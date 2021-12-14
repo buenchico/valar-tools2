@@ -1,24 +1,9 @@
-# README
+# valar-tools2
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Webapp containing tools to help players at
+    [valar.es](www.valar.es) by David Ortiz
 
-Things you may want to cover:
+[Valar](www.valar.es) is a community that host various roleplaying
+    and strategy games, usually in the world of <strong>A Song of Ice and Fire</strong>.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+This a new version of the tools, build from zero up to better standards and a more thought design (aka I did not know what I was doing in the first version, not that I know much better)
