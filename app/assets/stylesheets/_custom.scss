@@ -1,0 +1,65 @@
+/* universal */
+
+body {
+  background-color:#222222;
+  color: #ddd;
+}
+
+.container {
+  max-width: 1110px;
+}
+
+.text-black {
+  color: #222222;
+}
+
+.bg-black {
+  background-color: #111111;
+}
+
+.btn {
+  border-radius: 0;
+}
+
+/* header */
+
+#navbar-custom {
+  height: 60px;
+}
+
+#nav-logo {
+  height: 40px;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.nav-text-icon {
+  font-size: 1.75em;
+  padding: 0.5rem;
+}
+
+.nav-icon {
+  height: 32px;
+  width: 32px;
+  margin: auto;
+}
+
+.nav-item:hover {
+  background-color: #313131;
+}
+
+.dropdown-toggle::after {
+    content: none;
+}
+
+/* miscellaneous */
+
+.debug_dump {
+  background-color: white;
+  clear: both;
+  float: left;
+  width: 100%;
+  margin-top: 45px;
+}

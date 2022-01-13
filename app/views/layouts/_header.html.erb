@@ -1,0 +1,50 @@
+<header id="header" class="bg-black">
+  <nav class="navbar navbar-custom navbar-expand-md navbar-dark">
+    <div class="container">
+      <%= link_to image_tag("tools.png", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand" %>
+
+        <ul class="navbar-nav ml-auto">
+          <% if current_user.nil? %>
+            <%= button_to login_path, method: :post, class: 'btn btn-sm btn-primary text-black', form_class: 'm-auto' do %>
+              <i class="fas fa-user"></i> Iniciar sesión
+            <% end %>
+          <% end %>
+
+          <% if Rails.env.development? %>
+          <%= button_to login_hammer_path, method: :post, class: 'btn btn-sm btn-danger', form_class: 'm-auto' do %>
+            <i class="fas fa-user"></i> Iniciar sesión como Hammer
+          <% end %>
+          <%= button_to login_master_path, method: :post, class: 'btn btn-sm btn-danger', form_class: 'm-auto' do %>
+            <i class="fas fa-user"></i> Iniciar sesión como Master
+          <% end %>
+          <% end %>
+
+
+          <li class="nav-item">
+            <%= link_to image_tag("valar-circle.png", :alt => "Valar", class: "nav-icon"), "https://www.valar.es", class: "nav-link" %>
+          </li>
+          <li class="nav-item dropdown">
+            <%= link_to "", "#", id: "navbarHamburger", class: "nav-link dropdown-toggle fas fa-bars nav-text-icon", "role": "button", "data-bs-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" %>
+            <ul class="dropdown-menu" aria-labelledby="navbarHamburger">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li>
+
+          <% if current_user %>
+            <li class="nav-item dropdown">
+              <%= link_to image_tag(current_user.avatar_url, class: "nav-icon avatar"), "#", id: "navbarAvatar", class: "nav-link", "role": "button", "data-bs-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" %>
+                <div class="dropdown-menu" style="z-index: 2000" aria-labelledby="navbarAvatar">
+                  <a href="/users/<%= current_user.id %>" class="dropdown-item"><i class="fas fa-user"></i> <%= current_user.player + ' — ' + current_user.faction.title %>  </a>
+                  <%= link_to logout_path, method: :post, class: 'dropdown-item' do %>
+                    <i class="fas fa-sign-out-alt"></i>  Cerrar sesión
+                  <% end %>
+                </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+  </nav>
+</header>

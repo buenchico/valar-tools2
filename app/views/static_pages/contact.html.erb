@@ -1,2 +1,14 @@
-<h1>StaticPages#contact</h1>
-<p>Find me in app/views/static_pages/contact.html.erb</p>
+
+
+<% if Rails.env.development? %>
+  <div>
+    <% if current_user.try(:is_master?) then %>
+      <% $all_tools.each do |tool| %>
+        <div class="tool-box">
+          <h1><%= link_to "", tool.path, class: "#{tool.icon}" %></h1>
+          <p><%= tool.short_title %></p>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

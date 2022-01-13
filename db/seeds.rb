@@ -5,3 +5,13 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+Faction.new(name: 'Admin', active: false, ).save(validate: false)
+Faction.new(name: 'Master', active: false).save(validate: false)
+Faction.new(name: 'Inactivo', active: false).save(validate: false)
+
+User.create([
+{
+player: "valar", faction: Faction.find(1), discourse_id: 2
+}
+])

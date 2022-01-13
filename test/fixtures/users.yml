@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  discourse_id: 1
+  player: MyString
+  faction: MyString
+  avatar_url: MyString
+  password_digest: MyString
+
+two:
+  discourse_id: 1
+  player: MyString
+  faction: MyString
+  avatar_url: MyString
+  password_digest: MyString

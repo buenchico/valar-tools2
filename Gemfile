@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.0.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
+gem 'rails', '7.0.0'
 # database gems
 gem 'pg', '1.1'
 gem 'rails_12factor'
@@ -12,10 +12,20 @@ gem 'rails_12factor'
 gem 'puma', '~> 5.0'
 # Use SCSS for stylesheets
 gem 'sassc-rails', '>= 2.1.2'
+# Use jquery
+gem 'jquery-rails', '>= 4.4.0'
+gem 'jquery-ui-rails', '>= 6.0.1'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
+# Use Bootstrap framework for CSS
+gem 'bootstrap', '~> 5.1', '>= 5.1.3'
+gem 'font-awesome-sass', '~> 5.15', '>= 5.15.1'
+# support for API calls
+gem 'faraday'
+gem 'faraday-net_http_persistent'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password

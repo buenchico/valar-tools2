@@ -1,16 +1,40 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ValarTools2</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title><%= yield(:title) %></title>
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag    'application', media: 'all',
+                                              'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= favicon_link_tag '/assets/favicon.ico' %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="<%= controller_name %> <%= action_name %>">
+    <%= render 'layouts/header' %>
+    <% flash.each do |message_type, message| %>
+      <% if message.class == Hash %>
+        <div id="error_explanation" class="container mx-auto text-center alert alert-danger">
+          <h2>Se ha encontrado un error</h2>
+          <ul class="list-unstyled text-left">
+          <% message.values.each do |msg| %>
+            <% msg.each do |m| %>
+              <li><%= m %></li>
+            <%end %>
+          <% end %>
+          </ul>
+        </div>
+      <% else %>
+        <div class="container mx-auto text-center alert alert-<%= message_type %>" style=""><%= message %></div>
+      <% end %>
+    <% end %>
+    <div class="container content">
+      <%= yield %>
+    </div>
+    <%= debug(params) if Rails.env.development? %>
   </body>
 </html>
