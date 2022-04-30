@@ -14,5 +14,8 @@ Rails.application.routes.draw do
     post 'login_master', to: 'sessions#create_master', as: 'login_master'
   end
 
+  # Games and Tools
+  get 'settings', to: 'settings#index'
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

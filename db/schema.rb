@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_11_192935) do
+ActiveRecord::Schema.define(version: 2022_01_13_221020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,36 @@ ActiveRecord::Schema.define(version: 2022_01_11_192935) do
     t.integer "discourse_id"
     t.boolean "active"
     t.integer "reputation"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.string "name"
+    t.string "title"
+    t.string "prefix"
+    t.string "icon_url"
+    t.boolean "active", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "games_tools", id: false, force: :cascade do |t|
+    t.bigint "game_id"
+    t.bigint "tool_id"
+    t.index ["game_id"], name: "index_games_tools_on_game_id"
+    t.index ["tool_id"], name: "index_games_tools_on_tool_id"
+  end
+
+  create_table "tools", force: :cascade do |t|
+    t.string "name"
+    t.string "title"
+    t.string "short_title"
+    t.string "icon_url"
+    t.text "options", default: [], array: true
+    t.boolean "master", default: false
+    t.integer "sort", default: 0
+    t.boolean "active", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
