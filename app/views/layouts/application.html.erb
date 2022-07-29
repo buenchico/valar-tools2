@@ -32,7 +32,7 @@
         <div class="container mx-auto text-center alert alert-<%= message_type %>" style=""><%= message %></div>
       <% end %>
     <% end %>
-    <div class="container content">
+    <div class="container content mt-3">
       <%= yield %>
     </div>
     <%= debug(params) if Rails.env.development? %>

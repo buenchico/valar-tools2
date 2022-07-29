@@ -7,7 +7,48 @@
 </div>
 
 <div>
-  <% @tools.each do |tool| %>
-    <p><%= @tools.name %></p>
-  <% end %>
+  <p><%= active_game.title %></p>
 </div>
+
+<div>
+  <table class="table table-dark table-striped table-borderless table-hover table-sm table-responsive sortable">
+    <caption>Lista de Partidas</caption>
+      <thead>
+        <tr>
+          <th scope="col" style="width: 25px"></th>
+          <th scope="col">Partida <i class="fas fa-sort"></i></th>
+          <th scope="col">Prefijo <i class="fas fa-sort"></i></th>
+          <th scope="col" class="sorter-font-awesome">Herramientas <i class="fas fa-sort"></i></th>
+          <th scope="col" class="sorter-font-awesome" style="width: 75px">Activa <i class="fas fa-sort"></i></th>
+          <th scope="col" colspan="1"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @games.each do |game| %>
+          <tr class="<%= game.active == true ? "" : "active" %>" >
+            <td><%= image_tag(game.icon_url, :alt => game.name, id: game.name, class: 'icon-table') %></td>
+            <td><%= game.title %></td>
+            <td><%= game.prefix %></td>
+            <td></td>
+            <td class="text-center">
+              <% if game.active == true  %>
+                <i class="fas fa-check"></i>
+              <% else %>
+                <i class="fas fa-times"></i>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to edit_game_path(game.name), remote: true do %>
+                <i class="fas fa-edit text-white"></i>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+
+<div id='game-content'></div>
+<div id='tool-content'></div>

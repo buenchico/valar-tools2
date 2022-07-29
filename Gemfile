@@ -21,10 +21,14 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 # Use Bootstrap framework for CSS
 gem 'bootstrap', '~> 5.1', '>= 5.1.3'
-gem 'font-awesome-sass', '~> 5.15', '>= 5.15.1'
+gem 'font-awesome-sass', '~> 6.1.1', '>= 6.1.1'
 # support for API calls
 gem 'faraday'
 gem 'faraday-net_http_persistent'
+# accessing the clipboard
+gem 'clipboard-rails'
+# sorting tables
+gem 'jquery-tablesorter'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'

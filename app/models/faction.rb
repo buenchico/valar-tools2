@@ -1,5 +1,6 @@
 class Faction < ApplicationRecord
   has_many :users
+  belongs_to :game
   validates :name, presence: true, uniqueness: true, format: { without: /\s/ }
 
   def title

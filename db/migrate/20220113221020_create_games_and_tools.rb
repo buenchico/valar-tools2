@@ -16,7 +16,7 @@ class CreateGamesAndTools < ActiveRecord::Migration[7.0]
       t.string :short_title
       t.string :icon_url
       t.text :options, array: true, default: []
-      t.boolean :master, default: false
+      t.string :role, default: 'player'
       t.integer :sort, default: 0
       t.boolean :active, default: false
 

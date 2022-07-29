@@ -1,1 +1,53 @@
 <% provide(:title, "Valar Tools") %>
+
+<div id="player-tools">
+  <% @player_tools.each do | tool | %>
+    <div class="tool-box text-white">
+      <div class="tool-box-icon">
+        <%= link_to tool.path do %>
+          <i class="fa-solid <%= tool.icon_url %> text-white"></i>
+        <% end %>
+      </div>
+      <div class="tool-box-title"><%= tool.short_title.capitalize %></div>
+    </div>
+  <% end %>
+</div>
+
+<div id="master-tools">
+  <% @master_tools.each do | tool | %>
+    <div class="tool-box text-info">
+      <div class="tool-box-icon">
+        <%= link_to tool.path do %>
+          <i class="fa-solid <%= tool.icon_url %> text-info"></i>
+        <% end %>
+      </div>
+      <div class="tool-box-title"><%= tool.short_title.capitalize %></div>
+    </div>
+  <% end %>
+</div>
+
+<div id="admin-tools">
+  <% @admin_tools.each do | tool | %>
+    <div class="tool-box text-warning">
+      <div class="tool-box-icon">
+        <%= link_to tool.path do %>
+          <i class="fa-solid <%= tool.icon_url %> text-warning"></i>
+        <% end %>
+      </div>
+      <div class="tool-box-title"><%= tool.short_title.capitalize %></div>
+    </div>
+  <% end %>
+</div>
+
+<div id="inactive-tools">
+  <% @inactive_tools.each do | tool | %>
+    <div class="tool-box text-danger">
+      <div class="tool-box-icon">
+        <%= link_to tool.path do %>
+          <i class="fa-solid <%= tool.icon_url %> text-danger"></i>
+        <% end %>
+      </div>
+      <div class="tool-box-title"><%= tool.short_title.capitalize %></div>
+    </div>
+  <% end %>
+</div>

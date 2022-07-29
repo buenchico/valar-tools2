@@ -19,10 +19,11 @@ ActiveRecord::Schema.define(version: 2022_01_13_221020) do
     t.string "name"
     t.string "long_name"
     t.integer "discourse_id"
-    t.boolean "active"
     t.integer "reputation"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "game_id"
+    t.index ["game_id"], name: "index_factions_on_game_id"
   end
 
   create_table "games", force: :cascade do |t|
@@ -48,7 +49,7 @@ ActiveRecord::Schema.define(version: 2022_01_13_221020) do
     t.string "short_title"
     t.string "icon_url"
     t.text "options", default: [], array: true
-    t.boolean "master", default: false
+    t.string "role", default: "player"
     t.integer "sort", default: 0
     t.boolean "active", default: false
     t.datetime "created_at", precision: 6, null: false
