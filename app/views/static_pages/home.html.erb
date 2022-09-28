@@ -5,7 +5,7 @@
     <div class="tool-box text-white">
       <div class="tool-box-icon">
         <%= link_to tool.path do %>
-          <i class="fa-solid <%= tool.icon_url %> text-white"></i>
+          <i class="<%= tool.icon_url %> text-white"></i>
         <% end %>
       </div>
       <div class="tool-box-title"><%= tool.short_title.capitalize %></div>
@@ -18,7 +18,7 @@
     <div class="tool-box text-info">
       <div class="tool-box-icon">
         <%= link_to tool.path do %>
-          <i class="fa-solid <%= tool.icon_url %> text-info"></i>
+          <i class="<%= tool.icon_url %> text-info"></i>
         <% end %>
       </div>
       <div class="tool-box-title"><%= tool.short_title.capitalize %></div>
@@ -31,7 +31,7 @@
     <div class="tool-box text-warning">
       <div class="tool-box-icon">
         <%= link_to tool.path do %>
-          <i class="fa-solid <%= tool.icon_url %> text-warning"></i>
+          <i class="<%= tool.icon_url %> text-warning"></i>
         <% end %>
       </div>
       <div class="tool-box-title"><%= tool.short_title.capitalize %></div>

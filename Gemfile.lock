@@ -97,8 +97,6 @@ GEM
       faraday-net_http
       net-http-persistent (~> 4.0)
     ffi (1.15.5)
-    font-awesome-sass (6.1.2)
-      sassc (~> 2.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     i18n (1.10.0)
@@ -239,7 +237,6 @@ DEPENDENCIES
   clipboard-rails
   faraday
   faraday-net_http_persistent
-  font-awesome-sass (~> 6.1.1, >= 6.1.1)
   jbuilder (~> 2.7)
   jquery-rails (>= 4.4.0)
   jquery-tablesorter
