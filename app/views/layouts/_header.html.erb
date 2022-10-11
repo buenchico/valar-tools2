@@ -11,20 +11,20 @@
           <% end %>
 
           <% if Rails.env.development? %>
-          <%= button_to login_hammer_path, method: :post, class: 'btn btn-sm btn-danger', form_class: 'm-auto' do %>
-            <i class="fas fa-user"></i> Iniciar sesión como Hammer
+            <%= button_to login_hammer_path, method: :post, class: 'btn btn-sm btn-danger', form_class: 'm-auto' do %>
+              <i class="fas fa-user"></i> Iniciar sesión como Hammer
+            <% end %>
+            <%= button_to login_master_path, method: :post, class: 'btn btn-sm btn-danger', form_class: 'm-auto' do %>
+              <i class="fas fa-user"></i> Iniciar sesión como Master
+            <% end %>
           <% end %>
-          <%= button_to login_master_path, method: :post, class: 'btn btn-sm btn-danger', form_class: 'm-auto' do %>
-            <i class="fas fa-user"></i> Iniciar sesión como Master
-          <% end %>
-          <% end %>
-
 
           <li class="nav-item">
             <%= link_to image_tag("valar-circle.png", :alt => "Valar", class: "nav-icon"), "https://www.valar.es", class: "nav-link" %>
           </li>
+
           <li class="nav-item dropdown">
-            <%= link_to "", "#", id: "navbarHamburger", class: "nav-link dropdown-toggle fas fa-bars nav-text-icon", "role": "button", "data-bs-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" %>
+            <%= link_to "", "#", id: "navbarHamburger", class: "nav-link dropdown-toggle nav-text-icon bi bi-list", "role": "button", "data-bs-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" %>
             <ul class="dropdown-menu" aria-labelledby="navbarHamburger">
               <li><a class="dropdown-item" href="#">Action</a></li>
               <li><a class="dropdown-item" href="#">Another action</a></li>
