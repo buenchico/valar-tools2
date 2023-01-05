@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
   def destroy
     @id = current_user.discourse_id.to_s
 
-    @url = 'https://www.valar.es/admin/users/'+ @id +'/log_out'
+    @url = 'https://www.valar.es/admin/users/'+ @id +'/log_out.json'
 
     Faraday.default_adapter = :net_http
 
@@ -37,7 +37,7 @@ class SessionsController < ApplicationController
     con = Faraday.new(
       ssl: {verify: @verify}, # Disabling verify for development
       url: @url,
-      headers: {'api-username': 'valar', 'api-key': ENV['DISCOURSE_API']}
+      headers: {'api-username': 'valar', 'api-key': ENV['DISCOURSE_API'], 'content-type': 'multipart/form-data'}
     )
 
     res = con.post @url

@@ -16,7 +16,8 @@ player: "valar", faction: Faction.find(1), discourse_id: 2, avatar_url: "https:/
 }
 ])
 
-Tool.new(name: 'settings', title: 'Configuración de la partida', short_title: 'configuración', icon_url: 'fas fa-tachometer-alt', role: 'admin', active: true ).save(validate: false)
+Tool.new(name: 'settings', title: 'Configuración de la partida', short_title: 'configuración', icon_url: 'bi bi-gear-fill', role: 'admin', active: true ).save(validate: false)
+Tool.new(name: 'armies', title: 'Lista de ejércitos', short_title: 'ejércitos', icon_url: 'bi bi-diagram-3', role: 'player', active: true, options: {hp: 2, xp: 2} ).save
 
 if Rails.env.development?
   User.create([

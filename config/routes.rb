@@ -16,7 +16,8 @@ Rails.application.routes.draw do
 
   # Games and Tools
   get 'settings', to: 'settings#index'
-  get 'settings/games/:name', to: 'settings#edit_game', as: 'edit_game'
+  get 'settings/games/:id', to: 'settings#edit_game', as: 'game'
+  patch 'settings/games/:id', to: 'settings#update_game', as: 'update_game'
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

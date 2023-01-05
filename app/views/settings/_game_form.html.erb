@@ -1,7 +1,48 @@
 <div class="modal fade" id="gameModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content bg-dark">
-      <%= game.name %>
-    </div>
+      <%= form_with model: game do |form| %>
+        <div class="modal-header">
+          <h5 class="modal-title" id="Title"><%= game.title %></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="name">Nombre</span>
+            <%= form.text_field :name, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="prefix">Prefijo</span>
+            <%= form.text_field :prefix, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="title">Título</span>
+            <%= form.text_field :title, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="icon_url">Icono</span>
+            <%= form.text_field :icon_url, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text w-100 bg-secondary" id="icon_url">Herramientas</span>
+          </div>
+          <% @tools.each do | tool | %>
+            <div class="input-group mb-1 ms-2">
+              <span class="input-group-text w-75" id="tools"><%= tool.title %></span>
+              <div class="form-check form-switch toggle-box">
+                <%= form.check_box '[tools][' + tool.id.to_s + '][active]', class: 'form-check-input toggle', checked: tool.game.find_by_id(@game.id).nil? ? false : true %>
+              </div>
+            </div>
+            <div class="input-group mb-3 ms-3 w-75">
+              <div class="form-floating">
+                <%= form.text_area '[tools][' + tool.id.to_s + '][options]', class: 'form-control' %>
+                <label class="floating-label">Opciones</label>
+              </div>
+            </div>
+          <% end %>
+
+          <%= form.submit %>
+        </div>
+      <% end %>
   </div>
 </div>
