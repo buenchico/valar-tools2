@@ -17,7 +17,11 @@ class SettingsController < ApplicationController
   # POST /game/1/edit
   def update_game
     respond_to do |format|
-      format.html { redirect_to settings_url, success: 'Casa añadida correctamente.' }
+      if @game.update(game_params)
+        format.html { redirect_to settings_url, success: 'Partida configurada correctamente.' }
+      else
+        format.html {  redirect_to settings_url, danger: @game.errors  }
+      end
     end
   end
 
@@ -25,5 +29,10 @@ class SettingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_game
       @game = Game.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def game_params
+      params.require(:game).permit(:name, :prefix, :title, :icon_url, :tool => {})
     end
 end
