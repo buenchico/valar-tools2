@@ -33,6 +33,6 @@ class SettingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def game_params
-      params.require(:game).permit(:name, :prefix, :title, :icon_url, :tool => {})
+      params.require(:game).permit(:name, :prefix, :title, :icon_url, tools_attributes: [:id, :name])
     end
 end

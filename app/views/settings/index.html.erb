@@ -29,7 +29,7 @@
             <td><%= image_tag(game.icon_url, :alt => game.name, id: game.name, class: 'icon-table') %></td>
             <td><%= game.title %></td>
             <td><%= game.prefix %></td>
-            <td><%= game.tool.pluck(:title).join(", ") %></td>
+            <td><%= game.tools.pluck(:title).join(", ") %></td>
             <td class="text-center">
               <% if game.active == true  %>
                 <i class="bi bi-check-lg"></i>

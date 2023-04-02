@@ -26,16 +26,14 @@
           <div class="input-group mb-3">
             <span class="input-group-text w-100 bg-secondary" id="icon_url">Herramientas</span>
           </div>
-          <% @tools.each do | tool | %>
-            <div class="input-group mb-1 ms-2">
-              <span class="input-group-text w-75" id="tools"><%= tool.title %></span>
-              <div class="form-check form-switch toggle-box">
-                <%= form.check_box '[tools][' + tool.id.to_s + '][active]', class: 'form-check-input toggle', checked: tool.game.find_by_id(@game.id).nil? ? false : true %>
-              </div>
-            </div>
+
+          <%= form.fields_for :tools do | tool_fields | %>
+          <div class="input-group mb-1 ms-2">
+            <span class="input-group-text w-75" id="tools"><%= tool_fields.label :title, tool_fields.object.title %></span>
+          </div>
             <div class="input-group mb-3 ms-3 w-75">
               <div class="form-floating">
-                <%= form.text_area '[tools][' + tool.id.to_s + '][options]', class: 'form-control' %>
+                <%= tool_fields.text_area :options, class: 'form-control' %>
                 <label class="floating-label">Opciones</label>
               </div>
             </div>
