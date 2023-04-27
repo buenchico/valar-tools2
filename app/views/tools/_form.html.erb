@@ -1,0 +1,45 @@
+<div class="modal fade" id="toolModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark">
+      <%= form_with model: tool do |form| %>
+        <div class="modal-header">
+          <h5 class="modal-title" id="Title"><%= tool.title %></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="name">Nombre</span>
+            <%= form.text_field :name, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="prefix">Título</span>
+            <%= form.text_field :title, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="title">Título Corto</span>
+            <%= form.text_field :short_title, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="icon_url">Icono</span>
+            <%= form.text_field :icon_url, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="icon_url">Opciones</span>
+            <%= form.text_field :options, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="icon_url">Rol</span>
+            <%= form.select :role, options_for_select(@user_roles, tool.role), {}, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-text">Available?</div>
+            <div class="form-check form-switch switch-group fs-2">
+              <%= form.check_box :active, class: 'form-check-input switch-group h-100' %>
+            </div>
+          </div>
+
+          <%= form.submit nil, class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+  </div>
+</div>

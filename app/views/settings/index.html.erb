@@ -8,8 +8,15 @@
 
 <div class="card text-white bg-primary mb-3">
   <div class="card-body">
-    <p class="card-text"><%= active_game.title %></p>
+    <p class="card-text"><%= active_game.nil? ? 'Ninguna partida en activo' : active_game.title %></p>
   </div>
+</div>
+
+<div class="mt-2">
+  <%= @user_roles %>
+  <%= link_to new_game_path, class: "btn btn-primary", remote: true do %>
+    <i class="bi bi-plus-circle"></i> Crear Nueva Partida
+  <% end %>
 </div>
 
 <div>
@@ -18,10 +25,10 @@
       <thead>
         <tr>
           <th scope="col" style="width: 25px"></th>
-          <th scope="col">Partida <i class="fas fa-sort"></i></th>
-          <th scope="col">Prefijo <i class="fas fa-sort"></i></th>
-          <th scope="col" class="sorter-font-awesome">Herramientas <i class="fas fa-sort"></i></th>
-          <th scope="col" class="sorter-font-awesome" style="width: 75px">Activa <i class="fas fa-sort"></i></th>
+          <th scope="col">Partida</th>
+          <th scope="col">Prefijo</th>
+          <th scope="col">Herramientas</th>
+          <th scope="col" class="text-center" style="width: 75px">Activa</th>
           <th scope="col" colspan="1"></th>
         </tr>
       </thead>
@@ -40,7 +47,52 @@
               <% end %>
             </td>
             <td>
-              <%= link_to game_path(game), remote: true do %>
+              <%= link_to edit_game_path(game), remote: true do %>
+                <i class="bi bi-pencil-square text-white"></i>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+  </table>
+</div>
+
+<div class="mt-2">
+  <%= link_to new_tool_path, class: "btn btn-primary", remote: true do %>
+    <i class="bi bi-plus-circle"></i> Crear Nueva Herramienta
+  <% end %>
+</div>
+
+<div>
+  <table class="table table-dark table-striped table-borderless table-hover table-sm table-responsive align-middle sortable">
+    <caption>Lista de Herramientas</caption>
+      <thead>
+        <tr>
+          <th scope="col" style="width: 25px"></th>
+          <th scope="col">Herramienta</th>
+          <th scope="col">Role</th>
+          <th scope="col">Partidas</th>
+          <th scope="col">Opciones</th>
+          <th scope="col" class="text-center" style="width: 75px">Activa</th>
+          <th scope="col" colspan="1"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @tools.each do |tool| %>
+          <tr class="<%= tool.active == true ? "" : "active" %>" >
+            <td><i class="<%= tool.icon_url %>"></i></td>
+            <td><%= tool.title %></td>
+            <td><%= tool.role %></td>
+            <td><%= tool.games.pluck(:title).join(", ") %></td>
+            <td class="text-center">
+              <% if tool.active == true  %>
+                <i class="bi bi-check-lg"></i>
+              <% else %>
+                <i class="bi bi-x-lg"></i>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to edit_tool_path(tool), remote: true do %>
                 <i class="bi bi-pencil-square text-white"></i>
               <% end %>
             </td>
