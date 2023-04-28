@@ -10,9 +10,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_01_13_221020) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_28_213756) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "armies", force: :cascade do |t|
+    t.string "name"
+    t.string "status"
+    t.string "group"
+    t.text "notes"
+    t.string "region"
+    t.string "lord"
+    t.text "tags", default: [], array: true
+    t.string "col0"
+    t.string "col1"
+    t.string "col2"
+    t.string "col3"
+    t.string "col4"
+    t.string "col5"
+    t.string "col6"
+    t.string "col7"
+    t.string "col8"
+    t.string "col9"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "armies_factions", force: :cascade do |t|
+    t.bigint "army_id"
+    t.bigint "faction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["army_id"], name: "index_armies_factions_on_army_id"
+    t.index ["faction_id"], name: "index_armies_factions_on_faction_id"
+  end
 
   create_table "factions", force: :cascade do |t|
     t.string "name"
@@ -67,4 +98,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_01_13_221020) do
     t.index ["faction_id"], name: "index_users_on_faction_id"
   end
 
+  add_foreign_key "armies_factions", "armies"
+  add_foreign_key "armies_factions", "factions"
 end
