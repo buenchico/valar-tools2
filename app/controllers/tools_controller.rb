@@ -1,5 +1,6 @@
 class ToolsController < ApplicationController
-  before_action :set_game, only: [:edit, :update, :destroy]
+  before_action :set_tool, only: [:edit, :update, :destroy]
+  before_action :check_admin
 
   def new
     @tool = Tool.new
@@ -25,10 +26,10 @@ class ToolsController < ApplicationController
   # POST /game/1/edit
   def update
     respond_to do |format|
-      if @game.update(game_params)
-        format.html { redirect_to settings_url, success: 'Partida configurada correctamente.' }
+      if @tool.update(tool_params)
+        format.html { redirect_to settings_url, success: 'Herramienta configurada correctamente.' }
       else
-        format.html {  redirect_to settings_url, danger: @game.errors  }
+        format.html { redirect_to settings_url, danger: @game.errors  }
       end
     end
   end
@@ -42,6 +43,6 @@ private
   end
 
   def tool_params
-      params.require(:tool).permit(:name, :title, :short_title, :icon_url, {options: []}, :role, :sort, :active, game_ids: [])
+      params.require(:tool).permit(:name, :title, :short_title, :icon_url, :options, :role, :sort, :active, game_ids: [])
   end
 end

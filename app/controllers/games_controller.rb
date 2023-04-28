@@ -1,6 +1,7 @@
 class GamesController < ApplicationController
   before_action :set_game, only: [:edit, :update, :destroy]
-
+  before_action :check_admin
+  
   def new
     @game = Game.new
   end
@@ -42,6 +43,6 @@ private
   end
 
   def game_params
-    params.require(:game).permit(:name, :prefix, :title, :icon_url, :active, tools_attributes: [:id, :name])
+    params.require(:game).permit(:name, :prefix, :title, :icon_url, :active, tool_ids: [], game_tools_attributes: [:id, :options])
   end
 end

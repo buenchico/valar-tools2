@@ -13,7 +13,6 @@
 </div>
 
 <div class="mt-2">
-  <%= @user_roles %>
   <%= link_to new_game_path, class: "btn btn-primary", remote: true do %>
     <i class="bi bi-plus-circle"></i> Crear Nueva Partida
   <% end %>
@@ -70,7 +69,7 @@
         <tr>
           <th scope="col" style="width: 25px"></th>
           <th scope="col">Herramienta</th>
-          <th scope="col">Role</th>
+          <th scope="col">Rol</th>
           <th scope="col">Partidas</th>
           <th scope="col">Opciones</th>
           <th scope="col" class="text-center" style="width: 75px">Activa</th>
@@ -84,6 +83,7 @@
             <td><%= tool.title %></td>
             <td><%= tool.role %></td>
             <td><%= tool.games.pluck(:title).join(", ") %></td>
+            <td><%= tool.options.to_s %></td>
             <td class="text-center">
               <% if tool.active == true  %>
                 <i class="bi bi-check-lg"></i>
