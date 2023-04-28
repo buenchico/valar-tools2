@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-tablesorter
+//= require popper.js
 //= require turbolinks
 //= require bootstrap
 //= require clipboard
