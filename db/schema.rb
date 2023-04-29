@@ -21,6 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_28_213756) do
     t.text "notes"
     t.string "region"
     t.string "lord"
+    t.boolean "visible"
     t.text "tags", default: [], array: true
     t.string "col0"
     t.string "col1"

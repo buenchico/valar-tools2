@@ -7,6 +7,7 @@ class CreateArmies < ActiveRecord::Migration[7.0]
        t.text :notes
        t.string :region
        t.string :lord
+       t.boolean :visible
        t.text :tags, array: true, default: []
        t.string :col0
        t.string :col1
