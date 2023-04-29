@@ -28,13 +28,15 @@
           </div>
 
           <% @tools.reject { |tool| tool.name == "settings" }.each do |tool| %>
-            <div class="container row align-middle">
-              <div class="form-check form-switch">
-                <%= check_box_tag "game[tool_ids][]", tool.id, @game.tools.include?(tool), class: 'form-check-input', role: 'switch' %>
-                <%= form.label :options, tool.title, class: 'form-check-label' %>
-                <%= form.text_field :tool_options, value: tool.options.to_s, class: 'form-control w-50 float-end' %>
+              <div class="input-group mb-3">
+                <div class="input-group-text">
+                  <%= form.label :options, tool.title, class: '' %>
+                </div>
+                <div class="form-check form-switch switch-group fs-2">
+                  <%= check_box_tag "game[tool_ids][]", tool.id, @game.tools.include?(tool), class: 'form-check-input switch-group h-100', role: 'switch' %>
+                </div>
+                <%= form.text_field :tool_options, value: tool.options.to_s, class: 'form-control float-end' %>
               </div>
-            </div>
           <% end %>
 
           <%= form.submit nil, class: 'btn btn-primary' %>
