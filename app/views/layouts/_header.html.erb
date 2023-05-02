@@ -26,10 +26,48 @@
           <li class="nav-item dropdown">
             <%= link_to "", "#", id: "navbarHamburger", class: "nav-link dropdown-toggle nav-text-icon bi bi-list", "role": "button", "data-bs-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" %>
             <ul class="dropdown-menu" aria-labelledby="navbarHamburger">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <% player_tools.each do | tool | %>
+                <li>
+                  <%= link_to tool.path, class: 'dropdown-item' do %>
+                    <i class="<%= tool.icon_url %>"></i>
+                    <%= tool.short_title.capitalize %>
+                  <% end %>
+                </li>
+              <% end %>
+
+              <% unless current_user.nil? %>
+                <% if current_user.is_master? %>
+                  <% master_tools.each do | tool | %>
+                    <li>
+                      <%= link_to tool.path, class: 'dropdown-item text-info' do %>
+                        <i class="<%= tool.icon_url %>"></i>
+                        <%= tool.short_title.capitalize %>
+                      <% end %>
+                    </li>
+                  <% end %>
+                <% end %>
+
+                <% if current_user.is_admin? %>
+                  <% admin_tools.each do | tool | %>
+                    <li>
+                      <%= link_to tool.path, class: 'dropdown-item text-warning' do %>
+                        <i class="<%= tool.icon_url %>"></i>
+                        <%= tool.short_title.capitalize %>
+                      <% end %>
+                    </li>
+                  <% end %>
+
+                  <% inactive_tools.each do | tool | %>
+                    <li>
+                      <%= link_to tool.path, class: 'dropdown-item text-danger' do %>
+                        <i class="<%= tool.icon_url %>"></i>
+                        <%= tool.short_title.capitalize %>
+                      <% end %>
+                    </li>
+                  <% end %>
+                <% end %>
+
+              <% end %>
             </ul>
           </li>
 

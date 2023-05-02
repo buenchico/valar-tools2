@@ -29,7 +29,7 @@
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text" id="icon_url">Rol</span>
-            <%= form.select :role, options_for_select(@user_roles, tool.role), {}, class: 'form-control' %>
+            <%= form.select :role, options_for_select(user_roles, tool.role), {}, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
             <div class="input-group-text">Available?</div>
