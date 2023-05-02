@@ -1,0 +1,49 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark">
+      <%= form_with model: army do |form| %>
+        <div class="modal-header">
+          <h5 class="modal-title" id="Title"></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="name">Nombre</span>
+            <%= form.text_field :name, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="prefix">Estado</span>
+            <%= form.text_field :status, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="title">Grupo</span>
+            <%= form.text_field :group, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="title">Region</span>
+            <%= form.text_field :region, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="title">Señor</span>
+            <%= form.text_field :lord, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="title">Visibilidad</span>
+            <%= form.text_field :visible, class: 'form-control' %>
+          </div>
+          <% @tool.options.count.times do | index | %>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="title"><%= @tool.options[index][0] %></span>
+              <%= form.text_field "col#{index+1}", class: 'form-control' %>
+            </div>
+          <% end %>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="icon_url">Notas</span>
+            <%= form.text_area :notes, class: 'form-control' %>
+          </div>
+
+          <%= form.submit nil, class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+  </div>
+</div>

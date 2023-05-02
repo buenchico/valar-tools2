@@ -1,0 +1,40 @@
+<table id="army_list" class="table table-dark table-striped table-borderless table-hover table-sm table-responsive sortable">
+    <caption>Lista de ejércitos</caption>
+      <thead>
+        <tr id="table_title">
+          <th scope="col"><input type="checkbox" class="ckbCheckAll" /></th>
+          <th scope="col"<i class="bi bi-award"></i></th>
+          <th scope="col">Ejército</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Rasgos</th>
+          <th scope="col">Grupo</th>
+          <th scope="col">Visibilidad</th>
+          <% @tool.options.count.times do | index | %>
+            <th scope="col"><%= @tool.options[index][0] %></th>
+          <% end %>
+          <th scope="col" colspan="3"></th>
+        </tr>
+      </thead>
+      <tbody id="table_body">
+        <% @armies.each do |army| %>
+          <tr class="<%= army.status == 'Aniquilado' ? 'destroyed' : '' %><%= army.status == 'Movilizado' ? 'mobilized' : '' %>">
+            <td><%= check_box_tag "army_ids[]", army.id, false, class: "checkbox_selectable" %></td>
+            <td class="strenght" width = "50px"></td>
+            <td width = "300px"><%= army.name %></td>
+            <td width = "300px"><%= army.status %></td>
+            <td width = "160px"><%= army.tags.join(", ") %></td>
+            <td width = "300px"><%= army.group %></td>
+            <td width = "100px"><%= army.factions.join(", ") %>
+            <% @tool.options.count.times do | index | %>
+              <td width = "100px"><%= army["col#{index+1}"] %></td>
+            <% end %>
+            <td><%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %></td>
+            <% if army.notes.nil? || army.notes.empty? then %>
+              <td></td>
+            <% else %>
+              <td></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+  </table>

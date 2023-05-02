@@ -34,7 +34,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def set_user_roles
+  def set_tool
+    @tool = Tool.find_by(name: controller_name)
+  end
+
+  def user_roles
     user_roles = ['player', 'master', 'admin']
   end
 
