@@ -4,6 +4,7 @@ class CreateArmies < ActiveRecord::Migration[7.0]
        t.string :name
        t.string :status
        t.string :group
+       t.string :position
        t.text :notes
        t.string :region
        t.string :lord

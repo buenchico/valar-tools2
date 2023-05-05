@@ -28,6 +28,10 @@
             <%= form.text_field :options, value: @tool.options.to_s, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
+            <span class="input-group-text" id="icon_url">Opciones</span>
+            <%= form.text_area :options_info, value: @tool.options_info, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
             <span class="input-group-text" id="icon_url">Rol</span>
             <%= form.select :role, options_for_select(user_roles, tool.role), {}, class: 'form-control' %>
           </div>
