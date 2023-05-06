@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  helper_method :current_user
+  before_action :set_current_user
+
   helper_method :active_game
   helper_method :user_roles
   helper_method :player_tools
@@ -10,8 +11,8 @@ class ApplicationController < ActionController::Base
 
   add_flash_types :error, :success, :info, :danger
 
-  def current_user
-    current_user ||= User.find_by(auth_token: cookies[:auth_token]) if cookies[:auth_token]
+  def set_current_user
+    @current_user ||= User.find_by(auth_token: cookies[:auth_token]) if cookies[:auth_token]
   end
 
   def active_game
@@ -20,7 +21,7 @@ class ApplicationController < ActionController::Base
 
   def check_admin
     # allows only logged in user
-    if current_user.nil? || !current_user.is_admin?
+    if @current_user.nil? || !@current_user.is_admin?
       flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
       redirect_to root_path
     end
@@ -28,7 +29,7 @@ class ApplicationController < ActionController::Base
 
   def check_master
     # allows only logged in user
-    if current_user.nil? || !current_user.is_master?
+    if @current_user.nil? || !@current_user.is_master?
       flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
       redirect_to root_path
     end

@@ -8,7 +8,7 @@
 
 <div class="card text-white bg-primary mb-3">
   <div class="card-body">
-    <p class="card-text"><%= active_game.nil? ? 'Ninguna partida en activo' : active_game.title %></p>
+    <p class="card-text"><%= @active_game.nil? ? 'Ninguna partida en activo' : @active_game.title %></p>
   </div>
 </div>
 
@@ -83,7 +83,7 @@
             <td><%= tool.title %></td>
             <td><%= tool.role %></td>
             <td><%= tool.games.pluck(:title).join(", ") %></td>
-            <td><%= tool.options.to_s %></td>
+            <td><%= tool.options %></td>
             <td class="text-center">
               <% if tool.active == true  %>
                 <i class="bi bi-check-lg"></i>

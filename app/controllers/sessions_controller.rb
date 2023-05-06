@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    @id = current_user.discourse_id.to_s
+    @id = @current_user.discourse_id.to_s
 
     @url = 'https://www.valar.es/admin/users/'+ @id +'/log_out.json'
 

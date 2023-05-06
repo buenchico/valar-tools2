@@ -16,9 +16,28 @@
             <%= form.text_field :status, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="title">Grupo</span>
-            <%= form.text_field :group, class: 'form-control' %>
+            <span class="input-group-text" id="prefix">Posición</span>
+            <%= form.text_field :position, class: 'form-control' %>
           </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="icon_url">Grupo</span>
+            <%= form.select :group,
+              options_for_select(
+                ARMY_GROUPS.map { | key, value |
+                  [
+                    key,
+                    { "data-content": "<span class='badge rounded-pill pill-army pill-#{key}'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-army-text'>#{value[:name]}</span></span>".html_safe
+                  }
+                  ]
+                },
+                selected: army.group
+              ),
+              { include_blank: true},
+              class: 'selectpicker flex-fill',
+              title: 'Sin agrupar'
+            %>
+          </div>
+
           <div class="input-group mb-3">
             <span class="input-group-text" id="title">Region</span>
             <%= form.text_field :region, class: 'form-control' %>

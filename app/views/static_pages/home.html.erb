@@ -13,8 +13,8 @@
   <% end %>
 </div>
 
-<% unless current_user.nil? %>
-  <% if current_user.is_master? %>
+<% unless @current_user.nil? %>
+  <% if @current_user.is_master? %>
     <div id="master-tools">
       <% master_tools.each do | tool | %>
         <div class="tool-box text-info">
@@ -29,7 +29,7 @@
     </div>
   <% end %>
 
-  <% if current_user.is_admin? %>
+  <% if @current_user.is_admin? %>
     <div id="admin-tools">
       <% admin_tools.each do | tool | %>
         <div class="tool-box text-warning">

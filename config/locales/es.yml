@@ -32,8 +32,20 @@
 es:
   helpers:
     submit:
-      create: "Añadir %{model}"
-      update: "Guardar %{model}"
+      create: 'Añadir %{model}'
+      update: 'Guardar %{model}'
+    label:
+      tool:
+        name: 'Nombre'
+        title: 'Título'
+        short_title: 'Título corto'
+        icon_url: 'Icono'
+        sort: 'Órden'
+        active: 'Activo'
+        role: 'Rol'
+        options_info: 'Información de las opciones'
+        options: 'Opciones'
   activerecord:
     models:
-      game: "partida"
+      game: 'Partida'
+      tool: 'Herramienta'

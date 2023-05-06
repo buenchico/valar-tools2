@@ -2,9 +2,16 @@
 <% provide(:icon, @tool.icon_url) %>
 
 <div class="tool-title">
-    <i class="white <%= yield(:icon) %>"></i>
-    <%= yield(:title) %>
+  <i class="white <%= yield(:icon) %>"></i>
+  <%= yield(:title) %>
 </div>
+
+<div class="mt-2">
+  <%= link_to new_army_path, class: "btn btn-primary", remote: true do %>
+    <i class="bi bi-plus-circle"></i> Crear Nuevo Ejército
+  <% end %>
+</div>
+
 
 <%= render 'armies_table' %>
 

@@ -4,7 +4,7 @@
       <%= link_to image_tag("tools.png", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand" %>
 
         <ul class="navbar-nav ml-auto">
-          <% if current_user.nil? %>
+          <% if @current_user.nil? %>
             <%= button_to login_path, method: :post, class: 'btn btn-sm btn-primary text-black', form_class: 'm-auto' do %>
               <i class="fas fa-user"></i> Iniciar sesión
             <% end %>
@@ -35,8 +35,8 @@
                 </li>
               <% end %>
 
-              <% unless current_user.nil? %>
-                <% if current_user.is_master? %>
+              <% unless @current_user.nil? %>
+                <% if @current_user.is_master? %>
                   <% master_tools.each do | tool | %>
                     <li>
                       <%= link_to tool.path, class: 'dropdown-item text-info' do %>
@@ -47,7 +47,7 @@
                   <% end %>
                 <% end %>
 
-                <% if current_user.is_admin? %>
+                <% if @current_user.is_admin? %>
                   <% admin_tools.each do | tool | %>
                     <li>
                       <%= link_to tool.path, class: 'dropdown-item text-warning' do %>
@@ -71,11 +71,11 @@
             </ul>
           </li>
 
-          <% if current_user %>
+          <% if @current_user %>
             <li class="nav-item dropdown">
-              <%= link_to image_tag(current_user.avatar_url, class: "nav-icon avatar"), "#", id: "navbarAvatar", class: "nav-link", "role": "button", "data-bs-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" %>
+              <%= link_to image_tag(@current_user.avatar_url, class: "nav-icon avatar"), "#", id: "navbarAvatar", class: "nav-link", "role": "button", "data-bs-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" %>
                 <div class="dropdown-menu" style="z-index: 2000" aria-labelledby="navbarAvatar">
-                  <a href="/users/<%= current_user.id %>" class="dropdown-item"><i class="fas fa-user"></i> <%= current_user.player + ' — ' + current_user.faction.title %>  </a>
+                  <a href="/users/<%= @current_user.id %>" class="dropdown-item"><i class="fas fa-user"></i> <%= @current_user.player + ' — ' + @current_user.faction.title %>  </a>
                   <%= link_to logout_path, method: :post, class: 'dropdown-item' do %>
                     <i class="fas fa-sign-out-alt"></i>  Cerrar sesión
                   <% end %>

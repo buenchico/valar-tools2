@@ -8,17 +8,16 @@ class ToolsController < ApplicationController
 
   # GET /tool/1/edit
   def edit
-    @tools = Tool.all.order(:sort).order(:id)
   end
 
   def create
-    @game = Game.new(game_params)
+    @tool = Tool.new(tool_params)
 
     respond_to do |format|
-      if @game.save
-        format.html { redirect_to settings_url, success: 'Partida creada correctamente.' }
+      if @tool.save
+        format.html { redirect_to settings_url, success: 'Herramienta creada correctamente.' }
       else
-        format.html {  redirect_to settings_url, danger: @game.errors  }
+        format.html {  redirect_to settings_url, danger: @tool.errors  }
       end
     end
   end
@@ -43,6 +42,8 @@ private
   end
 
   def tool_params
-      params.require(:tool).permit(:name, :title, :short_title, :icon_url, :options, :role, :sort, :active, game_ids: [])
+    params.require(:tool).permit(:name, :title, :short_title, :icon_url, :options, :options_info, :role, :sort, :active, game_ids: []).transform_values do |value|
+      value.is_a?(String) && value.start_with?('{', '[') ? JSON.parse(value) : value
+    end
   end
 end

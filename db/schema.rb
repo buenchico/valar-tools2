@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_05_084652) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_05_110731) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -80,13 +80,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_084652) do
     t.string "title"
     t.string "short_title"
     t.string "icon_url"
-    t.text "options", default: [], array: true
     t.string "role", default: "player"
     t.integer "sort", default: 0
     t.boolean "active", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "options_info"
+    t.jsonb "options"
   end
 
   create_table "users", force: :cascade do |t|

@@ -8,35 +8,41 @@
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
-            <span class="input-group-text" id="name">Nombre</span>
+            <%= form.label :name, class: 'input-group-text' %>
             <%= form.text_field :name, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="prefix">Título</span>
+            <%= form.label :title, class: 'input-group-text' %>
             <%= form.text_field :title, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="title">Título Corto</span>
+            <%= form.label :short_title, class: 'input-group-text' %>
             <%= form.text_field :short_title, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="icon_url">Icono</span>
+            <%= form.label :icon_url, class: 'input-group-text' %>
             <%= form.text_field :icon_url, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="icon_url">Opciones</span>
-            <%= form.text_field :options, value: @tool.options.to_s, class: 'form-control' %>
+            <%= form.label :options, class: 'input-group-text' %>
+            <%= form.text_field :options, value: @tool.options.to_json , class: 'form-control', "data-bs-toggle": "tooltip", "data-bs-html": "true", "title": (@tool.options_info&.then { |info| Kramdown::Document.new(info).to_html } || '').html_safe %>
+            <% unless @tool.name.nil? %>
+              <div id='showOptionsInfo' class='btn btn-primary' data-bs-toggle="tooltip" data-bs-html="true" title="Mostrar Información de las opciones">
+                <i class="bi bi-info-circle-fill"></i>
+              </div>
+            <% end %>
           </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="icon_url">Opciones</span>
+
+          <div id="toolOptionsInfoContainer" class="input-group mb-3 d-none">
+            <%= form.label :options_info, class: 'input-group-text input-group-text-wrap' %>
             <%= form.text_area :options_info, value: @tool.options_info, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="icon_url">Rol</span>
+            <%= form.label :role, class: 'input-group-text' %>
             <%= form.select :role, options_for_select(user_roles, tool.role), {}, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <div class="input-group-text">Available?</div>
+            <%= form.label :active, class: 'input-group-text' %>
             <div class="form-check form-switch switch-group fs-2">
               <%= form.check_box :active, class: 'form-check-input switch-group h-100' %>
             </div>

@@ -27,15 +27,11 @@ body {
   border-radius: 0 !important;
 }
 
-textarea,
-input[type] {
+.input-group-text,
+.form-control,
+.form-select {
   border-radius: 0 !important;
 }
-
-.input-group-text {
-  border-radius: 0 !important;
-}
-
 
 /* header */
 
@@ -102,19 +98,6 @@ input[type] {
   height: 40px;
 }
 
-/* forms */
-.toggle-box {
-  height: 38px;
-  margin: 0;
-}
-
-.toggle {
-  height: 100% !important;
-  width: 60px !important;
-  border-radius: 0px !important;
-  margin-top: 0px !important;
-}
-
 // Link Unstyled
 
 .link-unstyled {
@@ -147,6 +130,37 @@ input[type] {
 .switch-group {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+  border-radius: 0px !important;
+}
+
+.input-group-text-wrap {
+  white-space: normal;
+  max-width: 150px;
+}
+
+/* Pills for army groups */
+
+.pill-army {
+  width: 5.5em;
+  text-align: left;
+  font-size: 14px;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+<% ARMY_GROUPS.each do | k,v | %>
+  .pill-<%= k.to_s %> {
+    background-color: <%= v[:color] %>;
+  }
+<% end %>
+
+.pill-army-text {
+  text-transform: uppercase;
+}
+
+/* Popovers in modals */
+.popover {
+    z-index: 1060;
 }
 
 /* miscellaneous */

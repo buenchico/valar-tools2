@@ -16,5 +16,6 @@
 //= require popper.js
 //= require turbolinks
 //= require bootstrap
+//= require bootstrap-select
 //= require clipboard
 //= require_tree .
