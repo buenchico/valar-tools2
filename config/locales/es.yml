@@ -49,3 +49,4 @@ es:
     models:
       game: 'Partida'
       tool: 'Herramienta'
+      army: 'Ejército'

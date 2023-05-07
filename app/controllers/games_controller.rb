@@ -1,9 +1,10 @@
 class GamesController < ApplicationController
   before_action :set_game, only: [:edit, :update, :destroy]
   before_action :check_admin
-  
+
   def new
     @game = Game.new
+    @tools = Tool.all.order(:sort).order(:id)
   end
 
   # GET /game/1/edit

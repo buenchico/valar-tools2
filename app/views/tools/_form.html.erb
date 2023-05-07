@@ -25,7 +25,7 @@
           </div>
           <div class="input-group mb-3">
             <%= form.label :options, class: 'input-group-text' %>
-            <%= form.text_field :options, value: @tool.options.to_json , class: 'form-control', "data-bs-toggle": "tooltip", "data-bs-html": "true", "title": (@tool.options_info&.then { |info| Kramdown::Document.new(info).to_html } || '').html_safe %>
+            <%= form.text_field :options, value: form.object.options.to_json , class: 'form-control', "data-bs-toggle": "tooltip", "data-bs-html": "true", "title": (@tool.options_info&.then { |info| Kramdown::Document.new(info).to_html } || '').html_safe %>
             <% unless @tool.name.nil? %>
               <div id='showOptionsInfo' class='btn btn-primary' data-bs-toggle="tooltip" data-bs-html="true" title="Mostrar Información de las opciones">
                 <i class="bi bi-info-circle-fill"></i>
