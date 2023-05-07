@@ -10,8 +10,8 @@
           <th scope="col">Posición</th>
           <th scope="col">Grupo</th>
           <th scope="col">Visibilidad</th>
-          <% @tool.options.count.times do | index | %>
-            <th scope="col"><%= @tool.options[index][0] %></th>
+          <% @tool.options["attributes"].each do | key, value | %>
+            <th scope="col"><%= key %></th>
           <% end %>
           <th scope="col" colspan="3"></th>
         </tr>
@@ -36,7 +36,7 @@
               <% end %>
             </td>
             <td width = "100px"></td>
-            <% @tool.options.count.times do | index | %>
+            <% @tool.options["attributes"].each_with_index do | (key, value), index | %>
               <td width = "100px"><%= army["col#{index+1}"] %></td>
             <% end %>
             <td><%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %></td>

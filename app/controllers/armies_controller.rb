@@ -16,9 +16,9 @@ class ArmiesController < ApplicationController
 
     respond_to do |format|
       if @army.save
-        format.html { redirect_to settings_url, success: 'Ejército creado correctamente.' }
+        format.html { redirect_to armies_url, success: 'Ejército creado correctamente.' }
       else
-        format.html {  redirect_to settings_url, danger: @army.errors }
+        format.html {  redirect_to armies_url, danger: @army.errors }
       end
     end
   end

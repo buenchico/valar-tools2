@@ -50,9 +50,9 @@
             <span class="input-group-text" id="title">Visibilidad</span>
             <%= form.text_field :visible, class: 'form-control' %>
           </div>
-          <% @tool.options.count.times do | index | %>
+          <% @tool.options["attributes"].each_with_index do |(key, value), index| %>
             <div class="input-group mb-3">
-              <span class="input-group-text" id="title"><%= @tool.options[index][0] %></span>
+              <span class="input-group-text" id="title"><%= key %></span>
               <%= form.text_field "col#{index+1}", class: 'form-control' %>
             </div>
           <% end %>
