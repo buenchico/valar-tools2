@@ -15,7 +15,7 @@ class CreateGamesAndTools < ActiveRecord::Migration[7.0]
       t.string :title
       t.string :short_title
       t.string :icon_url
-      t.text :options, array: true, default: []
+      t.text :options_info, default: ''
       t.string :role, default: 'player'
       t.integer :sort, default: 0
       t.boolean :active, default: false
@@ -23,9 +23,14 @@ class CreateGamesAndTools < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    create_table :games_tools, id: false do |t|
+    create_table :game_tools do |t|
       t.belongs_to :game
       t.belongs_to :tool
+
+      t.boolean :active, default: false
+      t.jsonb :options
+
+      t.timestamps
     end
   end
 end

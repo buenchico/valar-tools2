@@ -8,7 +8,7 @@
           <th scope="col">Prefijo</th>
           <th scope="col">Herramientas</th>
           <th scope="col" class="text-center" style="width: 75px">Activa</th>
-          <th scope="col" colspan="1"></th>
+          <th scope="col" colspan="2"></th>
         </tr>
       </thead>
       <tbody>
@@ -17,7 +17,7 @@
             <td><%= image_tag(game.icon_url, :alt => game.name, id: game.name, class: 'icon-table') %></td>
             <td><%= game.title %></td>
             <td><%= game.prefix %></td>
-            <td><%= game.tools.pluck(:title).join(", ") %></td>
+            <td><%= game.active_tools.pluck(:title).join(", ") %></td>
             <td class="text-center">
               <% if game.active == true  %>
                 <i class="bi bi-check-lg"></i>
@@ -28,6 +28,11 @@
             <td>
               <%= link_to edit_game_path(game), remote: true do %>
                 <i class="bi bi-pencil-square text-white"></i>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to game_path(game), method: :delete, data: { confirm: "Estás seguro de eliminar la partida #{game.name}?" }, remote: true do %>
+                <i class="bi bi-trash text-white"></i>
               <% end %>
             </td>
           </tr>

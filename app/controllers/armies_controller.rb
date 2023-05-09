@@ -5,6 +5,7 @@ class ArmiesController < ApplicationController
 
   def index
     @armies = Army.all.order(:group)
+    @options = @tool.game_tools.find_by(game_id: Game.find_by(name: 'valar').id).options
   end
 
   def new

@@ -58,6 +58,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_110731) do
     t.index ["game_id"], name: "index_factions_on_game_id"
   end
 
+  create_table "game_tools", force: :cascade do |t|
+    t.bigint "game_id"
+    t.bigint "tool_id"
+    t.boolean "active", default: false
+    t.jsonb "options"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_game_tools_on_game_id"
+    t.index ["tool_id"], name: "index_game_tools_on_tool_id"
+  end
+
   create_table "games", force: :cascade do |t|
     t.string "name"
     t.string "title"
@@ -68,25 +79,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_110731) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "games_tools", id: false, force: :cascade do |t|
-    t.bigint "game_id"
-    t.bigint "tool_id"
-    t.index ["game_id"], name: "index_games_tools_on_game_id"
-    t.index ["tool_id"], name: "index_games_tools_on_tool_id"
-  end
-
   create_table "tools", force: :cascade do |t|
     t.string "name"
     t.string "title"
     t.string "short_title"
     t.string "icon_url"
+    t.text "options_info"
     t.string "role", default: "player"
     t.integer "sort", default: 0
     t.boolean "active", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "options_info"
-    t.jsonb "options"
   end
 
   create_table "users", force: :cascade do |t|

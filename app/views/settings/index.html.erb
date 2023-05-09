@@ -8,7 +8,12 @@
 
 <div class="card text-white bg-primary mb-3">
   <div class="card-body">
-    <p class="card-text"><%= @active_game.nil? ? 'Ninguna partida en activo' : @active_game.title %></p>
+    <% if @active_game.nil?%>
+      <div class="card-text"><%= @active_game.nil? ? 'Ninguna partida en activo' : @active_game.title %></div>
+      <%= link_to set_active_game_url(Game.first), method: :post, class: "btn btn-danger", remote: true do %>
+        <i class="bi bi-plus-circle"></i> Seleccionar Valar como partida
+      <% end %>
+    <% end %>
   </div>
 </div>
 

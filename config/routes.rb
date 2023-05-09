@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   # Games and Tools
   get 'settings', to: 'settings#index'
   resources :games, only: [:new, :edit, :create, :update, :destroy ]
+  post 'games/:id/set_active_game', to: 'games#set_active_game', as: 'set_active_game'
   resources :tools, only: [:new, :edit, :create, :update, :destroy ]
 
   resources :armies

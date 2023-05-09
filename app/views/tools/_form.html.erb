@@ -23,20 +23,28 @@
             <%= form.label :icon_url, class: 'input-group-text' %>
             <%= form.text_field :icon_url, class: 'form-control' %>
           </div>
-          <div class="input-group mb-3">
-            <%= form.label :options, class: 'input-group-text' %>
-            <%= form.text_field :options, value: form.object.options.to_json , class: 'form-control', "data-bs-toggle": "tooltip", "data-bs-html": "true", "title": (@tool.options_info&.then { |info| Kramdown::Document.new(info).to_html } || '').html_safe %>
-            <% unless @tool.name.nil? %>
-              <div id='showOptionsInfo' class='btn btn-primary' data-bs-toggle="tooltip" data-bs-html="true" title="Mostrar Información de las opciones">
-                <i class="bi bi-info-circle-fill"></i>
-              </div>
-            <% end %>
+
+          <div id="toolOptionsInfoContainer" class="input-group mb-3">
+            <%= form.label :options_info, class: 'input-group-text input-group-text-wrap' %>
+            <%= form.text_area :options_info, value: form.object.options_info, class: 'form-control' %>
           </div>
 
-          <div id="toolOptionsInfoContainer" class="input-group mb-3 d-none">
-            <%= form.label :options_info, class: 'input-group-text input-group-text-wrap' %>
-            <%= form.text_area :options_info, value: @tool.options_info, class: 'form-control' %>
+          <div class="input-group mb-3">
+            <%= Kramdown::Document.new(form.object&.options_info).to_html.html_safe %>
           </div>
+
+          <%= form.fields_for :game_tools do |game_tool_form| %>
+            <div class="input-group mb-3">
+              <div class="input-group-text">
+                <%= game_tool_form.label nil, game_tool_form.object.game.title %>
+              </div>
+              <div class="form-check form-switch switch-group fs-2">
+                 <%= game_tool_form.check_box :active, class: 'form-check-input switch-group h-100', role: 'switch' %>
+              </div>
+              <%= game_tool_form.text_field :options, value: game_tool_form.object.options.to_s, class: 'form-control float-end' %>
+            </div>
+          <% end %>
+
           <div class="input-group mb-3">
             <%= form.label :role, class: 'input-group-text' %>
             <%= form.select :role, options_for_select(user_roles, tool.role), {}, class: 'form-control' %>

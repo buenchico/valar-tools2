@@ -34,6 +34,13 @@ class ToolsController < ApplicationController
   end
 
   def destroy
+    respond_to do |format|
+      if @tool.destroy
+        format.html { redirect_to settings_url, success: 'Herramienta eliminada correctamente.' }
+      else
+        format.html {  redirect_to settings_url, danger: @tool.errors  }
+      end
+    end
   end
 
 private
