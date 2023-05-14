@@ -8,19 +8,19 @@
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
-            <span class="input-group-text" id="name">Nombre</span>
+            <%= form.label :name, class: 'input-group-text' %>
             <%= form.text_field :name, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="prefix">Prefijo</span>
+            <%= form.label :prefix, class: 'input-group-text' %>
             <%= form.text_field :prefix, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="title">Título</span>
+            <%= form.label :title, class: 'input-group-text' %>
             <%= form.text_field :title, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="icon_url">Icono</span>
+            <%= form.label :icon_url, class: 'input-group-text' %>
             <%= form.text_field :icon_url, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
@@ -36,7 +36,7 @@
                 <div class="form-check form-switch switch-group fs-2">
                    <%= game_tool_form.check_box :active, class: 'form-check-input switch-group h-100', role: 'switch' %>
                 </div>
-                <%= game_tool_form.text_field :options, value: game_tool_form.object.options.to_s, class: 'form-control float-end', "data-bs-toggle": "tooltip", "data-bs-html": "true", "title": ( game_tool_form.object.tool.options_info&.then { |info| Kramdown::Document.new(info).to_html } || '').html_safe %>
+                <%= game_tool_form.text_field :options, value: game_tool_form.object.options.to_json, class: 'form-control float-end', "data-bs-toggle": "tooltip", "data-bs-html": "true", "title": ( game_tool_form.object.tool.options_info&.then { |info| Kramdown::Document.new(info).to_html } || '').html_safe %>
               </div>
             <% end %>
           <% end %>

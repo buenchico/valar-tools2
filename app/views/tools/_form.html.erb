@@ -41,13 +41,13 @@
               <div class="form-check form-switch switch-group fs-2">
                  <%= game_tool_form.check_box :active, class: 'form-check-input switch-group h-100', role: 'switch' %>
               </div>
-              <%= game_tool_form.text_field :options, value: game_tool_form.object.options.to_s, class: 'form-control float-end' %>
+              <%= game_tool_form.text_field :options, value: game_tool_form.object.options.to_json, class: 'form-control float-end' %>
             </div>
           <% end %>
 
           <div class="input-group mb-3">
             <%= form.label :role, class: 'input-group-text' %>
-            <%= form.select :role, options_for_select(user_roles, tool.role), {}, class: 'form-control' %>
+            <%= form.select :role, options_for_select(USER_ROLES, tool.role), {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :active, class: 'input-group-text' %>

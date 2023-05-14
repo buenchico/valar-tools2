@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   helper_method :admin_tools
   helper_method :inactive_tools
 
-  add_flash_types :error, :success, :info, :danger
+  add_flash_types :error, :success, :info, :danger, :warning
 
   def set_current_user
     @current_user ||= User.find_by(auth_token: cookies[:auth_token]) if cookies[:auth_token]
@@ -37,10 +37,6 @@ class ApplicationController < ActionController::Base
 
   def set_tool
     @tool = Tool.find_by(name: controller_name)
-  end
-
-  def user_roles
-    user_roles = ['player', 'master', 'admin']
   end
 
   def player_tools

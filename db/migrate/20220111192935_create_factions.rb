@@ -5,6 +5,7 @@ class CreateFactions < ActiveRecord::Migration[7.0]
       t.string :long_name
       t.integer :discourse_id
       t.integer :reputation
+      t.boolean :active
 
       t.timestamps
     end

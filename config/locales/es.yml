@@ -45,8 +45,30 @@ es:
         role: 'Rol'
         options_info: 'Información de las opciones'
         options: 'Opciones'
+      army:
+        name: "Nombre"
+        status: "Estado"
+        position: "Posición"
+        group: "Grupo"
+        lord: "Señor"
+        tags: "Rasgos"
+        visible: "Visible"
+        notes: "Notas"
+        factions: "Facciones"
   activerecord:
     models:
       game: 'Partida'
       tool: 'Herramienta'
       army: 'Ejército'
+    errors:
+      models:
+        army:
+          attributes:
+            name:
+              taken: 'El nombre del ejército debe ser único'
+            tags:
+              inclusion: 'Sólo pueden elegirse rasgos de la lista'
+        game_tool:
+          attributes:
+            options:
+              options_cannot_be_changed_if_game_is_active: "No puedes cambiar las opciones de la partida %{game_name} mientres esté activa"

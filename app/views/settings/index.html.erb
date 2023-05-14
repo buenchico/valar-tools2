@@ -6,14 +6,34 @@
     <%= yield(:title) %>
 </div>
 
-<div class="card text-white bg-primary mb-3">
+<div class="card bg-dark mb-3">
   <div class="card-body">
     <% if @active_game.nil?%>
-      <div class="card-text"><%= @active_game.nil? ? 'Ninguna partida en activo' : @active_game.title %></div>
-      <%= link_to set_active_game_url(Game.first), method: :post, class: "btn btn-danger", remote: true do %>
-        <i class="bi bi-plus-circle"></i> Seleccionar Valar como partida
+      <%= form_with url: set_active_game_url, remote: true do |form| %>
+        <%= form.select :id,
+          options_for_select(
+            @games.pluck(:id, :title, :icon_url).map { | id, title, icon_url |
+              [
+                id,
+                { "data-content": image_tag(icon_url, :alt => title, id: title, class: 'icon-table bg-dark') + " " + title
+              }
+              ]
+            },
+            selected: nil
+          ),
+          { include_blank: false },
+          class: 'selectpicker flex-fill dropdown-toggle-custom',
+          title: 'Elige partida para preparar',
+          data: { }
+        %>
+        <%= form.submit "Inicialzar partida", class: "btn btn-danger" %>
       <% end %>
-    <% end %>
+    <% else %>
+      <%= form_with url: unset_active_game_url, remote: true do |form| %>
+        <%= image_tag(@active_game.icon_url, :alt => @active_game.title, id: @active_game.title, class: 'icon-table bg-dark') + " " + @active_game.title %>
+        <%= form.submit "Terminar partida", class: "btn btn-danger" %>
+        <% end %>
+      <% end %>
   </div>
 </div>
 

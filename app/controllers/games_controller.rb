@@ -50,7 +50,17 @@ class GamesController < ApplicationController
       if Game.update_all(active: false) && @game.update(active: true)
         format.html { redirect_to settings_url, success: 'Partida inicializada correctamente.' }
       else
-        format.html {  redirect_to settings_url, danger: @game.errors  }
+        format.html { redirect_to settings_url, danger: @game.errors }
+      end
+    end
+  end
+
+  def unset_active_game
+    respond_to do |format|
+      if Game.update_all(active: false)
+        format.html { redirect_to settings_url, success: 'Partida terminada correctamente.' }
+      else
+        format.html { redirect_to settings_url, danger: @game.errors }
       end
     end
   end
@@ -61,8 +71,13 @@ private
   end
 
   def game_params
-    params.require(:game).permit(:name, :prefix, :title, :icon_url, :active, game_tools_attributes: [:id, :tool_id, :active, :options => {}]).transform_values do |value|
-      value.is_a?(String) && value.start_with?('{', '[') ? JSON.parse(value) : value
-    end
+    params.require(:game).permit(:name, :prefix, :title, :icon_url, game_tools_attributes: [:id, :active, :options])
+      .tap do |whitelisted|
+        whitelisted[:game_tools_attributes].each do |index, tool_params|
+          if tool_params[:options].present?
+            whitelisted[:game_tools_attributes][index][:options] = JSON.parse(tool_params[:options])
+          end
+        end
+      end
   end
 end

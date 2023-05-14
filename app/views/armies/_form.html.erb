@@ -3,24 +3,45 @@
     <div class="modal-content bg-dark">
       <%= form_with model: army do |form| %>
         <div class="modal-header">
-          <h5 class="modal-title" id="Title"></h5>
+          <h5 class="modal-title" id="Title"><%= @army&.name %></h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
-            <span class="input-group-text" id="name">Nombre</span>
-            <%= form.text_field :name, class: 'form-control' %>
+            <%= form.label :name, class: 'input-group-text' %>
+            <%= form.text_field :name, class: 'form-control', disabled: !@current_user.is_admin? %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="prefix">Estado</span>
-            <%= form.text_field :status, class: 'form-control' %>
+            <%= form.label :status, class: 'input-group-text' %>
+            <%= form.select :status, ARMY_STATUS, {}, class: 'form-select', disabled: !@current_user.is_admin? %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="prefix">Posición</span>
+            <%= form.label :position, class: 'input-group-text' %>
             <%= form.text_field :position, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="icon_url">Grupo</span>
+            <%= form.label :tags, class: 'input-group-text' %>
+            <%= form.select :tags,
+              options_for_select(
+                @options["tags"].map { | tag |
+                  [
+                    tag[0],
+                    { "data-content": "<span class='badge rounded-pill pill-army bg-success'><i class='bi bi-#{tag[1]["icon"]}-fill'></i> <span class='pill-army-text'>#{tag[1]["name"]}</span></span>".html_safe
+                  }
+                  ]
+                },
+                selected: army.tags
+              ),
+              { include_blank: false },
+              class: 'selectpicker flex-fill dropdown-toggle-custom',
+              title: 'Sin rasgos',
+              multiple: true,
+              data: { },
+              disabled: !@current_user.is_admin?
+            %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :group, class: 'input-group-text' %>
             <%= form.select :group,
               options_for_select(
                 ARMY_GROUPS.map { | key, value |
@@ -32,34 +53,64 @@
                 },
                 selected: army.group
               ),
-              { include_blank: true},
-              class: 'selectpicker flex-fill',
-              title: 'Sin agrupar'
+              { include_blank: true },
+              class: 'selectpicker flex-fill dropdown-toggle-custom',
+              title: 'Sin agrupar',
+              data: { }
             %>
           </div>
 
           <div class="input-group mb-3">
-            <span class="input-group-text" id="title">Region</span>
-            <%= form.text_field :region, class: 'form-control' %>
+            <%= form.label :region, class: 'input-group-text' %>
+            <%= form.text_field :region, class: 'form-control', disabled: !@current_user.is_admin? %>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="title">Señor</span>
-            <%= form.text_field :lord, class: 'form-control' %>
+            <%= form.label :lord, class: 'input-group-text' %>
+            <%= form.text_field :lord, class: 'form-control', disabled: !@current_user.is_admin? %>
           </div>
+
           <div class="input-group mb-3">
-            <span class="input-group-text" id="title">Visibilidad</span>
-            <%= form.text_field :visible, class: 'form-control' %>
+            <%= form.label :visible, class: 'input-group-text' %>
+            <div class="form-check form-switch switch-group fs-2">
+              <%= form.check_box :visible, class: 'form-check-input switch-group h-100', disabled: !@current_user.is_admin? %>
+            </div>
           </div>
-          <% @tool.options["attributes"].each_with_index do |(key, value), index| %>
+
+          <% @options["attributes"].each_with_index do |(key, value), index| %>
             <div class="input-group mb-3">
-              <span class="input-group-text" id="title"><%= key %></span>
-              <%= form.text_field "col#{index+1}", class: 'form-control' %>
+              <%= form.label key, class: 'input-group-text' %>
+              <%= form.number_field  "col#{index}", class: 'form-control', step: 1, disabled: !@current_user.is_admin? %>
             </div>
           <% end %>
+
           <div class="input-group mb-3">
-            <span class="input-group-text" id="icon_url">Notas</span>
+            <%= form.label :notes, class: 'input-group-text' %>
             <%= form.text_area :notes, class: 'form-control' %>
           </div>
+
+          <% if @current_user.is_admin? %>
+            <div class="input-group mb-3">
+              <%= form.label :factions, class: 'input-group-text' %>
+              <%= form.select :faction_ids,
+                options_for_select(
+                  @factions.pluck(:name, :id).map { |name, id|
+                    [
+                      id,
+                      { "data-content": name
+                    }
+                    ]
+                  },
+                  selected: army.factions.pluck(:id)
+                ),
+                { include_blank: false },
+                class: 'selectpicker flex-fill dropdown-toggle-custom',
+                title: 'Sin facción',
+                multiple: true,
+                data: { },
+                disabled: !@current_user.is_admin?
+              %>
+            </div>
+          <% end %>
 
           <%= form.submit nil, class: 'btn btn-primary' %>
         </div>

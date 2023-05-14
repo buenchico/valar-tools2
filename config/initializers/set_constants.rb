@@ -1,3 +1,5 @@
+USER_ROLES = ['player', 'master', 'admin']
+
 ARMY_GROUPS = {
   "red": {"name": "rojo", "icon": "suit-diamond", "color": "OrangeRed"},
   "blue": {"name": "azul", "icon": "circle", "color": "MidnightBlue"},
@@ -6,3 +8,5 @@ ARMY_GROUPS = {
   "grey": {"name": "gris", "icon": "octagon", "color": "DarkGray"},
   "black": {"name": "negro", "icon": "square", "color":"Black"}
 }
+
+ARMY_STATUS = [ "Movilizado", "Desmovilizado", "Aniquilado" ]

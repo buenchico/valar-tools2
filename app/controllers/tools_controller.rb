@@ -28,7 +28,7 @@ class ToolsController < ApplicationController
       if @tool.update(tool_params)
         format.html { redirect_to settings_url, success: 'Herramienta configurada correctamente.' }
       else
-        format.html { redirect_to settings_url, danger: @game.errors  }
+        format.html { redirect_to settings_url, danger: @tool.errors  }
       end
     end
   end
@@ -49,8 +49,13 @@ private
   end
 
   def tool_params
-    params.require(:tool).permit(:name, :title, :short_title, :icon_url, :options, :options_info, :role, :sort, :active, game_ids: []).transform_values do |value|
-      value.is_a?(String) && value.start_with?('{', '[') ? JSON.parse(value) : value
-    end
+    params.require(:tool).permit(:name, :title, :short_title, :icon_url, :options, :options_info, :role, :sort, :active, game_tools_attributes: [:id, :active, :options])
+      .tap do |whitelisted|
+        whitelisted[:game_tools_attributes].each do |index, tool_params|
+          if tool_params[:options].present?
+            whitelisted[:game_tools_attributes][index][:options] = JSON.parse(tool_params[:options])
+          end
+        end
+      end
   end
 end

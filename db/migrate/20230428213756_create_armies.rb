@@ -10,16 +10,16 @@ class CreateArmies < ActiveRecord::Migration[7.0]
        t.string :lord
        t.boolean :visible
        t.text :tags, array: true, default: []
-       t.string :col0
-       t.string :col1
-       t.string :col2
-       t.string :col3
-       t.string :col4
-       t.string :col5
-       t.string :col6
-       t.string :col7
-       t.string :col8
-       t.string :col9
+       t.integer :col0
+       t.integer :col1
+       t.integer :col2
+       t.integer :col3
+       t.integer :col4
+       t.integer :col5
+       t.integer :col6
+       t.integer :col7
+       t.integer :col8
+       t.integer :col9
        t.timestamps
      end
 

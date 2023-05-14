@@ -9,8 +9,10 @@
           <th scope="col">Rasgos</th>
           <th scope="col">Posición</th>
           <th scope="col">Grupo</th>
-          <th scope="col">Visibilidad</th>
-          <% @options["attributes"].each do | key, value | %>
+          <% if @current_user.is_admin? %>
+            <th scope="col">Visibilidad</th>
+          <% end %>
+          <% @options["attributes"]&.each do | key, value | %>
             <th scope="col"><%= key %></th>
           <% end %>
           <th scope="col" colspan="3"></th>
@@ -20,14 +22,18 @@
         <% @armies.each do |army| %>
           <tr class="<%= army.status == 'Aniquilado' ? 'destroyed' : '' %><%= army.status == 'Movilizado' ? 'mobilized' : '' %>">
             <td><%= check_box_tag "army_ids[]", army.id, false, class: "checkbox_selectable" %></td>
-            <td class="strenght" width = "50px"></td>
+            <td class="strenght" width = "50px"><%= army.strength %></td>
             <td width = "300px"><%= army.name %></td>
             <td width = "300px"><%= army.status %></td>
-            <td width = "160px"><%= army.tags.join(", ") %></td>
+            <td>
+              <% army.tags.each do | tag | %>
+                <span class="badge rounded-pill pill-army pill-army-text bg-success"><i class="bi bi-<%= @options['tags'][tag]['icon'] %>-fill"></i> <%= @options["tags"][tag]["name"] %></span>
+              <% end %>
+            </td>
             <td width = "300px"><%= army.position %></td>
             <td>
               <% unless army.group.blank? %>
-                <span class='badge rounded-pill pill-army pill-<%= army.group %>'>
+                <span class='badge rounded-pill pill-army pill-army-group pill-<%= army.group %>'>
                   <i class='bi bi-<%= ARMY_GROUPS[army.group.to_sym][:icon] %>'></i>
                   <span class="pill-army-text">
                     <%= ARMY_GROUPS[army.group.to_sym][:name] %>
@@ -35,16 +41,15 @@
                 </span>
               <% end %>
             </td>
-            <td width = "100px"></td>
+            <% if @current_user.is_admin? %>
+              <td width = "100px"><%= army.factions.pluck(:name).join(",") %></td>
+            <% end %>
+
             <% @options["attributes"].each_with_index do | (key, value), index | %>
-              <td width = "100px"><%= army["col#{index+1}"] %></td>
+              <td width = "100px"><%= army["col#{index}"] %></td>
             <% end %>
             <td><%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %></td>
-            <% if army.notes.nil? || army.notes.empty? then %>
-              <td></td>
-            <% else %>
-              <td></td>
-            <% end %>
+            <td><%= link_to '', edit_notes_army_path(army), remote: true, class: army.notes.blank? ? 'bi bi-sticky text-white' : 'bi bi-sticky-fill text-warning' %></td>
           </tr>
         <% end %>
       </tbody>

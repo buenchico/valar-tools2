@@ -24,18 +24,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_110731) do
     t.string "lord"
     t.boolean "visible"
     t.text "tags", default: [], array: true
-    t.string "col0"
-    t.string "col1"
-    t.string "col2"
-    t.string "col3"
-    t.string "col4"
-    t.string "col5"
-    t.string "col6"
-    t.string "col7"
-    t.string "col8"
-    t.string "col9"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "col0"
+    t.integer "col1"
+    t.integer "col2"
+    t.integer "col3"
+    t.integer "col4"
+    t.integer "col5"
+    t.integer "col6"
+    t.integer "col7"
+    t.integer "col8"
+    t.integer "col9"
   end
 
   create_table "armies_factions", force: :cascade do |t|
@@ -52,6 +52,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_110731) do
     t.string "long_name"
     t.integer "discourse_id"
     t.integer "reputation"
+    t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "game_id"

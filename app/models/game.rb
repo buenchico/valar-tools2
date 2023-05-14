@@ -1,6 +1,7 @@
 class Game < ApplicationRecord
   validates :name, :title, :prefix, :icon_url, presence: true
-  validates :name, :short_title, format: { without: /\s/ }
+  validates :name, :prefix, format: { without: /\s/ }
+  validates_uniqueness_of :name, :title
 
   has_many :factions
 

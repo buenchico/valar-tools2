@@ -33,6 +33,72 @@ body {
   border-radius: 0 !important;
 }
 
+:disabled {
+  cursor: not-allowed !important;
+}
+
+/* Text area submit */
+
+.textarea-submit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 300;
+}
+
+
+/* Bootstrap select styling */
+
+.dropdown-toggle-custom {
+  background: white;
+  cursor: default !important;
+}
+
+.dropdown-toggle-custom::after {
+  font-family: "bootstrap-icons";
+  content: "\f282";
+  color: #343a40;
+  position: absolute;
+  margin-left: -25px;
+  font-size: 12px;
+  font-weight: bolder;
+  margin-top: 10px;
+}
+
+.dropdown-toggle {
+  cursor: default !important;
+  background: none;
+}
+
+.dropdown-toggle:hover {
+  cursor: default !important;
+  background: none;
+}
+
+.filter-option {
+  cursor: default !important;
+}
+
+.filter-option-inner {
+  cursor: default !important;
+}
+
+.filter-option-inner-inner {
+  cursor: default !important;
+}
+
+.filter-option:hover {
+  cursor: default !important;
+}
+
+.filter-option-inner:hover {
+  cursor: default !important;
+}
+
+.filter-option-inner-inner:hover {
+  cursor: default !important;
+}
+
 /* header */
 
 #navbar-custom {
@@ -65,7 +131,7 @@ body {
 }
 
 .dropdown-toggle::after {
-    content: none;
+  content: none !important;
 }
 
 /* tools  */
@@ -141,7 +207,6 @@ body {
 /* Pills for army groups */
 
 .pill-army {
-  width: 5.5em;
   text-align: left;
   font-size: 14px;
   font-weight: normal;
@@ -156,6 +221,10 @@ body {
 
 .pill-army-text {
   text-transform: uppercase;
+}
+
+.pill-army-group {
+  width: 5.5em;
 }
 
 /* Popovers in modals */

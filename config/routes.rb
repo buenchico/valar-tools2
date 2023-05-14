@@ -17,10 +17,12 @@ Rails.application.routes.draw do
   # Games and Tools
   get 'settings', to: 'settings#index'
   resources :games, only: [:new, :edit, :create, :update, :destroy ]
-  post 'games/:id/set_active_game', to: 'games#set_active_game', as: 'set_active_game'
+  post 'games/set_active_game', to: 'games#set_active_game', as: 'set_active_game'
+  post 'games/unset_active_game', to: 'games#unset_active_game', as: 'unset_active_game'
   resources :tools, only: [:new, :edit, :create, :update, :destroy ]
 
   resources :armies
+  get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
