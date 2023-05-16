@@ -1,9 +1,9 @@
 class SettingsController < ApplicationController
   before_action :check_admin
+  before_action :set_tool
 
   def index
     @active_game = active_game
-    @tool = Tool.find_by(name: controller_name)
     @games = Game.all.order(:id)
     @tools = Tool.all.order(:sort).order(:id)
   end
