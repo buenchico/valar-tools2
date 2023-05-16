@@ -1,0 +1,39 @@
+// Filter tables
+
+(function($) {
+	$.fn.filterTable = function(filter, columnname) {
+		var index = null;
+		this.find("thead > tr:first > th").each(function(i) {
+			if ($.trim($(this).text()) == columnname) {
+				index = i;
+				return false;
+			}
+		});
+		if (index == null)
+			throw ("filter columnname: " + columnname + " not found");
+
+		this.find("tbody:first > tr").each(function() {
+		    var row = $(this);
+		    if (filter == "") {
+		        row.show();
+		    }
+		    else {
+		        var cellText = row.find("td:eq(" + index + ")").find('option:selected').text();
+		        if (cellText == "") {
+		            cellText = $(row.find(("td:eq(" + index + ")"))).text().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+		        }
+						// Override cellText if a filter-value text has been defined to search in span with class filter-value element
+						if ($(row.find(("td:eq(" + index + ")"))).find('span.filter-value:first').length == 1) {
+								cellText = $(row.find(("td:eq(" + index + ")"))).find('span.filter-value:first').text().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+						}
+		        if (cellText.indexOf(filter) == -1) {
+		            row.hide();
+		        }
+		        else {
+		            row.show();
+		        }
+		    }
+		});
+		return this;
+	};
+})(jQuery);

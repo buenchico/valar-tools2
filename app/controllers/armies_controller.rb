@@ -3,6 +3,7 @@ class ArmiesController < ApplicationController
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
   before_action :set_options, only: [:index, :edit, :update, :new]
   before_action :set_factions, only: [:edit, :new]
+  before_action :set_filters, only: [:index]
 
   def index
     if @current_user.is_master?
@@ -59,6 +60,14 @@ private
 
   def set_factions
     @factions = Faction.where(active: true).order(:name).offset(3)
+  end
+
+  def set_filters
+    if @current_user&.is_master?
+      @filter = [ "Ejército", "Estado", "Rasgos", "Posición", "Grupo", "Visibilidad" ]
+    else
+      @filter = [ "Ejército", "Rasgos", "Posición", "Grupo" ]
+    end
   end
 
   def army_params

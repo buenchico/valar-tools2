@@ -81,7 +81,7 @@ $(document).on('turbolinks:load', function() {
 
 // Select all checkboxes
 $(document).on('turbolinks:load', function(e) {
-    var $checkboxes = $('#checkbox_select_all');
+    var $checkboxes = $('.checkbox_selectable');
 
     $checkboxes.change(function(){
         var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
@@ -91,11 +91,11 @@ $(document).on('turbolinks:load', function(e) {
 
     // :visible only select visible rows
 
-    $(".checkbox_select_all").click(function () {
+    $("#checkbox_select_all").click(function () {
         $(".checkbox_selectable:visible").prop('checked', $(this).prop('checked'));
     });
 
-    $(".checkbox_selectable").change(function(){
+    $("#checkbox_selectable").change(function(){
         if (!$(this).prop("checked")){
             $(".checkbox_select_all").prop("checked",false);
         }

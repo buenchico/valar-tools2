@@ -25,7 +25,7 @@
           ARMY_GROUPS.map { | key, value |
             [
               key,
-              { "data-content": "<span class='badge rounded-pill pill-army pill-#{key}'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-army-text'>#{value[:name]}</span></span>".html_safe
+              { "data-content": "<span class='badge rounded-pill pill-army pill-#{key} filter-value'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-army-text'>#{value[:name]}</span></span>".html_safe
             }
             ]
           },
