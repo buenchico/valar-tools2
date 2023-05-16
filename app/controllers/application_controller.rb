@@ -18,8 +18,16 @@ class ApplicationController < ActionController::Base
     active_game ||= Game.find_by(active: true)
   end
 
-  def check_admin
+  def check_player
     # allows only logged in user
+    if @current_user.nil?
+      flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
+      redirect_to root_path
+    end
+  end
+
+  def check_admin
+    # allows only admin user
     if @current_user.nil? || !@current_user.is_admin?
       flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
       redirect_to root_path
@@ -27,7 +35,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_master
-    # allows only logged in user
+    # allows only master user
     if @current_user.nil? || !@current_user.is_master?
       flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
       redirect_to root_path

@@ -1,4 +1,5 @@
 class ArmiesController < ApplicationController
+  before_action :check_player
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
   before_action :set_options, only: [:index, :edit, :update, :new]
