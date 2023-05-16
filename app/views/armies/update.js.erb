@@ -1,0 +1,27 @@
+$('#army_<%= @army.id %>').replaceWith("<%= j(render partial: 'army_row', locals: { army: @army }) %>");
+$('#army_<%= @army.id %>').addClass( "table-highlight", 500, callback )
+function callback() {
+  setTimeout(function() {
+    $('#army_<%= @army.id %>').removeClass( "table-highlight" );
+  }, 250 );
+}
+
+$('.selectpicker').selectpicker();
+// Inline edit select form to submit on change
+$('.inline-edit-select').change(function() {
+  $(this).closest('form').submit();
+});
+
+
+// Inline edit input to focus on click
+$('.inline-edit-input').on('focus', function() {
+  $(this).addClass('inline-edit-input-focus');
+});
+
+$('.inline-edit-input').on('blur', function() {
+  $(this).removeClass('inline-edit-input-focus');
+  var initialValue = $(this).data('initialValue'); // Retrieve initial value
+  if (initialValue !== $(this).val()) { // Compare initial value with current value
+    $(this).closest('form').submit();
+  }
+});

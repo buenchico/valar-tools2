@@ -26,6 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_110731) do
     t.text "tags", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "hp", default: 100
     t.integer "col0"
     t.integer "col1"
     t.integer "col2"

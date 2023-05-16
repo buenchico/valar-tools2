@@ -1,7 +1,7 @@
 class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
-  before_action :set_options, only: [:index, :edit, :new]
+  before_action :set_options, only: [:index, :edit, :update, :new]
   before_action :set_factions, only: [:edit, :new]
 
   def index
@@ -38,8 +38,9 @@ class ArmiesController < ApplicationController
     respond_to do |format|
       if @army.update(army_params)
         format.html { redirect_to armies_url, success: 'Ejército editado correctamente.' }
+        format.js
       else
-        format.html { redirect_to armies_url, danger: @army.errors  }
+        format.html { redirect_to armies_url, danger: @army.errors }
       end
     end
   end

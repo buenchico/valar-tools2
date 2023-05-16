@@ -50,19 +50,21 @@ body {
 /* Bootstrap select styling */
 
 .dropdown-toggle-custom {
-  background: white;
   cursor: default !important;
 }
 
 .dropdown-toggle-custom::after {
   font-family: "bootstrap-icons";
   content: "\f282";
-  color: #343a40;
   position: absolute;
   margin-left: -25px;
   font-size: 12px;
   font-weight: bolder;
   margin-top: 10px;
+}
+
+.dropdown-toggle-text-color {
+  color: #343a40 !important;
 }
 
 .dropdown-toggle {
@@ -230,6 +232,30 @@ body {
 /* Popovers in modals */
 .popover {
     z-index: 1060;
+}
+
+/* Inline Edit */
+.inline-edit-input {
+  border: solid var(--bs-success);
+  width: 100%;
+  margin-left: -5px;
+  background: none;
+  color: inherit;
+  border-width: thin;
+  padding: 0.475rem 0.75rem;  
+}
+
+.inline-edit-input-focus {
+  background: white;
+  color: black;
+}
+
+/* Highlight table-striped */
+.table-highlight {
+  --bs-table-bg: #ffff99 !important;
+  --bs-table-striped-bg: #ffff99 !important;
+  --bs-table-color: black !important;
+  --bs-table-striped-color: black !important;
 }
 
 /* miscellaneous */

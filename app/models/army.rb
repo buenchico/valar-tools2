@@ -11,7 +11,10 @@ class Army < ApplicationRecord
     @options = Tool.find_by(name: 'armies').game_tools.find_by(game_id: Game.find_by(active: true).id).options
     str = 10
     @options["attributes"].each_with_index do | (key, value), index |
-      str += self["col#{index}"].to_i * value
+      str += self["col#{index}"].to_i * value["str"]
+    end
+    self.tags.each do | tag |
+      str += @options["tags"][tag]["str"].to_i
     end
     return str
   end

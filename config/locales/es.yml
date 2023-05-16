@@ -55,6 +55,7 @@ es:
         visible: "Visible"
         notes: "Notas"
         factions: "Facciones"
+        hp: "Salud"
   activerecord:
     models:
       game: 'Partida'
@@ -68,6 +69,8 @@ es:
               taken: 'El nombre del ejército debe ser único'
             tags:
               inclusion: 'Sólo pueden elegirse rasgos de la lista'
+            group:
+              inclusion: 'Sólo pueden elegirse grupos de la lista'
         game_tool:
           attributes:
             options:

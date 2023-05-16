@@ -26,14 +26,14 @@
                 @options["tags"].map { | tag |
                   [
                     tag[0],
-                    { "data-content": "<span class='badge rounded-pill pill-army bg-success'><i class='bi bi-#{tag[1]["icon"]}-fill'></i> <span class='pill-army-text'>#{tag[1]["name"]}</span></span>".html_safe
+                    { "data-content": "<span class='badge rounded-pill pill-army bg-success'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-army-text'>#{tag[1]["name"]}</span></span>".html_safe
                   }
                   ]
                 },
                 selected: army.tags
               ),
               { include_blank: false },
-              class: 'selectpicker flex-fill dropdown-toggle-custom',
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
               title: 'Sin rasgos',
               multiple: true,
               data: { },
@@ -54,7 +54,7 @@
                 selected: army.group
               ),
               { include_blank: true },
-              class: 'selectpicker flex-fill dropdown-toggle-custom',
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
               title: 'Sin agrupar',
               data: { }
             %>
@@ -76,9 +76,14 @@
             </div>
           </div>
 
+          <div class="input-group mb-3">
+            <%= form.label :hp, class: 'input-group-text' %>
+            <%= form.number_field :hp, class: 'form-control', step: 1, disabled: !@current_user.is_admin? %>
+          </div>
+
           <% @options["attributes"].each_with_index do |(key, value), index| %>
             <div class="input-group mb-3">
-              <%= form.label key, class: 'input-group-text' %>
+              <%= form.label value["name"] + " *(" + value["str"].to_s + ")", class: 'input-group-text' %>
               <%= form.number_field  "col#{index}", class: 'form-control', step: 1, disabled: !@current_user.is_admin? %>
             </div>
           <% end %>
@@ -103,7 +108,7 @@
                   selected: army.factions.pluck(:id)
                 ),
                 { include_blank: false },
-                class: 'selectpicker flex-fill dropdown-toggle-custom',
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
                 title: 'Sin facción',
                 multiple: true,
                 data: { },

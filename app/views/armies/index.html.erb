@@ -12,6 +12,10 @@
   <% end %>
 </div>
 
-<%= render 'armies_table' %>
+<% if @current_user.is_master? %>
+  <%= render 'armies_table' %>
+<% else %>
+  <%= render 'armies_table' %>
+<% end %>
 
 <div id='army-content'></div>

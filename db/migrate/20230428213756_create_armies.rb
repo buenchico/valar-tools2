@@ -10,6 +10,7 @@ class CreateArmies < ActiveRecord::Migration[7.0]
        t.string :lord
        t.boolean :visible
        t.text :tags, array: true, default: []
+       t.integer :hp, default: 100
        t.integer :col0
        t.integer :col1
        t.integer :col2

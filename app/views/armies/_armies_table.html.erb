@@ -2,55 +2,23 @@
     <caption>Lista de ejércitos</caption>
       <thead>
         <tr id="table_title">
-          <th scope="col"><input type="checkbox" class="ckbCheckAll" /></th>
+          <th scope="col"><input type="checkbox" id="checkbox_select_all" /></th>
           <th scope="col"<i class="bi bi-award"></i></th>
           <th scope="col">Ejército</th>
           <th scope="col">Estado</th>
+          <th scope="col">Salud</th>
           <th scope="col">Rasgos</th>
           <th scope="col">Posición</th>
           <th scope="col">Grupo</th>
-          <% if @current_user.is_admin? %>
+          <% if @current_user.is_master? %>
             <th scope="col">Visibilidad</th>
-          <% end %>
-          <% @options["attributes"]&.each do | key, value | %>
-            <th scope="col"><%= key %></th>
           <% end %>
           <th scope="col" colspan="3"></th>
         </tr>
       </thead>
       <tbody id="table_body">
         <% @armies.each do |army| %>
-          <tr class="<%= army.status == 'Aniquilado' ? 'destroyed' : '' %><%= army.status == 'Movilizado' ? 'mobilized' : '' %>">
-            <td><%= check_box_tag "army_ids[]", army.id, false, class: "checkbox_selectable" %></td>
-            <td class="strenght" width = "50px"><%= army.strength %></td>
-            <td width = "300px"><%= army.name %></td>
-            <td width = "300px"><%= army.status %></td>
-            <td>
-              <% army.tags.each do | tag | %>
-                <span class="badge rounded-pill pill-army pill-army-text bg-success"><i class="bi bi-<%= @options['tags'][tag]['icon'] %>-fill"></i> <%= @options["tags"][tag]["name"] %></span>
-              <% end %>
-            </td>
-            <td width = "300px"><%= army.position %></td>
-            <td>
-              <% unless army.group.blank? %>
-                <span class='badge rounded-pill pill-army pill-army-group pill-<%= army.group %>'>
-                  <i class='bi bi-<%= ARMY_GROUPS[army.group.to_sym][:icon] %>'></i>
-                  <span class="pill-army-text">
-                    <%= ARMY_GROUPS[army.group.to_sym][:name] %>
-                  </span>
-                </span>
-              <% end %>
-            </td>
-            <% if @current_user.is_admin? %>
-              <td width = "100px"><%= army.factions.pluck(:name).join(",") %></td>
-            <% end %>
-
-            <% @options["attributes"].each_with_index do | (key, value), index | %>
-              <td width = "100px"><%= army["col#{index}"] %></td>
-            <% end %>
-            <td><%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %></td>
-            <td><%= link_to '', edit_notes_army_path(army), remote: true, class: army.notes.blank? ? 'bi bi-sticky text-white' : 'bi bi-sticky-fill text-warning' %></td>
-          </tr>
+          <%= render 'army_row', army: army %>
         <% end %>
       </tbody>
   </table>

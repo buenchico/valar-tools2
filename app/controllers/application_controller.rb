@@ -3,7 +3,6 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
 
   helper_method :active_game
-  helper_method :user_roles
   helper_method :player_tools
   helper_method :master_tools
   helper_method :admin_tools
