@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_05_110731) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_17_145724) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,7 +26,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_110731) do
     t.text "tags", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "hp", default: 100
     t.integer "col0"
     t.integer "col1"
     t.integer "col2"
@@ -37,6 +36,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_110731) do
     t.integer "col7"
     t.integer "col8"
     t.integer "col9"
+    t.integer "hp"
   end
 
   create_table "armies_factions", force: :cascade do |t|
@@ -53,11 +53,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_110731) do
     t.string "long_name"
     t.integer "discourse_id"
     t.integer "reputation"
-    t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "game_id"
-    t.index ["game_id"], name: "index_factions_on_game_id"
+    t.boolean "active"
+    t.string "flair_url"
+  end
+
+  create_table "factions_games", id: false, force: :cascade do |t|
+    t.bigint "game_id", null: false
+    t.bigint "faction_id", null: false
+    t.index ["faction_id", "game_id"], name: "index_factions_games_on_faction_id_and_game_id"
+    t.index ["game_id", "faction_id"], name: "index_factions_games_on_game_id_and_faction_id"
   end
 
   create_table "game_tools", force: :cascade do |t|

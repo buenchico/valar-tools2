@@ -1,3 +1,5 @@
+/*  All options names to be changed to lower case to allow the function to work!!! */
+
 (function ($) {
   'use strict';
 
@@ -932,7 +934,7 @@
 
   // part of this is duplicated in i18n/defaults-en_US.js. Make sure to update both.
   Selectpicker.DEFAULTS = {
-    noneSelectedText: 'Nothing selected',
+    noneselectedtext: 'Nothing selected',
     noneResultsText: 'No results matched {0}',
     countSelectedText: function (numSelected, numTotal) {
       return (numSelected == 1) ? '{0} item selected' : '{0} items selected';
@@ -951,7 +953,7 @@
     chunkSize: 40,
     doneButton: false,
     doneButtonText: 'Close',
-    multipleSeparator: ', ',
+    multipleseparator: ', ',
     styleBase: 'btn',
     style: classNames.BUTTONCLASS,
     size: 'auto',
@@ -1909,7 +1911,7 @@
           selectedValues = getSelectValues.call(this, selectedOptions),
           button = this.$button[0],
           buttonInner = button.querySelector('.filter-option-inner-inner'),
-          multipleSeparator = document.createTextNode(this.options.multipleSeparator),
+          multipleseparator = document.createTextNode(this.options.multipleseparator),
           titleFragment = elementTemplates.fragment.cloneNode(false),
           showCount,
           countMax,
@@ -1958,7 +1960,7 @@
 
                 if (option) {
                   if (this.multiple && selectedIndex > 0) {
-                    titleFragment.appendChild(multipleSeparator.cloneNode(false));
+                    titleFragment.appendChild(multipleseparator.cloneNode(false));
                   }
 
                   if (option.title) {
@@ -2000,10 +2002,10 @@
         }
       }
 
-      // If the select doesn't have a title, then use the default, or if nothing is set at all, use noneSelectedText
+      // If the select doesn't have a title, then use the default, or if nothing is set at all, use noneselectedtext
       if (!titleFragment.childNodes.length) {
         titleFragment = generateOption.text.call(this, {
-          text: this.options.placeholder ? this.options.placeholder : this.options.noneSelectedText
+          text: this.options.placeholder ? this.options.placeholder : this.options.noneselectedtext
         }, true);
       }
 

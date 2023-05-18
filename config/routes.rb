@@ -24,5 +24,7 @@ Rails.application.routes.draw do
   resources :armies
   get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'
 
+  resources :factions, only: [:index, :edit, :update]
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

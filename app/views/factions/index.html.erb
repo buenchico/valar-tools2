@@ -1,0 +1,13 @@
+<% provide(:title, @tool.title) %>
+<% provide(:icon, @tool.icon_url) %>
+
+<div class="tool-title">
+    <i class="white <%= yield(:icon) %>"></i>
+    <%= yield(:title) %>
+</div>
+
+<%= render 'factions_table' %>
+
+<!-- Modal -->
+
+<div id='faction-content'></div>

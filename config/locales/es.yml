@@ -56,6 +56,13 @@ es:
         notes: "Notas"
         factions: "Facciones"
         hp: "Salud"
+      faction:
+        name: "Nombre"
+        long_name: "Título"
+        discourse_id: "Discourse_id"
+        flair_url: "Flair URL"
+        reputation: "Reputación"
+        game_ids: "Partidas"
   activerecord:
     models:
       game: 'Partida'

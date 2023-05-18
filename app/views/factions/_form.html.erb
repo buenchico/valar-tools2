@@ -1,0 +1,53 @@
+<div class="modal fade" id="factionModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark">
+      <%= form_with model: faction do |form| %>
+        <div class="modal-header">
+          <h5 class="modal-title" id="Title"><%= faction.title %></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <%= form.label :name, class: 'input-group-text' %>
+            <%= form.text_field :name, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :long_name, class: 'input-group-text' %>
+            <%= form.text_field :long_name, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :discourse_id, class: 'input-group-text' %>
+            <%= form.number_field :discourse_id, class: 'form-control', step: 1, disabled: true %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :flair_url, class: 'input-group-text' %>
+            <%= form.text_field :flair_url, class: 'form-control', disabled: true %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :reputation, class: 'input-group-text' %>
+            <%= form.number_field :reputation, class: 'form-control', step: 1 %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :game_ids, class: 'input-group-text' %>
+            <%= form.select :game_ids,
+              options_for_select(
+                @games.map { | game |
+                  [
+                    game.id,
+                    { "data-content": "#{image_tag(game.icon_url, alt: game.name, id: game.name, class: 'icon-select bg-secondary')} #{game.title}".html_safe
+                  }
+                  ]
+                },
+                selected: form.object.games.pluck(:id)
+              ),
+              { include_blank: false },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              multiple: true,
+              data: { multipleSeparator: ' ', noneSelectedText: 'Elige partidas' }
+            %>
+          </div>
+          <%= form.submit nil, class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+  </div>
+</div>
