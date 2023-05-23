@@ -15,7 +15,7 @@
 <div class="row mt-3">
   <div class="col">
     <%= form_tag(edit_multiple_armies_path, method: :get, id: 'edit_multiple', remote: true) do %>
-      <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button", disabled: true) do %>
+      <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button copy", disabled: true) do %>
         <i class="bi bi-clipboard"></i> Copiar
       <% end %>
       <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "update") do %>

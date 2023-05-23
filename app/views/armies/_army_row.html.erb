@@ -1,12 +1,12 @@
 <tr id="army_<%= army.id %>" class="<%= army.status == 'Aniquilado' ? 'destroyed' : '' %><%= army.status == 'Movilizado' ? 'mobilized' : '' %>">
-  <td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable" %></td>  
+  <td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable" %></td>
   <td class="strenght" width = "50px"><%= army.strength %></td>
   <td width = "300px"><%= army.name %></td>
   <td width = "300px"><%= army.status %></td>
   <td width = "100px"><%= army.hp %></td>
   <td width = "500">
     <% army.tags.each do | tag | %>
-      <span class="badge rounded-pill pill-army pill-army-text bg-success"><i class="bi bi-<%= @options['tags'][tag]['icon'] %>"></i> <%= @options["tags"][tag]["name"] %></span>
+      <span class="badge rounded-pill pill-army pill-army-text bg-success"><i class="bi bi-<%= @options['tags'][tag]['icon'] %>"></i> <%= @options["tags"][tag]["name"].capitalize %></span>
     <% end %>
     <% @options["attributes"].each_with_index do | (key, value), index | %>
       <%= (army["col#{index}"]&.nonzero? ? ('<span class="badge rounded-pill pill-army pill-army-text bg-primary"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_army_attribute(army["col#{index}"]) + '</span>').html_safe : nil ) %>
