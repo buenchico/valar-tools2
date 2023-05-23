@@ -6,10 +6,29 @@
   <%= yield(:title) %>
 </div>
 
-<div class="row">
+<div class="col">
+  <%= link_to new_army_path, class: "btn btn-primary", remote: true do %>
+    <i class="bi bi-plus-circle"></i> Crear Nuevo Ejército
+  <% end %>
+</div>
+
+<div class="row mt-3">
   <div class="col">
-    <%= link_to new_army_path, class: "btn btn-primary", remote: true do %>
-      <i class="bi bi-plus-circle"></i> Crear Nuevo Ejército
+    <%= form_tag(edit_multiple_armies_path, method: :get, id: 'edit_multiple', remote: true) do %>
+      <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button", disabled: true) do %>
+        <i class="bi bi-clipboard"></i> Copiar
+      <% end %>
+      <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "update") do %>
+        <i class="bi bi-pencil-square"></i> Editar en masa
+      <% end %>
+      <% if @current_user.is_master? %>
+        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "destroy") do %>
+          <i class="bi bi-trash"></i> Borrar en masa
+        <% end %>
+        <%= button_tag(type: 'button', class: "btn btn-danger btn-sm mass_edit_button", 'data-toggle': 'modal', value: "csv") do %>
+          Importar/Exportar
+        <% end %>
+      <% end %>
     <% end %>
   </div>
 
@@ -28,5 +47,7 @@
 <% else %>
   <%= render 'armies_table' %>
 <% end %>
+
+
 
 <div id='army-content'></div>

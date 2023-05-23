@@ -1,0 +1,74 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title">Edición masiva</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <%= form_for :army, url: update_multiple_armies_path, method: :put do | form | %>
+            <div class="alert alert-danger">
+              <div class="float-left mr-2"><i class="fas fa-exclamation-triangle fa-3x"></i></div>
+              <div>Los siguientes ejércitos serán actualizados, cualquier campo dejado en blanco no será actualizado:</div>
+            </div>
+              <% armies.each do | army | %>
+                <div class="row">
+                  <div class="col-md-5">
+                    <%= hidden_field_tag "army_ids[]", army.id %>
+                    <%= army.name %>
+                  </div>
+                  <div class="col-md-2">
+                    <%= army.status %>
+                  </div>
+                  <div class="col-md-2">
+                    <% unless army.position.blank? %>
+                      <em><%= army.position %></em>
+                    <% end %>
+                  </div>
+                  <div class="col-md-2">
+                    <% if army.group.blank? %>
+                      <span class='badge rounded-pill pill-army bg-secondary'><span class='pill-army-text'>Sin agrupar</span>
+                    <% else %>
+                      <span class='badge rounded-pill pill-army pill-<%= army.group %>'><i class='bi bi-<%= ARMY_GROUPS[army.group.to_sym][:icon] %>'></i> <span class='pill-army-text'><%= ARMY_GROUPS[army.group.to_sym][:name] %></span></span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            <div class="input-group mt-3">
+              <%= form.label :position, class: 'input-group-text' %>
+              <%= form.text_field :position, class: "form-control", "data-bs-toggle": "tooltip", "data-bs-placement": "top", "data-bs-html": "true", title: ("Escribe <em>CLEAR</em> para borrar la posición").html_safe %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :group, class: 'input-group-text' %>
+              <%= form.select :group,
+                options_for_select(
+                  ARMY_GROUPS.map { | key, value |
+                    [
+                      key,
+                      { "data-content": "<span class='badge rounded-pill pill-army pill-#{key}'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-army-text'>#{value[:name]}</span></span>".html_safe
+                    }
+                    ]
+                  }.unshift([{"data-content": "<span class='badge rounded-pill pill-army bg-secondary'><span class='pill-army-text'>Quitar grupos</span>"},"CLEAR"]),
+                  selected: nil
+                ),
+                { include_blank: true },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                data: { noneSelectedText: ' '}
+              %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :status, class: 'input-group-text' %>
+              <%= form.select :status, ([""] + ARMY_STATUS), {}, class: 'form-select', disabled: !@current_user.is_master? %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'VALIDATE' para confirmar los cambios." %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.submit t('helpers.submit.update_multiple', model: Army.model_name.human.pluralize), class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+      </div>
+    </div>
+  </div>
+</div>

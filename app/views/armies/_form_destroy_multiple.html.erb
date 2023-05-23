@@ -1,0 +1,48 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title">Borrar masivo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <%= form_for :army, url: destroy_multiple_armies_path, method: :put do | form | %>
+            <div class="alert alert-danger">
+              <div class="float-left mr-2"><i class="fas fa-exclamation-triangle fa-3x"></i></div>
+              <div>Los siguientes ejércitos serán eliminados:</div>
+            </div>
+              <% armies.each do | army | %>
+                <div class="row">
+                  <div class="col-md-5">
+                    <%= hidden_field_tag "army_ids[]", army.id %>
+                    <%= army.name %>
+                  </div>
+                  <div class="col-md-2">
+                    <%= army.status %>
+                  </div>
+                  <div class="col-md-2">
+                    <% unless army.position.blank? %>
+                      <em><%= army.position %></em>
+                    <% end %>
+                  </div>
+                  <div class="col-md-2">
+                    <% if army.group.blank? %>
+                      <span class='badge rounded-pill pill-army bg-secondary'><span class='pill-army-text'>Sin agrupar</span>
+                    <% else %>
+                      <span class='badge rounded-pill pill-army pill-<%= army.group %>'><i class='bi bi-<%= ARMY_GROUPS[army.group.to_sym][:icon] %>'></i> <span class='pill-army-text'><%= ARMY_GROUPS[army.group.to_sym][:name] %></span></span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            <div class="input-group mt-3">
+              <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'DELETE' para confirmar los cambios." %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.submit t('helpers.submit.delete_multiple', model: Army.model_name.human.pluralize), class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+      </div>
+    </div>
+  </div>
+</div>

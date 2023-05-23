@@ -34,6 +34,9 @@ es:
     submit:
       create: 'Añadir %{model}'
       update: 'Guardar %{model}'
+      delete: 'Borrar %{model}'
+      update_multiple: 'Guardar %{model}'
+      delete_multiple: 'Guardar %{model}'
     label:
       tool:
         name: 'Nombre'

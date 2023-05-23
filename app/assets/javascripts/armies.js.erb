@@ -44,31 +44,21 @@ $(document).on('turbolinks:load', function(){
     })
 });
 
-// Refresh strength and change classes after best in place editing
 $(document).on('turbolinks:load', function(){
-    $('.best_in_place').bind("ajax:success", function(event, data) {
-        // Change strenght
-        var strenght = JSON.parse(data).army.strenght;
-        var oldStrenght = $(this).closest("tr")[0].cells[1].textContent;
+  $('.checkbox_selectable').change(function() {
+    var form = $('#edit_multiple');
+    var armyId = $(this).val();
 
-        $("#count-strenght").html(parseInt($("#count-visible-strenght").text()) + strenght - oldStrenght);
-
-        $(this).closest("tr")[0].cells[1].textContent = strenght;
-
-        $.fn.recalculateStats()
-
-        // Change classes
-        var status = JSON.parse(data).army.status;
-
-        if (status !== "Aniquilado") {
-            $(this).closest("tr").removeClass("destroyed")
-            } else {
-            $(this).closest("tr").addClass("destroyed")
-        };
-        if (status !== "Movilizado") {
-            $(this).closest("tr").removeClass("mobilized")
-            } else {
-            $(this).closest("tr").addClass("mobilized")
-        };
-    })
+    if ($(this).is(':checked')) {
+      // If the checkbox is checked, add the army_id to the form parameters
+      $('<input>').attr({
+        type: 'hidden',
+        name: 'army_ids[]',
+        value: armyId
+      }).appendTo(form);
+    } else {
+      // If the checkbox is unchecked, remove the corresponding input element from the form
+      form.find('input[value="' + armyId + '"]').remove();
+    }
+  });
 });

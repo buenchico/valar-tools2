@@ -25,7 +25,6 @@ $(document).on('shown.bs.modal', function (event) {
 });
 
 
-
 // Initializing selectpicker
 $(document).on('turbolinks:load', function() {
   $('.selectpicker').selectpicker();
@@ -35,7 +34,6 @@ $(document).on('turbolinks:load', function() {
 $(document).on('shown.bs.modal', function (event) {
   $('.selectpicker').selectpicker();
 });
-
 
 // Table sorting by column
 $(document).on('turbolinks:load', function() {
@@ -81,25 +79,27 @@ $(document).on('turbolinks:load', function() {
 
 // Select all checkboxes
 $(document).on('turbolinks:load', function(e) {
-    var $checkboxes = $('.checkbox_selectable');
+  var $checkboxes = $('.checkbox_selectable');
 
-    $checkboxes.change(function(){
-        var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
-        if (countCheckedCheckboxes == 0 ) $(".mass_edit_button").prop( "disabled", true );
-        if (countCheckedCheckboxes != 0) $(".mass_edit_button").prop( "disabled", false );
-    });
+  function mass_edit_buttons() {
+    var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+    if (countCheckedCheckboxes == 0 ) {
+      $(".mass_edit_button").prop("disabled", true);
+    }
+    if (countCheckedCheckboxes != 0) {
+      $(".mass_edit_button").prop("disabled", false);
+    }
+  }
 
-    // :visible only select visible rows
+  $checkboxes.change(function(){
+    if (!$(this).prop("checked")){
+      $(".checkbox_select_all").prop("checked", false);
+    }
+    mass_edit_buttons();
+  });
 
-    $("#checkbox_select_all").click(function () {
-        $(".checkbox_selectable:visible").prop('checked', $(this).prop('checked'));
-    });
-
-    $("#checkbox_selectable").change(function(){
-        if (!$(this).prop("checked")){
-            $(".checkbox_select_all").prop("checked",false);
-        }
-    });
-    // Stop propagation make the code to work inside a table
-    e.stopPropagation();
+  $("#checkbox_select_all").click(function () {
+    $(".checkbox_selectable:visible").prop('checked', $(this).prop('checked'));
+    $checkboxes.trigger('change'); // Trigger the change event on individual checkboxes
+  });
 });

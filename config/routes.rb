@@ -21,8 +21,13 @@ Rails.application.routes.draw do
   post 'games/unset_active_game', to: 'games#unset_active_game', as: 'unset_active_game'
   resources :tools, only: [:new, :edit, :create, :update, :destroy ]
 
-  resources :armies
+  resources :armies, :except => [:show]
   get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'
+  get 'armies/:id/confirm_delete', to: 'armies#confirm', as: 'confirm_delete_army'
+  get 'edit_multiple', to: 'armies#edit_multiple', as: 'edit_multiple_armies'
+  put 'update_multiple', to: 'armies#update_multiple', as: 'update_multiple_armies'
+  put 'destroy_multiple', to: 'armies#destroy_multiple', as: 'destroy_multiple_armies'
+  post 'import', to: 'armies#import', as: 'import_armies'
 
   resources :factions, only: [:index, :edit, :update]
 
