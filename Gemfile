@@ -4,7 +4,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.0.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
+gem "rails", "~> 7.0.3"
 # database gems
+gem 'pg', '1.5.2'
 gem 'rails_12factor'
 # Use Puma as the app server
 gem 'puma', '~> 5.0'
@@ -28,6 +30,9 @@ gem 'clipboard-rails'
 gem 'jquery-tablesorter'
 # markdown
 gem 'kramdown', '~> 2.4'
+# leaflef support
+gem 'leaflet-rails'
+gem 'leaflet-draw-rails'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
@@ -66,3 +71,4 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data'
