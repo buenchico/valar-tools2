@@ -21,12 +21,12 @@ class FactionsController < ApplicationController
     end
   end
 
-  private
-    def set_faction
-      @faction = Faction.find(params[:id])
-    end
+private
+  def set_faction
+    @faction = Faction.find(params[:id])
+  end
 
-    def faction_params
-      params.require(:faction).permit(:name, :long_name, :discourse_id, :reputation, :active, :flair_url, game_ids: [])
-    end
+  def faction_params
+    params.require(:faction).permit(:name, :long_name, :discourse_id, :reputation, :active, :flair_url, game_ids: [])
+  end
 end

@@ -4,7 +4,6 @@ class ArmiesController < ApplicationController
   before_action :set_options, only: [:index, :edit, :update, :new]
   before_action :set_factions, only: [:edit, :new]
   before_action :set_filters, only: [:index]
-  before_action :check_player
   before_action :check_master, only: [:destroy, :destroy_multiple]
   before_action :check_owner, only: [:edit, :edit_notes, :update]
 
@@ -140,7 +139,7 @@ class ArmiesController < ApplicationController
 
 private
   def set_options
-    @options = @tool.game_tools.find_by(game_id: active_game.id).options
+    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
     if @options.nil?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de ejércitos'
     end

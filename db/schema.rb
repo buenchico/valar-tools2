@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_17_145724) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -66,6 +66,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_145724) do
     t.index ["game_id", "faction_id"], name: "index_factions_games_on_game_id_and_faction_id"
   end
 
+  create_table "families", force: :cascade do |t|
+    t.string "name"
+    t.string "tags", default: [], array: true
+    t.string "branch"
+    t.boolean "visible"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "game_id"
+    t.index ["game_id"], name: "index_families_on_game_id"
+  end
+
   create_table "game_tools", force: :cascade do |t|
     t.bigint "game_id"
     t.bigint "tool_id"
@@ -85,6 +96,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_145724) do
     t.boolean "active", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string "name_en"
+    t.string "name_es"
+    t.string "description"
+    t.float "x"
+    t.float "y"
+    t.string "region"
+    t.string "tags", default: [], array: true
+    t.string "location_type"
+    t.boolean "visible"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "family_id"
+    t.bigint "game_id"
+    t.index ["family_id"], name: "index_locations_on_family_id"
+    t.index ["game_id"], name: "index_locations_on_game_id"
   end
 
   create_table "tools", force: :cascade do |t|

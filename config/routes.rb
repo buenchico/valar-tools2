@@ -29,7 +29,9 @@ Rails.application.routes.draw do
   put 'destroy_multiple', to: 'armies#destroy_multiple', as: 'destroy_multiple_armies'
   post 'import', to: 'armies#import', as: 'import_armies'
 
-  resources :factions, only: [:index, :edit, :update]
+  resources :factions, :except => [:show]
+  resources :locations, :except => [:show]
+  resources :families, :except => [:show]
 
   get 'travel', to: 'travel#index'
 

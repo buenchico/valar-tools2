@@ -1,0 +1,65 @@
+<div class="modal fade" id="<%= @tool.name.singularize %>Modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark">
+      <%= form_with model: object do |form| %>
+        <div class="modal-header">
+          <h5 class="modal-title" id="Title"><%= object&.title %></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <% @tool.name.singularize.capitalize.constantize.columns_hash.except('id', 'created_at', 'updated_at').each do | column_name, column_info| %>
+            <% if object[column_name.to_sym].class.to_s == "Array" %>
+            <div class="input-group mb-3">
+              <%= form.label column_name.to_sym, class: 'input-group-text' %>
+              <% if @options.nil? %>
+                <%= form.text_field column_name.to_sym, class: 'form-control' %>
+              <% else %>
+                <%= form.select column_name.to_sym,
+                  options_for_select(
+                    @options.map { | tag |
+                      [
+                        tag,
+                        { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><span class='pill-tags-text'>#{tag}</span></span>".html_safe
+                      }
+                      ]
+                    },
+                    selected: object.tags
+                  ),
+                  { include_blank: false },
+                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  title: 'Sin etiquetas',
+                  multiple: true,
+                  data: { }
+                %>
+              <% end %>
+            </div>
+            <% else %>
+              <% if column_info.type.to_s == "boolean" %>
+                <div class="input-group mb-3">
+                  <%= form.label column_name.to_sym, class: 'input-group-text' %>
+                  <div class="form-check form-switch switch-group fs-2">
+                    <%= form.check_box column_name.to_sym, class: 'form-check-input switch-group h-100' %>
+                  </div>
+                </div>
+              <% elsif column_name.to_s.include? ("s_id") %>
+                MULTI OBJECT SELECTOR
+              <% elsif column_name.to_s.include? ("_id") %>
+                <div class="input-group mb-3">
+                  <%= form.label column_name.to_sym, class: 'input-group-text' %>
+                  <%= form.select column_name.to_sym, [""] + column_name.split("_")[0].capitalize.constantize.all.map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+                </div>
+              <% else %>
+                <div class="input-group mb-3">
+                  <%= form.label column_name.to_sym, class: 'input-group-text' %>
+                  <%= form.text_field column_name.to_sym, class: 'form-control' %>
+                </div>
+              <% end %>
+            <% end %>
+
+          <% end %>
+
+          <%= form.submit nil, class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+  </div>
+</div>

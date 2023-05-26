@@ -9,6 +9,8 @@ class Game < ApplicationRecord
   has_many :tools, -> { order('sort ASC, name ASC') }, :through => :game_tools
   accepts_nested_attributes_for :game_tools
 
+  has_many :families
+
   after_create :add_all_tools
   after_create :add_base_factions
 

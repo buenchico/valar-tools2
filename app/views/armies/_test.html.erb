@@ -5,10 +5,10 @@
   <td width = "100px"><%= army.hp %></td>
   <td width = "500">
     <% army.tags.each do | tag | %>
-      <span class="badge rounded-pill pill-army pill-army-text bg-success"><i class="bi bi-<%= @options['tags'][tag]['icon'] %>"></i> <%= @options["tags"][tag]["name"] %></span>
+      <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><i class="bi bi-<%= @options['tags'][tag]['icon'] %>"></i> <%= @options["tags"][tag]["name"] %></span>
     <% end %>
     <% @options["attributes"].each_with_index do | (key, value), index | %>
-      <%= (army["col#{index}"]&.nonzero? ? ('<span class="badge rounded-pill pill-army pill-army-text bg-primary"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_army_attribute(army["col#{index}"]) + '</span>').html_safe : nil ) %>
+      <%= (army["col#{index}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_army_attribute(army["col#{index}"]) + '</span>').html_safe : nil ) %>
     <% end %>
   </td>
   <td width = "300px"></td>      

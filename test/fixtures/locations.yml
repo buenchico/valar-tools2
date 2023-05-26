@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  name_es: MyString
+  x: 1.5
+  'y': 1.5
+  region: MyString
+  tags: MyString
+  location_type: MyString
+  visibility: false
+
+two:
+  name: MyString
+  name_es: MyString
+  x: 1.5
+  'y': 1.5
+  region: MyString
+  tags: MyString
+  location_type: MyString
+  visibility: false

@@ -28,9 +28,9 @@
                   </div>
                   <div class="col-md-2">
                     <% if army.group.blank? %>
-                      <span class='badge rounded-pill pill-army bg-secondary'><span class='pill-army-text'>Sin agrupar</span>
+                      <span class='badge rounded-pill pill-tags bg-secondary'><span class='pill-tags-text'>Sin agrupar</span>
                     <% else %>
-                      <span class='badge rounded-pill pill-army pill-<%= army.group %>'><i class='bi bi-<%= ARMY_GROUPS[army.group.to_sym][:icon] %>'></i> <span class='pill-army-text'><%= ARMY_GROUPS[army.group.to_sym][:name] %></span></span>
+                      <span class='badge rounded-pill pill-tags pill-<%= army.group %>'><i class='bi bi-<%= ARMY_GROUPS[army.group.to_sym][:icon] %>'></i> <span class='pill-tags-text'><%= ARMY_GROUPS[army.group.to_sym][:name] %></span></span>
                     <% end %>
                   </div>
                 </div>
