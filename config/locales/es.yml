@@ -38,6 +38,13 @@ es:
       update_multiple: 'Guardar %{model}'
       delete_multiple: 'Guardar %{model}'
     label:
+  activerecord:
+    attributes:
+      game:
+        name: "Nombre"
+        prefix: "Prefijo"
+        icon_url: "Icono URL"
+        title: "Título"
       tool:
         name: 'Nombre'
         title: 'Título'
@@ -66,11 +73,17 @@ es:
         flair_url: "Flair URL"
         reputation: "Reputación"
         game_ids: "Partidas"
-  activerecord:
+      family:
+        name: "Nombre"
+        tags: "Etiquetas"
+        branch: "Rama"
+        visible: "Visible"
+        games_id: "Partidas"
     models:
       game: 'Partida'
       tool: 'Herramienta'
       army: 'Ejército'
+      family: 'Familia'
     errors:
       models:
         army:
@@ -85,3 +98,7 @@ es:
           attributes:
             options:
               options_cannot_be_changed_if_game_is_active: "No puedes cambiar las opciones de la partida %{game_name} mientres esté activa"
+        family:
+          attributes:
+            name:
+              taken: 'El nombre de la familia debe ser único'

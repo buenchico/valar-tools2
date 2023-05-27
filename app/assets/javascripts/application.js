@@ -14,6 +14,9 @@
 //= require jquery_ujs
 //= require jquery-tablesorter
 //= require jquery-ui/effects/effect-highlight
+//= require leaflet
+//= require leaflet.draw
+//= require leaflet-easyprint
 //= require popper.js
 //= require turbolinks
 //= require bootstrap

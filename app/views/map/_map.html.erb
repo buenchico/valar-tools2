@@ -1,0 +1,255 @@
+<script>
+  $(document).on('turbolinks:load', function () {
+    if ($(".map.index").length !== 0 || $(".map.full").length !== 0) {
+      if ($('#map-container').data('loaded') == false) {
+        $(window).resize(function(){
+          if ($('#map-container').hasClass('fs') ) {
+            $('#mapid').height(window.innerHeight);
+          } else {
+            $('#mapid').height(window.innerHeight - $("#header").height() - 102);
+          }
+        });
+
+        //var bounds = [[-13,1], [40,35]]; // tiles
+        //var bounds = [[-30,1], [45,60]]; // mapa-fisico
+        var bounds = [[-13,1],[40,48]] // mapa-westeros
+
+        var map = L.map('mapid', {
+            crs: L.CRS.Simple, //CRS need to be removed for tile layer
+            //drawControl: true,
+            minZoom: 5,
+            maxZoom: 8,
+            maxBounds: bounds,
+            maxBoundsViscosity: 1.0,
+            fullscreenControl: true,
+            fullscreenControlOptions: {
+              position: 'topleft' }
+        });
+
+        var params = new URLSearchParams(document.location.search.substring(1));
+        var x = params.get("x");
+        var y = params.get("y");
+
+        if (x == null || y == null) {
+          map.setView( [13.5, 18], 5);
+        } else {
+          map.setView( [y, x], 7);
+        }
+
+        var image = L.imageOverlay('/assets/mapa-westeros.png', bounds, {opacity: 1, attribution: '&copy; Ser Mountain Goat &mdash; <a href="http://www.sermountaingoat.co.uk/map/index.php">http://www.sermountaingoat.co.uk/map</a>',}).addTo(map);
+
+        // TILE LAYER
+        /*
+        L.tileLayer('/assets/tiles/{z}_{x}_{y}.png', {
+          tms: false,
+          attribution: '&copy; Ser Mountain Goat &mdash; <a href="http://www.sermountaingoat.co.uk/map/index.php">http://www.sermountaingoat.co.uk/map</a>',
+        }).addTo(map);
+        */
+
+        var json_roads = layer_json()[0];
+        var json_hex = layer_json()[1];
+
+        var layer_roads = new L.geoJson(json_roads, {
+          style: {
+            color: 'rgba(104,56,28,1.0)',
+            weight: 2.0
+          }
+        });
+        map.addLayer(layer_roads);
+
+        var main = new L.layerGroup.collision({margin:0});
+        var main_all = new L.FeatureGroup();
+        var other = new L.FeatureGroup();
+        var ruins = new L.FeatureGroup();
+        var the_wall = new L.FeatureGroup();
+
+        var drawnItems = new L.FeatureGroup();
+
+        map.on('zoom', function () {
+          if (map.getZoom() == 8) {
+            map.removeControl(layerControl);
+            map.addControl(layerControlZoom8);
+            if (map.hasLayer(main)) {
+              map.removeLayer(main);
+              main_all.addTo(map);
+            }
+          }
+          if (map.getZoom() != 8) {
+            map.removeControl(layerControlZoom8);
+            map.addControl(layerControl);
+            if (map.hasLayer(main_all)) {
+              map.removeLayer(main_all);
+              main.addTo(map);
+            }
+          }
+        });
+
+        var layer_hex = new L.geoJson(json_hex, {
+          interactive: false,
+          style: {
+            color: 'rgba(0,0,0,0.5)',
+            weight: 1.0
+          }
+        });
+        map.addLayer(layer_hex);
+
+
+        var overlays = {
+          "Asentamientos": main,
+          "Caminos": layer_roads,
+          "Otros lugares": other,
+          "Ruinas": ruins,
+          "El Muro": the_wall,
+          "Rejilla": layer_hex,
+          "Rutas": drawnItems
+        }
+
+        var overlays_zoom8 = {
+          "Asentamientos": main_all,
+          "Caminos": layer_roads,
+          "Otros lugares": other,
+          "Ruinas": ruins,
+          "El Muro": the_wall,
+          "Rejilla": layer_hex,
+          "Rutas": drawnItems
+        }
+
+        var layerControl = L.control.layers(null, overlays)
+        var layerControlZoom8 = L.control.layers(null, overlays_zoom8)
+
+        map.addControl(layerControl);
+
+        // Saving as image
+
+        // Custom image size
+        var fullMap = {
+  	      width: 1080, // change depending on base map 1080
+  	      height: 1700, // change depending on base map 1700
+  	      className: 'fullMap',
+  	      name: 'Mapa completo'
+        }
+
+        var printer = L.easyPrint({
+          		title: 'Exportar mapa',
+          		sizeModes: ['Current',fullMap],
+          		defaultSizeTitles: {Current: 'Zona visible'},
+          		filename: 'westeros',
+          		exportOnly: true,
+          		hideControlContainer: true
+        }).addTo(map);
+
+        map.on('easyPrint-start', e => {
+          $('#printing').removeClass('invisible')
+          if (e.event.target.className == 'fullMap') {
+            map.setView( [13.5, 18], 5);
+          }
+        });
+
+        map.on('easyPrint-finished', e => {
+          $('#printing').addClass('invisible')
+        });
+
+        map.addLayer(drawnItems);
+
+        // Set the button title text for the polygon button
+        L.drawLocal.draw.toolbar.buttons.polyline = 'Dibuja tu ruta';
+        L.drawLocal.draw.toolbar.buttons.marker = 'Añade tu marcador';
+
+        // Set polyline colours array
+        var colours = ['DarkRed','LimeGreen','SteelBlue','DarkMagenta','Gold','Black'];
+
+        var drawControl = new L.Control.Draw({
+          draw: {
+        		polyline: {
+        		  showLength: false,
+        			shapeOptions: {
+                className: 'route',
+                showMeasurements: true,
+                color: colours[0],
+        				weight: 10
+        			}
+        		},
+            polygon: false,
+            rectangle: false,
+            circle: false,
+            marker: {icon: new L.DivIcon({
+              iconAnchor: [10, 35], // point of the icon which will correspond to marker's location
+              className: 'markerClass',
+              html: '<div style="position:relative; text-align:center; width: 24px; font-size: 60%;"><div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); color: white;">A</div><img src="/assets/marker.svg" style="width:100%""></div>'
+            })}
+          },
+          edit: {
+            featureGroup: drawnItems,
+            edit: false
+          }
+        });
+
+        map.addControl(drawControl);
+
+        var poly = 0;
+        var mark = 0;
+
+        map.on('draw:created', function (e) {
+          var type = e.layerType,
+              layer = e.layer;
+          drawnItems.addLayer(layer);
+          (type == 'polyline') ? poly++ : '';
+          (type == 'marker') ? mark++ : '';
+
+          map.removeControl(drawControl);
+          drawControl.setDrawingOptions({
+            polyline: {
+              showLength: false,
+              shapeOptions: {
+                className: 'route',
+                showMeasurements: true,
+                color: colours[ poly % colours.length],
+                weight: 10
+              }
+            },
+            marker: {
+              icon: new L.DivIcon({
+                iconAnchor: [10, 35], // point of the icon which will correspond to marker's location
+                className: 'markerClass',
+                html: '<div style="position:relative; text-align:center; width: 24px; font-size: 60%;"><div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); color: white;">' + String.fromCharCode(65 + mark ) + '</div><img src="/assets/marker.svg" style="width:100%""></div>'
+              })
+            }
+          });
+          map.addControl(drawControl);
+        });
+
+        /*
+        // Debug coords
+        map.on('click', function(e){
+          var coord = e.latlng;
+          var lat = coord.lat;
+          var lng = coord.lng;
+          console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
+        });
+
+        // Debug grid
+
+        L.GridLayer.GridDebug = L.GridLayer.extend({
+          createTile: function (coords) {
+            const tile = document.createElement('div');
+            tile.style.outline = '1px solid green';
+            tile.style.fontWeight = 'bold';
+            tile.style.fontSize = '14pt';
+            tile.innerHTML = [coords.z, coords.x, coords.y].join('/');
+            return tile;
+          },
+        });
+
+        L.gridLayer.gridDebug = function (opts) {
+          return new L.GridLayer.GridDebug(opts);
+        };
+
+        map.addLayer(L.gridLayer.gridDebug());
+
+        */
+
+        $('#map-container').data('loaded', true);
+    }
+  }
+});
+</script>

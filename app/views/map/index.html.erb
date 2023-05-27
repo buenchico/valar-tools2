@@ -1,0 +1,18 @@
+<% provide(:title, @tool.title) %>
+<% provide(:icon, @tool.icon_url) %>
+
+<div class="tool-title">
+    <i class="white <%= yield(:icon) %>"></i>
+    <%= yield(:title) %>
+</div>
+
+<div class="container" id="map-container" data-loaded="false">
+  <div class="container mt-5" style="margin-bottom: -160px;"">
+    <div class="loader mx-auto invisible" id="printing"></div>
+  </div>
+
+  <div id="mapid" style="height: 720px; width: 100%">
+  </div>
+</div>
+
+<%= render 'map' %>
