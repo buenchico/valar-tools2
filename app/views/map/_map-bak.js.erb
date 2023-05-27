@@ -1,4 +1,3 @@
-<script>
   $(document).on('turbolinks:load', function () {
     if ($(".map.index").length !== 0 || $(".map.full").length !== 0) {
       if ($('#map-container').data('loaded') == false) {
@@ -36,7 +35,7 @@
           map.setView( [y, x], 7);
         }
 
-        var image = L.imageOverlay('/assets/mapa-westeros.png', bounds, {opacity: 1, attribution: '&copy; Ser Mountain Goat &mdash; <a href="http://www.sermountaingoat.co.uk/map/index.php">http://www.sermountaingoat.co.uk/map</a>',}).addTo(map);
+        var image = L.imageOverlay('/assets/map-westeros.png', bounds, {opacity: 1, attribution: '&copy; Ser Mountain Goat &mdash; <a href="http://www.sermountaingoat.co.uk/map/index.php">http://www.sermountaingoat.co.uk/map</a>',}).addTo(map);
 
         // TILE LAYER
         /*
@@ -252,4 +251,3 @@
     }
   }
 });
-</script>

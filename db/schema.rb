@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
+ActiveRecord::Schema.define(version: 2023_05_23_160338) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,8 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.string "lord"
     t.boolean "visible"
     t.text "tags", default: [], array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "hp", default: 100
     t.integer "col0"
     t.integer "col1"
     t.integer "col2"
@@ -36,14 +36,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.integer "col7"
     t.integer "col8"
     t.integer "col9"
-    t.integer "hp"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "armies_factions", force: :cascade do |t|
     t.bigint "army_id"
     t.bigint "faction_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["army_id"], name: "index_armies_factions_on_army_id"
     t.index ["faction_id"], name: "index_armies_factions_on_faction_id"
   end
@@ -53,9 +54,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.string "long_name"
     t.integer "discourse_id"
     t.integer "reputation"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.boolean "active"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "flair_url"
   end
 
@@ -71,8 +72,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.string "tags", default: [], array: true
     t.string "branch"
     t.boolean "visible"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.bigint "game_id"
     t.index ["game_id"], name: "index_families_on_game_id"
   end
@@ -82,8 +83,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.bigint "tool_id"
     t.boolean "active", default: false
     t.jsonb "options"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["game_id"], name: "index_game_tools_on_game_id"
     t.index ["tool_id"], name: "index_game_tools_on_tool_id"
   end
@@ -94,8 +95,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.string "prefix"
     t.string "icon_url"
     t.boolean "active", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "locations", force: :cascade do |t|
@@ -108,8 +109,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.string "tags", default: [], array: true
     t.string "location_type"
     t.boolean "visible"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.bigint "family_id"
     t.bigint "game_id"
     t.index ["family_id"], name: "index_locations_on_family_id"
@@ -121,12 +122,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.string "title"
     t.string "short_title"
     t.string "icon_url"
-    t.text "options_info"
+    t.text "options_info", default: ""
     t.string "role", default: "player"
     t.integer "sort", default: 0
     t.boolean "active", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -135,8 +136,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.integer "discourse_id"
     t.string "avatar_url"
     t.string "auth_token"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.bigint "faction_id"
     t.index ["faction_id"], name: "index_users_on_faction_id"
   end

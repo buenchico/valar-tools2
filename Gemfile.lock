@@ -89,6 +89,8 @@ GEM
     crass (1.0.6)
     erubi (1.10.0)
     execjs (2.8.1)
+    faker (3.2.0)
+      i18n (>= 1.8.11, < 2)
     faraday (2.3.0)
       faraday-net_http (~> 2.0)
       ruby2_keywords (>= 0.0.4)
@@ -112,6 +114,11 @@ GEM
       railties (>= 3.2)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
+    kramdown (2.4.0)
+      rexml
+    leaflet-draw-rails (0.1.0)
+    leaflet-rails (1.9.3)
+      rails (>= 4.2.0)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -131,7 +138,7 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.6-x86_64-linux)
       racc (~> 1.4)
-    pg (1.1.0)
+    pg (1.5.2)
     popper_js (2.9.3)
     public_suffix (4.0.7)
     puma (5.6.4)
@@ -209,6 +216,8 @@ GEM
     turbolinks-source (5.2.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2023.3)
+      tzinfo (>= 1.0.0)
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -235,17 +244,21 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   clipboard-rails
+  faker
   faraday
   faraday-net_http_persistent
   jbuilder (~> 2.7)
   jquery-rails (>= 4.4.0)
   jquery-tablesorter
   jquery-ui-rails (>= 6.0.1)
+  kramdown (~> 2.4)
+  leaflet-draw-rails
+  leaflet-rails
   listen (~> 3.3)
-  pg (= 1.1)
+  pg (= 1.5.2)
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)
-  rails (= 7.0.0)
+  rails (~> 7.0.0)
   rails_12factor
   sassc-rails (>= 2.1.2)
   selenium-webdriver

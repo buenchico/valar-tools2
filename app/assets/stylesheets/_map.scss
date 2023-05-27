@@ -1,0 +1,63 @@
+.easyPrintHolder .fullMap {
+  background-image: url(icon-fullscreen.png);
+}
+
+.leaflet-measure-path-measurement {
+    position: absolute;
+    font-size: 14px;
+    color: black;
+    text-shadow: -1px  0 0 white,
+                 -1px -1px 0 white,
+                  0 -1px 0 white,
+                  1px -1px 0 white,
+                  1px  0 0 white,
+                  1px  1px 0 white,
+                  0  1px 0 white,
+                 -1px  1px 0 white;
+    white-space: nowrap;
+    transform-origin: 0;
+    pointer-events: none;
+}
+
+.leaflet-measure-path-measurement > div {
+    position: relative;
+    margin-top: -25%;
+    left: -50%;
+}
+
+.markerClass {
+  text-align: center;
+  font-size: 14px;
+  color: black;
+}
+
+.leaflet-popup-tip-container {
+    display: none;
+}
+
+.leaflet-tooltip-top.locationLabel:before,
+.leaflet-tooltip-bottom.locationLabel:before,
+.leaflet-tooltip-left.locationLabel:before,
+.leaflet-tooltip-right.locationLabel:before {
+    display: none;
+    }
+
+.locationLabel {
+  font-family: "Baskerville Regular", Sans-Serif !important;
+  padding: 10px !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: white !important;
+  font-size: 15px;
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+.divIconBox {
+  background-color: transparent;
+  border: none;
+}
