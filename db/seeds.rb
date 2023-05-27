@@ -16,8 +16,65 @@ player: "valar", faction: Faction.find(1), discourse_id: 2, avatar_url: "https:/
 }
 ])
 
+Game.new(name: 'valar', prefix: 'va', title: 'Valar Dohaeris', icon_url: 'va-icon.png')
+Game.new(name: 'warvalar', prefix: 'wh', title: 'WarValar', icon_url: 'wh-icon.png')
+
 Tool.new(name: 'settings', title: 'Configuración de la partida', short_title: 'configuración', icon_url: 'bi bi-gear-fill', role: 'admin', active: true ).save(validate: false)
-Tool.new(name: 'armies', title: 'Lista de ejércitos', short_title: 'ejércitos', icon_url: 'bi bi-diagram-3', role: 'player', active: true, options: {hp: 2, xp: 2} ).save
+Tool.new(name: 'armies', title: 'Lista de ejércitos', short_title: 'ejércitos', icon_url: 'bi-shield-shaded', role: 'player',
+  options_info: 'Formato JSON con los siguientes valores:
+
+  * *attributes* como pares **name**: **value**
+
+  * *tags* con pares de valores para **icon**, **str** y **name**
+  * No olvidar los *{* *}* ni las *"* (comillas dobles, no simples)',
+  active: true).save
+Tool.new(name: 'travel', title: 'Calculadora de Viaje', short_title: 'Viaje', icon_url: 'bi-signpost-split-fill', role: 'player',
+  options_info: '',
+  active: true ).save
+Tool.new(name: 'factions', title: 'Lista de Facciones', short_title: 'Facciones', icon_url: 'bi-flag-fill', role: 'master',
+  options_info: '',
+  active: true ).save
+Tool.new(name: 'locations', title: 'Lista de Lugares', short_title: 'Viaje', icon_url: 'bi-pin-map-fill', role: 'master',
+  options_info: 'Array de etiquetas, no olvides incluir los corchetes **[** y **]** ni las comillas dobles **"**',
+  active: true ).save
+Tool.new(name: 'families', title: 'Lista de Familias', short_title: 'Familias', icon_url: 'bi-house-fill', role: 'master',
+  options_info: 'Array de etiquetas, no olvides incluir los corchetes **[** y **]** ni las comillas dobles **"**',
+  active: true ).save
+Tool.new(name: 'map', title: 'Mapa', short_title: 'Mapa', icon_url: 'bi-globe-europe-africa', role: 'player',
+  options_info: '',
+  active: true ).save
+
+Game_tool.where(tool_id: Tool.find_by(name: 'armies').id, game_id: Game.find_by(name: 'valar')).update(options: {
+  "tags": {
+    "cavalry": {
+      "str": 2,
+      "icon": "chess-knight-fill",
+      "name": "caballería"
+    },
+    "garrison": {
+      "str": 0,
+      "icon": "chess-rook-fill",
+      "name": "guarnición"
+    },
+    "peaseants": {
+      "str": -2,
+      "icon": "chess-pawn-fill",
+      "name": "campesinos"
+    }
+  },
+  "attributes": {
+    "xp": {
+      "str": 2,
+      "icon": "chevron-double-up",
+      "name": "veterano"
+    },
+    "armour": {
+      "str": 1,
+      "icon": "shield-fill",
+      "name": "armadura"
+    }
+  }
+})
 
 if Rails.env.development?
   User.create([
