@@ -63,7 +63,7 @@
         var unit,
             hex;
 
-        d = d / 1.16;
+        d = d / <%= (@options["scale"] || 1 ) %>;
         unit = 'hex';
 
         return d.toFixed(2) + ' ' + unit;
