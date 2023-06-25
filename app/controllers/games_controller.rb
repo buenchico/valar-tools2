@@ -72,12 +72,14 @@ private
 
   def game_params
     params.require(:game).permit(:name, :prefix, :title, :icon_url, game_tools_attributes: [:id, :active, :options])
-      .tap do |whitelisted|
+          .tap do |whitelisted|
+      if whitelisted[:game_tools_attributes].present?
         whitelisted[:game_tools_attributes].each do |index, tool_params|
           if tool_params[:options].present?
             whitelisted[:game_tools_attributes][index][:options] = JSON.parse(tool_params[:options])
           end
         end
       end
+    end
   end
 end
