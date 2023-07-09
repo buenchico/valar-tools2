@@ -63,7 +63,7 @@
         var unit,
             hex;
 
-        d = d / (<%= @options["scale"] * 2 %>);
+        d = d / ( (<%= @options["scale"] %>) / ( 1.15 * 0.5 ) );
         unit = 'hex';
 
         return d.toFixed(2) + ' ' + unit;
