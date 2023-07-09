@@ -28,9 +28,9 @@ $(document).on('turbolinks:load', function () {
       var y = params.get("y");
 
       if (x == null || y == null) {
-        map.setView( [13.5, 18], 5);
+        map.setView( [<%= @options["bounds"][1][0] / 2 %>, <%= @options["bounds"][1][1] / 2 %>], <%= @options["zoom"][0] %>);
       } else {
-        map.setView( [y, x], 7);
+        map.setView( [y, x], <%= @options["zoom"][0] %>);
       }
 
       var image = L.imageOverlay('<%= "/assets/" + @options["img"].to_s %>', bounds, {opacity: 1, attribution: '<%= @options["attribution"].html_safe %>',}).addTo(map);
