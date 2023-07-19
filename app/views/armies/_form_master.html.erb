@@ -9,11 +9,11 @@
         <div class="modal-body">
           <div class="input-group mb-3">
             <%= form.label :name, class: 'input-group-text' %>
-            <%= form.text_field :name, class: 'form-control', disabled: !@current_user.is_master? %>
+            <%= form.text_field :name, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :status, class: 'input-group-text' %>
-            <%= form.select :status, ARMY_STATUS, {}, class: 'form-select', disabled: !@current_user.is_master? %>
+            <%= form.select :status, ARMY_STATUS, {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :position, class: 'input-group-text' %>
@@ -36,8 +36,7 @@
               class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
               title: 'Sin rasgos',
               multiple: true,
-              data: { },
-              disabled: !@current_user.is_master?
+              data: { }
             %>
           </div>
           <div class="input-group mb-3">
@@ -61,29 +60,29 @@
 
           <div class="input-group mb-3">
             <%= form.label :region, class: 'input-group-text' %>
-            <%= form.text_field :region, class: 'form-control', disabled: !@current_user.is_master? %>
+            <%= form.text_field :region, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :lord, class: 'input-group-text' %>
-            <%= form.text_field :lord, class: 'form-control', disabled: !@current_user.is_master? %>
+            <%= form.text_field :lord, class: 'form-control' %>
           </div>
 
           <div class="input-group mb-3">
             <%= form.label :visible, class: 'input-group-text' %>
             <div class="form-check form-switch switch-group fs-2">
-              <%= form.check_box :visible, class: 'form-check-input switch-group h-100', disabled: !@current_user.is_master? %>
+              <%= form.check_box :visible, class: 'form-check-input switch-group h-100' %>
             </div>
           </div>
 
           <div class="input-group mb-3">
             <%= form.label :hp, class: 'input-group-text' %>
-            <%= form.number_field :hp, class: 'form-control', step: 1, disabled: !@current_user.is_master? %>
+            <%= form.number_field :hp, class: 'form-control', step: 1 %>
           </div>
 
           <% @options["attributes"].each_with_index do |(key, value), index| %>
             <div class="input-group mb-3">
               <%= form.label value["name"] + " *(" + value["str"].to_s + ")", class: 'input-group-text' %>
-              <%= form.number_field  "col#{index}", class: 'form-control', step: 1, disabled: !@current_user.is_master? %>
+              <%= form.number_field  "col#{index}", class: 'form-control', step: 1 %>
             </div>
           <% end %>
 
@@ -92,29 +91,26 @@
             <%= form.text_area :notes, class: 'form-control' %>
           </div>
 
-          <% if @current_user.is_master? %>
-            <div class="input-group mb-3">
-              <%= form.label :factions, class: 'input-group-text' %>
-              <%= form.select :faction_ids,
-                options_for_select(
-                  @factions.pluck(:name, :id).map { |name, id|
-                    [
-                      id,
-                      { "data-content": name
-                    }
-                    ]
-                  },
-                  selected: army.factions.pluck(:id)
-                ),
-                { include_blank: false },
-                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                title: 'Sin facción',
-                multiple: true,
-                data: { },
-                disabled: !@current_user.is_master?
-              %>
-            </div>
-          <% end %>
+          <div class="input-group mb-3">
+            <%= form.label :factions, class: 'input-group-text' %>
+            <%= form.select :faction_ids,
+              options_for_select(
+                @factions.pluck(:name, :id).map { |name, id|
+                  [
+                    id,
+                    { "data-content": name
+                  }
+                  ]
+                },
+                selected: army.factions.pluck(:id)
+              ),
+              { include_blank: false },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              title: 'Sin facción',
+              multiple: true,
+              data: { }
+            %>
+          </div>
 
           <%= form.submit nil, class: 'btn btn-primary' %>
         </div>

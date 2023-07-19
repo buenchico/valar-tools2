@@ -1,2 +1,6 @@
-$('#army-content').html("<%= j render 'form', army: @army %>");
+<% if @current_user.is_master? %>
+  $('#army-content').html("<%= j render 'form_master', army: @army %>");
+<% else %>
+  $('#army-content').html("<%= j render 'form_player', army: @army %>");
+<% end %>
 $('#armyModal').modal('show');

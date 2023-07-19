@@ -52,9 +52,13 @@ class ArmiesController < ApplicationController
   end
 
   def update
+
     if !@current_user.is_master? # modify params if user is not admin
-      keys_to_remove = ["name", "status", "tags", "region", "lord", "visible", "hp",
+      keys_to_remove = ["tags", "region", "lord", "visible", "hp",
         "col0", "col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8", "col9", "faction_ids"]
+        if @army.status == ARMY_STATUS[-1]
+          keys_to_remove << "status"
+        end
     end
 
     respond_to do |format|
