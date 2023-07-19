@@ -2,17 +2,17 @@
   <td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable" %></td>
   <td class="strenght" width = "50px"><%= army.strength %></td>
   <td width = "300px"><%= army.name %></td>
-  <td width = "300px"><%= army.status %></td>
-  <td width = "100px"><%= army.hp %></td>
-  <td width = "500">
-    <% army.tags.each do | tag | %>
-      <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><i class="bi bi-<%= @options['tags'][tag]['icon'] %>"></i> <%= @options["tags"][tag]["name"].capitalize %></span>
-    <% end %>
+  <td><%= army.status %></td>
+  <td width = "800px">
+    <%= ((100 - army.hp) / @options["hp"]["step"])&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-danger"><i class="bi bi-' + @options["hp"]["icon"] + '"></i> ' + @options["hp"]["name"].capitalize + " " + number_to_army_attribute(((army.hp - 100) / @options["hp"]["step"])) + '</span>').html_safe : nil %>
     <% @options["attributes"].each_with_index do | (key, value), index | %>
       <%= (army["col#{index}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_army_attribute(army["col#{index}"]) + '</span>').html_safe : nil ) %>
     <% end %>
+    <% army.tags.each do | tag | %>
+      <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><i class="bi bi-<%= @options['tags'][tag]['icon'] %>"></i> <%= @options["tags"][tag]["name"].capitalize %></span>
+    <% end %>
   </td>
-  <td width = "300px">
+  <td width = "500px">
     <%= form_with model: army, local: false do |form| %>
       <%= form.text_field :position, class: 'inline-edit-input form-control', "data-initialvalue": army.position %>
     <% end %>
