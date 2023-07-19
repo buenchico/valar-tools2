@@ -1,9 +1,70 @@
+<script>
+  <%= render partial: 'step', formats: [:js] %>
+</script>
+
 <% provide(:title, @tool.title) %>
 <% provide(:icon, @tool.icon_url) %>
 
 <div class="tool-title">
   <i class="white <%= yield(:icon) %>"></i>
-  <%= yield(:title) %>
+  <%= yield(:title) %> — <span class="land">Tierra</span><span class="sea d-none">Mar</span>
+  <%= button_tag 'Cambiar terreno', id: 'path_type_btn', class: 'btn btn-info float-end mt-3', value: 'land' %>
 </div>
 
-<div id='travel-content'></div>
+<div id="result" class="card mb-5 border-primary bg-dark d-none col-6">
+  <div class="card-body">
+    <div class="card-title">
+      <span id=title" class="h5">Desde Origen hasta Destino</span>
+      <button type="button" id="close_results" class="btn-close btn-close-white float-end" aria-label="Close" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar"></button>
+      <button type="button" id="copy_results" class="btn-no-style text-light float-end me-1" aria-label="Copy" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar resultado">
+        <i class="bi bi-clipboard2-fill"></i>
+      </button>
+    </div>
+    <p class="card-text"></p>
+  </div>
+</div>
+
+<div class="container d-flex flex-row align-items-center flex-wrap">
+  <%= form_with url: travel_calculate_path, local: false do |form| %>
+    <%= form.hidden_field :type, value: 'land' %>
+
+    <div class="input-group mb-3 w-auto">
+      <%= form.label :from, class: 'input-group-text' %>
+      <%= form.text_field :from, class: 'form-control me-2' %>
+      <%= form.label :to, class: 'input-group-text' %>
+      <%= form.text_field :to, class: 'form-control me-2' %>
+    </div>
+
+    <div class="input-group mb-3 w-auto">
+      <%= form.label :size_travel_land, class: 'input-group-text land' %>
+      <%= form.label :size_travel_sea, class: 'input-group-text sea d-none' %>
+      <%= form.number_field :size, class: 'form-control me-2', min: 0, step: 1 %>
+
+      <%= form.label :army_type_land, class: 'input-group-text land' %>
+      <%= form.label :army_type_sea, class: 'input-group-text sea d-none' %>
+      <%= form.select :army_type, options_for_select(USER_ROLES, nil), {}, class: 'form-select me-2' %>
+    </div>
+
+    <div id="steps" class="ms-5">
+      <div id="step_0" class="input-group mb-3 w-auto pe-3">
+        <%= form.label :distance, class: 'input-group-text' %>
+        <%= form.number_field "step[0][hex]", class: 'form-control me-2', min: 0, step: 1 %>
+
+        <%= form.label :terrain, class: 'input-group-text' %>
+        <%= form.select :"step[0][terrain]", options_for_select(USER_ROLES, nil), {}, class: 'form-select me-2' %>
+
+        <%= form.label :speed, class: 'input-group-text' %>
+        <%= form.select :"step[0][speed]", options_for_select(USER_ROLES, nil), {}, class: 'form-select me-2' %>
+
+        <%= form.label :obstacle, class: 'input-group-text' %>
+        <%= form.select :"step[0][obstacle]", options_for_select(USER_ROLES, nil), {}, class: 'form-select me-2' %>
+      </div>
+    </div>
+
+    <div class="input-group mb-3 w-auto">
+      <%= form.button t('.add_step'), class: "btn btn-success", id: "add_step", type: "button" %>
+    </div>
+
+    <%= form.submit t('.calculate'), class: "btn btn-primary", id: "calculate" %>
+  <% end %>
+</div>

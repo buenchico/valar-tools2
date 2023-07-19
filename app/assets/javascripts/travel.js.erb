@@ -1,0 +1,27 @@
+// Copy selected to clipboard
+$(document).on('turbolinks:load', function () {
+  if ($(".travel.index").length !== 0 ) {
+
+    $("#path_type_btn").click(function() {
+      if ($(this).val() == 'land') {
+        $(this).val('sea')
+        $('#type').val('sea')
+        $('.sea').removeClass('d-none')
+        $('.land').addClass('d-none')
+      } else {
+        $(this).val('land')
+        $('#type').val('land')
+        $('.land').removeClass('d-none')
+        $('.sea').addClass('d-none')
+      }
+    })
+
+    $('#close_results').click(function() {
+      $('#result').addClass('d-none')
+    })
+
+    $(document).on("click", ".remstep", function() {
+      $(this).parent().remove();
+    });
+  }
+});

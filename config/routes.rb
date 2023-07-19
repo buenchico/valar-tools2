@@ -34,8 +34,11 @@ Rails.application.routes.draw do
   resources :families, :except => [:show]
 
   get 'travel', to: 'travel#index'
+  post 'travel/calculate', to: 'travel#calculate'
 
   get 'map', to: 'map#index'
+
+
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

@@ -38,6 +38,16 @@ es:
       update_multiple: 'Guardar %{model}'
       delete_multiple: 'Guardar %{model}'
     label:
+      from: "Origen"
+      to: "Destino"
+      army_type_land: "Tipo de ejércitos"
+      army_type_sea: "Tipo de flotas"
+      size_travel_land: "Nº de ejércitos"
+      size_travel_sea: "Nº de flotas"
+      terrain: "Terreno"
+      speed: "Velocidad"
+      distance: "Distancia"
+      obstacle: "Obstáculo"
   activerecord:
     attributes:
       game:
@@ -102,3 +112,7 @@ es:
           attributes:
             name:
               taken: 'El nombre de la familia debe ser único'
+  travel:
+    index:
+      calculate: 'Calcular'
+      add_step: 'Añadir etapa'
