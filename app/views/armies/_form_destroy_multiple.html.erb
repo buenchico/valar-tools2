@@ -14,14 +14,17 @@
             </div>
               <% armies.each do | army | %>
                 <div class="row">
-                  <div class="col-md-5">
+                  <div class="col-md-2">
+                    id: #<%= sprintf('%04d', army.id) %>
+                  </div>
+                  <div class="col-md-6">
                     <%= hidden_field_tag "army_ids[]", army.id %>
                     <%= army.name %>
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-1">
                     <%= army.status %>
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-1">
                     <% unless army.position.blank? %>
                       <em><%= army.position %></em>
                     <% end %>

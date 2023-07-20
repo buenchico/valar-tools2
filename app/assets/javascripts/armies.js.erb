@@ -1,54 +1,3 @@
-// Copy selected to clipboard
-$(document).on('turbolinks:load', function () {
-
-    $(function () {
-        //Assign Click event to Button.
-        $(".copy").click(function () {
-            var message = "";
-
-            //Loop through all checked CheckBoxes in GridView.
-            $("input[type=checkbox]:visible:checked").each(function () {
-                var row = $(this).closest("tr")[0];
-                if ($(this).closest("tr")[0].id != "table_title") {
-                  message += row.cells[2].textContent; // Army name
-                  message += " (" + row.cells[3].textContent + ")"; // Army status
-                  if (row.cells[4].textContent != "") message += ", en " + row.cells[4].textContent; // Army position
-                  if (row.cells[5].textContent != "") {
-
-                    var stringArray = $.trim(row.cells[5].textContent).split(/\n/)
-
-                    var resultArray = [];
-                    for (var i = 0; i < stringArray.length; i++) {
-                      var element = $.trim(stringArray[i]); // Remove leading and trailing whitespace from each element
-                      if (element) { // Skip empty elements
-                        resultArray.push(element);
-                      }
-                    }
-
-                    message += " [" + resultArray.join(", ") + "]"; // Army tratis
-                  }
-
-                  message += " FUE: " + row.cells[1].textContent
-                  message += "\n";
-                };
-            });
-
-            // Create a dummy input to copy the string array inside it
-            var dummy = document.createElement("textarea");
-            // Add it to the document
-            document.body.appendChild(dummy);
-            // Output the array into it
-            dummy.value = message;
-            // Select it
-            dummy.select();
-            // Copy its contents
-            document.execCommand("copy");
-            // Remove it as its not needed anymore
-            document.body.removeChild(dummy);
-        });
-    });
-});
-
 // Filters
 $.fn.armyFilters = function(house){
     var value = $("#filtertext-" + house).val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -57,19 +6,6 @@ $.fn.armyFilters = function(house){
     var countArmies = $('input[type="checkbox"]:visible').length - 1;
     $("#count-visible").html(countArmies);
 }
-
-// Recalculate stats
-$.fn.recalculateStats = function(){
-    var countArmies = $('input[type="checkbox"]:visible').length - 1;
-    $("#count-visible").html(countArmies);
-
-    var countStrenght = 0;
-    $('.strenght:visible').each(function(){
-        countStrenght += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
-    });
-    $("#count-visible-strenght").html(countStrenght);
-}
-
 
 // Trigger filters
 $(document).on('turbolinks:load', function(){

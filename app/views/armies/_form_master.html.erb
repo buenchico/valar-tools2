@@ -1,5 +1,5 @@
 <div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content bg-dark">
       <%= form_with model: army do |form| %>
         <div class="modal-header">
@@ -7,6 +7,33 @@
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <div id="result" class="card mb-3 border-primary bg-dark">
+            <div class="card-body">
+              <div class="card-title">
+                <button type="button" id="copy_traits" class="btn-no-style text-light float-end me-1" aria-label="Copy" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar rasgos">
+                  <i class="bi bi-clipboard2-fill"></i>
+                </button>
+              </div>
+              <p class="card-text">
+                <%= army&.name %> (<i class="bi bi-award"></i><%= army&.strength %>)
+                <%= ((100 - army.hp) / @options["hp"]["step"])&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-danger me-1 mt-1"><i class="bi bi-' + @options["hp"]["icon"] + '"></i> ' + @options["hp"]["name"].capitalize + " " + number_to_army_attribute(((army.hp - 100) / @options["hp"]["step"])) + '</span>').html_safe : nil %>
+
+                <% @options["attributes"].each_with_index do | (key, value), index | %>
+                  <%= (army["col#{index}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary me-1 mt-1"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_army_attribute(army["col#{index}"]) + '</span>').html_safe : nil ) %>
+                <% end %>
+
+                <% army.tags.each do | tag | %>
+                  <span class="badge rounded-pill pill-tags pill-tags-text bg-success me-1 mt-1"><i class="bi bi-<%= @options['tags'][tag]['icon'] %>"></i> <%= @options["tags"][tag]["name"].capitalize %></span>
+                <% end %>
+
+                [id: #<%= sprintf('%04d', army.id) %>]
+              </p>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            Este ejército está compuesto por <%= @options["soldiers"] * ( army.hp / 100) %> hombres y tiene una fuerza de combate&nbsp;<i class="bi bi-award"></i><%= army.strength %>
+          </div>
+
           <div class="input-group mb-3">
             <%= form.label :name, class: 'input-group-text' %>
             <%= form.text_field :name, class: 'form-control' %>
@@ -15,10 +42,19 @@
             <%= form.label :status, class: 'input-group-text' %>
             <%= form.select :status, ARMY_STATUS, {}, class: 'form-select' %>
           </div>
+
           <div class="input-group mb-3">
-            <%= form.label :position, class: 'input-group-text' %>
-            <%= form.text_field :position, class: 'form-control' %>
+            <%= form.label :hp, class: 'input-group-text' %>
+            <%= form.number_field :hp, class: 'form-control', step: @options["hp"]["step"] %>
           </div>
+
+          <% @options["attributes"].each_with_index do |(key, value), index| %>
+            <div class="input-group mb-3">
+              <%= form.label value["name"] + " *(" + value["str"].to_s + ")", class: 'input-group-text' %>
+              <%= form.number_field  "col#{index}", class: 'form-control', step: 1 %>
+            </div>
+          <% end %>
+
           <div class="input-group mb-3">
             <%= form.label :tags, class: 'input-group-text' %>
             <%= form.select :tags,
@@ -39,6 +75,12 @@
               data: { }
             %>
           </div>
+
+          <div class="input-group mb-3">
+            <%= form.label :position, class: 'input-group-text' %>
+            <%= form.text_field :position, class: 'form-control' %>
+          </div>
+
           <div class="input-group mb-3">
             <%= form.label :group, class: 'input-group-text' %>
             <%= form.select :group,
@@ -73,18 +115,6 @@
               <%= form.check_box :visible, class: 'form-check-input switch-group h-100' %>
             </div>
           </div>
-
-          <div class="input-group mb-3">
-            <%= form.label :hp, class: 'input-group-text' %>
-            <%= form.number_field :hp, class: 'form-control', step: 1 %>
-          </div>
-
-          <% @options["attributes"].each_with_index do |(key, value), index| %>
-            <div class="input-group mb-3">
-              <%= form.label value["name"] + " *(" + value["str"].to_s + ")", class: 'input-group-text' %>
-              <%= form.number_field  "col#{index}", class: 'form-control', step: 1 %>
-            </div>
-          <% end %>
 
           <div class="input-group mb-3">
             <%= form.label :notes, class: 'input-group-text' %>

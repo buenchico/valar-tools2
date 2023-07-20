@@ -40,7 +40,13 @@
   </td>
 
   <% if @current_user.is_master? %>
-    <td width = "100px"><%= army.factions.pluck(:name).join(",") %></td>
+    <td width = "100px" class="text-center">
+      <% if army.visible == true %>
+        <%= army.factions.pluck(:name).join(",") %>
+      <% else %>
+        <i class="bi bi-x-lg text-danger"></i>
+      <% end %>
+    </td>
   <% end %>
 
   <td><%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %></td>

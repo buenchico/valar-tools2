@@ -1,8 +1,3 @@
-// Accessing the clipboard
-$(document).on('turbolinks:load', function() {
-  var clipboard = new Clipboard('.clipboard-btn');
-});
-
 // Initializing popovers & tooltips
 function initPopovers() {
   var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
