@@ -7,7 +7,7 @@
 </div>
 
 <% if @current_user.is_master? %>
-  <%= link_to "Sincronizar Grupos", sync_groups_path, method: :post, class: 'btn btn-danger' %>
+  <%= link_to "Sincronizar Grupos", sync_groups_path, method: :post, class: 'btn btn-danger mb-3' %>
 <% end %>
 
 <%= render 'factions_table' %>

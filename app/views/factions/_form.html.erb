@@ -9,11 +9,11 @@
         <div class="modal-body">
           <div class="input-group mb-3">
             <%= form.label :name, class: 'input-group-text' %>
-            <%= form.text_field :name, class: 'form-control' %>
+            <%= form.text_field :name, class: 'form-control', disabled: true  %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :long_name, class: 'input-group-text' %>
-            <%= form.text_field :long_name, class: 'form-control' %>
+            <%= form.text_field :long_name, class: 'form-control', disabled: true  %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :discourse_id, class: 'input-group-text' %>
@@ -45,6 +45,12 @@
               multiple: true,
               data: { multipleSeparator: ' ', noneSelectedText: 'Elige partidas' }
             %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :active, class: 'input-group-text' %>
+            <div class="form-check form-switch switch-group fs-2">
+              <%= form.check_box :active, class: 'form-check-input switch-group h-100' %>
+            </div>
           </div>
           <%= form.submit nil, class: 'btn btn-primary' %>
         </div>

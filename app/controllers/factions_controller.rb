@@ -4,10 +4,11 @@ class FactionsController < ApplicationController
   before_action :set_faction, only: [:edit, :update]
 
   def index
-    @factions = Faction.all.order(:id)
-    response = DiscourseApi::DiscourseGroups.get_groups_data
-
-    @groups_data = response
+    if @current_user.is_master?
+      @factions = Faction.all.order(:id)
+    else
+      @factions = Faction.where(active: true).order(:name)
+    end
   end
 
   def edit
@@ -86,6 +87,6 @@ private
   end
 
   def faction_params
-    params.require(:faction).permit(:name, :long_name, :discourse_id, :reputation, :active, :flair_url, game_ids: [])
+    params.require(:faction).permit(:reputation, :active, game_ids: [])
   end
 end
