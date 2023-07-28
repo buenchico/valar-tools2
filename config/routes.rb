@@ -30,6 +30,8 @@ Rails.application.routes.draw do
   post 'import', to: 'armies#import', as: 'import_armies'
 
   resources :factions, :except => [:show]
+  post 'factions/sync_groups', to: 'factions#sync_groups', as: 'sync_groups'
+
   resources :locations, :except => [:show]
   resources :families, :except => [:show]
 

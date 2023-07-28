@@ -6,6 +6,10 @@
     <%= yield(:title) %>
 </div>
 
+<% if @current_user.is_master? %>
+  <%= link_to "Sincronizar Grupos", sync_groups_path, method: :post, class: 'btn btn-danger' %>
+<% end %>
+
 <%= render 'factions_table' %>
 
 <!-- Modal -->
