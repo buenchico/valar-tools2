@@ -3399,6 +3399,7 @@
         this.render();
         this.buildList();
       } else {
+        this.selectpicker.main.data = null; // Marek Vsechovsky's fix: Fixes https://github.com/snapappointments/bootstrap-select/issues/2738 (duplication of list items and selections on "refresh").        
         this.fetchData(function () {
           that.render();
           that.buildList();
