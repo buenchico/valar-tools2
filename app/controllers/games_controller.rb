@@ -45,9 +45,54 @@ class GamesController < ApplicationController
     end
   end
 
-  def set_active_game
+  def setup
+    @game = Game.find(params[:id])
+    @factions = Faction.all.order(:id)
+    @users = User.offset(1).all.order(:id)
+  end
+
+  def setup_complete
+    game = Game.find(params[:id])
+
+    Faction.update_all(active: false) # setting all factions as inactive
+
+    selected_faction_ids = params[:faction_ids].unshift("3", "2", "1") # Get selected faction IDs from form parameter
+    selected_factions = Faction.where(id: selected_faction_ids) # Fetch Faction records for selected factions
+
+    selected_factions.each do |faction|
+      # Check if the faction does not already have the game associated
+      unless faction.games.exists?(game.id)
+        faction.games << game # Add @game to each faction's games association
+      end
+      faction.active = true
+      faction.save
+
+      if !faction.save
+        @errors << faction.errors
+      end
+
+      User.all.offset(1).update_all(faction_id: 3)
+
+      users_array = params[:users] || []
+
+      users_array.each do | user |
+        player = User.find(user["id"].to_i)
+        if !player.update(faction_id: user["faction"].to_i)
+          @errors << player.errors
+        end
+      end
+    end
+
+    if !game.update(game_params)
+      @errors << game.errors
+    end
+
+    if !game.update(active: true)
+      @errors << game.errors
+    end
+
     respond_to do |format|
-      if Game.update_all(active: false) && @game.update(active: true)
+      if @errors.blank?
         format.html { redirect_to settings_url, success: 'Partida inicializada correctamente.' }
       else
         format.html { redirect_to settings_url, danger: @game.errors }

@@ -5,6 +5,6 @@ class SettingsController < ApplicationController
   def index
     @active_game = active_game
     @games = Game.all.order(:id)
-    @tools = Tool.all.order(:sort).order(:id)
+    @tools = Tool.all.order(:sort).order(:role)
   end
 end

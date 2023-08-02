@@ -9,24 +9,27 @@
 <div class="card bg-dark mb-3">
   <div class="card-body">
     <% if @active_game.nil?%>
-      <%= form_with url: set_active_game_url, remote: true do |form| %>
+      <%= form_with url: setup_game_url, local: false do |form| %>
         <%= form.select :id,
           options_for_select(
             @games.pluck(:id, :title, :icon_url).map { | id, title, icon_url |
               [
                 id,
-                { "data-content": image_tag(icon_url, :alt => title, id: title, class: 'icon-table bg-dark') + " " + title
-              }
+                {
+                  "data-content": image_tag(icon_url, :alt => title, id: title, class: 'icon-table bg-dark') + " " + title
+                }
               ]
             },
             selected: nil
           ),
           { include_blank: false },
-          class: 'selectpicker flex-fill dropdown-toggle-custom',
+          class: 'selectpicker flex-fill dropdown-toggle-custom game-select',
           title: 'Elige partida para preparar',
-          data: { }
+          data: { "style": "btn-danger btn-game-select" }
         %>
-        <%= form.submit "Inicialzar partida", class: "btn btn-danger" %>
+        <%= button_tag type: 'submit', class: 'btn btn-primary btn-lg' do %>
+          <i class="bi bi-controller"></i> Preparar partida
+        <% end %>
       <% end %>
     <% else %>
       <%= form_with url: unset_active_game_url, remote: true do |form| %>

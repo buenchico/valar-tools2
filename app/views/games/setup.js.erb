@@ -1,0 +1,41 @@
+$('#game-content').html("<%= j render 'setup', game: @game %>");
+$('#gameModal').modal('show');
+$('#step-users').click(function() {
+  $("#users-tab").tab("show");
+
+  var uncheckedFactionIds = []; // Initialize an empty array to store checked faction_ids
+
+  // Loop through each checkbox with class 'checkbox_selectable' that is checked
+  $('input.checkbox_faction:not(:checked)').each(function() {
+    var factionId = $(this).val(); // Get the value (faction_id) of the checked checkbox
+    uncheckedFactionIds.push(factionId); // Add the faction_id to the array
+  });
+
+  console.log(uncheckedFactionIds)
+
+  $('.select-factions').each(function() {
+    var select = $(this);
+    uncheckedFactionIds.forEach(function(id) {
+      select.find('option[value="' + id + '"]').remove();
+    });
+  });
+
+});
+$('#step-tools').click(function() {
+  $("#tools-tab").tab("show");
+});
+$('#step-complete').click(function() {
+  $("#complete-tab").tab("show");
+});
+$('input[type="checkbox"]').change(function() {
+  if ($(this).prop('checked')) {
+    var id = $(this).attr('id').split("-")[1]
+    $('#' + id).removeClass("inactive")
+    $('#users_' + id.split("_")[1] + '_faction').prop('disabled', false)
+    $('#users_' + id.split("_")[1] + '_faction').selectpicker('refresh')
+  } else {
+    $('#' + $(this).attr('id').split("-")[1]).addClass("inactive")
+    $('#users_' + id.split("_")[1] + '_faction').prop('disabled', true)
+    $('#users_' + id.split("_")[1] + '_faction').selectpicker('refresh')
+  }
+});
