@@ -47,7 +47,11 @@ class ApplicationController < ActionController::Base
   end
 
   def player_tools
-    player_tools = Tool.where(active: true).where(role:'player')
+    if @current_user&.is_master?
+      player_tools = Tool.where(active: true).where(role:'player')
+    else
+      player_tools = active_game&.tools&.where(active: true)&.where(role:'player')
+    end
   end
 
   def master_tools

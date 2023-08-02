@@ -1,5 +1,5 @@
 class FactionsController < ApplicationController
-  before_action :check_master
+  before_action :check_master, except: [:index]
   before_action :set_tool
   before_action :set_faction, only: [:edit, :update]
 
@@ -16,7 +16,7 @@ class FactionsController < ApplicationController
   end
 
   def sync_groups
-    @groups_data = DiscourseApi::DiscourseGroups.get_groups_data
+    @groups_data = DiscourseApi::DiscourseGetData.get_groups_data
     @games_prefix = Game.pluck(:prefix)
     @factions = Faction.all.order(:id)
     @count = 0
@@ -66,7 +66,7 @@ class FactionsController < ApplicationController
         message = '<p>' + @count.to_s + ' facciones han sido sincronizadas correctamente.</p>' +
                   '<p>' + @errors.length.to_s + ' facciones han fallado al ser creadas.</p>' +
                   '<p>' + @errors.to_s + '</p>'
-        format.html { redirect_to factions_url, danger: message.html_safe, flash: { html_safe: true } }
+        format.html { redirect_to factions_url, danger: message }
       end
     end
   end

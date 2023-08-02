@@ -1,0 +1,27 @@
+<div>
+  <table class="table table-dark table-striped table-borderless table-hover table-sm table-responsive align-middle sortable">
+    <caption>Lista de Facciones</caption>
+      <thead>
+        <tr>
+          <th scope="col" style="width: 25px"></th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Facción</th>
+          <th scope="col" colspan="1"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr class="<%= user.is_active? ? nil : 'inactive' %>">
+            <td><%= image_tag(user.avatar_url, :alt => user.player, id: user.player, class: 'icon-table') if user.avatar_url.present? %></td>
+            <td><%= user.player %></td>
+            <td><%= user.faction.title %></td>
+            <td>
+              <%= link_to edit_user_path(user), remote: true do %>
+                <i class="bi bi-pencil-square text-white"></i>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+  </table>
+</div>

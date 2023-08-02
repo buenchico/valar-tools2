@@ -1,0 +1,46 @@
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark">
+      <%= form_with model: user do |form| %>
+        <div class="modal-header">
+          <h5 class="modal-title" id="Title"><%= user.player %></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <%= form.label :player, class: 'input-group-text' %>
+            <%= form.text_field :player, class: 'form-control', disabled: true  %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :discourse_id, class: 'input-group-text' %>
+            <%= form.number_field :discourse_id, class: 'form-control', step: 1, disabled: true %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :avatar_url, class: 'input-group-text' %>
+            <%= form.text_field :avatar_url, class: 'form-control', disabled: true %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :faction, class: 'input-group-text' %>
+            <%= form.select :faction_id,
+              options_for_select(
+                @factions.map { | faction |
+                  [
+                    faction.id,
+                    { "data-content": "#{image_tag(faction.flair_url, alt: faction.name, id: faction.name, class: 'icon-select bg-secondary') unless faction.flair_url.blank?} #{faction.title}".html_safe
+                  }
+                  ]
+                },
+                selected: form.object.faction.id
+              ),
+              { include_blank: false },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              multiple: false,
+              data: { noneSelectedText: 'Elige facción' }
+            %>
+          </div>
+
+          <%= form.submit nil, class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+  </div>
+</div>

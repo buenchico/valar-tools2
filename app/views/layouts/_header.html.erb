@@ -26,7 +26,7 @@
           <li class="nav-item dropdown">
             <%= link_to "", "#", id: "navbarHamburger", class: "nav-link dropdown-toggle nav-text-icon bi bi-list", "role": "button", "data-bs-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" %>
             <ul class="dropdown-menu" aria-labelledby="navbarHamburger">
-              <% player_tools.each do | tool | %>
+              <% player_tools&.each do | tool | %>
                 <li>
                   <%= link_to tool.path, class: 'dropdown-item' do %>
                     <i class="<%= tool.icon_url %>"></i>

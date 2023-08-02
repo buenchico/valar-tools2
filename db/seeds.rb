@@ -18,6 +18,7 @@ player: "valar", faction: Faction.find(1), discourse_id: 2, avatar_url: "https:/
 
 Game.create(name: 'valar', prefix: 'va', title: 'Valar Dohaeris', icon_url: 'va-icon.png')
 Game.create(name: 'warvalar', prefix: 'wh', title: 'WarValar', icon_url: 'wh-icon.png')
+Game.create(name: 'heggon', prefix: 'hg', title: 'Los Planos de Heggon', icon_url: 'hg-icon.png')
 
 Tool.create(name: 'settings', title: 'Configuración de la partida', short_title: 'configuración', icon_url: 'bi bi-gear-fill', role: 'admin', active: true ).save(validate: false)
 Tool.create(name: 'armies', title: 'Lista de ejércitos', short_title: 'ejércitos', icon_url: 'bi-shield-shaded', role: 'player',
@@ -32,6 +33,9 @@ Tool.create(name: 'travel', title: 'Calculadora de Viaje', short_title: 'Viaje',
   options_info: '',
   active: true )
 Tool.create(name: 'factions', title: 'Lista de Facciones', short_title: 'Facciones', icon_url: 'bi-flag-fill', role: 'master',
+  options_info: '',
+  active: true )
+Tool.create(name: 'users', title: 'Lista de Jugadores', short_title: 'Jugadores', icon_url: 'bi-person-fill', role: 'admin',
   options_info: '',
   active: true )
 Tool.create(name: 'locations', title: 'Lista de Lugares', short_title: 'Viaje', icon_url: 'bi-pin-map-fill', role: 'master',

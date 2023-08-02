@@ -17,9 +17,15 @@ Rails.application.routes.draw do
   # Games and Tools
   get 'settings', to: 'settings#index'
   resources :games, only: [:new, :edit, :create, :update, :destroy ]
+  post 'games/setup', to: 'games#setup', as: 'setup_game'
+  post 'games/setup/factions', to: 'games#setup_factions', as: 'setup_game_factions'
+  post 'games/setup/tools', to: 'games#setup_tools', as: 'setup_game_tools'
   post 'games/set_active_game', to: 'games#set_active_game', as: 'set_active_game'
   post 'games/unset_active_game', to: 'games#unset_active_game', as: 'unset_active_game'
   resources :tools, only: [:new, :edit, :create, :update, :destroy ]
+
+  resources :users, only: [:index, :edit, :update ]
+  post 'users/sync_users', to: 'users#sync_users', as: 'sync_users'
 
   resources :armies, :except => [:show]
   get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'

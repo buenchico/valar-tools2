@@ -83,6 +83,11 @@ es:
         flair_url: "Flair URL"
         reputation: "Reputación"
         game_ids: "Partidas"
+      user:
+        player: "Jugador"
+        discourse_id: "Discourse_id"
+        avatar_url: "Avatar URL"
+        faction: "Facción"
       family:
         name: "Nombre"
         tags: "Etiquetas"
@@ -94,6 +99,7 @@ es:
       tool: 'Herramienta'
       army: 'Ejército'
       family: 'Familia'
+      user: 'Jugador'
     errors:
       models:
         army:

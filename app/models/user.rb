@@ -17,4 +17,8 @@ class User < ApplicationRecord
   def is_master?
     self.faction.name == 'Master' || self.faction.name == 'Admin'
   end
+
+  def is_active?
+    self.faction.name != 'Inactivo'
+  end
 end

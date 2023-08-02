@@ -13,7 +13,7 @@
       </thead>
       <tbody>
         <% @factions.each do |faction| %>
-          <tr class="<%= faction.active == true ? "" : "active" %>" >
+          <tr class="<%= faction.active == true ? "" : "inactive" %>" >
             <td><%= image_tag(faction.flair_url, :alt => faction.name, id: faction.name, class: 'icon-table') if faction.flair_url.present? %></td>
             <td>
               <blockquote class="blockquote">

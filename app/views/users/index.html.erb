@@ -1,3 +1,5 @@
+<!-- Scaffold for basic tools -->
+
 <% provide(:title, @tool.title) %>
 <% provide(:icon, @tool.icon_url) %>
 
@@ -7,11 +9,11 @@
 </div>
 
 <% if @current_user.is_admin? %>
-  <%= link_to "Sincronizar Grupos", sync_groups_path, method: :post, class: 'btn btn-danger mb-3' %>
+  <%= link_to "Sincronizar Jugadores", sync_users_path, method: :post, class: 'btn btn-danger mb-3' %>
 <% end %>
 
-<%= render 'factions_table' %>
+<%= render 'users_table' %>
 
 <!-- Modal -->
 
-<div id='faction-content'></div>
+<div id='user-content'></div>
