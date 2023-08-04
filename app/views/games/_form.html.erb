@@ -28,7 +28,7 @@
           </div>
 
           <%= form.fields_for :game_tools do |game_tool_form| %>
-            <% unless game_tool_form.object.tool.name == 'settings' %>
+            <% unless game_tool_form.object.tool.role == 'admin' %>
               <div class="input-group mb-3">
                 <div class="input-group-text">
                   <%= game_tool_form.label nil, game_tool_form.object.tool.title %>

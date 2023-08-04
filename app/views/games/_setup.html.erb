@@ -123,7 +123,7 @@
             <div class="tab-pane fade" id="tools" role="tabpanel" aria-labelledby="tools-tab">
               <%= button_tag 'Seleccionar herramientas', type: 'button', class: 'btn btn-danger', id: 'step-complete' %>
 
-              <%= form.fields_for :game_tools, form.object.game_tools.sort_by(&:id).drop(1) do |game_tool_form| %>
+              <%= form.fields_for :game_tools, form.object.game_tools.sort_by(&:id).select { |game_tool| game_tool.tool.role != "admin" } do |game_tool_form| %>
                 <div class="mt-3">
                   <div class="input-group mb-2">
                     <div class="input-group-text">

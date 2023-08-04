@@ -91,6 +91,14 @@ class GamesController < ApplicationController
       @errors << game.errors
     end
 
+    game_params["game_tools_attributes"].each do | key, gametool|
+      tool = GameTool.find(gametool["id"]).tool
+
+      if !tool.update(active: gametool["active"])
+        @errors << tool.errors
+      end
+    end
+
     respond_to do |format|
       if @errors.blank?
         format.html { redirect_to settings_url, success: 'Partida inicializada correctamente.' }
@@ -102,7 +110,7 @@ class GamesController < ApplicationController
 
   def unset_active_game
     respond_to do |format|
-      if Game.update_all(active: false)
+      if Game.update_all(active: false) && Tool.where.not(role: 'admin').update_all(active: false)
         format.html { redirect_to settings_url, success: 'Partida terminada correctamente.' }
       else
         format.html { redirect_to settings_url, danger: @game.errors }

@@ -1,7 +1,7 @@
 class GameTool < ApplicationRecord
   belongs_to :tool
   belongs_to :game
-  validate :options_cannot_be_changed_if_game_is_active, if: :options_changed?
+  # validate :options_cannot_be_changed_if_game_is_active, if: :options_changed?
 
 private
   def options_cannot_be_changed_if_game_is_active
