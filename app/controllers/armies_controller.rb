@@ -8,8 +8,10 @@ class ArmiesController < ApplicationController
   before_action :check_owner, only: [:edit, :edit_notes, :update]
 
   def index
+    @faction = @current_user.faction.name
     if @current_user.is_master?
-      @armies = Army.all.order(:group)
+      @all_armies = Army.all.order(:group)
+      @factions = Faction.where(active: true).order(:id).drop(1)
     else
       @armies = Army.joins(:factions).where(factions: { id: @current_user.faction_id }).distinct
     end
