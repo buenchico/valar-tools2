@@ -28,4 +28,4 @@ test:
   database: <%= ENV['POSTGRES_TEST_DB'] %>
 
 production:
-  database: my_database_production
+  database: valar_db
