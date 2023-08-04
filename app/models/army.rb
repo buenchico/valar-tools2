@@ -5,7 +5,7 @@ class Army < ApplicationRecord
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
   validates :status, inclusion: ARMY_STATUS
   validates_uniqueness_of :name
-  validates :tags, inclusion: Tool.find_by(name: 'armies').game_tools.find_by(game_id: Game.find_by(active: true).id).options["tags"].keys
+#  validates :tags, inclusion: Tool.find_by(name: 'armies').game_tools.find_by(game_id: Game.find_by(active: true).id).options["tags"].keys
 
   def strength
     @options = Tool.find_by(name: 'armies').game_tools.find_by(game_id: Game.find_by(active: true).id).options
