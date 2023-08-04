@@ -11,6 +11,5 @@ class CreateFactions < ActiveRecord::Migration[7.0]
     end
 
     add_reference :users, :faction
-    add_reference :factions, :game
   end
 end

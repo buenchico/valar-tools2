@@ -44,8 +44,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.bigint "faction_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["army_id"], name: "index_armies_factions_on_army_id"
-    t.index ["faction_id"], name: "index_armies_factions_on_faction_id"
+    t.index ["army_id"], name: "index_valar_armies_factions_on_army_id"
+    t.index ["faction_id"], name: "index_valar_armies_factions_on_faction_id"
   end
 
   create_table "factions", force: :cascade do |t|
@@ -59,13 +59,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.string "flair_url"
   end
 
-  create_table "factions_games", id: false, force: :cascade do |t|
-    t.bigint "game_id", null: false
-    t.bigint "faction_id", null: false
-    t.index ["faction_id", "game_id"], name: "index_factions_games_on_faction_id_and_game_id"
-    t.index ["game_id", "faction_id"], name: "index_factions_games_on_game_id_and_faction_id"
-  end
-
   create_table "families", force: :cascade do |t|
     t.string "name"
     t.string "tags", default: [], array: true
@@ -74,7 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "game_id"
-    t.index ["game_id"], name: "index_families_on_game_id"
+    t.index ["game_id"], name: "index_valar_families_on_game_id"
   end
 
   create_table "game_tools", force: :cascade do |t|
@@ -84,8 +77,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.jsonb "options"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["game_id"], name: "index_game_tools_on_game_id"
-    t.index ["tool_id"], name: "index_game_tools_on_tool_id"
+    t.index ["game_id"], name: "index_valar_game_tools_on_game_id"
+    t.index ["tool_id"], name: "index_valar_game_tools_on_tool_id"
   end
 
   create_table "games", force: :cascade do |t|
@@ -96,6 +89,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.boolean "active", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "games_factions", force: :cascade do |t|
+    t.bigint "game_id"
+    t.bigint "faction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faction_id"], name: "index_valar_games_factions_on_faction_id"
+    t.index ["game_id"], name: "index_valar_games_factions_on_game_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -112,8 +114,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.datetime "updated_at", null: false
     t.bigint "family_id"
     t.bigint "game_id"
-    t.index ["family_id"], name: "index_locations_on_family_id"
-    t.index ["game_id"], name: "index_locations_on_game_id"
+    t.index ["family_id"], name: "index_valar_locations_on_family_id"
+    t.index ["game_id"], name: "index_valar_locations_on_game_id"
   end
 
   create_table "tools", force: :cascade do |t|
@@ -138,9 +140,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "faction_id"
-    t.index ["faction_id"], name: "index_users_on_faction_id"
+    t.index ["faction_id"], name: "index_valar_users_on_faction_id"
   end
 
   add_foreign_key "armies_factions", "armies"
   add_foreign_key "armies_factions", "factions"
+  add_foreign_key "games_factions", "factions"
+  add_foreign_key "games_factions", "games"
 end
