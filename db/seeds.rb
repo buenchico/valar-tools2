@@ -48,6 +48,38 @@ Tool.create(name: 'map', title: 'Mapa', short_title: 'Mapa', icon_url: 'bi-globe
   options_info: '',
   active: true )
 
+  GameTool.where(tool_id: Tool.find_by(name: 'armies').id, game_id: Game.find_by(name: 'valar')).first.update(options: {
+    "tags": {
+      "cavalry": {
+        "str": 2,
+        "icon": "chess-knight-fill",
+        "name": "caballería"
+      },
+      "garrison": {
+        "str": 0,
+        "icon": "chess-rook-fill",
+        "name": "guarnición"
+      },
+      "peaseants": {
+        "str": -2,
+        "icon": "chess-pawn-fill",
+        "name": "campesinos"
+      }
+    },
+    "attributes": {
+      "xp": {
+        "str": 2,
+        "icon": "chevron-double-up",
+        "name": "veterano"
+      },
+      "armour": {
+        "str": 1,
+        "icon": "shield-fill",
+        "name": "armadura"
+      }
+    }
+  })  
+
 if Rails.env.development?
   User.create([
   {
