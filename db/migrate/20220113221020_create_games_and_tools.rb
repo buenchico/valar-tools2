@@ -33,9 +33,9 @@ class CreateGamesAndTools < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    create_table :games_factions do |t|
-      t.references :game, foreign_key: true
+    create_table :factions_games do |t|
       t.references :faction, foreign_key: true
+      t.references :game, foreign_key: true
       t.timestamps
     end
   end
