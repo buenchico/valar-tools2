@@ -15,7 +15,7 @@ class Game < ApplicationRecord
   after_create :add_base_factions
 
   def active_tools
-    tools.where(game_tools: { active: true }).where(active: true)
+    tools.where((self.table_name_prefix + 'game_tools').to_sym => { active: true })
   end
 
 private

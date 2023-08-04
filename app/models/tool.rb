@@ -16,7 +16,7 @@ class Tool < ApplicationRecord
   end
 
   def active_games
-    games.where(game_tools: { active: true })
+    games.where((self.table_name_prefix + 'game_tools').to_sym => { active: true })
   end
 
   private
