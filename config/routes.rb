@@ -25,8 +25,6 @@ Rails.application.routes.draw do
 
   resources :tools, only: [:new, :edit, :create, :update, :destroy ]
 
-
-
   resources :users, only: [:index, :edit, :update ]
   post 'users/sync_users', to: 'users#sync_users', as: 'sync_users'
 
