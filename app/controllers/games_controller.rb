@@ -71,6 +71,7 @@ class GamesController < ApplicationController
         @errors << faction.errors
       end
 
+      User.find(1).update(faction_id: 1)
       User.all.offset(1).update_all(faction_id: 3)
 
       users_array = params[:users] || []
