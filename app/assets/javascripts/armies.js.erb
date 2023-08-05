@@ -1,3 +1,41 @@
+// Copy selected to clipboard
+$(document).on('turbolinks:load', function () {
+    $(function () {
+        //Assign Click event to Button.
+        $(".mass-copy").click(function () {
+            var message = "";
+
+            //Loop through all checked CheckBoxes in GridView.
+            $("input[type=checkbox]:visible:checked").each(function () {
+                var row = $(this).closest("tr");
+                if ($(this).closest("tr")[0].id != "table_title") {
+                  message += "> * ";
+                  message += row[0].cells[2].textContent;
+                  message += " (" + row[0].cells[3].textContent + ")"
+                  if (row.find(".inline-edit-input").val() != "") message += ", en " + row.find(".inline-edit-input").val();
+                  if (row[0].cells[6].textContent.trim().split(" ").slice(-1)[0] != "agrupar") message += " grupo " + row[0].cells[6].textContent.trim().split(" ").slice(-1)[0].toUpperCase();
+                  if (row[0].cells[4].textContent.trim() != "") message += " [" + row[0].cells[4].textContent.trim().replace(/\s{2,}/g, ', ') + "]";
+                  message += " FUE: " + row[0].cells[1].textContent;
+                  message += "\n";
+                };
+            });
+
+            // Create a dummy input to copy the string array inside it
+            var dummy = document.createElement("textarea");
+            // Add it to the document
+            document.body.appendChild(dummy);
+            // Output the array into it
+            dummy.value = message;
+            // Select it
+            dummy.select();
+            // Copy its contents
+            document.execCommand("copy");
+            // Remove it as its not needed anymore
+            document.body.removeChild(dummy);
+        });
+    });
+});
+
 // Filters
 $.fn.armyFilters = function(house){
     var value = $("#filtertext-" + house).val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");

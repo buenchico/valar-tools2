@@ -4,3 +4,14 @@
   $('#army-content').html("<%= j render 'form_player', army: @army %>");
 <% end %>
 $('#armyModal').modal('show');
+// Attach a click event handler to the button
+$('#copy_army').click(function() {
+    // Get the contents of the div
+    var content = $('#army-data').text().trim();
+    // Create a temporary textarea element
+    var textarea = $('<textarea>').val(content).appendTo('.modal-body').select();
+    // Execute the "copy" command
+    textarea.focus(); //SET FOCUS on the TEXTFIELD
+    document.execCommand('copy');
+    textarea.remove();
+});

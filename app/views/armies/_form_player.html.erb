@@ -1,19 +1,19 @@
 <div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content bg-dark">
-
-      <%= ARMY_STATUS[-1] %>
-
       <%= form_with model: army do |form| %>
         <div class="modal-header">
           <h5 class="modal-title" id="Title"><%= army&.name %></h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <%= render 'army_data', army: army %>
+
           <div class="input-group mb-3">
             <%= form.label :name, class: 'input-group-text' %>
             <%= form.text_field :name, class: 'form-control', disabled: !@current_user.is_master? %>
           </div>
+
           <div class="input-group mb-3">
             <%= form.label :status, class: 'input-group-text' %>
             <%= form.select :status, ARMY_STATUS, {}, class: 'form-select', disabled: (army.status == 'Aniquilado') %>
@@ -21,9 +21,6 @@
 
           <div class="input-group mb-1 d-flex justify-content-between align-items-center">
             <%= form.label :tags, class: 'input-group-text w-100' %>
-            <div class="copy-icon" id="copy_traits" aria-label="Copy" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar rasgos">>
-              <i class="bi bi-clipboard2-fill text-dark"></i>
-            </div>
           </div>
 
           <div class="input-group mb-3">
