@@ -1,6 +1,3 @@
-console.log("<%= @action %>")
-console.log("tttt")
-
 if ('<%= @action %>' == 'update') {
   $('#army-content').html("<%= j render 'form_update_multiple', armies: @armies, action: @action %>");
 }

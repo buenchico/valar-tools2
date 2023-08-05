@@ -54,12 +54,12 @@
   <div class="tab-content">
     <% @factions.each do | faction | %>
       <div class="tab-pane fade show  <%= faction.name == "Master" ? "active" : nil %>" id="<%= faction.name %>" role="tabpanel" aria-labelledby="<%= faction.name %>-tab">
-        <%= render 'armies_table', army: @armies = faction.name == "Master" ? @all_armies : faction.armies %>
+        <%= render 'armies_table', army: @armies = faction.name == "Master" ? @all_armies : faction.armies, faction: faction %>
       </div>
     <% end %>
   </div>
 <% else %>
-  <%= render 'armies_table' %>
+  <%= render 'armies_table', faction: @current_user.faction %>
 <% end %>
 
 <div id='army-content'></div>

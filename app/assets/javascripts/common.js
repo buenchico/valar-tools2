@@ -87,14 +87,14 @@ $(document).on('turbolinks:load', function(e) {
   }
 
   $checkboxes.change(function(){
-    if (!$(this).prop("checked")){
-      $(".checkbox_select_all").prop("checked", false);
+    if ($(this).prop('checked') == false) {
+      $(".checkbox_select_all").prop('checked', false);
     }
     mass_edit_buttons();
   });
 
-  $("#checkbox_select_all").click(function () {
+  $(".checkbox_select_all").click(function () {
     $(".checkbox_selectable:visible").prop('checked', $(this).prop('checked'));
-    $checkboxes.trigger('change'); // Trigger the change event on individual checkboxes
+    $(".checkbox_selectable:visible").trigger('change'); // Trigger the change event on individual checkboxes
   });
 });

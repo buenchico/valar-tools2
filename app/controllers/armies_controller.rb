@@ -4,6 +4,7 @@ class ArmiesController < ApplicationController
   before_action :set_options, only: [:index, :edit, :update, :new]
   before_action :set_factions, only: [:edit, :new]
   before_action :set_filters, only: [:index]
+  before_action :check_player
   before_action :check_master, only: [:destroy, :destroy_multiple]
   before_action :check_owner, only: [:edit, :edit_notes, :update]
 
@@ -86,7 +87,9 @@ class ArmiesController < ApplicationController
           end
         end
         if (key == "group")
-          if (ARMY_GROUPS.keys.map { |k| k.to_s }).include?(value.to_s)
+          if value == "CLEAR"
+            army_params_hash[key] = nil
+          else (ARMY_GROUPS.keys.map { |k| k.to_s }).include?(value.to_s)
             army_params_hash[key] = value
           end
         end

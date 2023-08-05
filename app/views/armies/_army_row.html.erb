@@ -1,5 +1,5 @@
-<tr id="army_<%= army.id %>" class="<%= army.status == 'Aniquilado' ? 'destroyed' : '' %><%= army.status == 'Movilizado' ? 'mobilized' : '' %>">
-  <td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable" %></td>
+<tr id="army_<%= faction.name %>_<%= army.id %>" class="<%= army.status == 'Aniquilado' ? 'destroyed' : '' %><%= army.status == 'Movilizado' ? 'mobilized' : '' %>">
+  <td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + faction.name + "_" + army.id.to_s,class: "checkbox_selectable" %></td>
   <td class="strenght" width = "50px"><%= army.strength %></td>
   <td width = "300px"><%= army.name %></td>
   <td><%= army.status %></td>

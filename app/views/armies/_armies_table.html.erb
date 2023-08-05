@@ -2,7 +2,7 @@
     <caption>Lista de ejércitos</caption>
       <thead>
         <tr id="table_title">
-          <th scope="col"><input type="checkbox" id="checkbox_select_all" /></th>
+          <th scope="col"><input type="checkbox" class="checkbox_select_all" /></th>
           <th scope="col"<i class="bi bi-award"></i></th>
           <th scope="col">Ejército</th>
           <th scope="col">Estado</th>
@@ -17,7 +17,7 @@
       </thead>
       <tbody id="table_body">
         <% @armies.each do |army| %>
-          <%= render 'army_row', army: army %>
+          <%= render 'army_row', army: army, faction: faction %>
         <% end %>
       </tbody>
   </table>
