@@ -56,8 +56,8 @@ $(document).on('turbolinks:load', function () {
                   iconAnchor: [12, 12]
                 })
                 })
-                .bindPopup('<p><%= location.name_es %></p><p><%= location.family.name %></p>')
-                .bindTooltip("<%= location.name_es %>", {permanent: true, className: "locationLabel", offset: [0, 0] })
+                .bindPopup('<p><%= location.name %></p><p><%= location.family.name %></p>')
+                .bindTooltip("<%= location.name %>", {permanent: true, className: "locationLabel <%= @options['font'] %>", style: "background-color:powderblue;", offset: [0, 0] })
             );
         <% end %>
       <% end %>
