@@ -36,7 +36,16 @@
                 <div class="form-check form-switch switch-group fs-2">
                    <%= game_tool_form.check_box :active, class: 'form-check-input switch-group h-100', role: 'switch' %>
                 </div>
-                <%= game_tool_form.text_field :options, value: game_tool_form.object.options.to_json, class: 'form-control float-end', "data-bs-toggle": "tooltip", "data-bs-html": "true", "title": ( game_tool_form.object.tool.options_info&.then { |info| Kramdown::Document.new(info).to_html } || '').html_safe %>
+                <div class="input-group">
+                  <%= game_tool_form.text_area :options,
+                        value: JSON.pretty_generate(game_tool_form.object.options),
+                        rows: game_tool_form.object.options.nil? ? 1 : 10,
+                        class: 'form-control float-end',
+                        "data-bs-toggle": "tooltip",
+                        "data-bs-html": "true",
+                        "title": ( game_tool_form.object.tool.options_info&.then { |info| Kramdown::Document.new(info).to_html } || '').html_safe
+                         %>
+                </div>
               </div>
             <% end %>
           <% end %>
