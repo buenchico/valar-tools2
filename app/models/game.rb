@@ -10,6 +10,7 @@ class Game < ApplicationRecord
   accepts_nested_attributes_for :game_tools
 
   has_many :families
+  has_many :locations
 
   after_create :add_all_tools
   after_create :add_base_factions
