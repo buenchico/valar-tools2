@@ -1,7 +1,7 @@
 class LocationsController < ApplicationController
   before_action :set_tool
   before_action :set_location, only: [:edit, :update, :destroy]
-  before_action :set_options, only: [:new, :edit]
+  before_action :set_options, only: [:index, :new, :edit]
 
   def index
     @locations = Location.all

@@ -29,7 +29,7 @@
               <% elsif column_name.to_s.include? ("s_id") %>
                 <td>"MULTI"</td>
               <% elsif column_name.to_s.include? ("_id") %>
-                <td><%= column_name.split("_")[0].capitalize.constantize.find(object[column_name.to_sym]).title %></td>
+              <td><%= object[column_name.to_sym].nil? ? nil : column_name.split("_")[0].capitalize.constantize.find(object[column_name.to_sym]).title %></td>
               <% else %>
                 <td><%= object[column_name.to_sym] %></td>
               <% end %>

@@ -11,12 +11,12 @@
             <% if object[column_name.to_sym].class.to_s == "Array" %>
             <div class="input-group mb-3">
               <%= form.label column_name.to_sym, class: 'input-group-text' %>
-              <% if @options.nil? %>
+              <% if (@options.nil? || @options["tags"].nil?) %>
                 <%= form.text_field column_name.to_sym, class: 'form-control' %>
               <% else %>
                 <%= form.select column_name.to_sym,
                   options_for_select(
-                    @options.map { | tag |
+                    @options["tags"].map { | tag |
                       [
                         tag,
                         { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><span class='pill-tags-text'>#{tag}</span></span>".html_safe
@@ -47,6 +47,11 @@
                 <div class="input-group mb-3">
                   <%= form.label column_name.to_sym, class: 'input-group-text' %>
                   <%= form.select column_name.to_sym, [""] + column_name.split("_")[0].capitalize.constantize.all.map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+                </div>
+              <% elsif column_name.to_s == "location_type" %>
+                <div class="input-group mb-3">
+                  <%= form.label column_name.to_sym, class: 'input-group-text' %>
+                  <%= form.select column_name.to_sym, @options["types"].map { |key, value| [value["name"], key] }, {}, class: 'form-select' %>
                 </div>
               <% else %>
                 <div class="input-group mb-3">
