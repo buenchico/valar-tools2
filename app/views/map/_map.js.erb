@@ -43,6 +43,27 @@ $(document).on('turbolinks:load', function () {
 
       var drawnItems = new L.FeatureGroup();
 
+      <% if !@locations.nil? %>
+        <% @locations.each do |location| %>
+
+          main.addLayer(
+            L.marker(
+              [<%= location.y %>,<%= location.x %>],
+                { icon: L.divIcon({
+                  className: "divIconBox",
+                  html: "<img src='/assets/marker.svg' width='24' height='24'></div>",
+                  iconSize: [120,24],
+                  iconAnchor: [12, 12]
+                })
+                })
+                .bindPopup('<p><%= location.name_es %></p><p><%= location.family.name %></p>')
+                .bindTooltip("<%= location.name_es %>", {permanent: true, className: "locationLabel", offset: [0, 0] })
+            );
+        <% end %>
+      <% end %>
+
+      main.addTo(map);
+
       map.on('zoom', function () {
         if (map.getZoom() == 8) {
           map.removeControl(layerControl);
@@ -76,8 +97,8 @@ $(document).on('turbolinks:load', function () {
         const horizontalSpacing = hexWidth * 0.75;
         const verticalSpacing = hexHeight;
 
-        const numRows = 100;
-        const numCols = 100;
+        const numRows = (bounds[1][0] / sideLength);
+        const numCols = (bounds[1][1] / sideLength);
 
         let rowOffset = 0;
         let colOffset = 0;
@@ -124,7 +145,7 @@ $(document).on('turbolinks:load', function () {
       const sideLength = <%= (@options["scale"] || 1 ) %>;
 
       const hexGrid = generateHexGrid(bounds, sideLength);
-      const jsonLayer = {
+      const jsonHex = {
         type: 'FeatureCollection',
         name: 'hex',
         crs: {
@@ -136,9 +157,7 @@ $(document).on('turbolinks:load', function () {
         features: hexGrid
       };
 
-      const jsonHex = JSON.stringify(jsonLayer);
-
-      var layer_hex = new L.geoJson(jsonLayer, {
+      var layer_hex = new L.geoJson(jsonHex, {
         interactive: false,
         style: {
           color: 'rgba(0,0,0,0.5)',
@@ -261,43 +280,41 @@ $(document).on('turbolinks:load', function () {
         map.addControl(drawControl);
       });
 
-      <% if !@current_user.nil? %>
-        <% if !@current_user.nil? %>
-          // Debug coords
-          map.on('click', function(e){
-            var coord = e.latlng;
-            var lat = coord.lat;
-            var lng = coord.lng;
-            console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
-          });
+      <% if @current_user.is_master? %>
+        // Debug coords
+        map.on('click', function(e){
+          var coord = e.latlng;
+          var lat = coord.lat;
+          var lng = coord.lng;
+          console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
+        });
 
-          // Debug grid
+        // Debug grid
 
-          L.GridLayer.GridDebug = L.GridLayer.extend({
-            createTile: function (coords) {
-              const tile = document.createElement('div');
-              tile.style.outline = '1px solid green';
-              tile.style.fontWeight = 'bold';
-              tile.style.fontSize = '14pt';
-              tile.innerHTML = [coords.z, coords.x, coords.y].join('/');
-              return tile;
-            },
-          });
+        L.GridLayer.GridDebug = L.GridLayer.extend({
+          createTile: function (coords) {
+            const tile = document.createElement('div');
+            tile.style.outline = '1px solid green';
+            tile.style.fontWeight = 'bold';
+            tile.style.fontSize = '14pt';
+            tile.innerHTML = [coords.z, coords.x, coords.y].join('/');
+            return tile;
+          },
+        });
 
-          L.gridLayer.gridDebug = function (opts) {
-            return new L.GridLayer.GridDebug(opts);
-          };
+        L.gridLayer.gridDebug = function (opts) {
+          return new L.GridLayer.GridDebug(opts);
+        };
 
-          map.addLayer(L.gridLayer.gridDebug());
+        map.addLayer(L.gridLayer.gridDebug());
 
-          // Debug coords
-          map.on('click', function(e){
-            var coord = e.latlng;
-            var lat = coord.lat;
-            var lng = coord.lng;
-            console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
-          });
-        <% end %>
+        // Debug coords
+        map.on('click', function(e){
+          var coord = e.latlng;
+          var lat = coord.lat;
+          var lng = coord.lng;
+          console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
+        });
       <% end %>
 
       $('#map-container').data('loaded', true);
