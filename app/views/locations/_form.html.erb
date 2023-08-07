@@ -3,7 +3,7 @@
     <div class="modal-content bg-dark">
       <%= form_with model: object do |form| %>
         <div class="modal-header">
-          <h5 class="modal-title" id="Title"><%= object&.title %></h5>
+          <h5 class="modal-title" id="Title"><%= object&.name %></h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -46,7 +46,7 @@
               <% elsif column_name.to_s.include? ("_id") %>
                 <div class="input-group mb-3">
                   <%= form.label column_name.to_sym, class: 'input-group-text' %>
-                  <%= form.select column_name.to_sym, [""] + column_name.split("_")[0].capitalize.constantize.all.map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+                  <%= form.select column_name.to_sym, [""] + column_name.split("_")[0].capitalize.constantize.all.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
                 </div>
               <% elsif column_name.to_s == "location_type" %>
                 <div class="input-group mb-3">
