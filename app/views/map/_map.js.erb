@@ -35,53 +35,29 @@ $(document).on('turbolinks:load', function () {
 
       var image = L.imageOverlay('<%= "/assets/" + @options["img"].to_s %>', bounds, {opacity: 1, attribution: '<%= @options["attribution"].html_safe %>',}).addTo(map);
 
-      var main = new L.layerGroup.collision({margin:0});
-      var main_all = new L.FeatureGroup();
-      var other = new L.FeatureGroup();
-      var ruins = new L.FeatureGroup();
-      var the_wall = new L.FeatureGroup();
-
-      var drawnItems = new L.FeatureGroup();
-
-      <% if !@locations.nil? %>
-        <% @locations.each do |location| %>
-
-          main.addLayer(
-            L.marker(
-              [<%= location.y %>,<%= location.x %>],
-                { icon: L.divIcon({
-                  className: "divIconBox",
-                  html: "<img src='/assets/marker.svg' width='24' height='24'></div>",
-                  iconSize: [120,24],
-                  iconAnchor: [12, 12]
-                })
-                })
-                .bindPopup('<p><%= location.name %></p><p><%= location.family.name %></p>')
-                .bindTooltip("<%= location.name %>", {permanent: true, className: "locationLabel <%= @options['font'] %>", style: "background-color:powderblue;", offset: [0, 0] })
-            );
+      <% @options["layers"].each do | code, layer | %>
+        var <%= code %> = new L.layerGroup.collision({margin:0});
+        <% layer["types"].each do | type | %>
+          <% @locations.where(location_type: type).each do | location | %>
+            <%= code %>.addLayer(
+              L.marker(
+                [<%= location.y %>,<%= location.x %>],
+                  { icon: L.divIcon({
+                    className: "divIconBox",
+                    html: "<img src='/assets/marker.svg' width='24' height='24'></div>",
+                    iconSize: [120,24],
+                    iconAnchor: [12, 12]
+                  })
+                  })
+                  .bindPopup('<p><%= location.name %></p><p><%= location.family.name %></p>')
+                  .bindTooltip("<%= location.name %>", {permanent: true, className: "locationLabel <%= @options['font'] %>", style: "background-color:powderblue;", offset: [0, 0] })
+              );
+          <% end %>
         <% end %>
+        <%= code %>.addTo(map);
       <% end %>
 
-      main.addTo(map);
-
-      map.on('zoom', function () {
-        if (map.getZoom() == 8) {
-          map.removeControl(layerControl);
-          map.addControl(layerControlZoom8);
-          if (map.hasLayer(main)) {
-            map.removeLayer(main);
-            main_all.addTo(map);
-          }
-        }
-        if (map.getZoom() != 8) {
-          map.removeControl(layerControlZoom8);
-          map.addControl(layerControl);
-          if (map.hasLayer(main_all)) {
-            map.removeLayer(main_all);
-            main.addTo(map);
-          }
-        }
-      });
+      var drawnItems = new L.FeatureGroup();
 
       function generateHexGrid(bounds, sideLength) {
         const hexagons = [];
@@ -167,17 +143,13 @@ $(document).on('turbolinks:load', function () {
       map.addLayer(layer_hex);
 
       var overlays = {
-        "Asentamientos": main,
-        "Rutas": drawnItems
-      }
-
-      var overlays_zoom8 = {
-        "Asentamientos": main_all,
+        <% @options["layers"].sort_by { |_key, value| value["name"] }.each do | code, layer | %>
+          <%= layer["name"] %>: <%= code %>,
+        <% end %>
         "Rutas": drawnItems
       }
 
       var layerControl = L.control.layers(null, overlays)
-      var layerControlZoom8 = L.control.layers(null, overlays_zoom8)
 
       map.addControl(layerControl);
 
