@@ -19,7 +19,7 @@
             <td><%= tool.title %></td>
             <td><%= tool.role %></td>
             <td><%= tool.active_games.pluck(:title).join(", ") %></td>
-            <td><%= ( tool.game_tools.find_by(game_id: active_game&.id)&.options&.to_json )%></td>             
+            <td><%= JSON.pretty_generate( tool.game_tools.find_by(game_id: active_game&.id)&.options )%></td>             
             <td class="text-center">
               <% if tool.active == true  %>
                 <i class="bi bi-check-lg"></i>
