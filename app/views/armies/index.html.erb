@@ -27,9 +27,10 @@
         <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "destroy") do %>
           <i class="bi bi-trash"></i> Borrar en masa
         <% end %>
-        <%= button_tag(type: 'button', class: "btn btn-danger btn-sm mass_edit_button", 'data-toggle': 'modal', value: "csv") do %>
-          Importar/Exportar
+        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm", value: "import") do %>
+          Importar
         <% end %>
+        <%= link_to 'Exportar', export_armies_path(format: :csv), class: 'btn btn-danger btn-sm' %>
       <% end %>
     <% end %>
   </div>

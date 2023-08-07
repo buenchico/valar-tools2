@@ -33,6 +33,7 @@ gem 'kramdown', '~> 2.4'
 # leaflef support
 gem 'leaflet-rails'
 gem 'leaflet-draw-rails'
+gem 'csv'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'

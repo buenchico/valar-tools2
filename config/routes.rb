@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   put 'update_multiple', to: 'armies#update_multiple', as: 'update_multiple_armies'
   put 'destroy_multiple', to: 'armies#destroy_multiple', as: 'destroy_multiple_armies'
   post 'import', to: 'armies#import', as: 'import_armies'
+  get 'export', to: 'armies#export', as: 'export_armies'
 
   resources :locations, :except => [:show]
   resources :families, :except => [:show]

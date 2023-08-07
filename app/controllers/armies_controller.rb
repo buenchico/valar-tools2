@@ -1,7 +1,7 @@
 class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
-  before_action :set_options, only: [:index, :edit, :update, :new]
+  before_action :set_options, only: [:index, :edit, :update, :new, :export]
   before_action :set_factions, only: [:edit, :new]
   before_action :set_filters, only: [:index]
   before_action :check_player
@@ -55,7 +55,6 @@ class ArmiesController < ApplicationController
   end
 
   def update
-
     if !@current_user.is_master? # modify params if user is not admin
       keys_to_remove = ["tags", "region", "lord", "visible", "hp",
         "col0", "col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8", "col9", "faction_ids"]
@@ -144,6 +143,39 @@ class ArmiesController < ApplicationController
         format.html { redirect_to armies_url, danger: 'La palabra de validación es incorrecta.' }
       end
     end
+  end
+
+  def export
+    @armies = Army.all
+
+    respond_to do |format|
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"armies.csv\""
+        headers['Content-Type'] ||= 'text/csv'
+
+        header_row = ["id", "name", "status", "position", "group", "visibility", "hp *(#{@options["hp"]["step"]})", "tags"] # Adjust the attributes as needed
+        @options["attributes"].each_with_index do | (key, value), index |
+          header_row << "#{key} *(#{value["str"]})"
+        end
+
+        csv_data = CSV.generate(col_sep: ";", headers: true) do |csv|
+          csv << header_row # Adjust the attributes as needed
+
+          @armies.each do |army|
+            data_row = [army.id, army.name, army.status, army.position, army.group, army.factions.pluck(:name).join(","), army.hp, army.tags.join(",")]
+            @options["attributes"].each_with_index do | (key, value), index |
+              data_row << army["col#{index}"]
+            end
+            csv << data_row
+          end
+        end
+
+        render plain: csv_data
+      end
+    end
+  end
+
+  def import
   end
 
 private
