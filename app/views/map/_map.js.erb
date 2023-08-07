@@ -121,6 +121,7 @@ $(document).on('turbolinks:load', function () {
       const sideLength = <%= (@options["scale"] || 1 ) %>;
 
       const hexGrid = generateHexGrid(bounds, sideLength);
+
       const jsonHex = {
         type: 'FeatureCollection',
         name: 'hex',
@@ -136,7 +137,7 @@ $(document).on('turbolinks:load', function () {
       var layer_hex = new L.geoJson(jsonHex, {
         interactive: false,
         style: {
-          color: 'rgba(0,0,0,0.5)',
+          color: 'rgba(0,0,0,0.3)',
           weight: 1.0
         }
       });
@@ -157,8 +158,8 @@ $(document).on('turbolinks:load', function () {
 
       // Custom image size
       var fullMap = {
-        width: 1080, // change depending on base map 1080
-        height: 1700, // change depending on base map 1700
+        width: bounds[1][1], // change depending on base map 1080
+        height: bounds[1][0], // change depending on base map 1700
         className: 'fullMap',
         name: 'Mapa completo'
       }
@@ -174,12 +175,14 @@ $(document).on('turbolinks:load', function () {
 
       map.on('easyPrint-start', e => {
         $('#printing').removeClass('invisible')
+        map.removeLayer(layer_hex)
         if (e.event.target.className == 'fullMap') {
-          map.setView( [13.5, 18], 5);
+          map.setView( [bounds[1][0] / 2, bounds[1][1] / 2], <%= @options["zoom"][0] %>);
         }
       });
 
       map.on('easyPrint-finished', e => {
+        map.addLayer(layer_hex)
         $('#printing').addClass('invisible')
       });
 

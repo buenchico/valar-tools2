@@ -124,7 +124,7 @@ GEM
     kramdown (2.4.0)
       rexml
     leaflet-draw-rails (0.1.0)
-    leaflet-rails (1.9.3)
+    leaflet-rails (1.7.0)
       rails (>= 4.2.0)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
