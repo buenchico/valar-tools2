@@ -51,7 +51,7 @@ class FactionsController < ApplicationController
           )
             @count += 1
           else
-            @errors << group["name"]
+            @errors << group["name"] + @faction.errors
           end
         end
       end
