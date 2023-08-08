@@ -37,6 +37,7 @@ es:
       delete: 'Borrar %{model}'
       update_multiple: 'Guardar %{model}'
       delete_multiple: 'Guardar %{model}'
+      import: 'Importar %{model}'
     label:
       from: "Origen"
       to: "Destino"

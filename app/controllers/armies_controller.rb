@@ -153,9 +153,9 @@ class ArmiesController < ApplicationController
         headers['Content-Disposition'] = "attachment; filename=\"armies.csv\""
         headers['Content-Type'] ||= 'text/csv'
 
-        header_row = ["id", "name", "status", "position", "group", "visibility", "hp *(#{@options["hp"]["step"]})", "tags"] # Adjust the attributes as needed
+        header_row = ["id", "name", "status", "position", "group", "factions", "hp *(#{@options["hp"]["step"]})", "tags"] # Adjust the attributes as needed
         @options["attributes"].each_with_index do | (key, value), index |
-          header_row << "#{key} *(#{value["str"]})"
+          header_row << "col#{index} #{key} *(#{value["str"]})"
         end
 
         csv_data = CSV.generate(col_sep: ";", headers: true) do |csv|
@@ -176,6 +176,74 @@ class ArmiesController < ApplicationController
   end
 
   def import
+    respond_to do |format|
+      if params[:army][:confirm] == 'IMPORT'
+        uploaded_file = params[:army][:file_upload]
+        headers = nil
+        @errors = []
+
+        if uploaded_file.present?
+          File.foreach(uploaded_file.path) do |line|
+            if headers.nil?
+              headers = line.strip.split(';') # Assuming the columns are comma-separated
+              headers = headers.map { |element| element.split(" ")[0] }
+            else
+              data = line.strip.split(';') # Assuming data is comma-separated
+              hash = Hash[headers.zip(data)]
+
+              # Formatting tags correctly
+              hash["tags"] = hash["tags"].split(",")
+
+              # Find the army by its 'id'
+              army = Army.find_or_initialize_by(id: hash["id"])
+
+              # Adding faction info
+              factions = hash.delete('factions') || []
+              factions = factions.split(",").map do |faction_name|
+                faction = Faction.find_by(name: faction_name)
+                if faction
+                  faction.id
+                else
+                  @errors << "(#{army.id}) #{army.name} : #{faction_name} no existe"
+                  nil
+                end
+              end
+
+              army_data = hash.merge('faction_ids' => factions.compact)
+
+              # Update the attributes
+              army.attributes = army_data
+
+              # Check if the army is new or not
+              @new = 0
+              @mod = 0
+              if army.new_record?
+                @new += 1
+              else
+                @mod += 1
+              end
+
+              # Save the army to the database
+              if !army.save
+                @errors << "(#{army.id}) #{army.name} : #{army.errors}"
+              end
+            end
+          end
+        end
+
+        if @errors.blank?
+          format.html { redirect_to armies_url, success: "#{(@new + @mod)} ejércitos importados correctamente. #{@new} han sido creados. #{@mod} ejércitos han sido modificados." }
+        else
+          message = '<p>' + (@new + @mod).to_s + ' ejércitos han sido importados correctamente.</p>' +
+                    '<p>' + @errors.length.to_s + ' ejércitos han fallado al ser creadas.</p>' +
+                    '<p>' + @errors.to_s + '</p>'
+          format.html { redirect_to armies_url, danger: message }
+        end
+
+      else
+        format.html { redirect_to armies_url, danger: 'La palabra de validación es incorrecta.' }
+      end
+    end
   end
 
 private

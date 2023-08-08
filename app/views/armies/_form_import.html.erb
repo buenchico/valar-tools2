@@ -7,12 +7,21 @@
       </div>
       <div class="modal-body">
         <div class="container-fluid">
-          <%= form_for :army, url: destroy_multiple_armies_path, method: :put do | form | %>
-            <div class="input-group mt-3">
-              <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'DELETE' para confirmar los cambios." %>
+          <%= form_for :army, url: import_armies_path, method: :post do | form | %>
+            <div class="alert alert-danger">
+              <div class="float-left mr-2"><i class="fas fa-exclamation-triangle fa-3x"></i></div>
+              <p>Utiliza un archivo csv con cada columna separada por 'punto y coma' <span class="text-monospace">';'</span>. Para aquellas columnas con múltiples elementos usa 'coma' <span class="text-monospace">','</span> para separarlos.</p>
+              <p>Los ejércitos serán identificados por la columna <span class="text-monospace">'id'</span>. Ejércitos sin 'id' serán creados, los ejércitos con 'id' serán actualizados.</p>
+              <p><%= link_to 'Exporta', export_armies_path(format: :csv), class: 'btn btn-warning btn-sm' %> los ejércitos antes de importar un nuevo archivo para poder restaurarlos si fuera necesario.</p>
+            </div>
+            <div class="form-group">
+              <%= form.file_field :file_upload, class: "form-control", :accept => 'text/csv' %>
             </div>
             <div class="input-group mt-3">
-              <%= form.submit t('helpers.submit.delete_multiple', model: Army.model_name.human.pluralize), class: 'btn btn-primary' %>
+              <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'IMPORT' para confirmar los cambios." %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.submit t('helpers.submit.import', model: Army.model_name.human.pluralize), class: 'btn btn-primary' %>
             </div>
           <% end %>
       </div>

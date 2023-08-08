@@ -34,11 +34,11 @@ Rails.application.routes.draw do
   resources :armies, :except => [:show]
   get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'
   get 'armies/:id/confirm_delete', to: 'armies#confirm', as: 'confirm_delete_army'
-  get 'edit_multiple', to: 'armies#edit_multiple', as: 'edit_multiple_armies'
-  put 'update_multiple', to: 'armies#update_multiple', as: 'update_multiple_armies'
-  put 'destroy_multiple', to: 'armies#destroy_multiple', as: 'destroy_multiple_armies'
-  post 'import', to: 'armies#import', as: 'import_armies'
-  get 'export', to: 'armies#export', as: 'export_armies'
+  get 'armies/edit_multiple', to: 'armies#edit_multiple', as: 'edit_multiple_armies'
+  put 'armies/update_multiple', to: 'armies#update_multiple', as: 'update_multiple_armies'
+  put 'armies/destroy_multiple', to: 'armies#destroy_multiple', as: 'destroy_multiple_armies'
+  post 'armies/import', to: 'armies#import', as: 'import_armies'
+  get 'armies/export', to: 'armies#export', as: 'export_armies'
 
   resources :locations, :except => [:show]
   resources :families, :except => [:show]
@@ -47,8 +47,5 @@ Rails.application.routes.draw do
   post 'travel/calculate', to: 'travel#calculate'
 
   get 'map', to: 'map#index'
-
-
-
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
