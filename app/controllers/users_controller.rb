@@ -45,7 +45,7 @@ class UsersController < ApplicationController
         if @user.save
           @count += 1
         else
-          @errors << user["username"]
+          @errors << user["username"] + @user.errors
         end
       else
         @user = @users.find_by(discourse_id: x["id"])
