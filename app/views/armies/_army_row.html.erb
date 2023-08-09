@@ -9,7 +9,7 @@
       <%= (army["col#{value['sort']}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_army_attribute(army["col#{value['sort']}"]) + '</span>').html_safe : nil ) %>
     <% end %>
     <% army.tags.each do | tag | %>
-      <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
+      <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %>"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
     <% end %>
   </td>
   <td width = "500px">
