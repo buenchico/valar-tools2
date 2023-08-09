@@ -24,10 +24,10 @@
             <%= form.number_field :hp, class: 'form-control', step: @options["hp"]["step"] %>
           </div>
 
-          <% @options["attributes"].each_with_index do |(key, value), index| %>
+          <% @attributes.each do | key, value | %>
             <div class="input-group mb-3">
               <%= form.label value["name"] + " *(" + value["str"].to_s + ")", class: 'input-group-text' %>
-              <%= form.number_field  "col#{index}", class: 'form-control', step: 1 %>
+              <%= form.number_field  "col#{value['sort']}", class: 'form-control', step: 1 %>
             </div>
           <% end %>
 
@@ -35,7 +35,7 @@
             <%= form.label :tags, class: 'input-group-text' %>
             <%= form.select :tags,
               options_for_select(
-                @options["tags"].map { | tag |
+                @tags.map { | tag |
                   [
                     tag[0],
                     { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe

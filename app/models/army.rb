@@ -10,11 +10,11 @@ class Army < ApplicationRecord
   def strength
     @options = Tool.find_by(name: 'armies').game_tools.find_by(game_id: Game.find_by(active: true).id).options
     base = 10
-    @options["attributes"].each_with_index do | (key, value), index |
-      base += self["col#{index}"].to_i * value["str"]
+    @options["attributes"].sort_by { |_, v| v["sort"] }.to_h.each do | key, value |
+      base += self["col#{value['sort']}"].to_i * value["str"]
     end
     self.tags.each do | tag |
-      base += @options["tags"][tag]["str"].to_i
+      base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h[tag]["str"].to_i
     end
     str = base * self.hp / 100
     return str

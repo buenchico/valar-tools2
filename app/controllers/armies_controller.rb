@@ -154,8 +154,8 @@ class ArmiesController < ApplicationController
         headers['Content-Type'] ||= 'text/csv'
 
         header_row = ["id", "name", "status", "position", "group", "factions", "hp *(#{@options["hp"]["step"]})", "tags"] # Adjust the attributes as needed
-        @options["attributes"].each_with_index do | (key, value), index |
-          header_row << "col#{index} #{key} *(#{value["str"]})"
+        @attributes.each do | key, value |
+          header_row << "col#{value['sort']} #{key} *(#{value["str"]})"
         end
 
         csv_data = CSV.generate(col_sep: ";", headers: true) do |csv|
@@ -163,8 +163,8 @@ class ArmiesController < ApplicationController
 
           @armies.each do |army|
             data_row = [army.id, army.name, army.status, army.position, army.group, army.factions.pluck(:name).join(","), army.hp, army.tags.join(",")]
-            @options["attributes"].each_with_index do | (key, value), index |
-              data_row << army["col#{index}"]
+            @attributes.each do | key, value |
+              data_row << army["col#{value['sort']}"]
             end
             csv << data_row
           end
@@ -249,6 +249,8 @@ class ArmiesController < ApplicationController
 private
   def set_options
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
+    @attributes = @options["attributes"].sort_by { |_, v| v["sort"] }.to_h
+    @tags = @options["tags"].sort_by { |_, v| v["colour"] }.to_h
     if @options.nil?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de ejércitos'
     end
