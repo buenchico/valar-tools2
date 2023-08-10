@@ -1,6 +1,43 @@
 <tr id="army_<%= faction.name %>_<%= army.id %>" class="<%= army.status == 'Aniquilado' ? 'destroyed' : '' %><%= army.status == 'Movilizado' ? 'mobilized' : '' %>">
   <td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + faction.name + "_" + army.id.to_s,class: "checkbox_selectable" %></td>
-  <td class="strenght" width = "50px"><%= army.strength %></td>
+  <td class="strenght" width = "30px" >
+    <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-custom-class="army-str-data" title="
+       <div class='row'>
+         <div class='fst-italic text-start col-8'>Base:</div>
+         <div class='text-end col-4'>10</div>
+       </div>
+       <% mod_str = 0 %>
+       <% @attributes.each do | key, value | %>
+         <div class='row'>
+           <div class='fst-italic text-start col-8'><i class='bi bi-<%= value["icon"] %>'></i> <%= value["name"].capitalize %></div>
+           <div class='text-end col-4'><%= number_to_army_attribute(army["col#{value['sort']}"].to_i * value["str"]) %></div>
+         </div>
+         <% mod_str += army["col#{value['sort']}"].to_i * value["str"] %>
+       <% end %>
+       <% army.tags.each do | tag | %>
+        <div class='row'>
+          <div class='fst-italic text-start col-8'><i class='bi bi-<%= @tags[tag]["icon"] %>'></i> <%= tag.capitalize %></div>
+          <div class='text-end col-4'><%= number_to_army_attribute(@tags[tag]["str"]) %></div>
+        </div>
+        <% mod_str += @tags[tag]["str"].to_i %>
+       <% end %>
+       <div class='row'>
+         <div class='text-decoration-underline text-start col-8'>Subtotal:</div>
+         <div class='text-end col-4'><%= 10 + mod_str %></div>
+       </div>
+       <div class='row'>
+         <div class='fst-italic text-start col-7'><i class='bi bi-<%= @options["hp"]["icon"] %>'></i> <%=  @options["hp"]["name"].capitalize %></div>
+         <div class='text-end col-5'>* <%= army.hp.to_i %>%</div>
+       </div>
+       <hr>
+       <div class='row'>
+          <div class='text-start fw-bold col-8'>Total:</div>
+          <div class='text-end col-4'><%= army.strength %></div>
+        </div>
+      ">
+      <%= army.strength %>
+    </span>
+  </td>
   <td width = "300px"><%= army.name %></td>
   <td><%= army.status %></td>
   <td width = "800px">
