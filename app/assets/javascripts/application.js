@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-tablesorter
+//= require jquery-ui/widgets/autocomplete
 //= require jquery-ui/effects/effect-highlight
 //= require leaflet
 //= require leaflet.draw

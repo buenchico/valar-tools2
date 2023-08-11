@@ -1,3 +1,11 @@
+// Autocomplete
+
+$(document).on('turbolinks:load', function() {
+  $(".auto-source").autocomplete({
+    source: $('.auto-source').data('autocomplete-source')
+  });
+});
+
 // Initializing popovers & tooltips
 function initPopovers() {
   var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
@@ -18,7 +26,6 @@ $(document).on('turbolinks:load', function() {
 $(document).on('shown.bs.modal', function (event) {
   initPopovers();
 });
-
 
 // Initializing selectpicker
 $(document).on('turbolinks:load', function() {

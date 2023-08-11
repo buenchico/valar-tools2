@@ -7,12 +7,16 @@ $(document).on('turbolinks:load', function () {
         $(this).val('sea')
         $('#type').val('sea')
         $('.sea').removeClass('d-none')
+        $('.sea').prop('disabled', false);
         $('.land').addClass('d-none')
+        $('.land').prop('disabled', true);
       } else {
         $(this).val('land')
         $('#type').val('land')
         $('.land').removeClass('d-none')
+        $('.land').prop('disabled', false);
         $('.sea').addClass('d-none')
+        $('.sea').prop('disabled', true);
       }
     })
 

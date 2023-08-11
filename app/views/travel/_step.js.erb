@@ -2,26 +2,44 @@ $(document).on('turbolinks:load', function () {
   var step_id = 0;
   $("#add_step").click(function(){
     step_id++;
+    console.log($("#path_type_btn").val());
+
+    var html_form = `
+      <%= j label_tag :distance, I18n.t('helpers.label.distance'), class: 'input-group-text' %>
+      <%= j number_field "hex", nil, class: 'form-control me-2', min: 0, step: 1 %>
+
+      <%= label_tag :terrain, I18n.t('helpers.label.terrain'), class: 'input-group-text' %>
+      `
+
+    if ($("#path_type_btn").val() == 'land') {
+      html_form += `<%= select_tag "terrain", options_for_select(@options["land"]["terrain"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], speed_option["mod"]] }, 0), {class: 'form-select me-2 land'} %>`
+    } else {
+      html_form += `<%= select_tag "terrain", options_for_select(@options["sea"]["terrain"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], speed_option["mod"]] }, 0), {class: 'form-select me-2 sea'} %>`
+    }
+
+    html_form += `
+            <%= label_tag :speed, I18n.t('helpers.label.speed'), class: 'input-group-text' %>
+            <%= select_tag "speed", options_for_select(@options["speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], speed_option["mod"]] }, 0), {class: 'form-select me-2'} %>
+
+            <%= label_tag :obstacle, I18n.t('helpers.label.obstacle'), class: 'input-group-text' %>
+            `
+
+    if ($("#path_type_btn").val() == 'land') {
+      html_form += `<%= select_tag "obstacle", options_for_select(@options["land"]["obstacles"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], speed_option["mod"]] }), {class: 'form-select me-2 land', include_blank: true} %>`
+    } else {
+      html_form += `<%= select_tag "obstacle", options_for_select(@options["sea"]["obstacles"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], speed_option["mod"]] }), {class: 'form-select me-2 sea', include_blank: true} %>`
+    }
+
+    html_form += `
+            <div class="mt-1 text-danger remstep">
+              <i class="bi bi-x-circle-fill"></i>
+            </div>
+            `
     var newStep = $('<div/>', {
       'id' : 'step_' + step_id,
-      'class' : 'input-group mb-3 w-auto',
-      'html' : `
-        <%= j label_tag :distance, I18n.t('helpers.label.distance'), class: 'input-group-text' %>
-        <%= j number_field "hex", nil, class: 'form-control me-2', min: 0, step: 1 %>
+      'class' : 'input-group mb-3 w-auto ' + $("#path_type_btn").val(),
+      'html' : html_form
 
-        <%= label_tag :terrain, I18n.t('helpers.label.terrain'), class: 'input-group-text' %>
-        <%= select_tag "terrain", options_for_select(USER_ROLES, nil), {class: 'form-select me-2'} %>
-
-        <%= label_tag :speed, I18n.t('helpers.label.speed'), class: 'input-group-text' %>
-        <%= select_tag "speed", options_for_select(USER_ROLES, nil), {class: 'form-select me-2'} %>
-
-        <%= label_tag :obstacle, I18n.t('helpers.label.obstacle'), class: 'input-group-text' %>
-        <%= select_tag "obstacle", options_for_select(USER_ROLES, nil), {class: 'form-select me-2'} %>
-
-        <div class="mt-1 text-danger remstep">
-          <i class="bi bi-x-circle-fill"></i>
-        </div>
-      `
     }).hide().fadeIn("normal").css("display", "");
 
     // Append the newStep as the last child of the "steps" div
@@ -29,11 +47,11 @@ $(document).on('turbolinks:load', function () {
 
     $('#hex_').attr("name","step["+step_id+"][hex]")
               .attr("id","step["+step_id+"][hex]")
-    $('#terrain').attr("name","step["+step_id+"][terrain]")
-                  .attr("id","step["+step_id+"][terrain]")
+    $('#terrain').attr("name","step["+step_id+"][terrain][" + $("#path_type_btn").val() + "]")
+                  .attr("id","step["+step_id+"][terrain][" + $("#path_type_btn").val() + "]")
     $('#speed').attr("name","step["+step_id+"][speed]")
                 .attr("id","step["+step_id+"][speed]")
-    $('#obstacle').attr("name","step["+step_id+"][obstacle]")
-                   .attr("id","step["+step_id+"][obstacle]")
+    $('#obstacle').attr("name","step["+ step_id +"][obstacle][" + $("#path_type_btn").val() + "]")
+                   .attr("id","step["+step_id+"][obstacle][" + $("#path_type_btn").val() + "]")
   });
 });

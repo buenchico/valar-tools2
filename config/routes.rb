@@ -41,6 +41,8 @@ Rails.application.routes.draw do
   get 'armies/export', to: 'armies#export', as: 'export_armies'
 
   resources :locations, :except => [:show]
+  get 'locations/list', to: 'locations#list', as: 'locations_list'
+
   resources :families, :except => [:show]
 
   get 'travel', to: 'travel#index'
