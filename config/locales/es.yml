@@ -98,7 +98,10 @@ es:
     models:
       game: 'Partida'
       tool: 'Herramienta'
-      army: 'Ejército'
+      army:
+        zero: 'Pequeño Grupo'
+        one: 'Ejército'
+        other: 'Ejércitos'
       family: 'Familia'
       user: 'Jugador'
     errors:
@@ -123,3 +126,40 @@ es:
     index:
       calculate: 'Calcular'
       add_step: 'Añadir etapa'
+  hexagon:
+    one: "hexágono"
+    other: "hexágonos"
+  hours:
+    one: "hora"
+    other: "horas"
+  fleet:
+    zero: "Flotilla"
+    one: "Flota"
+    other: "Flotas"
+  articles:
+    indefinite:
+      masculine:
+        one: "un"
+        other: "unos"
+      feminine:
+        one: "una"
+        other: "unas"
+    definite:
+      masculine:
+        one: "el"
+        other: "los"
+      feminine:
+        one: "la"
+        other: "las"
+  and: "y"
+  datetime:
+    distance_in_words:
+      x_hours:
+        one: 'una hora'
+        other: '%{count} horas'
+      x_days:
+        one: 'un día'
+        other: '%{count} días'
+      x_weeks:
+        one: 'una semana'
+        other: '%{count} semanas'

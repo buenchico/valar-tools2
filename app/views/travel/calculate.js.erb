@@ -1,1 +1,23 @@
 $('#result').removeClass('d-none')
+$('#result').html('<%= j render partial: "result" %>')
+$('#copy_results').click(function() {
+    // Get the contents of the div
+    var content = ""
+    content += $('.card-title').text().trim();
+    content += "\n"
+    content += $('#travel-text').html().trim().replace(/<\/p><p class="ms-2">/g, '\n* ').replace(/<\/?p[^>]*>/g, '');
+    // Create a temporary textarea element
+    var textarea = $('<textarea>').val(content).appendTo('.card-body').select();
+    // Execute the "copy" command
+    textarea.focus(); //SET FOCUS on the TEXTFIELD
+    document.execCommand('copy');
+    textarea.remove();
+    $('.card-body').addClass( "highlight", 250, callback )
+
+    function callback() {
+      setTimeout(function() {
+        $('.card-body').removeClass( "highlight" );
+      }, 250 );
+    }
+
+});

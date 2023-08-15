@@ -1,4 +1,4 @@
-// Copy selected to clipboard
+// Change from land to sea
 $(document).on('turbolinks:load', function () {
   if ($(".travel.index").length !== 0 ) {
 
@@ -7,16 +7,20 @@ $(document).on('turbolinks:load', function () {
         $(this).val('sea')
         $('#type').val('sea')
         $('.sea').removeClass('d-none')
-        $('.sea').prop('disabled', false);
+        $(".sea").prop("disabled", false);
+        $(".sea :input").prop("disabled", false);
         $('.land').addClass('d-none')
-        $('.land').prop('disabled', true);
+        $(".land").prop("disabled", true);
+        $(".land :input").prop("disabled", true);
       } else {
         $(this).val('land')
         $('#type').val('land')
         $('.land').removeClass('d-none')
-        $('.land').prop('disabled', false);
+        $(".land :input").prop("disabled", false);
+        $(".land").prop("disabled", false);
         $('.sea').addClass('d-none')
-        $('.sea').prop('disabled', true);
+        $(".sea").prop("disabled", true);
+        $(".sea :input").prop("disabled", true);
       }
     })
 
