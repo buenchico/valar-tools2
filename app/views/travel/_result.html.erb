@@ -1,4 +1,4 @@
-<div class="card mb-5 <%= @time.zero? ? "bg-danger" : "border-primary bg-dark" %> col-6">
+<div class="card mb-5 <%= @time.zero? ? "bg-danger" : "border-primary bg-dark text-white" %> col-6">
   <div class="card-body">
     <div class="card-title">
       <span id="travel-title" class="h5"><%= @time.zero? ? "ERROR" : "Desde #{@from} hasta #{@to}" %></span>
