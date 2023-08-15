@@ -33,7 +33,7 @@ $(document).on('turbolinks:load', function () {
         map.setView( [y, x], <%= @options["zoom"][0] %>);
       }
 
-      var image = L.imageOverlay('<%= "/assets/" + @options["img"].to_s %>', bounds, {opacity: 1, attribution: '<%= @options["attribution"].html_safe %>',}).addTo(map);
+      var image = L.imageOverlay('<%= asset_path('map-fiskeyja.jpg') %>', bounds, {opacity: 1, attribution: '<%= @options["attribution"].html_safe %>',}).addTo(map);
 
       <% @options["layers"].each do | code, layer | %>
         var <%= code %> = new L.layerGroup.collision({margin:0});
