@@ -24,13 +24,42 @@ Tool.create(name: 'settings', title: 'Configuración de la partida', short_title
 Tool.create(name: 'armies', title: 'Lista de ejércitos', short_title: 'ejércitos', icon_url: 'bi-shield-shaded', role: 'player',
   options_info: 'Formato JSON con los siguientes valores:
 
-  * *attributes* como pares **name**: **value**
+*hp* con los siguientes valores:
+  * *icon* class de bootstrap-icons
+  * *name*, string
+  * *step*, integer. Cuántos "pasos" para el 100%, 20 nos da 5 pasos
 
-  * *tags* con pares de valores para **icon**, **str** y **name**
-  * No olvidar los *{* *}* ni las *"* (comillas dobles, no simples)',
+*soldiers*, integer. Número de hombres para 100% de hp
+
+*tags* con cada etiqueta con su **key** y valores:
+  * *str*, integer, fuerza de combate
+  * *icon* class de bootstrap-icons
+  * *name*, string
+  * *colour*, class de bootstrap
+
+*attributes* con cada atributo con su **key** y valores:
+  * **str**, integer, fuerza por cada paso
+  * *icon* class de bootstrap-icons
+  * *name*, string
+  * *sort*, integer. Columna desde 0 hasta 9',
   active: true)
 Tool.create(name: 'travel', title: 'Calculadora de Viaje', short_title: 'Viaje', icon_url: 'bi-signpost-split-fill', role: 'player',
-  options_info: '',
+  options_info: 'Formato JSON con los siguientes valores:
+
+*sea* con los siguientes valores
+
+  * *base*: integer (velocidad base)
+  * *terrain* con **key** {**mod**: integer, **name**: string}
+  * *obstacles* con **key** {**mod**: integer, **name**: string}
+  * *army_speed* con **key** {**mod**: integer, **name**: string}
+  * En cada categoría debe haber un item con **key** = **default** con **mod** = **0**
+
+*land* con el mismo formato que **sea**
+
+*size*, un array de arrays con pares [**tamaño**, **modificador**]. Ordenado de mayor a menor, el último mostrando "-99"
+
+*speed* con pares de valores con **key** {**mod**: integer, **name**: string}
+  * En cada categoría debe haber un item con **key** = **default** con **mod** = **0**',
   active: true )
 Tool.create(name: 'factions', title: 'Lista de Facciones', short_title: 'Facciones', icon_url: 'bi-flag-fill', role: 'master',
   options_info: '',
@@ -45,7 +74,23 @@ Tool.create(name: 'families', title: 'Lista de Familias', short_title: 'Familias
   options_info: 'Array de etiquetas, no olvides incluir los corchetes **[** y **]** ni las comillas dobles **"**',
   active: true )
 Tool.create(name: 'map', title: 'Mapa', short_title: 'Mapa', icon_url: 'bi-globe-europe-africa', role: 'player',
-  options_info: '',
+  options_info: 'Formato JSON con los siguientes valores:
+
+*img*, string. Nombre del archivo de la imagen base
+
+*font*, string. Nombre de la 'font-family'. Debe definirse en el CSS
+
+*zoom*, array con zoom mínimo y máximo
+
+*scale*, integer, tamaño de los hexágonos
+
+*bounds*, array con los límites del mapa. [[x0,y0],[x100,y100]]
+
+*layers* cada capa un nuevo item con **key** y valores:
+  * *name*, string
+  * *types*, array. *keys* de los tipos de lugar en esta capa. Provenientes de la lista de lugares.
+
+*attribution*, string. Copyright del mapa',
   active: true )
 
 if Rails.env.development?
