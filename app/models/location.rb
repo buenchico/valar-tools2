@@ -2,7 +2,8 @@ class Location < ApplicationRecord
   has_many :games
   belongs_to :family, optional: true
 
-  validates :name_en, presence: true
+  validates :name_en, presence: true, if: -> { name_es.blank? }
+  validates :name_es, presence: true, if: -> { name_en.blank? }
 
   def name
     if self.name_es.nil?
