@@ -95,6 +95,17 @@ es:
         branch: "Rama"
         visible: "Visible"
         games_id: "Partidas"
+      location:
+        name: "Nombre"
+        name_es: "Nombre (ES)"
+        name_en: "Nombre (EN)"
+        tags: "Etiquetas"
+        region: "Región"
+        location_type: "Tipo"
+        visible: "Visible"
+        family_id: "Familia"
+        description: "Descripción"
+        game_id: "Partida"
     models:
       game: 'Partida'
       tool: 'Herramienta'
@@ -104,6 +115,9 @@ es:
         other: 'Ejércitos'
       family: 'Familia'
       user: 'Jugador'
+      location:
+        one: 'Lugar'
+        other: 'Lugares'
     errors:
       models:
         army:

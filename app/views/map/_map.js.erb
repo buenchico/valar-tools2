@@ -39,19 +39,34 @@ $(document).on('turbolinks:load', function () {
         var <%= code %> = new L.layerGroup.collision({margin:0});
         <% layer["types"].each do | type | %>
           <% @locations.where(location_type: type).each do | location | %>
-            <%= code %>.addLayer(
-              L.marker(
-                [<%= location.y %>,<%= location.x %>],
-                  { icon: L.divIcon({
-                    className: "divIconBox",
-                    html: "<img src='/assets/marker.svg' width='24' height='24'></div>",
-                    iconSize: [120,24],
-                    iconAnchor: [12, 12]
-                  })
-                  })
-                  .bindPopup('<p><%= location.name %></p><p><%= location.family.name %></p>')
-                  .bindTooltip("<%= location.name %>", {permanent: true, className: "locationLabel <%= @options['font'] %>", style: "background-color:powderblue;", offset: [0, 0] })
-              );
+            var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
+            if (icon == "") {
+              <%= code %>.addLayer(
+                L.marker(
+                  [<%= location.y %>,<%= location.x %>],
+                    { icon: L.divIcon({
+                      className: "region-label <%= @options['font'] %>",
+                      html: "<%= location.name %>",
+                      iconSize: [<%= location.name.length * 30 * 0.6 %>,30],
+                      iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
+                      })
+                    })
+                );
+            } else {
+              <%= code %>.addLayer(
+                L.marker(
+                  [<%= location.y %>,<%= location.x %>],
+                    { icon: L.divIcon({
+                      className: "divIconBox",
+                      html: "<img src='" + icon + "' width='24' height='24'></div>",
+                      iconSize: [120,24],
+                      iconAnchor: [12, 12]
+                      })
+                    })
+                    .bindPopup('<p><%= location.name %></p><p><%= location.family&.name %></p>')
+                    .bindTooltip("<%= location.name %>", {permanent: true, className: "locationLabel <%= @options['font'] %>", style: "background-color:powderblue;", offset: [0, 0] })
+                );
+            }
           <% end %>
         <% end %>
         <%= code %>.addTo(map);
@@ -141,13 +156,14 @@ $(document).on('turbolinks:load', function () {
           weight: 1.0
         }
       });
-      map.addLayer(layer_hex);
+      //map.addLayer(layer_hex);
 
       var overlays = {
         <% @options["layers"].sort_by { |_key, value| value["name"] }.each do | code, layer | %>
           <%= layer["name"] %>: <%= code %>,
         <% end %>
-        "Rutas": drawnItems
+        "Rutas": drawnItems,
+        "Grid": layer_hex
       }
 
       var layerControl = L.control.layers(null, overlays)
@@ -265,7 +281,6 @@ $(document).on('turbolinks:load', function () {
         });
 
         // Debug grid
-
         L.GridLayer.GridDebug = L.GridLayer.extend({
           createTile: function (coords) {
             const tile = document.createElement('div');
@@ -282,14 +297,6 @@ $(document).on('turbolinks:load', function () {
         };
 
         map.addLayer(L.gridLayer.gridDebug());
-
-        // Debug coords
-        map.on('click', function(e){
-          var coord = e.latlng;
-          var lat = coord.lat;
-          var lng = coord.lng;
-          console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
-        });
       <% end %>
 
       $('#map-container').data('loaded', true);
