@@ -1,21 +1,25 @@
 $(document).on('turbolinks:load', function () {
   if ($(".map.index").length !== 0 || $(".map.full").length !== 0) {
     if ($('#map-container').data('loaded') == false) {
+
+      /* Resizing window
       $(window).resize(function(){
         if ($('#map-container').hasClass('fs') ) {
           $('#mapid').height(window.innerHeight);
         } else {
-          $('#mapid').height(window.innerHeight - $("#header").height() - 102);
+          ('#mapid').height(window.innerHeight - $("#header").height() - 102);
         }
       });
+      */
 
-      var bounds = <%= @options["bounds"] %> // mapa-westeros
+      var bounds = <%= @options["bounds"] %>
+      var zoom = <%= @options["zoom"] %>
 
       var map = L.map('mapid', {
           crs: L.CRS.Simple, //CRS need to be removed for tile layer
           //drawControl: true,
-          minZoom: <%= @options["zoom"][0] %>,
-          maxZoom: <%= @options["zoom"][1] %>,
+          minZoom: zoom[0],
+          maxZoom: zoom[1],
           maxBounds: bounds,
           maxBoundsViscosity: 1.0,
           fullscreenControl: true,
@@ -28,12 +32,33 @@ $(document).on('turbolinks:load', function () {
       var y = params.get("y");
 
       if (x == null || y == null) {
-        map.setView( [<%= @options["bounds"][1][0] / 2 %>, <%= @options["bounds"][1][1] / 2 %>], <%= @options["zoom"][0] %>);
+        map.setView( [bounds[1][0] / 2 , bounds[1][1] / 2 ], zoom[0]);
       } else {
-        map.setView( [y, x], <%= @options["zoom"][0] %>);
+        map.setView( [y, x], zoom[0]);
       }
 
-      var image = L.imageOverlay('<%= asset_path('map-fiskeyja.jpg') %>', bounds, {opacity: 1, attribution: '<%= @options["attribution"].html_safe %>',}).addTo(map);
+      map.createPane('imagebg');
+      map.getPane('imagebg').style.zIndex = 50;
+
+      var baseImage = L.imageOverlay('<%= asset_path('map-fiskeyja.jpg') %>', bounds, {opacity: 1, attribution: '<%= @options["attribution"].html_safe %>', pane: 'imagebg'}).addTo(map);
+
+      const sideLength = <%= (@options["scale"] || 1 ) %>;
+
+      var customTileLayer = L.GridLayer.extend({
+          options: {
+            bounds: bounds,
+            tileSize: L.point(sideLength * 2 * 1.5, Math.sqrt(3) * sideLength * 2),
+            maxNativeZoom: 0, // Define the minimum native zoom level
+          },
+          createTile: function (coords) {
+              var tile = document.createElement('img');
+              tile.src = "<%= asset_path('hex-tile.svg') %>";
+
+              return tile;
+          }
+      });
+
+      var hexLayer = new customTileLayer().addTo(map);
 
       <% @options["layers"].each do | code, layer | %>
         var <%= code %> = new L.layerGroup.collision({margin:0});
@@ -74,101 +99,13 @@ $(document).on('turbolinks:load', function () {
 
       var drawnItems = new L.FeatureGroup();
 
-      function generateHexGrid(bounds, sideLength) {
-        const hexagons = [];
-
-        const minX = bounds[0][1];
-        const minY = bounds[0][0];
-        const maxX = bounds[1][1];
-        const maxY = bounds[1][0];
-
-        const hexWidth = sideLength * 2;
-        const hexHeight = Math.sqrt(3) * sideLength;
-
-        const horizontalSpacing = hexWidth * 0.75;
-        const verticalSpacing = hexHeight;
-
-        const numRows = (bounds[1][0] / sideLength);
-        const numCols = (bounds[1][1] / sideLength);
-
-        let rowOffset = 0;
-        let colOffset = 0;
-
-        for (let row = 0; row < numRows; row++) {
-
-          for (let col = 0; col < numCols; col++) {
-            if (col % 2 === 1) {
-              rowOffset = hexHeight / 2;
-            } else {
-              rowOffset = 0;
-            }
-
-            const x = minX + col * horizontalSpacing + colOffset;
-            const y = minY + row * verticalSpacing + rowOffset;
-
-            const hexagon = {
-              type: 'Feature',
-              geometry: {
-                type: 'MultiPolygon',
-                coordinates: [
-                  [
-                    [
-                      [x - (0.5 * hexWidth), y],
-                      [x - (0.25 * hexWidth), y - (0.5 * hexHeight)],
-                      [x + (0.25 * hexWidth), y - (0.5 * hexHeight)],
-                      [x + (0.5 * hexWidth), y],
-                      [x + (0.25 * hexWidth), y + (0.5 * hexHeight)],
-                      [x - (0.25 * hexWidth), y + (0.5 * hexHeight)]
-                    ]
-                  ]
-                ]
-              }
-            };
-
-            hexagons.push(hexagon);
-          }
-        }
-
-
-        return hexagons;
-      }
-
-      const sideLength = <%= (@options["scale"] || 1 ) %>;
-
-      const hexGrid = generateHexGrid(bounds, sideLength);
-
-      const jsonHex = {
-        type: 'FeatureCollection',
-        name: 'hex',
-        crs: {
-          type: 'name',
-          properties: {
-            name: 'urn:ogc:def:crs:OGC:1.3:CRS84'
-          }
-        },
-        features: hexGrid
-      };
-
-      var layer_hex = new L.geoJson(jsonHex, {
-        interactive: false,
-        style: {
-          color: 'rgba(0,0,0,0.3)',
-          weight: 1.0
-        }
-      });
-      //map.addLayer(layer_hex);
-
       var overlays = {
         <% @options["layers"].sort_by { |_key, value| value["name"] }.each do | code, layer | %>
           <%= layer["name"] %>: <%= code %>,
         <% end %>
         "Rutas": drawnItems,
-        "Grid": layer_hex
+        "Grid": hexLayer
       }
-
-      var layerControl = L.control.layers(null, overlays)
-
-      map.addControl(layerControl);
 
       // Saving as image
 
@@ -191,14 +128,12 @@ $(document).on('turbolinks:load', function () {
 
       map.on('easyPrint-start', e => {
         $('#printing').removeClass('invisible')
-        map.removeLayer(layer_hex)
         if (e.event.target.className == 'fullMap') {
-          map.setView( [bounds[1][0] / 2, bounds[1][1] / 2], <%= @options["zoom"][0] %>);
+          map.setView( [(bounds[1][0] / 2), (bounds[1][1] / 2)], zoom[0]);
         }
       });
 
       map.on('easyPrint-finished', e => {
-        map.addLayer(layer_hex)
         $('#printing').addClass('invisible')
       });
 
@@ -296,8 +231,15 @@ $(document).on('turbolinks:load', function () {
           return new L.GridLayer.GridDebug(opts);
         };
 
-        map.addLayer(L.gridLayer.gridDebug());
+        overlays["Debug grid"] = L.gridLayer.gridDebug();
+        overlays["Base"] = baseImage
+
+        //map.addLayer(L.gridLayer.gridDebug());
       <% end %>
+
+      var layerControl = L.control.layers(null, overlays)
+
+      map.addControl(layerControl);
 
       $('#map-container').data('loaded', true);
   }
