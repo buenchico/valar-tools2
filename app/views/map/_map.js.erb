@@ -72,7 +72,7 @@ $(document).on('turbolinks:load', function () {
                     { icon: L.divIcon({
                       className: "region-label <%= @options['font'] %>",
                       html: "<%= location.name %>",
-                      iconSize: [<%= location.name.length * 30 * 0.6 %>,30],
+                      iconSize: [<%= location.name.length * 30 * 0.6 %>, 30],
                       iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
                       })
                     })
