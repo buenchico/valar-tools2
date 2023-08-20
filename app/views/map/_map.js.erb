@@ -40,7 +40,7 @@ $(document).on('turbolinks:load', function () {
       map.createPane('imagebg');
       map.getPane('imagebg').style.zIndex = 50;
 
-      var baseImage = L.imageOverlay('<%= asset_path('map-fiskeyja.jpg') %>', bounds, {opacity: 1, attribution: '<%= @options["attribution"].html_safe %>', pane: 'imagebg'}).addTo(map);
+      var baseImage = L.imageOverlay('<%= asset_path(@options["img"]) %>', bounds, {opacity: 1, attribution: '<%= @options["attribution"].html_safe %>', pane: 'imagebg'}).addTo(map);
 
       const sideLength = <%= (@options["scale"] || 1 ) %>;
 
@@ -61,8 +61,13 @@ $(document).on('turbolinks:load', function () {
       var hexLayer = new customTileLayer().addTo(map);
 
       <% @options["layers"].each do | code, layer | %>
-        var <%= code %> = new L.layerGroup.collision({margin:0});
+        var <%= code %> = new L.layerGroup.collision({margin:-5});
         <% layer["types"].each do | type | %>
+          <% if !layer["img"].nil? %>
+            var imageOverlay = L.imageOverlay('<%= asset_path('map-fiskeyja-pol.png') %>', bounds, {opacity: 0.5})
+            imageOverlay.addTo(<%= code %>);
+          <% end %>
+
           <% @locations.where(location_type: type).each do | location | %>
             var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
             if (icon == "") {
@@ -94,7 +99,10 @@ $(document).on('turbolinks:load', function () {
             }
           <% end %>
         <% end %>
-        <%= code %>.addTo(map);
+
+        <% if layer["default"] != false %>
+          <%= code %>.addTo(map);
+        <% end %>
       <% end %>
 
       var drawnItems = new L.FeatureGroup();
