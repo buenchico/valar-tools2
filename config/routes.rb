@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   post 'armies/import', to: 'armies#import', as: 'import_armies'
   get 'armies/export', to: 'armies#export', as: 'export_armies'
 
-  resources :locations, :except => [:show]
+  resources :locations
   get 'locations/list', to: 'locations#list', as: 'locations_list'
 
   resources :families, :except => [:show]

@@ -1,0 +1,27 @@
+<div class="modal fade" id="<%= @tool.name.singularize %>Modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title"><%= object&.name %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <% @tool.name.singularize.capitalize.constantize.columns_hash.except('id', 'created_at', 'updated_at').each do | column_name, column_info| %>
+          <% if !object[column_name].blank? %>
+            <p><strong><%= object.class.human_attribute_name(column_name) %></strong>
+            <% if object[column_name].to_s.length > 50 %>
+              </p>
+              <p class="ms-2"><%= simple_format(object[column_name]) %></p>
+            <% elsif column_info.type.to_s == "boolean" %>
+              <% nil %>
+            <% elsif column_name.to_s.include? ("_id") %>
+              <%= column_name.split("_")[0].capitalize.constantize.find(object[column_name.to_sym]).title %></p>
+            <% else %>
+              <%= object[column_name]%></p>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

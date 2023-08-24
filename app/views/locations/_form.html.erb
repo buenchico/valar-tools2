@@ -56,7 +56,11 @@
               <% else %>
                 <div class="input-group mb-3">
                   <%= form.label column_name.to_sym, class: 'input-group-text' %>
-                  <%= form.text_field column_name.to_sym, class: 'form-control' %>
+                  <% if form.object[column_name.to_sym].to_s.length <= 50 %>
+                    <%= form.text_field column_name.to_sym, class: 'form-control' %>
+                  <% else %>
+                    <%= form.text_area column_name.to_sym, class: 'form-control' %>
+                  <% end %>
                 </div>
               <% end %>
             <% end %>
