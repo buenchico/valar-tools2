@@ -20,8 +20,8 @@ class ApplicationController < ActionController::Base
 
   def check_player
     # allows only logged in user
-    respond_to do |format|
-      if @current_user.nil?
+    if @current_user.nil?
+      respond_to do |format|
         format.html { redirect_to root_path, danger: 'No tienes permisos para acceder a esta herramienta' }
         format.js do
           flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
@@ -33,8 +33,8 @@ class ApplicationController < ActionController::Base
 
   def check_admin
     # allows only admin user
-    respond_to do |format|
-      if @current_user.nil? || !@current_user.is_admin?
+    if @current_user.nil? || !@current_user.is_admin?
+      respond_to do |format|
         format.html { redirect_to root_path, danger: 'No tienes permisos para acceder a esta herramienta' }
         format.js do
           flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
@@ -46,8 +46,8 @@ class ApplicationController < ActionController::Base
 
   def check_master
     # allows only master user
-    respond_to do |format|
-      if @current_user.nil? || !@current_user.is_master?
+    if @current_user.nil? || !@current_user.is_master?
+      respond_to do |format|
         format.html { redirect_to root_path, danger: 'No tienes permisos para acceder a esta herramienta' }
         format.js do
           flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
