@@ -32,8 +32,10 @@
                 <td><%= object[column_name.to_sym].nil? ? nil : column_name.split("_")[0].capitalize.constantize.find(object[column_name.to_sym]).title %></td>
               <% elsif column_name.to_s == "location_type" %>
                 <td><%= @options["types"][object[column_name.to_sym]]["name"] %></td>
+              <% elsif object[column_name.to_sym].to_s.length > 50 %>
+                <td><%= truncate(object[column_name.to_sym].to_s, length: 100, omission: '...') %></td>
               <% else %>
-                <td><%= simple_format(object[column_name.to_sym].to_s) %></td>
+                <td><%= object[column_name.to_sym].to_s %></td>
               <% end %>
             <% end %>
           <% end %>

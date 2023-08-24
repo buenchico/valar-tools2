@@ -12,12 +12,14 @@
             <% if object[column_name].to_s.length > 50 %>
               </p>
               <p class="ms-2"><%= simple_format(object[column_name]) %></p>
+            <% elsif column_name.to_s == "location_type" %>
+              <%= @options["types"][object[column_name].to_s]["name"] %></p>
             <% elsif column_info.type.to_s == "boolean" %>
               <% nil %>
             <% elsif column_name.to_s.include? ("_id") %>
               <%= column_name.split("_")[0].capitalize.constantize.find(object[column_name.to_sym]).title %></p>
             <% else %>
-              <%= object[column_name]%></p>
+              <%= object[column_name] %></p>
             <% end %>
           <% end %>
         <% end %>

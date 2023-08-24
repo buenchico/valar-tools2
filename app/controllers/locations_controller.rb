@@ -2,10 +2,13 @@ class LocationsController < ApplicationController
   before_action :set_tool
   before_action :check_master, except: [:index, :show]
   before_action :set_location, only: [:edit, :show, :update, :destroy]
-  before_action :set_options, only: [:index, :new, :edit]
+  before_action :set_options, only: [:index, :new, :edit, :show]
 
   def index
     @locations = Location.all
+  end
+
+  def show
   end
 
   def new
