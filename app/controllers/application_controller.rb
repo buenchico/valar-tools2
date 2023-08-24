@@ -20,25 +20,40 @@ class ApplicationController < ActionController::Base
 
   def check_player
     # allows only logged in user
-    if @current_user.nil?
-      flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
-      redirect_to root_path
+    respond_to do |format|
+      if @current_user.nil?
+        format.html { redirect_to root_path, danger: 'No tienes permisos para acceder a esta herramienta' }
+        format.js do
+          flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
+          render js: 'window.location.replace("/");'
+        end
+      end
     end
   end
 
   def check_admin
     # allows only admin user
-    if @current_user.nil? || !@current_user.is_admin?
-      flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
-      redirect_to root_path
+    respond_to do |format|
+      if @current_user.nil? || !@current_user.is_admin?
+        format.html { redirect_to root_path, danger: 'No tienes permisos para acceder a esta herramienta' }
+        format.js do
+          flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
+          render js: 'window.location.replace("/");'
+        end
+      end
     end
   end
 
   def check_master
     # allows only master user
-    if @current_user.nil? || !@current_user.is_master?
-      flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
-      redirect_to root_path
+    respond_to do |format|
+      if @current_user.nil? || !@current_user.is_master?
+        format.html { redirect_to root_path, danger: 'No tienes permisos para acceder a esta herramienta' }
+        format.js do
+          flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
+          render js: 'window.location.replace("/");'
+        end
+      end
     end
   end
 
