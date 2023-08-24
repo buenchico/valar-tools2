@@ -81,6 +81,7 @@ $(document).on('turbolinks:load', function () {
                       iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
                       })
                     })
+                    .bindPopup('<p><a href="<%= locations_path.to_s + '?id=' + location.id.to_s %>"><%= location.name %></a></p>' + '<%= j truncate(location&.description.to_s.gsub(/\n/, '<br>'), length: 100, omission: '...') %>' + '</p>')
                 );
             } else {
               <%= code %>.addLayer(
@@ -93,7 +94,9 @@ $(document).on('turbolinks:load', function () {
                       iconAnchor: [12, 12]
                       })
                     })
-                    .bindPopup('<p><%= location.name %></p><p><%= location.family&.name %></p>')
+                    .bindPopup('<p><a href="<%= locations_path.to_s + '?id=' + location.id.to_s %>"><%= location.name %></a></p><p><%= location.family&.name %></p>', {
+                        className: 'leaflet-popup'
+                      })
                     .bindTooltip("<%= location.name %>", {permanent: true, className: "locationLabel <%= @options['font'] %>", style: "background-color:powderblue;", offset: [0, 0] })
                 );
             }
