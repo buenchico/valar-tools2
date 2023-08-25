@@ -5,7 +5,7 @@ class FactionsController < ApplicationController
   before_action :set_faction, only: [:edit, :update, :show, :reputation]
 
   def index
-    if @current_user.is_master?
+    if @current_user&.is_master?
       @factions = Faction.all.order(:id)
     else
       @factions = Faction.where(active: true).where.not(name: ["Admin", "Inactivo", "Master"]).order(:name)

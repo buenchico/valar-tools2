@@ -6,7 +6,7 @@
           <th scope="col" style="width: 25px"></th>
           <th scope="col">Nombre</th>
           <th scope="col" style="width: 50px">Miembros</th>
-          <% if @current_user.is_master? %>
+          <% if @current_user&.is_master? %>
             <th scope="col">Partidas</th>
           <% else %>
             <th scope="col">Descripcción</th>
@@ -31,7 +31,7 @@
               </figcaption>
             </td>
             <td><%= truncate(faction.users.order(:player).pluck(:player).join(", "), length: 100, omission: '...') %></td>
-            <% if @current_user.is_master? %>
+            <% if @current_user&.is_master? %>
               <td><%= faction.games.order(:id).pluck(:name).map(&:titleize).join(", ") %></td>
             <% else %>
               <td><%= truncate(faction.description, length: 100, omission: '...') %></td>
@@ -39,7 +39,7 @@
             <% if @options["reputation"] %>
               <td>
                 <span id="rep_<%= faction.id %>"><%= number_to_modifier(calculate_mod(faction.reputation)) %> (<%= faction.reputation %>)</span>
-                <% if @current_user.is_master? %>
+                <% if @current_user&.is_master? %>
                   <%= form_with(model: faction, url: reputation_path(faction), method: :post, local: false) do |form| %>
                     <%= button_tag(type: 'submit', class: 'btn btn-outline-success', value: '1') do %>
                       <i class="bi bi-hand-thumbs-up-fill"></i>
@@ -59,7 +59,7 @@
               <% end %>
             </td>
             <td>
-              <% if @current_user.is_master? %>
+              <% if @current_user&.is_master? %>
                 <%= link_to '', send('edit_faction_path', faction.id), remote: true, class: 'bi bi-pencil-square text-white' %>
               <% else %>
                 <%= link_to '', send('faction_path', faction.id), remote: true, class: 'bi bi-eye-fill text-white' %>

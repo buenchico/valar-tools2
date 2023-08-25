@@ -40,7 +40,7 @@
             <% end %>
           <% end %>
           <td><%= link_to '', send("#{@tool.name.singularize}_path", object.id), remote: true, class: 'bi bi-eye-fill text-white' %></td>
-          <% if @current_user.is_master? %>
+          <% if @current_user&.is_master? %>
             <td><%= link_to '',   send("edit_#{@tool.name.singularize}_path", object.id), remote: true, class: 'bi bi-pencil-square text-white' %></td>
             <td>
               <%= link_to send("#{@tool.name.singularize}_path", object.id), method: :delete, data: { confirm: "Estás seguro de eliminar el objeto #{object.name}?" }, remote: true do %>
