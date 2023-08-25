@@ -1,7 +1,7 @@
-$('#army_<%= @army.id %>').addClass( "table-highlight", 500, callback )
+$('.army_<%= @army.id %>').addClass( "table-highlight", 500, callback )
 
 function callback() {
   setTimeout(function() {
-    $('#army_<%= @army.id %>').removeClass( "table-highlight" );
+    $('.army_<%= @army.id %>').removeClass( "table-highlight" );
   }, 250 );
 }

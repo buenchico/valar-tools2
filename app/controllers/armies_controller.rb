@@ -66,6 +66,7 @@ class ArmiesController < ApplicationController
     respond_to do |format|
       if @army.update(army_params.reject! { |x| keys_to_remove&.include?(x) })
         format.html { redirect_to armies_url, success: 'Ejército editado correctamente.' }
+        format.js
       else
         format.html { redirect_to armies_url, danger: @army.errors }
       end
