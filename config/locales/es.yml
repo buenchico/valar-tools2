@@ -84,6 +84,7 @@ es:
         flair_url: "Flair URL"
         reputation: "Reputación"
         game_ids: "Partidas"
+        description: "Descripcción"
       user:
         player: "Jugador"
         discourse_id: "Discourse_id"

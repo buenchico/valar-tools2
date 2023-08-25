@@ -1,0 +1,23 @@
+<div class="modal fade" id="factionModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title">
+          <%= image_tag(faction.flair_url, :alt => faction.name, id: faction.name, class: 'icon-table') if faction.flair_url.present? %>
+          <%= faction.title %>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-success">Jugador: <%= faction.users.order(:player).pluck(:player).join(", ") %></div>
+        <%= simple_format(faction.description) %>
+        <% if @options["reputation"] %>
+          <div class="input-group">
+            <%= label_tag :reputation, 'Reputation', class: 'input-group-text' %>
+            <%= text_field_tag :faction_reputation, number_to_modifier(faction.reputation), class: 'form-control', disabled: true %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

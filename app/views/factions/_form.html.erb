@@ -25,7 +25,12 @@
           </div>
           <div class="input-group mb-3">
             <%= form.label :reputation, class: 'input-group-text' %>
+            <%= form.label number_to_modifier(calculate_mod(faction.reputation)), class: 'input-group-text' %>
             <%= form.number_field :reputation, class: 'form-control', step: 1 %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :description, class: 'input-group-text' %>
+            <%= form.text_area :description, class: 'form-control', step: 1 %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :game_ids, class: 'input-group-text' %>

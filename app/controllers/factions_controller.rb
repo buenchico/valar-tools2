@@ -1,18 +1,22 @@
 class FactionsController < ApplicationController
-  before_action :check_master, except: [:index]
+  before_action :check_master, except: [:index, :show]
   before_action :set_tool
-  before_action :set_faction, only: [:edit, :update]
+  before_action :set_options
+  before_action :set_faction, only: [:edit, :update, :show, :reputation]
 
   def index
     if @current_user.is_master?
       @factions = Faction.all.order(:id)
     else
-      @factions = Faction.where(active: true).order(:name)
+      @factions = Faction.where(active: true).where.not(name: ["Admin", "Inactivo", "Master"]).order(:name)
     end
   end
 
   def edit
     @games = Game.all.order(:id)
+  end
+
+  def show
   end
 
   def sync_groups
@@ -46,8 +50,7 @@ class FactionsController < ApplicationController
             long_name: group["title"],
             discourse_id: group["id"],
             game_ids: Game.find_by(prefix: group["name"].split("-")[0]).id,
-            flair_url: group["flair_url"].nil? ? '' : "http://valar.es" + group["flair_url"],
-            active: false
+            flair_url: group["flair_url"].nil? ? '' : "http://valar.es" + group["flair_url"]
           )
             @count += 1
           else
@@ -81,12 +84,28 @@ class FactionsController < ApplicationController
     end
   end
 
+  def reputation
+    @rep = @faction.reputation.to_i + params[:button].to_i
+
+    respond_to do |format|
+      if @faction.update(reputation: @rep)
+        format.js
+      else
+        format.html { redirect_to factions_url, danger: @faction.errors  }
+      end
+    end
+  end
+
 private
   def set_faction
     @faction = Faction.find(params[:id])
   end
 
+  def set_options
+    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
+  end
+
   def faction_params
-    params.require(:faction).permit(:reputation, :active, game_ids: [])
+    params.require(:faction).permit(:reputation, :description, :active, game_ids: [])
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_25_133420) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -143,13 +143,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.index ["faction_id"], name: "index_users_on_faction_id"
   end
 
-  create_table "valar_ar_internal_metadata", primary_key: "key", id: :string, force: :cascade do |t|
-    t.string "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "valar_armies", force: :cascade do |t|
+  create_table "armies", force: :cascade do |t|
     t.string "name"
     t.string "status"
     t.string "group"
@@ -174,7 +168,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "valar_armies_factions", force: :cascade do |t|
+  create_table "armies_factions", force: :cascade do |t|
     t.bigint "army_id"
     t.bigint "faction_id"
     t.datetime "created_at", null: false
@@ -183,7 +177,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.index ["faction_id"], name: "index_valar_armies_factions_on_faction_id"
   end
 
-  create_table "valar_factions", force: :cascade do |t|
+  create_table "factions", force: :cascade do |t|
     t.string "name"
     t.string "long_name"
     t.integer "discourse_id"
@@ -192,9 +186,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "flair_url"
+    t.string "description"
   end
 
-  create_table "valar_factions_games", force: :cascade do |t|
+  create_table "factions_games", force: :cascade do |t|
     t.bigint "faction_id"
     t.bigint "game_id"
     t.datetime "created_at", null: false
@@ -203,7 +198,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.index ["game_id"], name: "index_valar_factions_games_on_game_id"
   end
 
-  create_table "valar_families", force: :cascade do |t|
+  create_table "families", force: :cascade do |t|
     t.string "name"
     t.string "tags", default: [], array: true
     t.string "branch"
@@ -214,7 +209,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.index ["game_id"], name: "index_valar_families_on_game_id"
   end
 
-  create_table "valar_game_tools", force: :cascade do |t|
+  create_table "game_tools", force: :cascade do |t|
     t.bigint "game_id"
     t.bigint "tool_id"
     t.boolean "active", default: false
@@ -225,7 +220,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.index ["tool_id"], name: "index_valar_game_tools_on_tool_id"
   end
 
-  create_table "valar_games", force: :cascade do |t|
+  create_table "games", force: :cascade do |t|
     t.string "name"
     t.string "title"
     t.string "prefix"
@@ -235,7 +230,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "valar_locations", force: :cascade do |t|
+  create_table "locations", force: :cascade do |t|
     t.string "name_en"
     t.string "name_es"
     t.string "description"
@@ -253,10 +248,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.index ["game_id"], name: "index_valar_locations_on_game_id"
   end
 
-  create_table "valar_schema_migrations", primary_key: "version", id: :string, force: :cascade do |t|
-  end
-
-  create_table "valar_tools", force: :cascade do |t|
+  create_table "tools", force: :cascade do |t|
     t.string "name"
     t.string "title"
     t.string "short_title"
@@ -269,7 +261,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "valar_users", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "player"
     t.string "faction"
     t.integer "discourse_id"
@@ -285,8 +277,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_160338) do
   add_foreign_key "armies_factions", "factions"
   add_foreign_key "factions_games", "factions"
   add_foreign_key "factions_games", "games"
-  add_foreign_key "valar_armies_factions", "valar_armies", column: "army_id"
-  add_foreign_key "valar_armies_factions", "valar_factions", column: "faction_id"
-  add_foreign_key "valar_factions_games", "valar_factions", column: "faction_id"
-  add_foreign_key "valar_factions_games", "valar_games", column: "game_id"
+  add_foreign_key "armies_factions", "armies"
+  add_foreign_key "armies_factions", "factions"
+  add_foreign_key "factions_games", "factions"
+  add_foreign_key "factions_games", "games"
 end

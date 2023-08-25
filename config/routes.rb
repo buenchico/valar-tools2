@@ -28,8 +28,9 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :edit, :update ]
   post 'users/sync_users', to: 'users#sync_users', as: 'sync_users'
 
-  resources :factions, :except => [:show]
+  resources :factions
   post 'factions/sync_groups', to: 'factions#sync_groups', as: 'sync_groups'
+  post 'factions/:id/reputation', to: 'factions#reputation', as: 'reputation'
 
   resources :armies, :except => [:show]
   get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'

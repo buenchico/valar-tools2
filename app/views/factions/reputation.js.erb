@@ -1,0 +1,8 @@
+$('#faction_<%= @faction.id %>').addClass("table-highlight", callback);
+
+function callback() {
+  $('#rep_<%= @faction.id %>').html("<%= number_to_modifier(calculate_mod(@faction.reputation)) %> (<%= @faction.reputation %>)")
+  setTimeout(function() {
+    $('#faction_<%= @faction.id %>').removeClass("table-highlight");
+  }, 250);
+}
