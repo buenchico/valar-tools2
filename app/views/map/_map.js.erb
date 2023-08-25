@@ -2,18 +2,26 @@ $(document).on('turbolinks:load', function () {
   if ($(".map.index").length !== 0 || $(".map.full").length !== 0) {
     if ($('#map-container').data('loaded') == false) {
 
-      /* Resizing window
-      $(window).resize(function(){
-        if ($('#map-container').hasClass('fs') ) {
-          $('#mapid').height(window.innerHeight);
-        } else {
-          ('#mapid').height(window.innerHeight - $("#header").height() - 102);
-        }
-      });
-      */
-
+      var imgSize = <%= @options["imgSize"] %>
       var bounds = <%= @options["bounds"] %>
       var zoom = <%= @options["zoom"] %>
+
+      function resizeMap() {
+        var width = Math.min($('#map-container').width(), bounds[1][1] - bounds[0][1])
+        var height = Math.min(window.innerHeight - 102, bounds[1][0] - bounds[0][0])
+        $('#mapid').width(width);
+        $('#mapid').height(height);
+      }
+
+      resizeMap();
+
+      $(window).resize(function(){
+        if ($('#map-container').hasClass('fs') ) {
+          resizeMap();
+        } else {
+          resizeMap();
+        }
+      });
 
       var map = L.map('mapid', {
           crs: L.CRS.Simple, //CRS need to be removed for tile layer
@@ -40,7 +48,7 @@ $(document).on('turbolinks:load', function () {
       map.createPane('imagebg');
       map.getPane('imagebg').style.zIndex = 50;
 
-      var baseImage = L.imageOverlay('<%= asset_path(@options["img"]) %>', bounds, {opacity: 1, attribution: '<%= @options["attribution"].html_safe %>', pane: 'imagebg'}).addTo(map);
+      var baseImage = L.imageOverlay('<%= asset_path(@options["img"]) %>', [[0,0],imgSize], {opacity: 1, attribution: '<%= @options["attribution"].html_safe %>', pane: 'imagebg'}).addTo(map);
 
       const sideLength = <%= (@options["scale"] || 1 ) %>;
 
@@ -49,6 +57,7 @@ $(document).on('turbolinks:load', function () {
             bounds: bounds,
             tileSize: L.point(sideLength * 2 * 1.5, Math.sqrt(3) * sideLength * 2),
             maxNativeZoom: 0, // Define the minimum native zoom level
+            minNativeZoom: 0
           },
           createTile: function (coords) {
               var tile = document.createElement('img');
@@ -64,7 +73,7 @@ $(document).on('turbolinks:load', function () {
         var <%= code %> = new L.layerGroup.collision({margin:-5});
         <% layer["types"].each do | type | %>
           <% if !layer["img"].nil? %>
-            var imageOverlay = L.imageOverlay('<%= asset_path('map-fiskeyja-pol.png') %>', bounds, {opacity: 0.5})
+            var imageOverlay = L.imageOverlay('<%= asset_path('map-fiskeyja-pol.png') %>', [[0,0],imgSize], {opacity: 0.5})
             imageOverlay.addTo(<%= code %>);
           <% end %>
 
