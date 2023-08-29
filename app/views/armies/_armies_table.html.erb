@@ -1,23 +1,25 @@
-<table id="army_list" class="table table-dark table-striped table-borderless table-hover table-sm table-responsive sortable">
-    <caption>Lista de ejércitos</caption>
-      <thead>
-        <tr id="table_title">
-          <th scope="col"><input type="checkbox" class="checkbox_select_all" /></th>
-          <th scope="col"<i class="bi bi-award"></i></th>
-          <th scope="col">Ejército</th>
-          <th scope="col">Estado</th>
-          <th scope="col">Rasgos</th>
-          <th scope="col">Posición</th>
-          <th scope="col">Grupo</th>
-          <% if @current_user.is_master? %>
-            <th scope="col">Visibilidad</th>
+<div class="table-responsive">
+  <table id="army_list" class="table table-dark table-striped table-borderless table-hover table-sm sortable">
+      <caption>Lista de ejércitos</caption>
+        <thead>
+          <tr id="table_title">
+            <th scope="col"><input type="checkbox" class="checkbox_select_all" /></th>
+            <th scope="col"<i class="bi bi-award"></i></th>
+            <th scope="col">Ejército</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Rasgos</th>
+            <th scope="col">Posición</th>
+            <th scope="col">Grupo</th>
+            <% if @current_user.is_master? %>
+              <th scope="col">Visibilidad</th>
+            <% end %>
+            <th scope="col" colspan="3"></th>
+          </tr>
+        </thead>
+        <tbody id="table_body">
+          <% @armies.each do |army| %>
+            <%= render 'army_row', army: army, faction: faction %>
           <% end %>
-          <th scope="col" colspan="3"></th>
-        </tr>
-      </thead>
-      <tbody id="table_body">
-        <% @armies.each do |army| %>
-          <%= render 'army_row', army: army, faction: faction %>
-        <% end %>
-      </tbody>
-  </table>
+        </tbody>
+    </table>
+</div>

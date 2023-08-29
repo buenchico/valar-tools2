@@ -1,5 +1,5 @@
-<div>
-  <table class="table table-dark table-striped table-borderless table-hover table-sm table-responsive align-middle sortable">
+<div class="table-responsive">
+  <table class="table table-dark table-striped table-borderless table-hover table-sm align-middle sortable">
     <caption>Lista de Herramientas</caption>
       <thead>
         <tr>
@@ -19,7 +19,7 @@
             <td><%= tool.title %></td>
             <td><%= tool.role %></td>
             <td><%= tool.active_games.pluck(:title).join(", ") %></td>
-            <td><%= JSON.pretty_generate( tool.game_tools.find_by(game_id: active_game&.id)&.options )%></td>             
+            <td><%= JSON.pretty_generate( tool.game_tools.find_by(game_id: active_game&.id)&.options )%></td>
             <td class="text-center">
               <% if tool.active == true  %>
                 <i class="bi bi-check-lg"></i>
