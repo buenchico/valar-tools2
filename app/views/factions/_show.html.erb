@@ -14,7 +14,7 @@
         <% if @options["reputation"] %>
           <div class="input-group">
             <%= label_tag :reputation, 'Reputation', class: 'input-group-text' %>
-            <%= text_field_tag :faction_reputation, number_to_modifier(faction.reputation), class: 'form-control', disabled: true %>
+            <%= text_field_tag :faction_reputation, number_to_modifier(calculate_mod(faction.reputation)), class: 'form-control', disabled: true %>
           </div>
         <% end %>
       </div>
