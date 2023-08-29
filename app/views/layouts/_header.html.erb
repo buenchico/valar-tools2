@@ -1,8 +1,8 @@
 <header id="header" class="bg-black">
-  <nav class="navbar navbar-custom navbar-expand-md navbar-dark">
+  <nav class="navbar navbar-custom navbar-expand navbar-dark">
     <div class="container">
       <%= link_to image_tag("tools-circle.png", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand d-block d-sm-none" %>
-      <%= link_to image_tag("tools.png", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand d-none d-md-block" %>
+      <%= link_to image_tag("tools.png", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand d-none d-sm-block" %>
 
         <ul class="navbar-nav ml-auto">
           <% if @current_user.nil? %>
