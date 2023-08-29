@@ -79,7 +79,7 @@
   <% if @current_user.is_master? %>
     <td width = "100px" class="text-center">
       <% if army.visible == true %>
-        <%= army.factions.pluck(:name).join(",") %>
+        <%= army.factions.pluck(:long_name).join(",") %>
       <% else %>
         <i class="bi bi-x-lg text-danger"></i>
       <% end %>
