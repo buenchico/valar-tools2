@@ -96,7 +96,7 @@
                                 [
                                   faction.id,
                                   {
-                                    "data-content": "#{faction.flair_url.present? ? image_tag(faction.flair_url, alt: faction.name, id: faction.name, class: 'icon-select bg-secondary') : ''} #{faction.title}".html_safe
+                                    "data-content": "#{faction.flair_url.present? ? image_tag(faction.flair_url, alt: faction.long_name, id: faction.name, class: 'icon-select bg-secondary') : ''} #{faction.title}".html_safe
                                   }
                                 ]
                               },

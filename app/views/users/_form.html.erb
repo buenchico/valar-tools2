@@ -26,7 +26,7 @@
                 @factions.map { | faction |
                   [
                     faction.id,
-                    { "data-content": "#{image_tag(faction.flair_url, alt: faction.name, id: faction.name, class: 'icon-select bg-secondary') unless faction.flair_url.blank?} #{faction.title}".html_safe
+                    { "data-content": "#{image_tag(faction.flair_url, alt: faction.name, id: faction.name, class: 'icon-select bg-secondary') unless faction.flair_url.blank?} #{faction.long_name}".html_safe
                   }
                   ]
                 },

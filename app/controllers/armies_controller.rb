@@ -9,7 +9,7 @@ class ArmiesController < ApplicationController
   before_action :check_owner, only: [:edit, :edit_notes, :update]
 
   def index
-    @faction = @current_user.faction.name
+    @faction = @current_user.faction.long_name
     if @current_user.is_master?
       @all_armies = Army.all.order(:group)
       @factions = Faction.where(active: true).order(:id).drop(1)
