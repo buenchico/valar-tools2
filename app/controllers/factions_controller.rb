@@ -8,7 +8,7 @@ class FactionsController < ApplicationController
     if @current_user&.is_master?
       @factions = Faction.all.order(:id)
     else
-      @factions = Faction.where(active: true).where.not(name: ["Admin", "Inactivo", "Master"]).order(:name)
+      @factions = Faction.where(active: true).where.not(name: ["admin", "player", "master"]).order(:name)
     end
   end
 
@@ -30,8 +30,9 @@ class FactionsController < ApplicationController
       if @games_prefix.include?(group["name"].split("-")[0])
         if !@factions.find_by(discourse_id: group["id"])
           @faction = Faction.new(
-            name: group["name"].split("-")[1],
-            long_name: group["title"],
+            name: group["name"],
+            long_name: group["full_name"],
+            title: group["title"],
             discourse_id: group["id"],
             game_ids: Game.find_by(prefix: group["name"].split("-")[0]).id,
             flair_url: group["flair_url"].nil? ? '' : "http://valar.es" + group["flair_url"],
@@ -46,8 +47,9 @@ class FactionsController < ApplicationController
         else
           @faction = @factions.find_by(discourse_id: group["id"])
           if @faction.update(
-            name: group["name"].split("-")[1],
-            long_name: group["title"],
+            name: group["name"],
+            long_name: group["full_name"],
+            title: group["title"],
             discourse_id: group["id"],
             game_ids: Game.find_by(prefix: group["name"].split("-")[0]).id,
             flair_url: group["flair_url"].nil? ? '' : "http://valar.es" + group["flair_url"]

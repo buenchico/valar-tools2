@@ -79,12 +79,13 @@ es:
         hp: "Salud"
       faction:
         name: "Nombre"
-        long_name: "Título"
+        long_name: "Nombre completo"
+        title: "Título"
         discourse_id: "Discourse_id"
         flair_url: "Flair URL"
         reputation: "Reputación"
         game_ids: "Partidas"
-        description: "Descripcción"
+        description: "Descripción"
       user:
         player: "Jugador"
         discourse_id: "Discourse_id"

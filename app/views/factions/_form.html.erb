@@ -16,6 +16,10 @@
             <%= form.text_field :long_name, class: 'form-control', disabled: true  %>
           </div>
           <div class="input-group mb-3">
+            <%= form.label :title, class: 'input-group-text' %>
+            <%= form.text_field :title, class: 'form-control', disabled: true  %>
+          </div>
+          <div class="input-group mb-3">
             <%= form.label :discourse_id, class: 'input-group-text' %>
             <%= form.number_field :discourse_id, class: 'form-control', step: 1, disabled: true %>
           </div>

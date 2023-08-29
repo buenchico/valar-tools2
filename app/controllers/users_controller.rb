@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update]
 
   def index
-    inactive_faction_id = Faction.find_by(name: 'Inactivo')&.id
+    inactive_faction_id = Faction.find_by(name: 'player')&.id
     @users = User.joins(:faction)
                  .order(Arel.sql("CASE WHEN #{User.table_name}.faction_id = #{inactive_faction_id} THEN 1 ELSE 0 END, #{Faction.table_name}.name"))
                  .all

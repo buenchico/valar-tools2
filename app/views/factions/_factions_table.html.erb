@@ -23,14 +23,16 @@
       <tbody>
         <% @factions.each do |faction| %>
           <tr id="faction_<%= faction.id.to_s %>" class="<%= faction.active == true ? "" : "inactive" %>" >
-            <td><%= image_tag(faction.flair_url, :alt => faction.name, id: faction.name, class: 'icon-table') if faction.flair_url.present? %></td>
+            <td><%= image_tag(faction.flair_url, :alt => faction.long_name, id: faction.name, class: 'icon-table') if faction.flair_url.present? %></td>
             <td>
               <blockquote class="blockquote">
-                <p><%= faction.name %></p>
+                <p><%= faction.long_name %></p>
               </blockquote>
-              <figcaption class="blockquote-footer">
-                <%= faction.long_name %>
-              </figcaption>
+              <% if faction.long_name != faction.title %>
+                <figcaption class="blockquote-footer">
+                  <%= faction.title %>
+                </figcaption>
+              <% end %>
             </td>
             <td><%= truncate(faction.users.order(:player).pluck(:player).join(", "), length: 100, omission: '...') %></td>
             <% if @current_user&.is_master? %>

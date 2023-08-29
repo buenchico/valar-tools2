@@ -11,14 +11,14 @@ class User < ApplicationRecord
 
   # Roles methodes
   def is_admin?
-    self.faction.name == 'Admin'
+    self.faction.name == 'admin'
   end
 
   def is_master?
-    self.faction.name == 'Master' || self.faction.name == 'Admin'
+    self.faction.name == 'master' || self.faction.name == 'admin'
   end
 
   def is_active?
-    self.faction.name != 'Inactivo'
+    self.faction.name != 'player'
   end
 end

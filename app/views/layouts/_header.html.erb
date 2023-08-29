@@ -66,7 +66,7 @@
             <li class="nav-item dropdown">
               <%= link_to image_tag(@current_user.avatar_url, class: "nav-icon avatar"), "#", id: "navbarAvatar", class: "nav-link", "role": "button", "data-bs-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" %>
                 <div class="dropdown-menu" style="z-index: 2000" aria-labelledby="navbarAvatar">
-                  <a href="https://www.valar.es/u/<%= @current_user.player %>" class="dropdown-item"><i class="fas fa-user"></i> <%= @current_user.player + ' — ' + @current_user.faction.title %>  </a>
+                  <a href="https://www.valar.es/u/<%= @current_user.player %>" class="dropdown-item"><i class="fas fa-user"></i> <%= @current_user.player + ' — ' + @current_user.faction.name %>  </a>
                   <%= link_to logout_path, method: :post, class: 'dropdown-item' do %>
                     <i class="fas fa-sign-out-alt"></i>  Cerrar sesión
                   <% end %>
