@@ -3,22 +3,24 @@
 <% provide(:title, @tool.title) %>
 <% provide(:icon, @tool.icon_url) %>
 
-<div class="tool-title">
-    <i class="white <%= yield(:icon) %>"></i>
-    <%= yield(:title) %>
-</div>
+<% if @current_user.is_master? %>
+  <div class="tool-title">
+      <i class="white <%= yield(:icon) %>"></i>
+      <%= yield(:title) %>
+  </div>
+<% end %>
 
 <div class="col">
-  <%= link_to send('new_' + @tool.name.singularize + '_path'), class: "btn btn-primary", remote: true do %>
+  <%= link_to send('new_location_path'), class: "btn btn-primary", remote: true do %>
     <i class="bi bi-plus-circle"></i> Crear Nuevo Lugar
   <% end %>
 </div>
 
-<%= render "objects_table" %>
+<%= render "locations_table" %>
 
 <!-- Modal -->
 
-<div id="<%= @tool.name.singularize %>-content"></div>
+<div id="location-content"></div>
 
 <% if params[:id].present? %>
   <script>
