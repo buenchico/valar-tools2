@@ -990,6 +990,10 @@
     sanitize: true,
     sanitizeFn: null,
     whiteList: DefaultWhitelist
+
+    // Extended options
+    ,
+    arbitrary: false
   };
 
   Selectpicker.prototype = {
@@ -1060,6 +1064,18 @@
       } else {
         this.focusedParent = this.$menuInner[0];
       }
+
+      // Extended options listeners
+
+      if (this.options.arbitrary) {
+        this.arbitraryListener();
+        this.focusedParent = this.$searchbox[0];
+      } else {
+        this.focusedParent = this.$menuInner[0];
+      }
+
+      // End of extended options
+
 
       this.setStyle();
       this.setWidth();
@@ -1147,7 +1163,8 @@
           searchbox = '',
           actionsbox = '',
           donebutton = '',
-          clearButton = '';
+          clearButton = '',
+          arbitrarybox = '';
 
       if (this.options.header) {
         header =
@@ -1199,6 +1216,30 @@
         clearButton = '<span class="close bs-select-clear-selected" title="' + this.options.deselectAllText + '"><span>&times;</span>';
       }
 
+      // Extended options
+
+
+      // Arbitrary options, if combined with liveSearch will allow search and adding options
+      if (this.options.arbitrary) {
+        arbitrarybox =
+        '<div class="row">' +
+            '<div class="col-md-9">' +
+              '<div class="bs-searchbox">' +
+                  '<input type="search" class="form-control bs-arbitrary" autocomplete="off"' +
+                    ' placeholder="' + htmlEscape(this.options.liveSearchPlaceholder) + '"'
+                    +
+                    ' role="combobox" aria-label="Search" aria-controls="' + this.selectId + '" aria-autocomplete="list">' +
+              '</div>' +
+            '</div>' +
+            '<div class="col-md-3">' +
+                '<div class="btn btn-success bs-arbitrary-add" style="margin: 4px 8px;">+</div>' +
+            '</div>' +
+          '</div>';
+
+      }
+
+      // End of extended options
+
       drop =
         '<div class="dropdown bootstrap-select' + showTick + inputGroup + '">' +
           '<button type="button" tabindex="-1" class="' +
@@ -1228,6 +1269,7 @@
           '<div class="' + classNames.MENU + ' ' + (version.major >= '4' ? '' : classNames.SHOW) + '">' +
             header +
             searchbox +
+            arbitrarybox + // for extended options: arbitrary
             actionsbox +
             '<div class="inner ' + classNames.SHOW + '" role="listbox" id="' + this.selectId + '" tabindex="-1" ' + multiselectable + '>' +
                 '<ul class="' + classNames.MENU + ' inner ' + (version.major >= '4' ? classNames.SHOW : '') + '" role="presentation">' +
@@ -3028,6 +3070,25 @@
       });
     },
 
+    // Extended listeners
+
+    arbitraryListener: function () {
+      $('.bs-arbitrary-add').on("click", function() {
+        var userInput = $('.bs-arbitrary').val();
+
+        // Create a new option element with the user's input
+        var newOption = '<option>' + userInput + '</option>';
+
+        // Append the new option to the selectpicker
+        $('.selectpicker').append(newOption);
+
+        // Automatically select the new option
+        $('.selectpicker option:contains(' + userInput + ')').prop('selected', true);
+        $('.selectpicker').selectpicker('refresh');
+      });
+    },
+    // End of extended listeners
+
     _searchStyle: function () {
       return this.options.liveSearchStyle || 'contains';
     },
@@ -3399,7 +3460,7 @@
         this.render();
         this.buildList();
       } else {
-        this.selectpicker.main.data = null; // Marek Vsechovsky's fix: Fixes https://github.com/snapappointments/bootstrap-select/issues/2738 (duplication of list items and selections on "refresh").        
+        this.selectpicker.main.data = null; // Marek Vsechovsky's fix: Fixes https://github.com/snapappointments/bootstrap-select/issues/2738 (duplication of list items and selections on "refresh").
         this.fetchData(function () {
           that.render();
           that.buildList();
