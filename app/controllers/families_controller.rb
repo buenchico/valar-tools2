@@ -1,7 +1,7 @@
 class FamiliesController < ApplicationController
   before_action :set_tool
   before_action :set_family, only: [:edit, :update, :destroy]
-  before_action :set_options, only: [:new, :edit]
+  before_action :set_options, only: [:new, :edit, :update]
 
   def index
     @families = Family.all
@@ -59,8 +59,26 @@ private
   end
 
   def family_params
-    params.require(:family).permit(:name, :branch, :visible, :game_id, tags: []).tap do |whitelisted|
-      whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
+    if params["family"]["tags"].is_a?(Array)
+      permitted_params = params.require(:family).permit(:name, :branch, :visible, :game_id, tags: [])
+      tags = params["family"]["tags"].reject(&:empty?)
+    else
+      # If tags is a string, split it into an array and process it
+      permitted_params = params.require(:family).permit(:name, :branch, :visible, :game_id, :tags)
+      tags = params["family"]["tags"].split(',').map(&:strip).reject(&:empty?)
     end
+
+    if !@options["tags"].nil?
+      tags.each do | tag |
+        if !@options["tags"].include?(tag)
+          @options["tags"] << tag
+        end
+        @tool.game_tools.find_by(game_id: active_game&.id).update(options: @options)
+      end
+    end
+
+    permitted_params[:tags] = tags
+
+    permitted_params
   end
 end
