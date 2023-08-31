@@ -101,7 +101,7 @@
             <%= form.label :factions, class: 'input-group-text' %>
             <%= form.select :faction_ids,
               options_for_select(
-                @factions.pluck(:name, :id).map { |name, id|
+                @factions.pluck(:long_name, :id).map { |name, id|
                   [
                     id,
                     { "data-content": name
