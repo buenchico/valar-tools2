@@ -3,13 +3,13 @@
     <caption><%=  @tool.title %></caption>
     <thead>
       <tr>
-        <th>Nombre</th>
-        <th>Etiquetas</th>
-        <th>Rama</th>
-        <th>Señor</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Etiquetas</th>
+        <th scope="col">Rama</th>
+        <th scope="col">Señor</th>
         <% if @current_user.is_master? %>
-          <th class="text-center">Visible</th>
-          <th>Partida</th>
+          <th scope="col" class="text-center">Visible</th>
+          <th scope="col">Partida</th>
         <% end %>
         <th scope="col" colspan="2" data-sorter="false"></th>
       </tr>
