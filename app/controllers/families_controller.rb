@@ -2,6 +2,7 @@ class FamiliesController < ApplicationController
   before_action :set_tool
   before_action :set_family, only: [:edit, :update, :destroy, :show]
   before_action :set_options, only: [:new, :edit, :update, :new, :show, :create]
+  before_action :check_master, only: [:new, :edit]
 
   def index
     if @current_user.is_master?

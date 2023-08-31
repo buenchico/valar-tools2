@@ -8,10 +8,10 @@
         <th>Rama</th>
         <th>Señor</th>
         <% if @current_user.is_master? %>
-          <th>Visible</th>
+          <th class="text-center">Visible</th>
           <th>Partida</th>
         <% end %>
-        <th scope="col" colspan="2"></th>
+        <th scope="col" colspan="2" data-sorter="false"></th>
       </tr>
     </thead>
     <tbody>
@@ -20,7 +20,7 @@
           <td><%= family.name %></td>
           <td><%= family.tags.join(", ") %></td>
           <td><%= family.branch %></td>
-          <td><%= family.faction&.long_name.nil? ? '' : link_to(family.faction.long_name, 'factions?id=' + family.faction.id.to_s, class: 'text-white') %></td>
+          <td><%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, 'factions?id=' + family.faction.id.to_s, class: 'text-white') %></td>
           <% if @current_user.is_master? %>
             <td class="text-center">
               <% if family.visible == true  %>
