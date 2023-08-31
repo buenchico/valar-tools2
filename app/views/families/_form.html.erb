@@ -1,3 +1,5 @@
+<%= object %>
+
 <div class="modal fade" id="<%= @tool.name.singularize %>Modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content bg-dark">
@@ -48,7 +50,7 @@
               <% elsif column_name.to_s.include? ("_id") %>
                 <div class="input-group mb-3">
                   <%= form.label column_name.to_sym, class: 'input-group-text' %>
-                  <%= form.select column_name.to_sym, [""] + column_name.split("_")[0].capitalize.constantize.all.map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+                  <%= form.select column_name.to_sym, [""] + column_name.split("_")[0].capitalize.constantize.all.order(active: :desc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
                 </div>
               <% else %>
                 <div class="input-group mb-3">

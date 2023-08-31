@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_29_144811) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_31_120403) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -207,6 +207,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_144811) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "game_id"
+    t.bigint "faction_id"
+    t.index ["faction_id"], name: "index_valar_families_on_faction_id"
     t.index ["game_id"], name: "index_valar_families_on_game_id"
   end
 
