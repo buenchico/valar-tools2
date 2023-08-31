@@ -1992,6 +1992,10 @@ $bootstrap-icons-map: (
   "chess-pawn-fill": "\f690",
   "chess-queen-fill": "\f695",
   "chess-rook-fill": "\f698",
+  "caret-up-down-fill": "\f6a2",
+  "sort-caret-down": "\f6a3",
+  "sort-caret-up": "\f6b6",
+  "sort-caret": "\f6c2",
 );
 
 @each $icon, $codepoint in $bootstrap-icons-map {

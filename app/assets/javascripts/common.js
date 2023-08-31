@@ -41,6 +41,10 @@ $(document).on('shown.bs.modal', function (event) {
 $(document).on('turbolinks:load', function() {
   $(function() {
     $("table.sortable").tablesorter({
+      headerTemplate : '{icon}{content}',
+      cssIconNone: 'bi bi-sort-caret small-icon',
+      cssIconAsc:  'bi bi-sort-caret-up small-icon',
+      cssIconDesc: 'bi bi-sort-caret-down small-icon',
       imgAttr: 'title' // image attribute used by "image" parser
     });
   });
