@@ -5,7 +5,11 @@ class LocationsController < ApplicationController
   before_action :set_options, only: [:index, :new, :edit, :show]
 
   def index
-    @locations = Location.all
+    if @current_user.is_master?
+      @locations = Location.all
+    else
+      @locations = Location.where(visible: true).where(game_id: active_game.id)
+    end
   end
 
   def show

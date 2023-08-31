@@ -1,2 +1,2 @@
-$("#<%= @tool.name.singularize %>-content").html("<%= j render 'form', object: instance_variable_get("@#{@tool.name.singularize.to_s}") %>");
-$("#<%= @tool.name.singularize %>Modal").modal('show');
+$("#location-content").html("<%= j render 'form', object: @location %>");
+$("#locationModal").modal('show');
