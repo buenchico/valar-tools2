@@ -42,10 +42,11 @@ Rails.application.routes.draw do
   get 'armies/export', to: 'armies#export', as: 'export_armies'
 
   resources :locations
-  get 'locations/list', to: 'locations#list', as: 'locations_list'
+  get 'locations_list', to: 'locations#list', as: 'locations_list'
 
   resources :families
-  
+  get 'families_list', to: 'families#list', as: 'families_list'
+
   get 'travel', to: 'travel#index'
   post 'travel/calculate', to: 'travel#calculate'
 
