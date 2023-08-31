@@ -8,7 +8,7 @@ class FamiliesController < ApplicationController
     if @current_user.is_master?
       @families = Family.all
     else
-      @families = Family.where(visible: true)
+      @families = Family.where(visible: true).where(game_id: active_game.id)
     end
   end
 

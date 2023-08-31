@@ -1,2 +1,2 @@
-$("#family-content").html("<%= j render 'show', object: instance_variable_get("@#{@tool.name.singularize.to_s}") %>");
+$("#family-content").html("<%= j render 'show', family: @family %>");
 $("#familyModal").modal('show');

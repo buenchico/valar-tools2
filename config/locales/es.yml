@@ -96,8 +96,9 @@ es:
         tags: "Etiquetas"
         branch: "Rama"
         visible: "Visible"
+        lord: "Señor"
         game_id: "Partida"
-        faction_id: "Señor"
+        faction_id: "Facción"
       location:
         name: "Nombre"
         name_es: "Nombre (ES)"
