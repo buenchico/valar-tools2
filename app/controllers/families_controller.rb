@@ -51,6 +51,13 @@ class FamiliesController < ApplicationController
     end
   end
 
+  def list
+  #Column name must be between double quotes because, by default, pgsql column names are always lowercase
+    @families_list = Family.order(:name).where(visible: true).where('LOWER("name") LIKE :term OR LOWER("branch") LIKE :term', term: "%#{params[:term].downcase}%")
+    @families_list  = @families_list.limit(20)
+    render json: @families_list.map(&:title).uniq
+  end
+
 private
   def set_family
     @family = Family.find(params[:id])
@@ -65,11 +72,11 @@ private
 
   def family_params
     if params["family"]["tags"].is_a?(Array)
-      permitted_params = params.require(:family).permit(:name, :branch, :visible, :game_id, :faction_id, tags: [])
+      permitted_params = params.require(:family).permit(:name, :branch, :visible, :lord, :game_id, :faction_id, tags: [])
       tags = params["family"]["tags"].reject(&:empty?)
     else
       # If tags is a string, split it into an array and process it
-      permitted_params = params.require(:family).permit(:name, :branch, :visible, :game_id, :faction_id, :tags)
+      permitted_params = params.require(:family).permit(:name, :branch, :visible, :lord, :game_id, :faction_id, :tags)
       tags = params["family"]["tags"].split(',').map(&:strip).reject(&:empty?)
     end
 
