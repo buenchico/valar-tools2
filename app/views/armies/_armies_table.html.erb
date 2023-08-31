@@ -3,8 +3,8 @@
       <caption>Lista de ejércitos</caption>
         <thead>
           <tr id="table_title">
-            <th scope="col"><input type="checkbox" class="checkbox_select_all" /></th>
-            <th scope="col"<i class="bi bi-award"></i></th>
+            <th data-sorter="false" scope="col"><input type="checkbox" class="checkbox_select_all" /></th>
+            <th scope="col" style="width: 78px"><i class="bi bi-award"></i></th>
             <th scope="col">Ejército</th>
             <th scope="col">Estado</th>
             <th scope="col">Rasgos</th>
@@ -13,7 +13,7 @@
             <% if @current_user.is_master? %>
               <th scope="col">Visibilidad</th>
             <% end %>
-            <th scope="col" colspan="3"></th>
+            <th scope="col" colspan="3" data-sorter="false"></th>
           </tr>
         </thead>
         <tbody id="table_body">
