@@ -1,7 +1,7 @@
 class FamiliesController < ApplicationController
   before_action :set_tool
   before_action :set_family, only: [:edit, :update, :destroy]
-  before_action :set_options, only: [:new, :edit, :update]
+  before_action :set_options, only: [:new, :edit, :update, :new]
 
   def index
     @families = Family.all
