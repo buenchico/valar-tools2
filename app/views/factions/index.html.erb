@@ -15,3 +15,11 @@
 <!-- Modal -->
 
 <div id='faction-content'></div>
+<% if params[:id].present? %>
+  <script>
+    $(document).on('turbolinks:load', function() {
+      $("#faction-content").html("<%= j render 'show', faction: Faction.find(params[:id]) %>");
+      $("#factionModal").modal('show');
+    });
+  </script>
+<% end %>

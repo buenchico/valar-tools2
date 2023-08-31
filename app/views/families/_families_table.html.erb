@@ -1,0 +1,47 @@
+<div class="table-responsive">
+  <table class="table table-dark table-striped table-borderless table-hover table-sm align-middle sortable">
+    <caption><%=  @tool.title %></caption>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Etiquetas</th>
+        <th>Rama</th>
+        <th>Señor</th>
+        <% if @current_user.is_master? %>
+          <th>Visible</th>
+          <th>Partida</th>
+        <% end %>
+        <th scope="col" colspan="2"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @families.each do | family | %>
+        <tr>
+          <td><%= family.name %></td>
+          <td><%= family.tags.join(", ") %></td>
+          <td><%= family.branch %></td>
+          <td><%= family.faction&.long_name.nil? ? '' : link_to(family.faction.long_name, 'factions?id=' + family.faction.id.to_s, class: 'text-white') %></td>
+          <% if @current_user.is_master? %>
+            <td class="text-center">
+              <% if family.visible == true  %>
+                <i class="bi bi-check-lg"></i>
+              <% else %>
+                <i class="bi bi-x-lg"></i>
+              <% end %>
+            </td>
+            <td><%= family.game.title %></td>
+          <% end %>
+          <td><%= link_to '', send("family_path", family.id), remote: true, class: 'bi bi-eye-fill text-white' %></td>
+          <% if @current_user&.is_master? %>
+            <td><%= link_to '',   send("edit_family_path", family.id), remote: true, class: 'bi bi-pencil-square text-white' %></td>
+            <td>
+              <%= link_to send("family_path", family.id), method: :delete, data: { confirm: "Estás seguro de eliminar el objeto #{family.name}?" }, remote: true do %>
+                <i class="bi bi-trash text-white"></i>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+    </table>
+  </div>

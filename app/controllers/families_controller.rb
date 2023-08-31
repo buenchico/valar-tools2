@@ -1,10 +1,14 @@
 class FamiliesController < ApplicationController
   before_action :set_tool
-  before_action :set_family, only: [:edit, :update, :destroy]
-  before_action :set_options, only: [:new, :edit, :update, :new]
+  before_action :set_family, only: [:edit, :update, :destroy, :show]
+  before_action :set_options, only: [:new, :edit, :update, :new, :show, :create]
 
   def index
-    @families = Family.all
+    if @current_user.is_master?
+      @families = Family.all
+    else
+      @families = Family.where(visible: true)
+    end
   end
 
   def new

@@ -44,8 +44,8 @@ Rails.application.routes.draw do
   resources :locations
   get 'locations/list', to: 'locations#list', as: 'locations_list'
 
-  resources :families, :except => [:show]
-
+  resources :families
+  
   get 'travel', to: 'travel#index'
   post 'travel/calculate', to: 'travel#calculate'
 

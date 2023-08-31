@@ -9,13 +9,13 @@
 </div>
 
 <div class="col">
-  <%= link_to send('new_' + @tool.name.singularize + '_path'), class: "btn btn-primary", remote: true do %>
+  <%= link_to send('new_family_path'), class: "btn btn-primary", remote: true do %>
     <i class="bi bi-plus-circle"></i> Crear Nueva Familia
   <% end %>
 </div>
 
-<%= render "objects_table" %>
+<%= render "families_table" %>
 
 <!-- Modal -->
 
-<div id="<%= @tool.name.singularize %>-content"></div>
+<div id="family-content"></div>
