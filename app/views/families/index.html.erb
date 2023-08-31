@@ -8,11 +8,13 @@
     <%= yield(:title) %>
 </div>
 
-<div class="col">
-  <%= link_to send('new_family_path'), class: "btn btn-primary", remote: true do %>
-    <i class="bi bi-plus-circle"></i> Crear Nueva Familia
-  <% end %>
-</div>
+<% if @current_user.is_master? %>
+  <div class="col">
+    <%= link_to send('new_family_path'), class: "btn btn-primary", remote: true do %>
+      <i class="bi bi-plus-circle"></i> Crear Nueva Familia
+    <% end %>
+  </div>
+<% end %>
 
 <%= render "families_table" %>
 
