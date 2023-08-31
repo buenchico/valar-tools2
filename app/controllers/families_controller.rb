@@ -72,11 +72,11 @@ private
 
   def family_params
     if params["family"]["tags"].is_a?(Array)
-      permitted_params = params.require(:family).permit(:name, :branch, :visible, :lord, :game_id, :faction_id, tags: [])
+      permitted_params = params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, tags: [])
       tags = params["family"]["tags"].reject(&:empty?)
     else
       # If tags is a string, split it into an array and process it
-      permitted_params = params.require(:family).permit(:name, :branch, :visible, :lord, :game_id, :faction_id, :tags)
+      permitted_params = params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :tags)
       tags = params["family"]["tags"].split(',').map(&:strip).reject(&:empty?)
     end
 

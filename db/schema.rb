@@ -208,9 +208,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_31_160538) do
     t.datetime "updated_at", null: false
     t.bigint "game_id"
     t.bigint "faction_id"
-    t.string "lord"
+    t.bigint "lord_id"
     t.index ["faction_id"], name: "index_valar_families_on_faction_id"
     t.index ["game_id"], name: "index_valar_families_on_game_id"
+    t.index ["lord_id"], name: "index_valar_families_on_lord_id"
   end
 
   create_table "game_tools", force: :cascade do |t|
@@ -285,4 +286,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_31_160538) do
   add_foreign_key "armies_factions", "factions"
   add_foreign_key "factions_games", "factions"
   add_foreign_key "factions_games", "games"
+  add_foreign_key "families", "families", column: "lord_id"
 end

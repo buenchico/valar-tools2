@@ -1,5 +1,5 @@
 class AddLordToFamilies < ActiveRecord::Migration[7.0]
   def change
-    add_column :families, :lord, :string
+    add_reference :families, :lord, foreign_key: { to_table: :families }
   end
 end

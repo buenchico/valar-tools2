@@ -10,13 +10,13 @@
           <div class="alert alert-danger">Esta familia no está activa en la partida</div>
         <% end %>
         <p><strong>Nombre:</strong> <%= family.name %></p>
-        <%= family.branch.blank? ? '' : '<p><strong>Nombre:</strong>#{family.name}</p>' %>
+        <%= family.branch.blank? ? '' : '<p><strong>Rama:</strong> '.html_safe + family.branch + '</p>'.html_safe %>
         <p>
           <% family.tags do | tag | %>
             <span class="badge rounded-pill pill-tags pill-tags-text"><%= tag %></span>
           <% end %>
         </p>
-        <p><strong>Señor:</strong> <%= family.lord %></p>
+        <p><strong>Señor:</strong> <%= family.lord&.name %></p>
         <p><strong>Facción:</strong> <%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, 'factions?id=' + family.faction.id.to_s, class: 'text-white') %></p>
       </div>
     </div>

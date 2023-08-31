@@ -5,8 +5,8 @@
       <tr>
         <th scope="col">Nombre</th>
         <th scope="col">Etiquetas</th>
-        <th scope="col">Rama</th>
         <th scope="col">Señor</th>
+        <th scope="col">Facción</th>
         <% if @current_user.is_master? %>
           <th scope="col" class="text-center">Visible</th>
           <th scope="col">Partida</th>
@@ -17,9 +17,9 @@
     <tbody>
       <% @families.each do | family | %>
         <tr>
-          <td><%= family.name %></td>
+          <td><%= family.title %></td>
           <td><%= family.tags.join(", ") %></td>
-          <td><%= family.branch %></td>
+          <td><%= family.lord&.title %></td>
           <td><%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, 'factions?id=' + family.faction.id.to_s, class: 'text-white') %></td>
           <% if @current_user.is_master? %>
             <td class="text-center">

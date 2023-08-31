@@ -38,8 +38,8 @@
             <%= form.text_field :branch, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
-            <%= form.label :lord, class: 'input-group-text' %>
-            <%= form.text_field :lord, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: families_list_path} %>
+            <%= form.label :lord_id, class: 'input-group-text' %>
+            <%= form.select :lord_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :visible, class: 'input-group-text' %>

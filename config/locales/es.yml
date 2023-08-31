@@ -96,7 +96,7 @@ es:
         tags: "Etiquetas"
         branch: "Rama"
         visible: "Visible"
-        lord: "Señor"
+        lord_id: "Señor"
         game_id: "Partida"
         faction_id: "Facción"
       location:
@@ -107,7 +107,7 @@ es:
         region: "Región"
         location_type: "Tipo"
         visible: "Visible"
-        family_id: "Familia"
+        family_id: "Señor"
         description: "Descripción"
         game_id: "Partida"
     models:
