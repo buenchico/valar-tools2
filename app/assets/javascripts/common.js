@@ -6,6 +6,13 @@ $(document).on('turbolinks:load', function() {
   });
 });
 
+// In modals
+$(document).on('shown.bs.modal', function (event) {
+  $(".auto-source").autocomplete({
+    source: $('.auto-source').data('autocomplete-source')
+  });
+});
+
 // Initializing popovers & tooltips
 function initPopovers() {
   var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
