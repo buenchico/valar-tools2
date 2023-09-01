@@ -22,7 +22,12 @@
         <% if @vassals.length > 0 %>
           <p><strong>Vasallos:</strong><p>
           <% @vassals.each do | vassal | %>
-            <p class="ms-2">— <%= vassal.title %></p>
+            <p class="ms-2">
+              — <%= vassal.title %>
+              <% vassal.tags.each do | v_tag | %>
+                <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><%= v_tag %></span>
+              <% end %>
+            </p>
           <% end %>
         <% end %>
         <% if @locations.length > 0 %>
