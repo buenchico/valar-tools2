@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_01_163204) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_01_170751) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -164,6 +164,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_163204) do
     t.integer "col9"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "location_id"
+    t.bigint "family_id"
+    t.index ["family_id"], name: "index_valar_armies_on_family_id"
+    t.index ["location_id"], name: "index_valar_armies_on_location_id"
   end
 
   create_table "armies_factions", force: :cascade do |t|
