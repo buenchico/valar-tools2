@@ -9,11 +9,10 @@ class Family < ApplicationRecord
   validates :name, uniqueness: { scope: :game }
 
   def title
-    self.name +
-    if self.branch.empty?
-      ""
+    if (self.branch.nil? || self.branch.empty?)
+      self.name
     else
-      " (" + self.branch + ")"
+      self.name + " (" + self.branch + ")"
     end
   end
 end
