@@ -12,8 +12,8 @@
         <p><strong>Nombre:</strong> <%= family.name %></p>
         <%= family.branch.blank? ? '' : '<p><strong>Rama:</strong> '.html_safe + family.branch + '</p>'.html_safe %>
         <p>
-          <% family.tags do | tag | %>
-            <span class="badge rounded-pill pill-tags pill-tags-text"><%= tag %></span>
+          <% family.tags.each do | tag | %>
+            <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><%= tag %></span>
           <% end %>
         </p>
         <p><strong>Señor:</strong> <%= family.lord&.name %></p>

@@ -19,7 +19,11 @@
       <% @families.each do | family | %>
         <tr>
           <td><%= family.title %></td>
-          <td><%= family.tags.join(", ") %></td>
+          <td>
+            <% family.tags.each do | tag | %>
+              <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><%= tag %></span>
+            <% end %>
+          </td>
           <td><%= family.lord&.title %></td>
           <td><%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, 'factions?id=' + family.faction.id.to_s, class: 'text-white') %></td>
           <td><%= truncate(family.description, length: 100, omission: '...') %></td>
