@@ -15,7 +15,7 @@
             <th scope="col">Reputación</th>
           <% end %>
           <% if @current_user&.is_master? %>
-            <th scope="col" class="text-center" style="width: 75px">Activa</th>
+            <th scope="col" class="text-center" data-sorter="false">Activa</th>
           <% end %>
           <th scope="col" colspan="1" data-sorter="false"></th>
         </tr>
