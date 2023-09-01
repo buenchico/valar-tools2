@@ -993,7 +993,8 @@
 
     // Extended options
     ,
-    arbitrary: false
+    arbitrary: false,
+    arbitraryPlaceholder: 'Type your tag and click + to add'
   };
 
   Selectpicker.prototype = {
@@ -1069,6 +1070,7 @@
 
       if (this.options.arbitrary) {
         this.arbitraryListener();
+        this.liveSearchListener();
         this.focusedParent = this.$searchbox[0];
       } else {
         this.focusedParent = this.$menuInner[0];
@@ -1221,12 +1223,12 @@
 
       // Arbitrary options, if combined with liveSearch will allow search and adding options
       if (this.options.arbitrary) {
-        arbitrarybox =
+        searchbox =
         '<div class="row">' +
             '<div class="col-md-9">' +
               '<div class="bs-searchbox">' +
                   '<input type="search" class="form-control bs-arbitrary" autocomplete="off"' +
-                    ' placeholder="' + htmlEscape(this.options.liveSearchPlaceholder) + '"'
+                    ' placeholder="' + htmlEscape(this.options.arbitraryPlaceholder) + '"'
                     +
                     ' role="combobox" aria-label="Search" aria-controls="' + this.selectId + '" aria-autocomplete="list">' +
               '</div>' +
@@ -1269,7 +1271,6 @@
           '<div class="' + classNames.MENU + ' ' + (version.major >= '4' ? '' : classNames.SHOW) + '">' +
             header +
             searchbox +
-            arbitrarybox + // for extended options: arbitrary
             actionsbox +
             '<div class="inner ' + classNames.SHOW + '" role="listbox" id="' + this.selectId + '" tabindex="-1" ' + multiselectable + '>' +
                 '<ul class="' + classNames.MENU + ' inner ' + (version.major >= '4' ? classNames.SHOW : '') + '" role="presentation">' +
