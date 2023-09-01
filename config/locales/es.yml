@@ -104,7 +104,7 @@ es:
         name_es: "Nombre (ES)"
         name_en: "Nombre (EN)"
         tags: "Etiquetas"
-        region: "Región"
+        region_id: "Región"
         location_type: "Tipo"
         visible: "Visible"
         family_id: "Señor"

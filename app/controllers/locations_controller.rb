@@ -74,12 +74,8 @@ private
     end
   end
 
-  def set_regions
-    @regions = Location.where(location_type: "region")
-  end
-
   def location_params
-    params.require(:location).permit(:name_en, :name_es, :description, :x, :y, :region, :location_type, :visible, :family_id, :game_id, tags: []).tap do |whitelisted|
+    params.require(:location).permit(:name_en, :name_es, :description, :x, :y, :region_id, :location_type, :visible, :family_id, :game_id, tags: []).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
     end
   end

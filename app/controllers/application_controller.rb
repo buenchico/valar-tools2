@@ -61,6 +61,10 @@ class ApplicationController < ActionController::Base
     @tool = Tool.find_by(name: controller_name)
   end
 
+  def set_regions
+    @regions = Location.where(location_type: "region")    
+  end
+
   def player_tools
     if @current_user&.is_master?
       player_tools = Tool.where(active: true).where(role:'player')
