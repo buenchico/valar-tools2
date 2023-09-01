@@ -65,11 +65,10 @@
                 <% end %>
               </td>
             <% end %>
+            <td><%= link_to '', send('faction_path', faction.id), remote: true, class: 'bi bi-eye-fill text-white' %></td>
             <td>
               <% if @current_user&.is_master? %>
                 <%= link_to '', send('edit_faction_path', faction.id), remote: true, class: 'bi bi-pencil-square text-white' %>
-              <% else %>
-                <%= link_to '', send('faction_path', faction.id), remote: true, class: 'bi bi-eye-fill text-white' %>
               <% end %>
             </td>
           </tr>
