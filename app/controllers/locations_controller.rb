@@ -2,7 +2,8 @@ class LocationsController < ApplicationController
   before_action :set_tool
   before_action :check_master, except: [:index, :show]
   before_action :set_location, only: [:edit, :show, :update, :destroy]
-  before_action :set_options, only: [:index, :new, :edit, :show]
+  before_action :set_regions, except: [:index]
+  before_action :set_options
 
   def index
     if @current_user.is_master?
@@ -71,6 +72,10 @@ private
     if @options.nil?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de lugares'
     end
+  end
+
+  def set_regions
+    @regions = Location.where(location_type: "region")
   end
 
   def location_params

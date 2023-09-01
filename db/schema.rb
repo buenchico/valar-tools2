@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_01_091315) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_01_160841) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -242,7 +242,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_091315) do
     t.string "description"
     t.float "x"
     t.float "y"
-    t.string "region"
     t.string "tags", default: [], array: true
     t.string "location_type"
     t.boolean "visible"
@@ -250,8 +249,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_091315) do
     t.datetime "updated_at", null: false
     t.bigint "family_id"
     t.bigint "game_id"
+    t.bigint "region_id"
     t.index ["family_id"], name: "index_valar_locations_on_family_id"
     t.index ["game_id"], name: "index_valar_locations_on_game_id"
+    t.index ["region_id"], name: "index_valar_locations_on_region_id"
   end
 
   create_table "tools", force: :cascade do |t|
@@ -288,4 +289,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_091315) do
   add_foreign_key "factions_games", "factions"
   add_foreign_key "factions_games", "games"
   add_foreign_key "families", "families", column: "lord_id"
+  add_foreign_key "locations", "locations", column: "region_id"
 end
