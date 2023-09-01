@@ -23,7 +23,7 @@
           <td><%= location.name_en %></td>
           <td><%= truncate(location.description, length: 100, omission: '...') %></td>
           <td><%= location.tags.join(",") %></td>
-          <td><%= location.region %></td>
+          <td><%= location.region&.name %></td>
           <td><%= location.family&.title %></td>
           <% if @current_user&.is_master? %>
             <td class="text-center">
