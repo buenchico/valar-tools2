@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
   root 'static_pages#home'
+  get 'bug', to: 'static_pages#bug'
+  post 'bug_report', to: 'static_pages#bug_report'
 
   # Login and logout routes
   get 'sso', to: 'sessions#sso', as: 'sso'

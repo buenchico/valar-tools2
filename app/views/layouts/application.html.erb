@@ -34,7 +34,13 @@
       <% end %>
     <% end %>
     <div class="container content mt-3">
+      <div class="container d-none">
+        <%= link_to send('bug_url'), class: "display-4 float-end", remote: true do %>
+          <i class="bi bi-bug-fill text-warning"></i>
+        <% end %>
+      </div>
       <%= yield %>
+      <div id='bug-content'></div>
     </div>
     <%= debug(params) if Rails.env.development? %>
     <% if Rails.env.development? %>

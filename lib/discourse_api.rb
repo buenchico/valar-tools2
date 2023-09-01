@@ -74,4 +74,42 @@ module DiscourseApi
       return groups
     end
   end
+
+  class DiscoursePostData
+    def self.post_bug(message)
+      if Rails.env.development?
+        @verify = false
+      else
+        @verify = true
+      end
+
+      # Create a new Faraday connection
+      connection= Faraday.new(
+        ssl: {verify: @verify}, # Disabling verify for development
+        headers: {'api-username': 'valar', 'api-key': ENV['DISCOURSE_API'], 'content-type': 'application/json'},
+        url: 'https://www.valar.es'
+        )
+
+        # Define the reply content as a JSON object
+        reply_data = {
+
+            "raw": message,
+            "topic_id": 2983,
+            "archetype": "regular",
+            "reply_to_post_number": 0,
+        }
+
+        # Send the POST request to create the reply
+        response = connection.post("/posts.json", reply_data.to_json)
+
+        # Check the response
+        if response.success?
+          # The reply was created successfully
+          puts 'Reply created successfully!'
+        else
+          # Handle the error
+          puts "Error creating reply: #{response.status}: #{response.body}"
+        end
+    end
+  end
 end
