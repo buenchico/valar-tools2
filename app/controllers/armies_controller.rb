@@ -7,6 +7,7 @@ class ArmiesController < ApplicationController
   before_action :check_player
   before_action :check_master, only: [:destroy, :destroy_multiple]
   before_action :check_owner, only: [:edit, :edit_notes, :update]
+  before_action :set_regions, only: [:new, :edit]
 
   def index
     @faction = @current_user.faction.long_name
@@ -284,7 +285,7 @@ private
 
   def army_params
     params.require(:army).permit(
-      :name, :status, :position, :group, :region, :lord, :confirm,
+      :name, :status, :position, :group, :region_id, :lord_id, :confirm,
       :visible, :hp, :col0, :col1, :col2, :col3, :col4, :col5, :col6, :col7, :col8, :col9, :notes, faction_ids: [], tags: []
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]

@@ -4,6 +4,7 @@ class Family < ApplicationRecord
   has_many :locations
   belongs_to :lord, class_name: 'Family', foreign_key: 'lord_id', optional: true
   has_many :vassals, class_name: 'Family', foreign_key: 'lord_id'
+  has_many :armies, foreign_key: 'family_id'
 
   validates :name, presence: true
   validates :name, uniqueness: { scope: :game }

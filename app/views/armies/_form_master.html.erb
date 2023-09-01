@@ -77,12 +77,12 @@
           </div>
 
           <div class="input-group mb-3">
-            <%= form.label :region, class: 'input-group-text' %>
-            <%= form.text_field :region, class: 'form-control' %>
+            <%= form.label :region_id, class: 'input-group-text' %>
+            <%= form.select :region_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
-            <%= form.label :lord, class: 'input-group-text' %>
-            <%= form.text_field :lord, class: 'form-control' %>
+            <%= form.label :lord_id, class: 'input-group-text' %>
+            <%= form.select :lord_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
           </div>
 
           <div class="input-group mb-3">

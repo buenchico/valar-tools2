@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_01_160841) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_01_163618) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -149,8 +149,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_160841) do
     t.string "group"
     t.string "position"
     t.text "notes"
-    t.string "region"
-    t.string "lord"
     t.boolean "visible"
     t.text "tags", default: [], array: true
     t.integer "hp", default: 100
@@ -166,6 +164,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_160841) do
     t.integer "col9"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "region_id"
+    t.bigint "lord_id"
+    t.index ["lord_id"], name: "index_valar_armies_on_lord_id"
+    t.index ["region_id"], name: "index_valar_armies_on_region_id"
   end
 
   create_table "armies_factions", force: :cascade do |t|
@@ -284,6 +286,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_160841) do
   add_foreign_key "armies_factions", "factions"
   add_foreign_key "factions_games", "factions"
   add_foreign_key "factions_games", "games"
+  add_foreign_key "armies", "families", column: "lord_id"
+  add_foreign_key "armies", "locations", column: "region_id"
   add_foreign_key "armies_factions", "armies"
   add_foreign_key "armies_factions", "factions"
   add_foreign_key "factions_games", "factions"

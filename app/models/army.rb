@@ -1,5 +1,7 @@
 class Army < ApplicationRecord
   has_and_belongs_to_many :factions
+  belongs_to :region, class_name: 'Location', foreign_key: 'location_id', optional: true
+  belongs_to :lord, class_name: 'Family', foreign_key: 'family_id', optional: true
 
   validates :name, presence: true
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
