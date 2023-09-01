@@ -84,6 +84,7 @@ private
           if !@options["tags"].include?(tag)
             @options["tags"] << tag
           end
+          @options["tags"] = @options["tags"].sort
           @tool.game_tools.find_by(game_id: active_game&.id).update(options: @options)
         end
       end
