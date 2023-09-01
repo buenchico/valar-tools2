@@ -18,6 +18,19 @@
         </p>
         <p><strong>Señor:</strong> <%= family.lord&.name %></p>
         <p><strong>Facción:</strong> <%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, 'factions?id=' + family.faction.id.to_s, class: 'text-white') %></p>
+        <p><%= simple_format(family.description) %></p>
+        <% if @vassals.length > 0 %>
+          <p><strong>Vasallos:</strong><p>
+          <% @vassals.each do | vassal | %>
+            <p class="ms-2">— <%= vassal.title %></p>
+          <% end %>
+        <% end %>
+        <% if @locations.length > 0 %>
+          <p><strong>Lugares:</strong><p>
+          <% @locations.each do | location | %>
+            <p class="ms-2">— <%= location.name %></p>
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>

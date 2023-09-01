@@ -11,31 +11,37 @@
             <%= form.label :name, class: 'input-group-text' %>
             <%= form.text_field :name, class: 'form-control' %>
           </div>
-          <div class="input-group mb-3">
-            <%= form.label :tags, class: 'input-group-text' %>
-            <%= form.select :tags,
-              options_for_select(
-                @options["tags"].map { | tag |
-                  [
-                    tag,
-                    { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><span class='pill-tags-text'>#{tag}</span></span>".html_safe
-                  }
-                  ]
-                },
-                selected: family.tags
-              ),
-              { include_blank: false },
-              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-              title: 'Sin etiquetas',
-              multiple: true,
-              data: {
-                      "arbitrary": "true",
-                      }
-            %>
-          </div>
+          <% if @options["tags"] != "false" %>
+            <div class="input-group mb-3">
+              <%= form.label :tags, class: 'input-group-text' %>
+              <%= form.select :tags,
+                options_for_select(
+                  @options["tags"].map { | tag |
+                    [
+                      tag,
+                      { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><span class='pill-tags-text'>#{tag}</span></span>".html_safe
+                    }
+                    ]
+                  },
+                  selected: family.tags
+                ),
+                { include_blank: false },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                title: 'Sin etiquetas',
+                multiple: true,
+                data: {
+                        "arbitrary": "true",
+                        }
+              %>
+            </div>
+          <% end %>
           <div class="input-group mb-3">
             <%= form.label :branch, class: 'input-group-text' %>
             <%= form.text_field :branch, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :description, class: 'input-group-text' %>
+            <%= form.text_area :description, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :lord_id, class: 'input-group-text' %>

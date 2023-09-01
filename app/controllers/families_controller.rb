@@ -12,6 +12,11 @@ class FamiliesController < ApplicationController
     end
   end
 
+  def show
+    @vassals = Family.where(lord_id: @family.id)
+    @locations = Location.where(family_id: @family.id)
+  end
+
   def new
     @family = Family.new
   end
@@ -71,26 +76,17 @@ private
   end
 
   def family_params
-    if params["family"]["tags"].is_a?(Array)
-      permitted_params = params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, tags: [])
-      tags = params["family"]["tags"].reject(&:empty?)
-    else
-      # If tags is a string, split it into an array and process it
-      permitted_params = params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :tags)
-      tags = params["family"]["tags"].split(',').map(&:strip).reject(&:empty?)
-    end
+    params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :description, :tags).tap do |whitelisted|
+      whitelisted[:tags] = params[:family][:tags].reject(&:empty?)
 
-    if !@options["tags"].nil?
-      tags.each do | tag |
-        if !@options["tags"].include?(tag)
-          @options["tags"] << tag
+      if @options["tags"] != "false"
+        whitelisted[:tags].each do |tag|
+          if !@options["tags"].include?(tag)
+            @options["tags"] << tag
+          end
+          @tool.game_tools.find_by(game_id: active_game&.id).update(options: @options)
         end
-        @tool.game_tools.find_by(game_id: active_game&.id).update(options: @options)
       end
     end
-
-    permitted_params[:tags] = tags
-
-    permitted_params
   end
 end
