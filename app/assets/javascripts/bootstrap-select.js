@@ -993,7 +993,7 @@
 
     // Extended options
     ,
-    arbitrary: false,
+    arbitrary: false, // liveSearch: true is required to get search in the box
     arbitraryPlaceholder: 'Type your tag and click + to add'
   };
 
@@ -1070,7 +1070,6 @@
 
       if (this.options.arbitrary) {
         this.arbitraryListener();
-        this.liveSearchListener();
         this.focusedParent = this.$searchbox[0];
       } else {
         this.focusedParent = this.$menuInner[0];
@@ -1177,7 +1176,7 @@
       }
 
       if (this.options.liveSearch) {
-        searchbox =
+        arbitrarybox =
           '<div class="bs-searchbox">' +
             '<input type="search" class="form-control" autocomplete="off"' +
               (
@@ -1187,6 +1186,10 @@
               ) +
               ' role="combobox" aria-label="Search" aria-controls="' + this.selectId + '" aria-autocomplete="list">' +
           '</div>';
+          if (this.options.liveSearch) {
+            searchbox = arbitrarybox
+            arbitrarybox = ''
+          }
       }
 
       if (this.multiple && this.options.actionsBox) {
@@ -1271,6 +1274,7 @@
           '<div class="' + classNames.MENU + ' ' + (version.major >= '4' ? '' : classNames.SHOW) + '">' +
             header +
             searchbox +
+            arbitrarybox +
             actionsbox +
             '<div class="inner ' + classNames.SHOW + '" role="listbox" id="' + this.selectId + '" tabindex="-1" ' + multiselectable + '>' +
                 '<ul class="' + classNames.MENU + ' inner ' + (version.major >= '4' ? classNames.SHOW : '') + '" role="presentation">' +
