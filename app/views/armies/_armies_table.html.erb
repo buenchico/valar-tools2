@@ -10,7 +10,7 @@
             <th scope="col">Rasgos</th>
             <th scope="col">Posición</th>
             <th scope="col">Grupo</th>
-            <% if @current_user.is_master? %>
+            <% if @current_user&.is_master? %>
               <th scope="col">Visibilidad</th>
             <% end %>
             <th scope="col" colspan="3" data-sorter="false"></th>

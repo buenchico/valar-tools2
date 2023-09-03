@@ -22,7 +22,7 @@
 </div>
 
 <% unless @current_user.nil? %>
-  <% if @current_user.is_master? %>
+  <% if @current_user&.is_master? %>
     <div id="master-tools">
       <% master_tools&.each do | tool | %>
         <div class="tool-box text-info">

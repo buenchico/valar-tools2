@@ -11,7 +11,7 @@
 
           <div class="input-group mb-3">
             <%= form.label :name, class: 'input-group-text' %>
-            <%= form.text_field :name, class: 'form-control', disabled: !@current_user.is_master? %>
+            <%= form.text_field :name, class: 'form-control', disabled: !@current_user&.is_master? %>
           </div>
 
           <div class="input-group mb-3">

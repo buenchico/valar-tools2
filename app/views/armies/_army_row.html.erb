@@ -76,7 +76,7 @@
     <% end %>
   </td>
 
-  <% if @current_user.is_master? %>
+  <% if @current_user&.is_master? %>
     <td width = "100px" class="text-center">
       <% if army.visible == true %>
         <%= army.factions.pluck(:long_name).join(",") %>
@@ -90,7 +90,7 @@
   <td><%= link_to '', edit_notes_army_path(army), remote: true, class: army.notes.blank? ? 'bi bi-sticky text-white' : 'bi bi-sticky-fill text-warning' %></td>
 
   <td>
-    <% if @current_user.is_master? %>
+    <% if @current_user&.is_master? %>
       <%= link_to army_path(army), method: :delete, data: { confirm: "Estás seguro de eliminar el ejército #{army.name}?" }, remote: true do %>
         <i class="bi bi-trash text-white"></i>
       <% end %>

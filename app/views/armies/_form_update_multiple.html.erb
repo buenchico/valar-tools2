@@ -62,7 +62,7 @@
             </div>
             <div class="input-group mt-3">
               <%= form.label :status, class: 'input-group-text' %>
-              <%= form.select :status, ([""] + ARMY_STATUS), {}, class: 'form-select', disabled: !@current_user.is_master? %>
+              <%= form.select :status, ([""] + ARMY_STATUS), {}, class: 'form-select', disabled: !@current_user&.is_master? %>
             </div>
             <div class="input-group mt-3">
               <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'VALIDATE' para confirmar los cambios." %>

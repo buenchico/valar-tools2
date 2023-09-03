@@ -9,7 +9,7 @@
         <th scope="col">Etiquetas</th>
         <th scope="col">Región</th>
         <th scope="col">Señor</th>
-        <% if @current_user.is_master? %>
+        <% if @current_user&.is_master? %>
           <th scope="col" class="text-center">Visible</th>
           <th scope="col">Partida</th>
         <% end %>

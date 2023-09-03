@@ -11,7 +11,7 @@ class ArmiesController < ApplicationController
 
   def index
     @faction = @current_user.faction.long_name
-    if @current_user.is_master?
+    if @current_user&.is_master?
       @all_armies = Army.all.order(:group)
       @factions = Faction.where(active: true).order(:id).drop(1)
     else
@@ -46,7 +46,7 @@ class ArmiesController < ApplicationController
     @action = params[:button]
 
     @armies.each do | army |
-      if !@current_user.is_master?
+      if !@current_user&.is_master?
         if !@current_user.faction.armies.include?(army)
           flash[:danger] = 'No tienes permisos para editar esos ejércitos.'
           render js: "window.location='/armies'"
@@ -56,7 +56,7 @@ class ArmiesController < ApplicationController
   end
 
   def update
-    if !@current_user.is_master? # modify params if user is not admin
+    if !@current_user&.is_master? # modify params if user is not admin
       keys_to_remove = ["tags", "region", "lord", "visible", "hp",
         "col0", "col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8", "col9", "faction_ids"]
         if @army.status == ARMY_STATUS[-1]
@@ -95,7 +95,7 @@ class ArmiesController < ApplicationController
           end
         end
         if (key == "status")
-          if @current_user.is_admin? # Checking the user is admin to modify the status
+          if @current_user&.is_admin? # Checking the user is admin to modify the status
             if ARMY_STATUS.include?(value.to_s)
               army_params_hash[key] = value
             end
@@ -275,7 +275,7 @@ private
   end
 
   def check_owner
-    if !@current_user.is_master?
+    if !@current_user&.is_master?
       if !@current_user.faction.armies.include?(@army)
         flash[:danger] = 'No tienes permisos para editar ese ejército.'
         render js: "window.location='/armies'"

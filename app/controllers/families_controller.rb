@@ -5,7 +5,7 @@ class FamiliesController < ApplicationController
   before_action :set_options, only: [:new, :edit, :update, :new, :show, :create]
 
   def index
-    if @current_user.is_master?
+    if @current_user&.is_master?
       @families = Family.all
     else
       @families = Family.where(visible: true).where(game_id: active_game.id)

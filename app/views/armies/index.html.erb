@@ -6,7 +6,7 @@
   <%= yield(:title) %>
 </div>
 
-<% if @current_user.is_master? %>
+<% if @current_user&.is_master? %>
   <div class="col">
     <%= link_to new_army_path, class: "btn btn-primary", remote: true do %>
       <i class="bi bi-plus-circle"></i> Crear Nuevo Ejército
@@ -23,7 +23,7 @@
       <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "update") do %>
         <i class="bi bi-pencil-square"></i> Editar en masa
       <% end %>
-      <% if @current_user.is_master? %>
+      <% if @current_user&.is_master? %>
         <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "destroy") do %>
           <i class="bi bi-trash"></i> Borrar en masa
         <% end %>
@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<% if @current_user.is_master? %>
+<% if @current_user&.is_master? %>
   <ul class="nav nav-pills mb-3" id="myTab" role="tablist">
     <% @factions.each do | faction | %>
       <li class="nav-item" role="presentation">

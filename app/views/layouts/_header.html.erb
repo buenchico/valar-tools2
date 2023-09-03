@@ -26,19 +26,18 @@
                 </li>
               <% end %>
 
-              <% unless @current_user.nil? %>
-                <% if @current_user.is_master? %>
-                  <% master_tools.each do | tool | %>
-                    <li>
-                      <%= link_to tool.path, class: 'dropdown-item text-info' do %>
-                        <i class="<%= tool.icon_url %>"></i>
-                        <%= tool.short_title.capitalize %>
-                      <% end %>
-                    </li>
-                  <% end %>
+
+              <% if @current_user&.is_master? %>
+                <% master_tools.each do | tool | %>
+                  <li>
+                    <%= link_to tool.path, class: 'dropdown-item text-info' do %>
+                      <i class="<%= tool.icon_url %>"></i>
+                      <%= tool.short_title.capitalize %>
+                    <% end %>
+                  </li>
                 <% end %>
 
-                <% if @current_user.is_admin? %>
+                <% if @current_user&.is_admin? %>
                   <% admin_tools.each do | tool | %>
                     <li>
                       <%= link_to tool.path, class: 'dropdown-item text-warning' do %>

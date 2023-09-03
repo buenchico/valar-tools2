@@ -6,7 +6,7 @@ class LocationsController < ApplicationController
   before_action :set_options
 
   def index
-    if @current_user.is_master?
+    if @current_user&.is_master?
       @locations = Location.all
     else
       @locations = Location.where(visible: true).where(game_id: active_game.id)
