@@ -1,5 +1,10 @@
 <% provide(:title, "Valar Tools") %>
 
+<div class="input-group mb-3">
+  <%= label_tag "test", "Label Text", class: 'input-group-text input-group-text-wrap' %>
+  <%= text_area_tag "test", 'asdasd asd as', class: 'form-control buen-markdown' %>
+</div>
+
 <div class="tool-title">
     <% if active_game %>
       <%= active_game.title %> - Valar Tools

@@ -44,6 +44,17 @@ $(document).on('shown.bs.modal', function (event) {
   $('.selectpicker').selectpicker();
 });
 
+// Initializing selectpicker
+$(document).on('turbolinks:load', function() {
+  $('.buen-markdown').buenMarkdown();
+});
+
+// Selectpicker to work in modals
+$(document).on('shown.bs.modal', function (event) {
+  $('.buen-markdown').buenMarkdown();
+});
+
+
 // Table sorting by column
 $(document).on('turbolinks:load', function() {
   $(function() {
