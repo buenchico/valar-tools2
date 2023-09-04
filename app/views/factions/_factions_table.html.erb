@@ -26,7 +26,7 @@
             <td><%= image_tag(faction.flair_url, :alt => faction.long_name, id: faction.name, class: 'icon-table') if faction.flair_url.present? %></td>
             <td>
               <blockquote class="blockquote">
-                <p><%= faction.long_name %></p>
+                <p><%= link_to faction.long_name, faction_path(faction), remote: true, class: 'link-unstyled' %></p>
               </blockquote>
               <% if faction.long_name != faction.title %>
                 <figcaption class="blockquote-footer">

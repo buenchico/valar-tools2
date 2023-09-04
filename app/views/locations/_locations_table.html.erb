@@ -19,8 +19,8 @@
     <tbody>
       <% @locations.each do | location | %>
         <tr>
-          <td><%= location.name_es %></td>
-          <td><%= location.name_en %></td>
+          <td><%= link_to location.name_es, location_path(location), remote: true, class: 'link-unstyled' %></td>
+          <td><%= link_to location.name_en, location_path(location), remote: true, class: 'link-unstyled' %></td>
           <td><%= truncate(location.description, length: 100, omission: '...') %></td>
           <td><%= location.tags.join(",") %></td>
           <td><%= location.region&.name %></td>
