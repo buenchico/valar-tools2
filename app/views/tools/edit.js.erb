@@ -1,4 +1,4 @@
-$('#tool-content').html("<%= j render 'form', tool: @tool %>");
+$('#content').html("<%= j render 'form', tool: @tool %>");
 $('#toolModal').modal('show');
 $("#showOptionsInfo").on( "click", function() {
   $('#toolOptionsInfoContainer').removeClass('d-none');

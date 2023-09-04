@@ -1,7 +1,7 @@
 <% if @current_user&.is_master? %>
-  $('#army-content').html("<%= j render 'form_master', army: @army %>");
+  $('#content').html("<%= j render 'form_master', army: @army %>");
 <% else %>
-  $('#army-content').html("<%= j render 'form_player', army: @army %>");
+  $('#content').html("<%= j render 'form_player', army: @army %>");
 <% end %>
 $('#armyModal').modal('show');
 // Attach a click event handler to the button

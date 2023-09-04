@@ -103,7 +103,7 @@ $(document).on('turbolinks:load', function () {
                       iconAnchor: [12, 12]
                       })
                     })
-                    .bindPopup('<p><a href="<%= locations_path.to_s + '?id=' + location.id.to_s %>"><%= location.name %></a></p><p><%= location.family&.name %></p>', {
+                    .bindPopup('<p><%= link_to location.name, location_path(location), remote: true %></p><p><%= location.family&.name %></p>', {
                         className: 'leaflet-popup'
                       })
                     .bindTooltip("<%= location.name %>", {permanent: true, className: "locationLabel <%= @options['font'] %>", style: "background-color:powderblue;", offset: [0, 0] })

@@ -25,7 +25,7 @@
             <% end %>
           </td>
           <td><%= family.lord&.title %></td>
-          <td><%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, 'factions?id=' + family.faction.id.to_s, class: 'text-white') %></td>
+          <td><%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, send("faction_path", family.faction.id), remote: true, class: 'text-white') %></td>
           <td><%= truncate(family.description, length: 100, omission: '...') %></td>
           <% if @current_user&.is_master? %>
             <td class="text-center">
@@ -39,7 +39,7 @@
           <% end %>
           <td><%= link_to '', send("family_path", family.id), remote: true, class: 'bi bi-eye-fill text-white' %></td>
           <% if @current_user&.is_master? %>
-            <td><%= link_to '',   send("edit_family_path", family.id), remote: true, class: 'bi bi-pencil-square text-white' %></td>
+            <td><%= link_to '', send("edit_family_path", family.id), remote: true, class: 'bi bi-pencil-square text-white' %></td>
             <td>
               <%= link_to send("family_path", family.id), method: :delete, data: { confirm: "Estás seguro de eliminar el objeto #{family.name}?" }, remote: true do %>
                 <i class="bi bi-trash text-white"></i>

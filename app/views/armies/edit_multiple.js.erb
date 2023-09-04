@@ -1,13 +1,13 @@
 if ('<%= @action %>' == 'update') {
-  $('#army-content').html("<%= j render 'form_update_multiple', armies: @armies, action: @action %>");
+  $('#content').html("<%= j render 'form_update_multiple', armies: @armies, action: @action %>");
 }
 
 if ('<%= @action %>' == 'destroy') {
-  $('#army-content').html("<%= j render 'form_destroy_multiple', armies: @armies, action: @action %>");
+  $('#content').html("<%= j render 'form_destroy_multiple', armies: @armies, action: @action %>");
 }
 
 if ('<%= @action %>' == 'import') {
-  $('#army-content').html("<%= j render 'form_import', action: @action %>");
+  $('#content').html("<%= j render 'form_import', action: @action %>");
 }
 
 $('#armyModal').modal('show');

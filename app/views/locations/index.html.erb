@@ -17,16 +17,3 @@
 </div>
 
 <%= render "locations_table" %>
-
-<!-- Modal -->
-
-<div id="location-content"></div>
-
-<% if params[:id].present? %>
-  <script>
-    $(document).on('turbolinks:load', function() {
-      $("#<%= @tool.name.singularize %>-content").html("<%= j render 'show', object: Location.find(params[:id]) %>");
-      $("#<%= @tool.name.singularize %>Modal").modal('show');
-    });
-  </script>
-<% end %>
