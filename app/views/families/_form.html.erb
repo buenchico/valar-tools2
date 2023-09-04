@@ -29,9 +29,8 @@
                 class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
                 title: 'Sin etiquetas',
                 multiple: true,
-                data: { "live-search": "true",
-                        "arbitrary": "true",
-                        "arbitrary-placeholder": "Escribe la etiqueta y presiona + para añadir"
+                data: { "arbitrary": "true",
+                        "none-results-text-arbitrary": "Haz click para crear «{tag}»"
                         }
               %>
             </div>
@@ -61,7 +60,7 @@
           <div class="input-group mb-3">
             <%= form.label :game_id, class: 'input-group-text' %>
             <%= form.select :game_id, Game.all.order(active: :desc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
-          </div>          
+          </div>
 
           <%= form.submit nil, class: 'btn btn-primary' %>
         </div>

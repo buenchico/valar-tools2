@@ -857,8 +857,13 @@
 
   function showNoResults (searchMatch, searchValue) {
     if (!searchMatch.length) {
-      elementTemplates.noResults.innerHTML = this.options.noneResultsText.replace('{0}', '"' + htmlEscape(searchValue) + '"');
-      this.$menuInner[0].firstChild.appendChild(elementTemplates.noResults);
+      if (this.options.arbitrary) {
+        elementTemplates.noResults.innerHTML = this.options.noneResultsTextArbitrary.replace('{tag}', '"' + htmlEscape(searchValue) + '"');
+        this.$menuInner[0].firstChild.appendChild(elementTemplates.noResults);
+      } else {
+        elementTemplates.noResults.innerHTML = this.options.noneResultsText.replace('{0}', '"' + htmlEscape(searchValue) + '"');
+        this.$menuInner[0].firstChild.appendChild(elementTemplates.noResults);
+      }
     }
   }
 
@@ -994,7 +999,7 @@
     // Extended options
     ,
     arbitrary: false, // liveSearch: true is required to get search in the box
-    arbitraryPlaceholder: 'Type your tag and click + to add'
+    noneResultsTextArbitrary: 'Click to create «{tag}»'
   };
 
   Selectpicker.prototype = {
@@ -1164,8 +1169,7 @@
           searchbox = '',
           actionsbox = '',
           donebutton = '',
-          clearButton = '',
-          arbitrarybox = '';
+          clearButton = '';
 
       if (this.options.header) {
         header =
@@ -1176,7 +1180,7 @@
       }
 
       if (this.options.liveSearch) {
-        arbitrarybox =
+        searchbox =
           '<div class="bs-searchbox">' +
             '<input type="search" class="form-control" autocomplete="off"' +
               (
@@ -1186,10 +1190,6 @@
               ) +
               ' role="combobox" aria-label="Search" aria-controls="' + this.selectId + '" aria-autocomplete="list">' +
           '</div>';
-          if (this.options.liveSearch) {
-            searchbox = arbitrarybox
-            arbitrarybox = ''
-          }
       }
 
       if (this.multiple && this.options.actionsBox) {
@@ -1224,23 +1224,20 @@
       // Extended options
 
 
-      // Arbitrary options, if combined with liveSearch will allow search and adding options
+      // Arbitrary options
       if (this.options.arbitrary) {
+        this.options.liveSearch = true;
         searchbox =
-        '<div class="row">' +
-            '<div class="col-md-9">' +
-              '<div class="bs-searchbox">' +
-                  '<input type="search" class="form-control bs-arbitrary" autocomplete="off"' +
-                    ' placeholder="' + htmlEscape(this.options.arbitraryPlaceholder) + '"'
-                    +
-                    ' role="combobox" aria-label="Search" aria-controls="' + this.selectId + '" aria-autocomplete="list">' +
-              '</div>' +
-            '</div>' +
-            '<div class="col-md-3">' +
-                '<div class="btn btn-success bs-arbitrary-add" style="margin: 4px 8px;">+</div>' +
-            '</div>' +
-          '</div>';
 
+        '<div class="bs-searchbox">' +
+          '<input type="search" class="form-control bs-arbitrary" autocomplete="off"' +
+            (
+              this.options.arbitraryPlaceholder === null ? ''
+              :
+              ' placeholder="' + htmlEscape(this.options.arbitraryPlaceholder) + '"'
+            ) +
+            ' role="combobox" aria-label="Search" aria-controls="' + this.selectId + '" aria-autocomplete="list">' +
+        '</div>';
       }
 
       // End of extended options
@@ -1274,7 +1271,6 @@
           '<div class="' + classNames.MENU + ' ' + (version.major >= '4' ? '' : classNames.SHOW) + '">' +
             header +
             searchbox +
-            arbitrarybox +
             actionsbox +
             '<div class="inner ' + classNames.SHOW + '" role="listbox" id="' + this.selectId + '" tabindex="-1" ' + multiselectable + '>' +
                 '<ul class="' + classNames.MENU + ' inner ' + (version.major >= '4' ? classNames.SHOW : '') + '" role="presentation">' +
@@ -3078,7 +3074,7 @@
     // Extended listeners
 
     arbitraryListener: function () {
-      $('.bs-arbitrary-add').on("click", function() {
+      $('#bs-select-1').on("click", function() {
         var userInput = $('.bs-arbitrary').val();
 
         // Create a new option element with the user's input
