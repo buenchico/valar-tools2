@@ -1,3 +1,5 @@
+$(".modal").modal('hide');
+
 if ('<%= @action %>' == 'update') {
   $('#content').html("<%= j render 'form_update_multiple', armies: @armies, action: @action %>");
 }

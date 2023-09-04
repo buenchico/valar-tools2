@@ -17,7 +17,7 @@
           <% end %>
         </p>
         <p><strong>Señor:</strong> <%= family.lord&.name %></p>
-        <p><strong>Facción:</strong> <%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, 'factions?id=' + family.faction.id.to_s, class: 'text-white') %></p>
+        <p><strong>Facción:</strong> <%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, faction_path(family.faction.id), remote: true, class: 'text-white') %></p>
         <p><%= simple_format(family.description) %></p>
         <% if @vassals.length > 0 %>
           <p><strong>Vasallos:</strong><p>
