@@ -5,6 +5,7 @@ class FamiliesController < ApplicationController
   before_action :set_families_list, only: [:index]
   before_action :set_options, only: [:new, :edit, :update, :new, :show, :create]
   before_action :set_filters, only: [:index, :show]
+  before_action :check_visble, only: [:show]
 
   def index
   end
@@ -83,6 +84,18 @@ private
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
     if @options.nil?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de familias'
+    end
+  end
+
+  def check_visble
+    if !@current_user&.is_master?
+      if !(@family.game == active_game && @family.visible == true)
+        respond_to do |format|
+          flash[:danger] = 'No tienes permisos para acceder a esta familia.'
+          format.js { render js: "window.location='/families'" }
+          format.html { redirect_to families_url }
+        end
+      end
     end
   end
 

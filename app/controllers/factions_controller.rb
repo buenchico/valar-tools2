@@ -4,6 +4,8 @@ class FactionsController < ApplicationController
   before_action :set_options
   before_action :set_faction, only: [:edit, :update, :show, :reputation]
   before_action :set_factions_list, only: [:index]
+  before_action :check_visble, only: [:show]
+
 
   def index
   end
@@ -115,6 +117,18 @@ private
 
   def set_options
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
+  end
+
+  def check_visble
+    if !@current_user&.is_master?
+      if !(@faction.games.exists?(id: active_game.id) && @faction.active == true)
+        respond_to do |format|
+          flash[:danger] = 'No tienes permisos para acceder a esta facción.'
+          format.js { render js: "window.location='/factions'" }
+          format.html { redirect_to factions_url }
+        end
+      end
+    end
   end
 
   def faction_params

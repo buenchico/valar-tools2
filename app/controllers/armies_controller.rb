@@ -47,8 +47,11 @@ class ArmiesController < ApplicationController
     @armies.each do | army |
       if !@current_user&.is_master?
         if !@current_user.faction.armies.include?(army)
-          flash[:danger] = 'No tienes permisos para editar esos ejércitos.'
-          render js: "window.location='/armies'"
+          respond_to do |format|
+            flash[:danger] = 'No tienes permisos para editar esos ejércitos.'
+            format.js { render js: "window.location='/armies'" }
+            format.html { redirect_to armies_url }
+          end
         end
       end
     end
