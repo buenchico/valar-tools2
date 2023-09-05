@@ -2,19 +2,21 @@ class FamiliesController < ApplicationController
   before_action :set_tool
   before_action :check_master, except: [:index, :show]
   before_action :set_family, only: [:edit, :update, :destroy, :show]
+  before_action :set_families_list, only: [:index]
   before_action :set_options, only: [:new, :edit, :update, :new, :show, :create]
 
   def index
-    if @current_user&.is_master?
-      @families = Family.all
-    else
-      @families = Family.where(visible: true).where(game_id: active_game.id)
-    end
   end
 
   def show
     @vassals = Family.where(lord_id: @family.id)
     @locations = Location.where(family_id: @family.id)
+    respond_to do | format |
+      format.js
+      format.html do
+        set_families_list
+      end
+    end
   end
 
   def new
@@ -66,6 +68,14 @@ class FamiliesController < ApplicationController
 private
   def set_family
     @family = Family.find(params[:id])
+  end
+
+  def set_families_list
+    if @current_user&.is_master?
+      @families = Family.all
+    else
+      @families = Family.where(visible: true).where(game_id: active_game.id)
+    end
   end
 
   def set_options

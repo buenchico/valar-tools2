@@ -3,13 +3,9 @@ class FactionsController < ApplicationController
   before_action :set_tool
   before_action :set_options
   before_action :set_faction, only: [:edit, :update, :show, :reputation]
+  before_action :set_factions_list, only: [:index]
 
   def index
-    if @current_user&.is_master?
-      @factions = Faction.all.order(:id)
-    else
-      @factions = Faction.where(active: true).where.not(name: ["admin", "player", "master"]).order(:name)
-    end
   end
 
   def edit
@@ -17,6 +13,12 @@ class FactionsController < ApplicationController
   end
 
   def show
+    respond_to do | format |
+      format.js
+      format.html do
+        set_factions_list
+      end
+    end
   end
 
   def sync_groups
@@ -101,6 +103,14 @@ class FactionsController < ApplicationController
 private
   def set_faction
     @faction = Faction.find(params[:id])
+  end
+
+  def set_factions_list
+    if @current_user&.is_master?
+      @factions = Faction.all.order(:id)
+    else
+      @factions = Faction.where(active: true).where.not(name: ["admin", "player", "master"]).order(:name)
+    end
   end
 
   def set_options

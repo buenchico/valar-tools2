@@ -1,0 +1,7 @@
+<%= render template: 'families/index' %>
+
+<script type="text/javascript">
+  $(document).on('turbolinks:load', function() {
+    <%= render template: 'families/show', formats: [:js] %>
+  });
+</script>
