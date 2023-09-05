@@ -4,7 +4,7 @@ class FamiliesController < ApplicationController
   before_action :set_family, only: [:edit, :update, :destroy, :show]
   before_action :set_families_list, only: [:index]
   before_action :set_options, only: [:new, :edit, :update, :new, :show, :create]
-  before_action :set_filters, only: [:index]
+  before_action :set_filters, only: [:index, :show]
 
   def index
   end
