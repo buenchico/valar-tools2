@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   get 'bug', to: 'static_pages#bug'
   post 'bug_report', to: 'static_pages#bug_report'
 
+  # Errors
+  match "/404", to: "errors#not_found", via: :all
+  match "/500", to: "errors#internal_server", via: :all
+
   # Login and logout routes
   get 'sso', to: 'sessions#sso', as: 'sso'
 
