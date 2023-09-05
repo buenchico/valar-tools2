@@ -8,12 +8,21 @@
     <%= yield(:title) %>
 </div>
 
-<% if @current_user&.is_master? %>
+<div class="row my-3">
   <div class="col">
-    <%= link_to send('new_family_path'), class: "btn btn-primary", remote: true do %>
-      <i class="bi bi-plus-circle"></i> Crear Nueva Familia
+    <% if @current_user&.is_master? %>
+      <%= link_to send('new_family_path'), class: "btn btn-primary", remote: true do %>
+        <i class="bi bi-plus-circle"></i> Crear Nueva Familia
+      <% end %>
     <% end %>
   </div>
-<% end %>
+  <div class="col-6">
+    <div class="d-flex align-items-center justify-content-end">
+      <%= select_tag "filter", options_for_select(@filter), id: "filterselect", class: "form-select form-select-sm me-2" %>
+      <input id="filtertext" class="form-control form-control-sm" type="text" placeholder="Filtrar...">
+    </div>
+  </div>
+</div>
+
 
 <%= render "families_table" %>
