@@ -1,7 +1,10 @@
 <%= render template: 'factions/index' %>
 
 <script type="text/javascript">
-  $(document).on('turbolinks:load', function() {
+  $(document).on('turbolinks:load.show', function() {
     <%= render template: 'factions/show', formats: [:js] %>
+  });
+  $(document).on('turbolinks:before-render', function() {
+    $(document).off('turbolinks:load.show');
   });
 </script>
