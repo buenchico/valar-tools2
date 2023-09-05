@@ -49,9 +49,9 @@ $(document).on('turbolinks:load', function() {
   $(function() {
     $("table.sortable").tablesorter({
       headerTemplate : '{icon}{content}',
-      cssIconNone: 'bi bi-sort-caret tablesorter-icon',
-      cssIconAsc:  'bi bi-sort-caret-up tablesorter-icon',
-      cssIconDesc: 'bi bi-sort-caret-down tablesorter-icon',
+      cssIconNone: 'bi bi-sort-caret sorter-icon',
+      cssIconAsc:  'bi bi-sort-caret-up sorter-icon',
+      cssIconDesc: 'bi bi-sort-caret-down sorter-icon',
       imgAttr: 'title' // image attribute used by "image" parser
     });
   });
