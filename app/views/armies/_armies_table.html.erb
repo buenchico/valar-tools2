@@ -1,8 +1,8 @@
 <div class="table-responsive">
-  <table id="army_list" class="table table-dark table-striped table-borderless table-hover table-sm sortable">
+  <table id="army_list-<%= faction.name %>" class="table table-dark table-striped table-borderless table-hover table-sm sortable army_list">
       <caption>Lista de ejércitos</caption>
         <thead>
-          <tr id="table_title">
+          <tr id="table_title-<%= faction.name %>">
             <th data-sorter="false" scope="col"><input type="checkbox" class="checkbox_select_all" /></th>
             <th scope="col" style="width: 78px"><i class="bi bi-award"></i></th>
             <th scope="col">Ejército</th>
@@ -16,7 +16,7 @@
             <th scope="col" colspan="3" data-sorter="false"></th>
           </tr>
         </thead>
-        <tbody id="table_body">
+        <tbody id="table_body-<%= faction.name %>">
           <% @armies.each do |army| %>
             <%= render 'army_row', army: army, faction: faction %>
           <% end %>

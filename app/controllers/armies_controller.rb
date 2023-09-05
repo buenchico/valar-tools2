@@ -10,10 +10,9 @@ class ArmiesController < ApplicationController
   before_action :set_regions, only: [:new, :edit]
 
   def index
-    @faction = @current_user.faction.long_name
+    @factions = Faction.where(active: true).order(:id).drop(1)
     if @current_user&.is_master?
       @all_armies = Army.all.order(:group)
-      @factions = Faction.where(active: true).order(:id).drop(1)
     else
       @armies = Army.joins(:factions).where(factions: { id: @current_user.faction_id }).distinct
     end

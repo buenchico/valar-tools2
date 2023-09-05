@@ -1,5 +1,8 @@
-// Copy selected to clipboard
+// Change from land to sea
 $(document).on('turbolinks:load', function () {
+  if ($(".armies.index").length !== 0 ) {
+
+    // Copy selected to clipboard
     $(function () {
         //Assign Click event to Button.
         $(".mass-copy").click(function () {
@@ -34,57 +37,49 @@ $(document).on('turbolinks:load', function () {
             document.body.removeChild(dummy);
         });
     });
-});
 
-// Filters
-$.fn.armyFilters = function(house){
-    var value = $("#filtertext-" + house).val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    var column = $("#filterselect-" + house).children("option:selected").val();
-    $("#army_list").filterTable(value, column);
-    var countArmies = $('input[type="checkbox"]:visible').length - 1;
-    $("#count-visible").html(countArmies);
-}
-
-// Trigger filters
-$(document).on('turbolinks:load', function(){
-    var houses = <%= ["master"] %>;
-
-    $.each( houses, function( k, house ) {
-
-        $("#filterselect-" + house).on("change", function() {
-            $.fn.armyFilters(house) // Why I need to remove the semicolons!!!!!
-            $.fn.recalculateStats()
-        });
-        $("#filtertext-" + house).on("keyup", function() {
-            $.fn.armyFilters(house)
-            $.fn.recalculateStats()
-        });
-    });
-});
-
-// Trigger recalculate stats on changing tabs
-$(document).on('turbolinks:load', function(){
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function () {
-        $.fn.recalculateStats()
-    })
-});
-
-// Add hidden checkboxes for mass edit options
-$(document).on('turbolinks:load', function(){
-  $('.checkbox_selectable').change(function() {
-    var form = $('#edit_multiple');
-    var armyId = $(this).val();
-
-    if ($(this).is(':checked')) {
-      // If the checkbox is checked, add the army_id to the form parameters
-      $('<input>').attr({
-        type: 'hidden',
-        name: 'army_ids[]',
-        value: armyId
-      }).appendTo(form);
-    } else {
-      // If the checkbox is unchecked, remove the corresponding input element from the form
-      form.find('input[value="' + armyId + '"]').remove();
+    // Filters
+    $.fn.armyFilters = function(){
+        var value = $("#filtertext").val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        var column = $("#filterselect").children("option:selected").val();
+        $(".army_list").filterTable(value, column);
+        var countArmies = $('input[type="checkbox"]:visible').length - 1;
+        $("#count-visible").html(countArmies);
     }
-  });
+
+    // Trigger filters
+    $("#filterselect").on("change", function() {
+        $.fn.armyFilters() // Why I need to remove the semicolons!!!!!
+        //$.fn.recalculateStats()
+    });
+    $("#filtertext").on("keyup", function() {
+        $.fn.armyFilters()
+        //$.fn.recalculateStats()
+    });
+
+
+    // Trigger recalculate stats on changing tabs
+    $(document).on('shown.bs.tab', function () {
+        //$.fn.recalculateStats()
+        //$("#filterselect").children("option:selected").val('');
+    })
+
+    // Add hidden checkboxes for mass edit options
+    $('.checkbox_selectable').change(function() {
+      var form = $('#edit_multiple');
+      var armyId = $(this).val();
+
+      if ($(this).is(':checked')) {
+        // If the checkbox is checked, add the army_id to the form parameters
+        $('<input>').attr({
+          type: 'hidden',
+          name: 'army_ids[]',
+          value: armyId
+        }).appendTo(form);
+      } else {
+        // If the checkbox is unchecked, remove the corresponding input element from the form
+        form.find('input[value="' + armyId + '"]').remove();
+      }
+    });
+  }
 });
