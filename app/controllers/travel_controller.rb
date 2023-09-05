@@ -57,7 +57,7 @@ class TravelController < ApplicationController
 
     @html += ((size == 0) ? "" : " de tamaño #{size}")
 
-    @html += "necesita #{travel_time(@time)} para ir desde #{@from} hasta #{@to}</p>"
+    @html += " necesita #{travel_time(@time)} para ir desde #{@from} hasta #{@to}</p>"
 
     @message.each do | line |
       @html += line
