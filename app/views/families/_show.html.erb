@@ -16,7 +16,7 @@
             <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><%= tag %></span>
           <% end %>
         </p>
-        <p><strong>Señor:</strong> <%= family.lord&.name %></p>
+        <p><strong>Señor:</strong> <%= family.lord.nil? ? '' : link_to(family.lord.name, family_path(family.id), remote: true, class: 'text-white') %></p>
         <p><strong>Facción:</strong> <%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, faction_path(family.faction.id), remote: true, class: 'text-white') %></p>
 
         <% if !family.description.blank? %>
