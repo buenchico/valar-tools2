@@ -18,23 +18,45 @@
         </p>
         <p><strong>Señor:</strong> <%= family.lord&.name %></p>
         <p><strong>Facción:</strong> <%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, faction_path(family.faction.id), remote: true, class: 'text-white') %></p>
-        <p><%= simple_format(family.description) %></p>
+
+        <% if !family.description.blank? %>
+          <p>
+            <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseDesc" role="button" aria-expanded="false" aria-controls="collapseDesc">
+              <i class="bi bi-plus-circle"></i> <strong>Descripción:</strong>
+            </a>
+          </p>
+          <div class="collapse" id="collapseDesc">
+            <%= simple_format(family.description) %>
+          </div>
+        <% end %>
         <% if @vassals.length > 0 %>
-          <p><strong>Vasallos:</strong><p>
-          <% @vassals.each do | vassal | %>
-            <p class="ms-2">
-              — <%= vassal.title %>
-              <% vassal.tags.each do | v_tag | %>
-                <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><%= v_tag %></span>
-              <% end %>
-            </p>
-          <% end %>
+          <p>
+            <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseVassals" role="button" aria-expanded="false" aria-controls="collapseVassals">
+              <i class="bi bi-plus-circle"></i> <strong>Vasallos:</strong>
+            </a>
+          </p>
+          <div class="collapse" id="collapseVassals">
+            <% @vassals.each do | vassal | %>
+              <p class="ms-2">
+                — <%= vassal.title %>
+                <% vassal.tags.each do | v_tag | %>
+                  <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><%= v_tag %></span>
+                <% end %>
+              </p>
+            <% end %>
+          </div>
         <% end %>
         <% if @locations.length > 0 %>
-          <p><strong>Lugares:</strong><p>
-          <% @locations.each do | location | %>
-            <p class="ms-2">— <%= location.name %></p>
-          <% end %>
+          <p>
+            <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseLocations" role="button" aria-expanded="false" aria-controls="collapseLocations">
+              <i class="bi bi-plus-circle"></i> <strong>Lugares:</strong>
+            </a>
+          </p>
+          <div class="collapse" id="collapseLocations">
+            <% @locations.each do | location | %>
+              <p class="ms-2">— <%= location.name %></p>
+            <% end %>
+          </div>
         <% end %>
       </div>
     </div>

@@ -116,3 +116,22 @@ $(document).on('turbolinks:load', function(e) {
     $(".checkbox_selectable:visible").trigger('change'); // Trigger the change event on individual checkboxes
   });
 });
+
+// Change collpase icon
+function changeCollapseIcon(event) {
+  var source = event.currentTarget.activeElement
+  if (event.type == 'shown') {
+    var icon = $(source).find('.bi-plus-circle:first')
+    icon.removeClass("bi-plus-circle");
+    icon.addClass("bi-dash-circle");
+  }
+  if (event.type == 'hidden') {
+    var icon = $(source).find('.bi-dash-circle:first')
+    icon.removeClass("bi-dash-circle");
+    icon.addClass("bi-plus-circle");
+  }
+}
+
+$(document).on('shown.bs.collapse hidden.bs.collapse', function (event) {
+  changeCollapseIcon(event);
+})
