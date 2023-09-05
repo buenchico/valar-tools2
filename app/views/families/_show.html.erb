@@ -29,6 +29,16 @@
             <%= simple_format(family.description) %>
           </div>
         <% end %>
+        <% if !family.members.blank? %>
+          <p>
+            <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseMembers" role="button" aria-expanded="false" aria-controls="collapseMembers">
+              <i class="bi bi-plus-circle"></i> <strong>Miembros:</strong>
+            </a>
+          </p>
+          <div class="collapse" id="collapseMembers">
+            <%= simple_format(family.members) %>
+          </div>
+        <% end %>
         <% if @vassals.length > 0 %>
           <p>
             <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseVassals" role="button" aria-expanded="false" aria-controls="collapseVassals">

@@ -76,7 +76,7 @@ private
   end
 
   def family_params
-    params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :description, :tags).tap do |whitelisted|
+    params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :description, :members, :tags).tap do |whitelisted|
       whitelisted[:tags] = params[:family][:tags].reject(&:empty?)
 
       if @options["tags"] != "false"

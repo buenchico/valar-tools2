@@ -44,6 +44,10 @@
             <%= form.text_area :description, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
+            <%= form.label :members, class: 'input-group-text' %>
+            <%= form.text_area :members, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
             <%= form.label :lord_id, class: 'input-group-text' %>
             <%= form.select :lord_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
           </div>
