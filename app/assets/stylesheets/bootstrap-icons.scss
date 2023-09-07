@@ -1996,6 +1996,15 @@ $bootstrap-icons-map: (
   "sort-caret-down": "\f6a3",
   "sort-caret-up": "\f6b6",
   "sort-caret": "\f6c2",
+  "anchor": "\f6e0",
+  "bow-arrow": "\f6ed",
+  "galley": "\f6ee",
+  "longship": "\f759",
+  "roman-helmet": "\f769",
+  "spears": "\f794",
+  "swords": "\f795",
+  "shield-zulu": "\f79a",
+  "bull-head": "\f79b",
 );
 
 @each $icon, $codepoint in $bootstrap-icons-map {
