@@ -233,6 +233,21 @@ $(document).on('turbolinks:load', function () {
           var lat = coord.lat;
           var lng = coord.lng;
           console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
+
+          var message = lat + '\t' + lng
+          // Create a dummy input to copy the string array inside it
+          var dummy = document.createElement("textarea");
+          // Add it to the document
+          document.body.appendChild(dummy);
+          // Output the array into it
+          dummy.value = message;
+          // Select it
+          dummy.select();
+          // Copy its contents
+          document.execCommand("copy");
+          // Remove it as its not needed anymore
+          document.body.removeChild(dummy);
+
         });
 
         // Debug grid
