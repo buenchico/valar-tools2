@@ -53,7 +53,7 @@
 
           <div class="input-group mb-3">
             <%= form.label :location_type, class: 'input-group-text' %>
-            <%= form.select :location_type, @options["types"].values.map { |key| key["name"] }, {}, class: 'form-select' %>
+            <%= form.select :location_type, @options["types"].map { |key, value| [value["name"],key] }, {}, class: 'form-select' %>
           </div>
 
           <div class="input-group mb-3">
