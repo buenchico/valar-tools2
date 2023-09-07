@@ -138,7 +138,7 @@ class ArmiesController < ApplicationController
 
     respond_to do |format|
       if params[:army][:confirm] == 'DELETE'
-        if @armies.delete_all
+        if @armies.each { |army| army.factions.clear } && @armies.destroy_all
           format.html { redirect_to armies_url, success: 'Ejércitos eliminados correctamente.' }
         else
           format.html { redirect_to armies_url, danger: 'Ha ocurrido un error, por favor, intentalo de nuevo más tarde.' }
