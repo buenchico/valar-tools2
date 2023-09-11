@@ -11,9 +11,8 @@ class ArmiesController < ApplicationController
 
   def index
     @factions = Faction.where(active: true).order(:id).drop(1)
-    if @current_user&.is_master?
-      @all_armies = Army.all.order(:group)
-    else
+    @all_armies = Army.all.order(:group)
+    if !@current_user&.is_master?
       @armies = Army.joins(:factions).where(factions: { id: @current_user.faction_id }).distinct
     end
   end
