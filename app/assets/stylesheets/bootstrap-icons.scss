@@ -2005,6 +2005,8 @@ $bootstrap-icons-map: (
   "swords": "\f795",
   "shield-zulu": "\f79a",
   "bull-head": "\f79b",
+  "dwarf-miner": "\f7a0",
+  "dwarf-warrior": "\f7a1",
 );
 
 @each $icon, $codepoint in $bootstrap-icons-map {
