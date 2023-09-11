@@ -73,6 +73,10 @@
                 <%= form.label :family_id, class: 'input-group-text' %>
                 <%= form.select :family_id, [[""],["Quitar señor", "CLEAR"]] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
               </div>
+              <div class="input-group mt-3">
+                <%= form.label :visible, class: 'input-group-text' %>
+                <%= form.select :visible, [[""],["Invisible", "CLEAR"],["Visible", true]], {}, class: 'form-select' %>
+              </div>
             <% end %>
             <div class="input-group mt-3">
               <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'VALIDATE' para confirmar los cambios." %>

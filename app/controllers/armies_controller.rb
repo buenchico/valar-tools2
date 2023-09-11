@@ -116,6 +116,13 @@ class ArmiesController < ApplicationController
               army_params_hash[key] = value
             end
           end
+          if (key == "visible")
+            if value == "CLEAR"
+              army_params_hash[key] = nil
+            else
+              army_params_hash[key] = value
+            end
+          end
         end
       end
     end
