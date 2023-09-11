@@ -1,3 +1,14 @@
+
+<div class="card bg-dark text-white mb-3">
+  <div class="card-body">
+    <p>Hay <%= @all_armies.length %> <%= Army.model_name.human(:count => @all_armies.length).downcase %> en el mundo, con un total de <%= @all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) } %> hombres y una fuerza de <%= @all_armies.sum { |army| army.strength } %></p>
+    <p>De los cuales <%= @all_armies.where(status: ARMY_STATUS[0]).length %> están movilizados y <%= @all_armies.where(status: ARMY_STATUS[2]).length %> han sido aniquilados</p>
+    <% if faction.armies.where(visible: true).length != 0 %>
+      <p class="card-text">Dispones de <%= faction.armies.where(visible: true).length %> <%= Army.model_name.human(:count => faction.armies.where(visible: true).length).downcase %> con un total de <%= faction.armies.where(visible: true).sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) } %> hombres y una fuerza de <%= faction.armies.where(visible: true).sum { |army| army.strength } %>.</p>
+    <% end %>
+  </div>
+</div>
+
 <div class="table-responsive">
   <table id="army_list-<%= faction.name %>" class="table table-dark table-striped table-borderless table-hover table-sm sortable army_list">
       <caption>Lista de ejércitos</caption>
