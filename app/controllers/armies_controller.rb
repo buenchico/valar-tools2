@@ -256,8 +256,8 @@ class ArmiesController < ApplicationController
                 hash["family_id"] = nil
               else
                 # Initialize family_name and family_branch variables
-                family_name = nil
-                family_branch = nil
+                family_name = ""
+                family_branch = ""
 
                 # Use a regular expression to match the pattern
                 match = family.match(/^(.*?)\s?\((.*?)\)$/)
@@ -265,12 +265,11 @@ class ArmiesController < ApplicationController
                 if match
                   family_name = match[1]
                   family_branch = match[2]
-                  family = Family.where(name: family_name).find_by(branch: family_branch)
                 else
                   # If the pattern doesn't match, assume the entire string is the family_name
                   family_name = family
-                  family = Family.where(name: family_name)
                 end
+                family = Family.where(name: family_name).find_by(branch: family_branch)
                 if family
                   hash["family_id"] = family.id
                 else
