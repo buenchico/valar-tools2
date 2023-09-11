@@ -30,7 +30,7 @@
         <% army.tags.each do | tag | %>
           <% traits << @tags[tag]["name"].capitalize %>
         <% end %>
-        <%= army.name %> (<%= army.status %>)<%= army.position.blank? ? nil : ", en #{army.position} " %><%= army.group.blank? ? nil : "grupo " + ARMY_GROUPS[army.group.to_sym][:name].upcase %> FUE: <%= army.strength %><%= traits.blank? ? nil : "[" + traits.join(", ") + "]" %>
+        <%= army.name %> (<%= army.status %>)<%= army.position.blank? ? nil : ", en #{army.position} " %><%= army.group.blank? ? nil : "grupo " + ARMY_GROUPS[army.group.to_sym][:name].upcase %> <%= traits.blank? ? nil : "[" + traits.join(", ") + "] " %>FUE: <%= army.strength %>
       </div>
     </div>
   </div>
