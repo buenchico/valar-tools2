@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_05_112545) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_11_113646) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -190,6 +190,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_05_112545) do
     t.string "flair_url"
     t.string "description"
     t.string "title"
+    t.string "pov"
+    t.string "tokens"
   end
 
   create_table "factions_games", force: :cascade do |t|

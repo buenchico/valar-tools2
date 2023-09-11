@@ -11,6 +11,26 @@
       <div class="modal-body">
         <div class="alert alert-success">Jugador: <%= faction.users.order(:player).pluck(:player).join(", ") %></div>
         <%= simple_format(faction.description) %>
+        <% if !faction.pov.blank? %>
+          <p>
+            <a class="link-unstyled" data-bs-toggle="collapse" href="#collapsePov" role="button" aria-expanded="false" aria-controls="collapsePov">
+              <i class="bi bi-plus-circle"></i> <strong>Puntos de Vista:</strong>
+            </a>
+          </p>
+          <div class="collapse" id="collapsePov">
+            <%= Kramdown::Document.new(faction.pov || "").to_html.html_safe %>
+          </div>
+        <% end %>
+        <% if !faction.tokens.blank? %>
+          <p>
+            <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseToken" role="button" aria-expanded="false" aria-controls="collapseToken">
+              <i class="bi bi-plus-circle"></i> <strong>Puntos de Vista:</strong>
+            </a>
+          </p>
+          <div class="collapse" id="collapseToken">
+            <%= Kramdown::Document.new(faction.tokens || "").to_html.html_safe %>
+          </div>
+        <% end %>
         <% if @options["reputation"] %>
           <div class="input-group">
             <%= label_tag :reputation, 'Reputation', class: 'input-group-text' %>

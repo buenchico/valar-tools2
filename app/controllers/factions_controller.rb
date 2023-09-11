@@ -132,6 +132,6 @@ private
   end
 
   def faction_params
-    params.require(:faction).permit(:reputation, :description, :active, game_ids: [])
+    params.require(:faction).permit(:reputation, :description, :active, :pov, :tokens, game_ids: [])
   end
 end
