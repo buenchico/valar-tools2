@@ -60,10 +60,20 @@
                 data: { noneSelectedText: ' '}
               %>
             </div>
-            <div class="input-group mt-3">
-              <%= form.label :status, class: 'input-group-text' %>
-              <%= form.select :status, ([""] + ARMY_STATUS), {}, class: 'form-select', disabled: !@current_user&.is_master? %>
-            </div>
+            <% if @current_user.is_master? %>
+              <div class="input-group mt-3">
+                <%= form.label :status, class: 'input-group-text' %>
+                <%= form.select :status, ([""] + ARMY_STATUS), {}, class: 'form-select' %>
+              </div>
+              <div class="input-group mt-3">
+                <%= form.label :location_id, class: 'input-group-text' %>
+                <%= form.select :location_id, [[""],["Quitar región", "CLEAR"]] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
+              </div>
+              <div class="input-group mt-3">
+                <%= form.label :family_id, class: 'input-group-text' %>
+                <%= form.select :family_id, [[""],["Quitar señor", "CLEAR"]] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+              </div>
+            <% end %>
             <div class="input-group mt-3">
               <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'VALIDATE' para confirmar los cambios." %>
             </div>

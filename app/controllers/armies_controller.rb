@@ -7,7 +7,7 @@ class ArmiesController < ApplicationController
   before_action :check_player
   before_action :check_master, only: [:destroy, :destroy_multiple]
   before_action :check_owner, only: [:edit, :edit_notes, :update]
-  before_action :set_regions, only: [:new, :edit]
+  before_action :set_regions, only: [:new, :edit, :edit_multiple]
 
   def index
     @factions = Faction.where(active: true).order(:id).drop(1)
@@ -96,9 +96,23 @@ class ArmiesController < ApplicationController
             army_params_hash[key] = value
           end
         end
-        if (key == "status")
-          if @current_user&.is_admin? # Checking the user is admin to modify the status
+        if @current_user&.is_admin? # Checking the user is admin to modify the status
+          if (key == "status")
             if ARMY_STATUS.include?(value.to_s)
+              army_params_hash[key] = value
+            end
+          end
+          if (key == "location_id")
+            if value == "CLEAR"
+              army_params_hash[key] = nil
+            else
+              army_params_hash[key] = value
+            end
+          end
+          if (key == "family_id")
+            if value == "CLEAR"
+              army_params_hash[key] = nil
+            else
               army_params_hash[key] = value
             end
           end
@@ -111,6 +125,8 @@ class ArmiesController < ApplicationController
         if army_params_hash.empty?
           format.html { redirect_to armies_url, success: 'Nada que actualizar.' }
         else
+          puts "////////////////////////////////////"
+          puts army_params_hash.to_hash
           if @armies.update_all(army_params_hash)
             format.html { redirect_to armies_url, success: 'Ejércitos editados correctamente.' }
           else
