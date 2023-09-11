@@ -180,7 +180,7 @@ class ArmiesController < ApplicationController
         headers['Content-Disposition'] = "attachment; filename=\"armies.csv\""
         headers['Content-Type'] ||= 'text/csv'
 
-        header_row = ["id", "name", "status", "position", "group", "factions", "hp *(#{@options["hp"]["step"]})", "tags"] # Adjust the attributes as needed
+        header_row = ["id", "name", "status", "position", "group", "factions", "hp *(#{@options["hp"]["step"]})", "tags", "location", "family"] # Adjust the attributes as needed
         @attributes.each do | key, value |
           header_row << "col#{value['sort']} #{key} *(#{value["str"]})"
         end
@@ -189,7 +189,7 @@ class ArmiesController < ApplicationController
           csv << header_row # Adjust the attributes as needed
 
           @armies.each do |army|
-            data_row = [army.id, army.name, army.status, army.position, army.group, army.factions.pluck(:name).join(","), army.hp, army.tags.join(",")]
+            data_row = [army.id, army.name, army.status, army.position, army.group, army.factions.pluck(:name).join(","), army.hp, army.tags.join(","), army.location&.name, army.family&.title]
             @attributes.each do | key, value |
               data_row << army["col#{value['sort']}"]
             end
@@ -231,12 +231,56 @@ class ArmiesController < ApplicationController
                 if faction
                   faction.id
                 else
-                  @errors << "(#{army.id}) #{army.name} : #{faction_name} no existe"
+                  @errors << "(#{army.id}) #{army.name} : la facción no existe"
+                  nil
+                end
+              end
+
+              # Adding location and family info
+              location = hash.delete('location')
+              if location.nil?
+                hash["location_id"] = nil
+              else
+                location = Location.where(location_type: "region").search_by_name(location).first
+                if location
+                  hash["location_id"] = location.id
+                else
+                  @errors << "(#{army.id}) #{army.name} : la región no existe"
+                  nil
+                end
+              end
+
+              family = hash.delete('family')
+
+              if family.nil?
+                hash["family_id"] = nil
+              else
+                # Initialize family_name and family_branch variables
+                family_name = nil
+                family_branch = nil
+
+                # Use a regular expression to match the pattern
+                match = family.match(/^(.*?)\s?\((.*?)\)$/)
+
+                if match
+                  family_name = match[1]
+                  family_branch = match[2]
+                else
+                  # If the pattern doesn't match, assume the entire string is the family_name
+                  family_name = family
+                end
+                family = Family.where(name: family_name).find_by(branch: family_branch)
+                if family
+                  hash["family_id"] = family.id
+                else
+                  @errors << "(#{army.id}) #{army.name} : la familia no existe"
                   nil
                 end
               end
 
               army_data = hash.merge('faction_ids' => factions.compact)
+
+              puts army_data
 
               # Update the attributes
               army.attributes = army_data

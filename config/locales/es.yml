@@ -141,8 +141,8 @@ es:
               options_cannot_be_changed_if_game_is_active: "No puedes cambiar las opciones de la partida %{game_name} mientres esté activa"
         family:
           attributes:
-            name:
-              taken: 'El nombre de la familia debe ser único'
+            base:
+              invalid: "Una familia con el mismo nombre y rama existe en la partida."
   travel:
     index:
       calculate: 'Calcular'

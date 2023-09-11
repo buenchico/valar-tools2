@@ -15,4 +15,8 @@ class Location < ApplicationRecord
       self.name_es
     end
   end
+
+  scope :search_by_name, ->(query) do
+    where("lower(name_en) LIKE :query OR lower(name_es) LIKE :query", query: "%#{query.downcase}%")
+  end
 end
