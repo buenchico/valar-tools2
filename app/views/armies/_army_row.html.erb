@@ -16,7 +16,7 @@
        <% end %>
        <% army.tags.each do | tag | %>
         <div class='row'>
-          <div class='fst-italic text-start col-8'><i class='bi bi-<%= @tags[tag]["icon"] %>'></i> <%= tag.capitalize %></div>
+          <div class='fst-italic text-start col-8'><i class='bi bi-<%= @tags[tag]["icon"] %>'></i> <%= @tags[tag]["name"].capitalize %></div>
           <div class='text-end col-4'><%= number_to_modifier(@tags[tag]["str"]) %></div>
         </div>
         <% mod_str += @tags[tag]["str"].to_i %>
