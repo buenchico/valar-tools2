@@ -265,11 +265,12 @@ class ArmiesController < ApplicationController
                 if match
                   family_name = match[1]
                   family_branch = match[2]
+                  family = Family.where(name: family_name).find_by(branch: family_branch)
                 else
                   # If the pattern doesn't match, assume the entire string is the family_name
                   family_name = family
+                  family = Family.where(name: family_name)
                 end
-                family = Family.where(name: family_name).find_by(branch: family_branch)
                 if family
                   hash["family_id"] = family.id
                 else
