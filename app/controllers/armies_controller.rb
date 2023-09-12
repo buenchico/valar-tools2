@@ -13,7 +13,7 @@ class ArmiesController < ApplicationController
     @factions = Faction.where(active: true).order(:id).drop(1)
     @all_armies = Army.all.order(:group)
     if !@current_user&.is_master?
-      @armies = Army.joins(:factions).where(factions: { id: @current_user.faction_id }).distinct
+      @armies = Army.where(visible: true).joins(:factions).where(factions: { id: @current_user.faction_id }).distinct
     end
   end
 
