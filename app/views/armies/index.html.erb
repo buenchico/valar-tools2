@@ -6,6 +6,9 @@
   <%= yield(:title) %>
 </div>
 
+<div class="d-none" id="men_per_army"><%= @options["soldiers"].to_i %></div>
+<div class="d-none" id="men_per_step"><%= ((@options["hp"]["step"].to_f / 100) * @options["soldiers"].to_i).to_i %></div>
+
 <% if @current_user&.is_master? %>
   <div class="col">
     <%= link_to new_army_path, class: "btn btn-primary", remote: true do %>
@@ -44,7 +47,7 @@
 </div>
 
 <% if @current_user&.is_master? %>
-  <ul class="nav nav-pills mb-3" id="myTab" role="tablist">
+  <ul class="nav nav-pills mb-3" id="myTabs" role="tablist">
     <% @factions.each do | faction | %>
       <li class="nav-item" role="presentation">
         <button class="nav-link <%= faction.name == "master" ? "active" : nil %> text-white" id="<%= faction.name %>-tab" data-bs-toggle="tab" data-bs-target="#<%= faction.name %>" type="button" role="tab" aria-controls="<%= faction.name %>" aria-selected="true"><%= faction.long_name %></button>

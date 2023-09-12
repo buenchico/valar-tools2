@@ -2,6 +2,15 @@
 $(document).on('turbolinks:load', function () {
   if ($(".armies").length !== 0 ) {
 
+    // activate the right tabs  // Get the URL hash (e.g., #tab2)
+    const urlHash = window.location.hash;
+
+    // If there's a hash in the URL
+    if (urlHash) {
+      // Activate the tab with the matching ID
+      $(urlHash + '-tab').click();
+    }
+
     // Copy selected to clipboard
     $(function () {
         //Assign Click event to Button.
@@ -38,6 +47,28 @@ $(document).on('turbolinks:load', function () {
         });
     });
 
+    // Recalculate stats
+    $.fn.recalculateStats = function(){
+        var faction = $('#myTabs .active').attr('id').split("-tab")[0];
+        var men_per_army = parseInt($('#men_per_army').text());
+        var men_per_step = parseInt($('#men_per_step').text());
+        var countArmies = $('input[type="checkbox"]:visible').length - 1;
+        var menArmies = 0
+        $('.army-hp:visible').each(function(){
+            menArmies += parseInt($(this).text().trim().split(" ")[1].replace(/–/g, '-'));  // Or this.innerHTML, this.innerText
+        });
+        var strArmies = 0
+        $('.strenght:visible').each(function(){
+            strArmies += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
+        });
+
+        $("#" + faction + "_count").html(countArmies);
+        $("#" + faction + "_str").html(strArmies);
+        $("#" + faction + "_men").html((countArmies * men_per_army) + (menArmies * men_per_step));
+    }
+
+    $.fn.recalculateStats()
+
     // Filters
     $.fn.armyFilters = function(){
         var value = $("#filtertext").val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -50,18 +81,16 @@ $(document).on('turbolinks:load', function () {
     // Trigger filters
     $("#filterselect").on("change", function() {
         $.fn.armyFilters() // Why I need to remove the semicolons!!!!!
-        //$.fn.recalculateStats()
+        $.fn.recalculateStats()
     });
     $("#filtertext").on("keyup", function() {
         $.fn.armyFilters()
-        //$.fn.recalculateStats()
+        $.fn.recalculateStats()
     });
 
-
     // Trigger recalculate stats on changing tabs
-    $(document).on('shown.bs.tab', function () {
-        //$.fn.recalculateStats()
-        //$("#filterselect").children("option:selected").val('');
+    $(document).on('shown.bs.tab', function (e) {
+        $.fn.recalculateStats()
     })
 
     // Add hidden checkboxes for mass edit options
