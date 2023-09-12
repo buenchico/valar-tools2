@@ -17,7 +17,7 @@
             <span class="badge rounded-pill pill-tags pill-tags-text"><%= tag %></span>
           <% end %>
         </p>
-        <p><strong>Región:</strong> <%= location.region %></p>
+        <p><strong>Región:</strong> <%= location.region&.name %></p>
         <p><strong>Lord:</strong> <%= location.family&.title %></p>
       </div>
     </div>
