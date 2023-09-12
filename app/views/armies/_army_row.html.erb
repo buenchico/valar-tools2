@@ -16,10 +16,22 @@
        <% end %>
        <% army.tags.each do | tag | %>
         <div class='row'>
-          <div class='fst-italic text-start col-8'><i class='bi bi-<%= @tags[tag]["icon"] %>'></i> <%= @tags[tag]["name"].capitalize %></div>
-          <div class='text-end col-4'><%= number_to_modifier(@tags[tag]["str"]) %></div>
+          <div class='fst-italic text-start col-8'>
+            <% if @tags[tag] %>
+              <i class='bi bi-<%= @tags[tag]["icon"] %>'></i> <%= @tags[tag]["name"].capitalize %>
+            <% else %>
+              <%= tag.capitalize %>
+            <% end %>
+          </div>
+          <div class='text-end col-4'>
+            <% if @tags[tag] %>
+              <%= number_to_modifier(@tags[tag]["str"]) %>
+            <% end %>
+          </div>
         </div>
-        <% mod_str += @tags[tag]["str"].to_i %>
+        <% if @tags[tag] %>
+          <% mod_str += @tags[tag]["str"].to_i %>
+        <% end %>
        <% end %>
        <div class='row'>
          <div class='text-decoration-underline text-start col-8'>Subtotal:</div>
@@ -46,7 +58,12 @@
       <%= (army["col#{value['sort']}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"]) + '</span>').html_safe : nil ) %>
     <% end %>
     <% army.tags.each do | tag | %>
-      <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %>"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
+      <% if @tags[tag] %>
+        <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %>"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
+      <% else %>
+        <span class="badge rounded-pill pill-tags pill-tags-text bg-danger %>"><%= tag.capitalize %></span>
+      <% end %>
+
     <% end %>
   </td>
   <td width = "500px">

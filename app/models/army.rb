@@ -16,7 +16,7 @@ class Army < ApplicationRecord
       base += self["col#{value['sort']}"].to_i * value["str"]
     end
     self.tags.each do | tag |
-      base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h[tag]["str"].to_i
+      base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"str" => 0})["str"].to_i
     end
     str = base * self.hp / 100
     return str
