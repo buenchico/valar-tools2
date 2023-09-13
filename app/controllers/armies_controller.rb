@@ -13,7 +13,7 @@ class ArmiesController < ApplicationController
     @factions = Faction.where(active: true).order(:id).drop(1)
     @all_armies = Army.all.order(:group)
     if !@current_user&.is_master?
-      @armies = Army.where(visible: true).joins(:factions).where(factions: { id: @current_user.faction_id }).distinct
+      @armies = @current_user.faction.armies.where(visible: true)
     end
   end
 
@@ -67,10 +67,10 @@ class ArmiesController < ApplicationController
 
     respond_to do |format|
       if @army.update(army_params.reject! { |x| keys_to_remove&.include?(x) })
-        format.html { redirect_to armies_url, success: 'Ejército editado correctamente.' }
+        format.html { redirect_to url_for(controller: 'armies', action: 'index', anchor: 'hg-Bornia'), success: 'Ejército editado correctamente.' }
         format.js
       else
-        format.html { redirect_to armies_url, danger: @army.errors }
+        format.html { redirect_to url_for(controller: 'armies', action: 'index', anchor: 'hg-Bornia'), danger: @army.errors }
       end
     end
   end
