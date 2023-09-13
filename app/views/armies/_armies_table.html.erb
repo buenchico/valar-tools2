@@ -1,5 +1,5 @@
 
-<div class="card bg-dark text-white mb-3">
+<div id="<%= faction.name %>" class="card bg-dark text-white mb-3 faction-name">
   <div class="card-body">
     <p>Hay <%= @all_armies.length %> <%= Army.model_name.human(:count => @all_armies.length).downcase %> en el mundo, con un total de <%= @all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) } %> hombres y una fuerza de <%= @all_armies.sum { |army| army.strength } %></p>
     <p>De los cuales <%= @all_armies.where(status: ARMY_STATUS[0]).length %> están alzados y <%= @all_armies.where(status: ARMY_STATUS[2]).length %> han sido aniquilados</p>

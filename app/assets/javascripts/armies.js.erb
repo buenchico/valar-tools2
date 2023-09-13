@@ -49,7 +49,11 @@ $(document).on('turbolinks:load', function () {
 
     // Recalculate stats
     $.fn.recalculateStats = function(){
-        var faction = $('#myTabs .active').attr('id').split("-tab")[0];
+        if ($('#myTabs .active').length !== 0) {
+          var faction = $('#myTabs .active').attr('id').split("-tab")[0];
+        } else {
+          var faction = $('.faction-name').attr('id');
+        }
         var men_per_army = parseInt($('#men_per_army').text());
         var men_per_step = parseInt($('#men_per_step').text());
         var countArmies = $('input[type="checkbox"]:visible').length - 1;
