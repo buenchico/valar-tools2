@@ -117,7 +117,7 @@ $(document).on('turbolinks:load', function () {
                         style: "background-color:powderblue;",
                         offset: [5,0]
                       })
-                    .bindPopup('<p class="text-white"><%= link_to location.name, location_path(location), class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                    .bindPopup('<p class="text-white"><%= link_to location.name, location_path(location), class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %> (<%= @location_types[location.location_type]["name"] %>)</p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                         className: 'leaflet-popup'
                       })
                 );
