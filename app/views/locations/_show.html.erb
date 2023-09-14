@@ -2,16 +2,25 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content bg-dark">
       <div class="modal-header">
-        <h5 class="modal-title" id="Title"><%= location&.name %></h5>
+        <h5 class="modal-title" id="Title"><%= location&.name %> (<%= @options["types"][location&.location_type]["name"] %>)</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <% if !(location.visible == true) %>
           <div class="alert alert-danger">Este lugar no está activo en la partida</div>
         <% end %>
-        <p><strong>Nombre (ES):</strong> <%= location.name_es %></p>
-        <p><strong>Nombre (EN):</strong> <%= location.name_en %></p>
-        <p><strong>COOR X:</strong> <%= location.x %> | <strong>COOR Y:</strong> <%= location.y %></p>
+        <p><strong>Nombre:</strong> <%= location.name %></p>
+        <% if (!location.name_es.blank? && !location.name_en.blank?) %>
+          <p>
+            <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseNames" role="button" aria-expanded="false" aria-controls="collapseNames">
+              <i class="bi bi-plus-circle"></i> <strong>Otros nombres:</strong>
+            </a>
+          </p>
+          <div class="collapse" id="collapseNames">
+            <p><strong>Nombre (ES):</strong> <%= location.name_es %></p>
+            <p><strong>Nombre (EN):</strong> <%= location.name_en %></p>
+          </div>
+        <% end %>
         <p>
           <% location.tags do | tag | %>
             <span class="badge rounded-pill pill-tags pill-tags-text"><%= tag %></span>
@@ -19,6 +28,26 @@
         </p>
         <p><strong>Región:</strong> <%= location.region&.name %></p>
         <p><strong>Lord:</strong> <%= location.family&.title %></p>
+        <p><%= simple_format(location.description) %></p>
+        <div class="row">
+          <div class="col-2">
+            <%= image_tag @options["types"][location&.location_type]["icon"], class: "img-fluid" %>
+          </div>
+          <div class="col">
+            <div>
+              <p><%= location.name %> es un <strong><%= @options["types"][location&.location_type]["name"] %></strong>.</p>
+              <p><%= @options["types"][location&.location_type]["desc"] %></p>
+            </div>
+          </div>
+        </div>
+        <p>
+          <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseOther" role="button" aria-expanded="false" aria-controls="collapseOther">
+            <i class="bi bi-plus-circle"></i> <strong>Otros datos:</strong>
+          </a>
+        </p>
+        <div class="collapse" id="collapseOther">
+          <p><strong>COOR X:</strong> <%= location.x %> | <strong>COOR Y:</strong> <%= location.y %></p>
+        </div>
       </div>
     </div>
   </div>
