@@ -42,4 +42,28 @@ module ApplicationHelper
       end
     end
   end
+
+  def word_gender(word)
+    if I18n.locale == :es
+      last_letter = word[-1].downcase
+
+      # Check if the last letter indicates the gender
+      if last_letter == 'a'
+        return 'feminine'
+      elsif last_letter == 'o'
+        return 'masculine'
+      else
+        # If the last letter doesn't indicate gender, check the YAML file
+        word_genders = I18n.t('word_genders', default: {}) # Load word genders from the YAML file
+        if word_genders.key?(word)
+          return word_genders[word]
+        else
+          return 'masculine' # Default to masculine when gender is not found
+        end
+      end
+    else
+      return 'masculine' # Default to masculine when the locale is not 'es'
+    end
+  end
+
 end

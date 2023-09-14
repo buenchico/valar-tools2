@@ -35,7 +35,7 @@
           </div>
           <div class="col">
             <div>
-              <p><%= location.name %> es un <strong><%= @options["types"][location&.location_type]["name"] %></strong>.</p>
+              <p><%= location.name %> es <%= I18n.t('articles.indefinite.' + word_gender(@options["types"][location&.location_type]["name"].singularize), count: 1) %> <strong><%= @options["types"][location&.location_type]["name"].downcase %></strong>.</p>
               <p><%= @options["types"][location&.location_type]["desc"] %></p>
             </div>
           </div>

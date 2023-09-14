@@ -184,3 +184,5 @@ es:
       x_weeks:
         one: 'una semana'
         other: '%{count} semanas'
+  word_genders:
+    ciudad: feminine
