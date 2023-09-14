@@ -30,9 +30,11 @@
         <p><strong>Lord:</strong> <%= location.family&.title %></p>
         <p><%= simple_format(location.description) %></p>
         <div class="row">
-          <div class="col-2">
-            <%= image_tag @options["types"][location&.location_type]["icon"], class: "img-fluid" %>
-          </div>
+          <% if @options["types"][location&.location_type]["icon"] %>
+            <div class="col-2">
+              <%= image_tag @options["types"][location&.location_type]["icon"], class: "img-fluid" %>
+            </div>
+          <% end %>
           <div class="col">
             <div>
               <p><%= location.name %> es <%= I18n.t('articles.indefinite.' + word_gender(@options["types"][location&.location_type]["name"].singularize), count: 1) %> <strong><%= @options["types"][location&.location_type]["name"].downcase %></strong>.</p>
