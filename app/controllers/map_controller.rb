@@ -3,7 +3,7 @@ class MapController < ApplicationController
   before_action :set_options
 
   def index
-    @locations = active_game.locations
+    @locations = active_game.locations.where(visible: true)
   end
 
 private

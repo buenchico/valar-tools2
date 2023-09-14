@@ -95,7 +95,7 @@ $(document).on('turbolinks:load', function () {
                       iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
                       })
                     })
-                    .bindPopup('<p class="text-white"><%= link_to location.name, location_path(location), class: "text-white", remote: true %> de los <%= location.family&.name %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                    .bindPopup('<p class="text-white"><%= link_to location.name, location_path(location), class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                         className: 'leaflet-popup'
                       })
                 );
@@ -112,7 +112,7 @@ $(document).on('turbolinks:load', function () {
                         })
                     })
                     .bindTooltip("<%= location.name %>", {permanent: true, className: "locationLabel <%= @options['font'] %>", style: "background-color:powderblue;" })
-                    .bindPopup('<p class="text-white"><%= link_to location.name, location_path(location), class: "text-white", remote: true %> de los <%= location.family&.name %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                    .bindPopup('<p class="text-white"><%= link_to location.name, location_path(location), class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                         className: 'leaflet-popup'
                       })
                 );
