@@ -47,22 +47,15 @@
     }
 
 .locationLabel {
-  padding: 10px !important;
   background-color: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
   color: white !important;
-  font-size: 15px;
   text-shadow:
     -1px -1px 0 #000,
     1px -1px 0 #000,
     -1px 1px 0 #000,
     1px 1px 0 #000;
-}
-
-.divIconBox {
-  background-color: transparent;
-  border: none;
 }
 
 .leaflet-top {

@@ -70,15 +70,20 @@ $(document).on('turbolinks:load', function () {
       var hexLayer = new customTileLayer().addTo(map);
 
       <% @options["layers"].each do | code, layer | %>
-        var <%= code %> = new L.layerGroup.collision({margin:-5});
+        var <%= code %> = new L.layerGroup.collision({margin:0});
+
         <% layer["types"].each do | type | %>
+          // if there is a layer image
           <% if !layer["img"].nil? %>
             var imageOverlay = L.imageOverlay('<%= asset_path('map-fiskeyja-pol.png') %>', [[0,0],imgSize], {opacity: 0.5})
             imageOverlay.addTo(<%= code %>);
           <% end %>
 
+          // render locations
           <% @locations.where(location_type: type).each do | location | %>
             var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
+
+            // render only name
             if (icon == "") {
               <%= code %>.addLayer(
                 L.marker(
@@ -90,23 +95,26 @@ $(document).on('turbolinks:load', function () {
                       iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
                       })
                     })
-                    .bindPopup('<p><a href="<%= locations_path.to_s + '?id=' + location.id.to_s %>"><%= location.name %></a></p>' + '<%= j truncate(location&.description.to_s.gsub(/\n/, '<br>'), length: 100, omission: '...') %>' + '</p>')
+                    .bindPopup('<p class="text-white"><%= link_to location.name, location_path(location), class: "text-white", remote: true %> de los <%= location.family&.name %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                        className: 'leaflet-popup'
+                      })
                 );
+
+            // render icons & name
             } else {
               <%= code %>.addLayer(
                 L.marker(
                   [<%= location.y %>,<%= location.x %>],
-                    { icon: L.divIcon({
-                      className: "divIconBox",
-                      html: "<img src='" + icon + "' width='24' height='24'></div>",
-                      iconSize: [120,24],
-                      iconAnchor: [12, 12]
-                      })
+                    { icon: L.icon({
+                        iconUrl: icon,
+                        className: '',
+                        iconSize: [30, 30],
+                        })
                     })
-                    .bindPopup('<p><%= link_to location.name, location_path(location), remote: true %></p><p><%= location.family&.name %></p>', {
+                    .bindTooltip("<%= location.name %>", {permanent: true, className: "locationLabel <%= @options['font'] %>", style: "background-color:powderblue;" })
+                    .bindPopup('<p class="text-white"><%= link_to location.name, location_path(location), class: "text-white", remote: true %> de los <%= location.family&.name %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                         className: 'leaflet-popup'
                       })
-                    .bindTooltip("<%= location.name %>", {permanent: true, className: "locationLabel <%= @options['font'] %>", style: "background-color:powderblue;", offset: [0, 0] })
                 );
             }
           <% end %>
