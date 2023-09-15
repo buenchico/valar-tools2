@@ -16,8 +16,6 @@ $(document).on('turbolinks:load', function () {
         }
         $('#mapid').width(width);
         $('#mapid').height(height);
-
-
       }
 
       resizeMap();
@@ -129,7 +127,21 @@ $(document).on('turbolinks:load', function () {
                         className: 'leaflet-popup'
                       })
                 );
-
+            // render only icon
+          } else if (<%= layer["display"] == "icons" %>) {
+            <%= code %>.addLayer(
+              L.marker(
+                [<%= location.y %>,<%= location.x %>],
+                  { icon: L.icon({
+                      iconUrl: icon,
+                      className: '',
+                      iconSize: [30, 30],
+                      })
+                  })
+                  .bindPopup('<p class="text-white"><%= link_to location.name, location_path(location), class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %> (<%= @location_types[location.location_type]["name"] %>)</p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                      className: 'leaflet-popup'
+                    })
+              );
             // render icons & name
             } else {
               <%= code %>.addLayer(
