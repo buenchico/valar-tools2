@@ -30,7 +30,7 @@
                     { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><i class='bi bi-#{@options["fleets"][key]["icon"]}'></i> <span class='pill-tags-text'>#{@options["fleets"][key]["name"]}</span></span>".html_safe
                     }
                   ]
-                }.unshift([{"data-content": "<span class='badge rounded-pill pill-tags bg-secondary'><span class='pill-tags-text'>Desembarcar</span>"},"CLEAR"]),
+                }.unshift([{"data-content": "<span class='badge rounded-pill pill-tags bg-secondary'><span class='pill-tags-text'>Desembarcar</span>"},nil]),
                   selected: army.board
                 ),
                 { include_blank: true },

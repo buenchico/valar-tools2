@@ -132,6 +132,8 @@ es:
       models:
         army:
           attributes:
+            board:
+              inclusion: 'Sólo pueden elegirse flotas de la lista'
             name:
               taken: 'El nombre del ejército debe ser único'
             tags:

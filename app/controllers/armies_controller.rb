@@ -363,6 +363,7 @@ private
       :visible, :hp, :col0, :col1, :col2, :col3, :col4, :col5, :col6, :col7, :col8, :col9, :notes, :board, faction_ids: [], tags: []
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
+      whitelisted[:board] = nil if whitelisted[:board].blank?      
     end
   end
 end
