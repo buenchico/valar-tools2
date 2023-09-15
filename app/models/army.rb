@@ -7,26 +7,6 @@ class Army < ApplicationRecord
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
   validates :status, inclusion: ARMY_STATUS
   validates_uniqueness_of :name
-  validate :validate_board_inclusion
-  validate :validate_tags_inclusion
-
-  def validate_board_inclusion
-    $options = Tool.find_by(name: "armies").game_tools.find_by(game_id: Game.find_by(active: true)&.id)&.options
-    if $options["fleets"].present?
-      unless $options["fleets"].keys.map(&:to_s).include?(board)
-        errors.add(:board, "is not included in the allowed values")
-      end
-    end
-  end
-
-  def validate_tags_inclusion
-    $options = Tool.find_by(name: "armies").game_tools.find_by(game_id: Game.find_by(active: true)&.id)&.options
-    if $options["tags"].present?
-      unless $options["tags"].keys.map(&:to_s).include?(tags)
-        errors.add(:tags, "is not included in the allowed values")
-      end
-    end
-  end
 
   def strength
     base = 10
