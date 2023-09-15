@@ -37,7 +37,10 @@ Rails.application.routes.draw do
   resources :factions
   post 'factions/sync_groups', to: 'factions#sync_groups', as: 'sync_groups'
   post 'factions/:id/reputation', to: 'factions#reputation', as: 'reputation'
-  
+  get 'factions/:id/edit_fleets_notes', to: 'factions#edit_fleets_notes', as: 'edit_fleets_notes_faction'
+  patch 'factions/:id/update_fleets_notes', to: 'factions#update_fleets_notes', as: 'update_fleets_notes_faction'
+  get 'factions/:id/edit_fleets', to: 'factions#edit_fleets', as: 'edit_fleets_faction'
+
   get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'
   get 'armies/:id/confirm_delete', to: 'armies#confirm', as: 'confirm_delete_army'
   get 'armies/edit_multiple', to: 'armies#edit_multiple', as: 'edit_multiple_armies'

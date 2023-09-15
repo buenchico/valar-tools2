@@ -6,6 +6,8 @@
   <%= yield(:title) %>
 </div>
 
+<%= @options["fleets"] %>
+
 <div class="d-none" id="men_per_army"><%= @options["soldiers"].to_i %></div>
 <div class="d-none" id="men_per_step"><%= ((@options["hp"]["step"].to_f / 100) * @options["soldiers"].to_i).to_i %></div>
 
@@ -58,7 +60,7 @@
   <div class="tab-content">
     <% @factions.each do | faction | %>
       <div class="tab-pane fade show  <%= faction.name == "master" ? "active" : nil %>" id="<%= faction.name %>" role="tabpanel" aria-labelledby="<%= faction.name %>-tab">
-        <%= render 'armies_table', army: @armies = faction.name == "master" ? @all_armies : faction.armies, faction: faction %>
+        <%= render 'armies_table', armies: @armies = faction.name == "master" ? @all_armies : faction.armies, faction: faction %>
       </div>
     <% end %>
   </div>

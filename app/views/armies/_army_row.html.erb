@@ -25,14 +25,29 @@
           </div>
           <div class='text-end col-4'>
             <% if @tags[tag] %>
-              <%= number_to_modifier(@tags[tag]["str"]) %>
+              <% if army.board.present? && @tags[tag]["board"].present? %>
+                <% mod_str += @tags[tag]["board"].to_i %>
+                <i class='bi bi-anchor'></i><%= number_to_modifier(@tags[tag]["board"]) %>
+              <% else %>
+                <% mod_str += @tags[tag]["str"].to_i %>
+                <%= number_to_modifier(@tags[tag]["str"]) %>
+              <% end %>
             <% end %>
           </div>
         </div>
-        <% if @tags[tag] %>
-          <% mod_str += @tags[tag]["str"].to_i %>
-        <% end %>
        <% end %>
+       <% if army.board.present? %>
+          <div class='row'>
+            <% if @options["fleets"][army.board] %>
+              <% mod_str += @options["fleets"][army.board]["str"].to_i %>
+              <div class='text-start col-8'><i class='bi bi-<%= @options["fleets"][army.board]["icon"] %>'></i> <%= @options["fleets"][army.board]["name"] %>:</div>
+              <div class='text-end col-4'><%= number_to_modifier(@options["fleets"][army.board]["str"]) %></div>
+            <% else %>
+              <div class='text-start col-8'><i class='bi bi-anchor'></i><%= army.board.capitalize %></div>
+            <% end %>
+          </div>
+       <% end %>
+
        <div class='row'>
          <div class='text-decoration-underline text-start col-8'>Subtotal:</div>
          <div class='text-end col-4'><%= 10 + mod_str %></div>
@@ -51,7 +66,17 @@
     </span>
   </td>
   <td width = "300px"><%= link_to army.name, edit_army_path(army), remote: true, class: 'link-unstyled' %></td>
-  <td><%= army.status %></td>
+  <td>
+    <%= army.status %>
+    <% if !army.board.blank? %>
+      <span class='badge rounded-pill pill-tags bg-success'>
+        <i class='bi bi-<%= @options["fleets"].fetch(army.board, {"icon" => ''})["icon"] %>'></i>
+        <span class='pill-tags-text'>
+          <%= @options["fleets"].fetch(army.board, {"name" => army.board})["name"] %>
+        </span>
+      </span>
+    <% end %>
+  </td>
   <td width = "800px">
     <%= ((100 - army.hp) / @options["hp"]["step"])&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-danger army-hp"><i class="bi bi-' + @options["hp"]["icon"] + '"></i> ' + @options["hp"]["name"].capitalize + " " + number_to_modifier(((army.hp - 100) / @options["hp"]["step"])) + '</span>').html_safe : nil %>
     <% @attributes.each do | key, value | %>

@@ -1,10 +1,11 @@
 class FactionsController < ApplicationController
-  before_action :check_master, except: [:index, :show]
+  before_action :check_master, except: [:index, :show, :edit_fleets_notes, :update_fleets_notes]
   before_action :set_tool
   before_action :set_options
-  before_action :set_faction, only: [:edit, :update, :show, :reputation]
+  before_action :set_faction, only: [:edit, :edit_fleets, :edit_fleets_notes, :update_fleets_notes, :update, :show, :reputation]
   before_action :set_factions_list, only: [:index]
   before_action :check_visble, only: [:show]
+  before_action :check_fleets_owner, only: [:edit_fleets_notes, :update_fleets_notes]
 
 
   def index
@@ -12,6 +13,22 @@ class FactionsController < ApplicationController
 
   def edit
     @games = Game.all.order(:id)
+  end
+
+  def edit_fleets
+  end
+
+  def edit_fleets_notes
+  end
+
+  def update_fleets_notes
+    respond_to do |format|
+      if @faction.update(fleets_notes: params["faction"]["fleets_notes"])
+        format.html { redirect_to armies_url, success: 'Flotas editadas correctamente.' }
+      else
+        format.html { redirect_to armies_url, danger: @faction.errors  }
+      end
+    end
   end
 
   def show
@@ -81,13 +98,13 @@ class FactionsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @faction.update(faction_params)
-        format.html { redirect_to factions_url, success: 'Facción editada correctamente.' }
-      else
-        format.html {  redirect_to factions_url, danger: @faction.errors  }
+      respond_to do |format|
+        if @faction.update(faction_params)
+          format.html { redirect_to factions_url, success: 'Facción editada correctamente.' }
+        else
+          format.html {  redirect_to factions_url, danger: @faction.errors  }
+        end
       end
-    end
   end
 
   def reputation
@@ -119,6 +136,16 @@ private
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
   end
 
+  def check_fleets_owner
+    if !@current_user&.is_master?
+      if !(@current_user.faction == @faction)
+        puts "test///////"
+        flash[:danger] = 'No tienes permisos para editar estas flotas.'
+        render js: "window.location='/armies'"
+      end
+    end
+  end
+
   def check_visble
     if !@current_user&.is_master?
       if !(@faction.games.exists?(id: active_game.id) && @faction.active == true)
@@ -132,6 +159,6 @@ private
   end
 
   def faction_params
-    params.require(:faction).permit(:reputation, :description, :active, :pov, :tokens, game_ids: [])
+    params.require(:faction).permit(:reputation, :description, :active, :pov, :tokens, :fleets, :fleets_notes, game_ids: [])
   end
 end

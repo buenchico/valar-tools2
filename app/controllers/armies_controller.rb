@@ -1,7 +1,7 @@
 class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
-  before_action :set_options, only: [:index, :edit, :update, :new, :export]
+  before_action :set_options, only: [:index, :edit, :edit_multiple, :update, :new, :export]
   before_action :set_factions, only: [:edit, :new]
   before_action :set_filters, only: [:index]
   before_action :check_player
@@ -34,8 +34,6 @@ class ArmiesController < ApplicationController
   end
 
   def edit
-    puts "////////////////////////////////////"
-    puts params
   end
 
   def edit_notes
@@ -83,6 +81,13 @@ class ArmiesController < ApplicationController
     army_params_hash = {}
     army_params.to_hash.each do | key, value |
       unless value.blank?
+        if key == "board"
+          if value == "CLEAR"
+            army_params_hash[key] = nil
+          else
+            army_params_hash[key] = value
+          end
+        end
         if key == "position"
           if value == "CLEAR"
             army_params_hash[key] = nil
@@ -133,8 +138,6 @@ class ArmiesController < ApplicationController
         if army_params_hash.empty?
           format.html { redirect_to armies_url, success: 'Nada que actualizar.' }
         else
-          puts "////////////////////////////////////"
-          puts army_params_hash.to_hash
           if @armies.update_all(army_params_hash)
             format.html { redirect_to armies_url, success: 'Ejércitos editados correctamente.' }
           else
@@ -323,6 +326,7 @@ private
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
     @attributes = @options["attributes"].sort_by { |_, v| v["sort"] }.to_h
     @tags = @options["tags"].sort_by { |_, v| v["colour"] }.to_h
+    $options = @options
     if @options.nil?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de ejércitos'
     end
@@ -356,7 +360,7 @@ private
   def army_params
     params.require(:army).permit(
       :name, :status, :position, :group, :location_id, :family_id, :confirm,
-      :visible, :hp, :col0, :col1, :col2, :col3, :col4, :col5, :col6, :col7, :col8, :col9, :notes, faction_ids: [], tags: []
+      :visible, :hp, :col0, :col1, :col2, :col3, :col4, :col5, :col6, :col7, :col8, :col9, :notes, :board, faction_ids: [], tags: []
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
     end

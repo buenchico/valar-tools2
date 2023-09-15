@@ -78,6 +78,7 @@ es:
         notes: "Notas"
         factions: "Facciones"
         hp: "Salud"
+        board: "Embarcar"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"
@@ -89,6 +90,8 @@ es:
         pov: "Puntos de Vista"
         game_ids: "Partidas"
         description: "Descripción"
+        fleets: "Flotas"
+        fleets_notes: "Posición de las flotas"
       user:
         player: "Jugador"
         discourse_id: "Discourse_id"
@@ -157,6 +160,11 @@ es:
     zero: "Flotilla"
     one: "Flota"
     other: "Flotas"
+  verbs:
+    estar:
+      zero: "están"
+      one: "está"
+      other: "están"
   articles:
     indefinite:
       masculine:

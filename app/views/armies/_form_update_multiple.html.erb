@@ -38,12 +38,32 @@
                   </div>
                 </div>
               <% end %>
+              <% if (!@current_user.faction.fleets.nil? || @current_user.is_master?) && !@options["fleets"].nil? %>
+                <div class="input-group mt-3">
+                  <%= form.label :board, t('activerecord.attributes.army.board'), class: 'input-group-text' %>
+                  <%= form.select :board,
+                    options_for_select(
+                    @options["fleets"].map { |key, value|
+                      [
+                        key,
+                        { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe
+                        }
+                      ]
+                    }.unshift([{"data-content": "<span class='badge rounded-pill pill-tags bg-secondary'><span class='pill-tags-text'>Desembarcar</span>"},"CLEAR"]),
+                      selected: nil
+                    ),
+                    { include_blank: true },
+                    class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                    data: { noneSelectedText: ' '}
+                  %>
+              </div>
+            <% end %>
             <div class="input-group mt-3">
-              <%= form.label :position, class: 'input-group-text' %>
+              <%= form.label :position, t('activerecord.attributes.army.position'), class: 'input-group-text' %>
               <%= form.text_field :position, class: "form-control", "data-bs-toggle": "tooltip", "data-bs-placement": "top", "data-bs-html": "true", title: ("Escribe <em>CLEAR</em> para borrar la posición").html_safe %>
             </div>
             <div class="input-group mt-3">
-              <%= form.label :group, class: 'input-group-text' %>
+              <%= form.label :group, t('activerecord.attributes.army.group'), class: 'input-group-text' %>
               <%= form.select :group,
                 options_for_select(
                   ARMY_GROUPS.map { | key, value |
@@ -62,19 +82,19 @@
             </div>
             <% if @current_user.is_master? %>
               <div class="input-group mt-3">
-                <%= form.label :status, class: 'input-group-text' %>
+                <%= form.label :status, t('activerecord.attributes.army.status'), class: 'input-group-text' %>
                 <%= form.select :status, ([""] + ARMY_STATUS), {}, class: 'form-select' %>
               </div>
               <div class="input-group mt-3">
-                <%= form.label :location_id, class: 'input-group-text' %>
+                <%= form.label :location_id, t('activerecord.attributes.army.location_id'), class: 'input-group-text' %>
                 <%= form.select :location_id, [[""],["Quitar región", "CLEAR"]] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
               </div>
               <div class="input-group mt-3">
-                <%= form.label :family_id, class: 'input-group-text' %>
+                <%= form.label :family_id, t('activerecord.attributes.army.family_id'), class: 'input-group-text' %>
                 <%= form.select :family_id, [[""],["Quitar señor", "CLEAR"]] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
               </div>
               <div class="input-group mt-3">
-                <%= form.label :visible, class: 'input-group-text' %>
+                <%= form.label :visible, t('activerecord.attributes.army.visible'), class: 'input-group-text' %>
                 <%= form.select :visible, [[""],["Invisible", "CLEAR"],["Visible", true]], {}, class: 'form-select' %>
               </div>
             <% end %>

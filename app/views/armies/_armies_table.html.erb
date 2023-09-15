@@ -1,13 +1,32 @@
 
-<div id="<%= faction.name %>" class="card bg-dark text-white mb-3 faction-name">
-  <div class="card-body">
-    <p>Hay <%= @all_armies.length %> <%= Army.model_name.human(:count => @all_armies.length).downcase %> en el mundo, con un total de <%= @all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) } %> hombres y una fuerza de <%= @all_armies.sum { |army| army.strength } %></p>
-    <p>De los cuales <%= @all_armies.where(status: ARMY_STATUS[0]).length %> están alzados y <%= @all_armies.where(status: ARMY_STATUS[2]).length %> han sido aniquilados</p>
-    <% if faction.armies.where(visible: true).length != 0 %>
-      <p class="card-text">Dispones de <%= faction.armies.where(visible: true).length %> <%= Army.model_name.human(:count => faction.armies.where(visible: true).length).downcase %> con un total de <%= faction.armies.where(visible: true).sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) } %> hombres y una fuerza de <%= faction.armies.where(visible: true).sum { |army| army.strength } %>.</p>
-    <% end %>
-    <p class="card-text">Hay <span id="<%= faction.name %>_count">X ejércitos</span> visibles con un total de <span id="<%= faction.name %>_men">X</span> hombres y una fuerza de <span id="<%= faction.name %>_str">X ejércitos</span>.</p>
+<div class="row">
+  <div id="<%= faction.name %>" class="col card bg-dark border border-success text-white mb-3 me-3 faction-name">
+    <div class="card-body">
+      <p>Hay <%= @all_armies.length %> <%= Army.model_name.human(:count => @all_armies.length).downcase %> en el mundo, con un total de <%= @all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) } %> hombres y una fuerza de <%= @all_armies.sum { |army| army.strength } %></p>
+      <p>De los cuales <%= @all_armies.where(status: ARMY_STATUS[0]).length %> están alzados y <%= @all_armies.where(status: ARMY_STATUS[2]).length %> han sido aniquilados</p>
+      <% if faction.armies.where(visible: true).length != 0 %>
+        <p class="card-text">Dispones de <%= faction.armies.where(visible: true).length %> <%= Army.model_name.human(:count => faction.armies.where(visible: true).length).downcase %> con un total de <%= faction.armies.where(visible: true).sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) } %> hombres y una fuerza de <%= faction.armies.where(visible: true).sum { |army| army.strength } %>.</p>
+      <% end %>
+      <p class="card-text">Hay <span id="<%= faction.name %>_count">X ejércitos</span> visibles con un total de <span id="<%= faction.name %>_men">X</span> hombres y una fuerza de <span id="<%= faction.name %>_str">X ejércitos</span>.</p>
+    </div>
   </div>
+  <% if !faction.fleets.nil? && !@options["fleets"].nil? %>
+    <div class="col-4 card bg-dark border border-success text-white mb-3 faction-name">
+      <div class="card-body">
+        <div class="float-end">
+          <%= link_to ' Posición', edit_fleets_notes_faction_path(faction.id), remote: true, class: faction.fleets_notes.blank? ? 'bi bi-sticky text-white link-unstyled' : 'bi bi-sticky-fill text-warning link-unstyled' %>
+        </div>
+        <p class="fs-3"><strong><i class="bi bi-anchor"></i> Flotas</strong></p>
+        <% faction.fleets.each do | fleet, number | %>
+          <% board = @armies.where(board: fleet).length %>
+          <p>Dispones de <%= number.to_s + " " + I18n.t("fleet", count: number).downcase %> de <%= @options["fleets"][fleet]["name"] %>. <%= board.to_s + " " + I18n.t("verbs.estar", count: board) %> en uso.</p>
+          <% if board > number %>
+            <p class="bg-danger">Estás usando más <%= @options["fleets"][fleet]["name"].downcase %> de los que dispones, por favor, desembarca algunas tropas.</p>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>
 
 <div class="table-responsive">

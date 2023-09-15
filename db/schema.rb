@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_11_113646) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_14_184527) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -166,6 +166,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_113646) do
     t.datetime "updated_at", null: false
     t.bigint "location_id"
     t.bigint "family_id"
+    t.string "board"
     t.index ["family_id"], name: "index_valar_armies_on_family_id"
     t.index ["location_id"], name: "index_valar_armies_on_location_id"
   end
@@ -192,6 +193,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_113646) do
     t.string "title"
     t.string "pov"
     t.string "tokens"
+    t.jsonb "fleets"
+    t.string "fleets_notes"
   end
 
   create_table "factions_games", force: :cascade do |t|
