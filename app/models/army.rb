@@ -26,6 +26,7 @@ class Army < ApplicationRecord
       base += @options["fleets"].fetch(self.board, {"str" => 0})["str"].to_i
     end
     str = base * self.hp / 100
+    str = [0, str].max
     return str
   end
 end
