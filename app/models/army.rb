@@ -13,7 +13,7 @@ class Army < ApplicationRecord
   validates :tags, inclusion: { in: $options["tags"]&.keys.map(&:to_s) }, allow_nil: true
 
   def set_options
-    $options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
+    $options = Tool.find_by(name: "armies").game_tools.find_by(game_id: Game.find_by(active: true)&.id)&.options
   end
 
   def strength
