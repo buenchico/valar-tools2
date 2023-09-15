@@ -7,20 +7,23 @@ $(document).on('turbolinks:load', function () {
       var zoom = <%= @options["zoom"] %>
 
       function resizeMap() {
-        var width = Math.min($('#map-container').width(), bounds[1][1] - bounds[0][1])
-        var height = Math.min(window.innerHeight - 102, bounds[1][0] - bounds[0][0])
+        if ($('#map-container').hasClass('fs')) {
+          var width = Math.min(window.innerWidth)
+          var height = Math.min(window.innerHeight)
+        } else {
+          var width = Math.min($('#map-container').width(), bounds[1][1] - bounds[0][1])
+          var height = Math.min(window.innerHeight - 200, bounds[1][0] - bounds[0][0])
+        }
         $('#mapid').width(width);
         $('#mapid').height(height);
+
+
       }
 
       resizeMap();
 
       $(window).resize(function(){
-        if ($('#map-container').hasClass('fs') ) {
-          resizeMap();
-        } else {
-          resizeMap();
-        }
+        resizeMap();
       });
 
       var map = L.map('mapid', {
@@ -33,6 +36,33 @@ $(document).on('turbolinks:load', function () {
           fullscreenControl: true,
           fullscreenControlOptions: {
             position: 'topleft' }
+      });
+
+      map.on('fullscreenchange', function () {
+        resizeMap();
+        var allowedBounds = L.latLngBounds(
+          L.latLng(bounds[0][0], bounds[0][1]),   // Southwest corner (bottom-left)
+          L.latLng(bounds[1][0], bounds[1][1]) // Northeast corner (top-right)
+        );
+
+        var currentBounds = map.getBounds();
+
+        // Check if the current map bounds are within the allowed bounds or maximum bounds
+        if (!allowedBounds.contains(currentBounds)) {
+          // Handle out-of-bounds situation here
+          // Get the current zoom level
+          var currentZoom = map.getZoom();
+
+          // Increase the zoom level by one unit
+          var newZoom = currentZoom + 1;
+
+          // Set the new zoom level
+          map.setZoom(newZoom);
+
+
+          // You can also reposition the map to the allowed bounds or take other actions.
+          map.fitBounds(allowedBounds);
+        }
       });
 
       var params = new URLSearchParams(document.location.search.substring(1));
@@ -75,7 +105,7 @@ $(document).on('turbolinks:load', function () {
         <% layer["types"].each do | type | %>
           // if there is a layer image
           <% if !layer["img"].nil? %>
-            var imageOverlay = L.imageOverlay('<%= asset_path('map-fiskeyja-pol.png') %>', [[0,0],imgSize], {opacity: 0.5})
+            var imageOverlay = L.imageOverlay('<%= asset_path(layer["img"]) %>', [[0,0],imgSize], {opacity: 0.5})
             imageOverlay.addTo(<%= code %>);
           <% end %>
 
@@ -152,7 +182,7 @@ $(document).on('turbolinks:load', function () {
 
       var printer = L.easyPrint({
             title: 'Exportar mapa',
-            sizeModes: ['Current',fullMap],
+            sizeModes: ['Current'],
             defaultSizeTitles: {Current: 'Zona visible'},
             filename: 'map',
             exportOnly: true,
@@ -161,9 +191,6 @@ $(document).on('turbolinks:load', function () {
 
       map.on('easyPrint-start', e => {
         $('#printing').removeClass('invisible')
-        if (e.event.target.className == 'fullMap') {
-          map.setView( [(bounds[1][0] / 2), (bounds[1][1] / 2)], zoom[0]);
-        }
       });
 
       map.on('easyPrint-finished', e => {
