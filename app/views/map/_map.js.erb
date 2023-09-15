@@ -61,10 +61,6 @@ $(document).on('turbolinks:load', function () {
         checkBounds();
       });
 
-      map.on('zoomend', function() {
-        checkBounds();
-      });
-
       var params = new URLSearchParams(document.location.search.substring(1));
       var x = params.get("x");
       var y = params.get("y");
