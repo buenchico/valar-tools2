@@ -3,12 +3,18 @@ class Army < ApplicationRecord
   belongs_to :family, class_name: 'Family', foreign_key: 'family_id', optional: true
   belongs_to :location, class_name: 'Location', foreign_key: 'location_id', optional: true
 
+  before_validation :set_options
+
   validates :name, presence: true
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
   validates :status, inclusion: ARMY_STATUS
   validates_uniqueness_of :name
   validates :board, inclusion: { in: $options["fleets"]&.keys.map(&:to_s) }, allow_nil: true
   validates :tags, inclusion: { in: $options["tags"]&.keys.map(&:to_s) }, allow_nil: true
+
+  def set_options
+    $options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
+  end
 
   def strength
     base = 10
