@@ -6,8 +6,6 @@
   <%= yield(:title) %>
 </div>
 
-<%= @options["fleets"] %>
-
 <div class="d-none" id="men_per_army"><%= @options["soldiers"].to_i %></div>
 <div class="d-none" id="men_per_step"><%= ((@options["hp"]["step"].to_f / 100) * @options["soldiers"].to_i).to_i %></div>
 

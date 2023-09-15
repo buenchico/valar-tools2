@@ -45,6 +45,10 @@
             <%= form.text_area :tokens, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
+            <%= form.label :fleets, class: 'input-group-text' %>
+            <%= form.text_area :fleets, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
             <%= form.label :game_ids, class: 'input-group-text' %>
             <%= form.select :game_ids,
               options_for_select(
