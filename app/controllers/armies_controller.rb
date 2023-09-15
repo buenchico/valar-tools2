@@ -324,11 +324,12 @@ class ArmiesController < ApplicationController
 private
   def set_options
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
-    @attributes = @options["attributes"].sort_by { |_, v| v["sort"] }.to_h
-    @tags = @options["tags"].sort_by { |_, v| v["colour"] }.to_h
-    $options = @options
-    if @options.nil?
+    if @options.blank?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de ejércitos'
+    else
+      @attributes = @options["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
+      @tags = @options["tags"]&.sort_by { |_, v| v["colour"] }.to_h
+      $options = @options
     end
   end
 
@@ -363,7 +364,7 @@ private
       :visible, :hp, :col0, :col1, :col2, :col3, :col4, :col5, :col6, :col7, :col8, :col9, :notes, :board, faction_ids: [], tags: []
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
-      whitelisted[:board] = nil if whitelisted[:board].blank?      
+      whitelisted[:board] = nil if whitelisted[:board].blank?
     end
   end
 end

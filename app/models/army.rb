@@ -7,8 +7,8 @@ class Army < ApplicationRecord
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
   validates :status, inclusion: ARMY_STATUS
   validates_uniqueness_of :name
-  # validates :board, inclusion: { in: $options["fleets"].keys.map(&:to_s) }, allow_nil: true
-  # validates :tags, inclusion: { in: $options["tags"].keys.map(&:to_s) }, allow_nil: true
+  validates :board, inclusion: { in: $options["fleets"]&.keys.map(&:to_s) }, allow_nil: true
+  validates :tags, inclusion: { in: $options["tags"]&.keys.map(&:to_s) }, allow_nil: true
 
   def strength
     base = 10
