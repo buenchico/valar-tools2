@@ -159,6 +159,10 @@ private
   end
 
   def faction_params
-    params.require(:faction).permit(:reputation, :description, :active, :pov, :tokens, :fleets, :fleets_notes, game_ids: [])
+    puts "/////////////////////"
+    puts params[:faction][:fleets]
+    params.require(:faction).permit(:reputation, :description, :active, :pov, :tokens, :fleets, :fleets_notes, game_ids: []).tap do |whitelisted|
+      whitelisted[:fleets] = JSON.parse(params[:faction][:fleets])
+    end
   end
 end
