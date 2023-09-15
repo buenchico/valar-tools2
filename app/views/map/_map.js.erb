@@ -18,6 +18,26 @@ $(document).on('turbolinks:load', function () {
         $('#mapid').height(height);
       }
 
+      function checkBounds() {
+        var allowedBounds = L.latLngBounds(
+          L.latLng(bounds[0][0], bounds[0][1]),   // Southwest corner (bottom-left)
+          L.latLng(bounds[1][0], bounds[1][1]) // Northeast corner (top-right)
+        );
+        var currentBounds = map.getBounds();
+        // Check if the current map bounds are within the allowed bounds or maximum bounds
+        if (!allowedBounds.contains(currentBounds)) {
+          // Handle out-of-bounds situation here
+          // Get the current zoom level
+          var currentZoom = map.getZoom();
+          // Increase the zoom level by one unit
+          var newZoom = currentZoom + 1;
+          // Set the new zoom level
+          map.setZoom(newZoom);
+          // You can also reposition the map to the allowed bounds or take other actions.
+          map.fitBounds(allowedBounds);
+        }
+      }
+
       resizeMap();
 
       $(window).resize(function(){
@@ -38,29 +58,11 @@ $(document).on('turbolinks:load', function () {
 
       map.on('fullscreenchange', function () {
         resizeMap();
-        var allowedBounds = L.latLngBounds(
-          L.latLng(bounds[0][0], bounds[0][1]),   // Southwest corner (bottom-left)
-          L.latLng(bounds[1][0], bounds[1][1]) // Northeast corner (top-right)
-        );
+        checkBounds();
+      });
 
-        var currentBounds = map.getBounds();
-
-        // Check if the current map bounds are within the allowed bounds or maximum bounds
-        if (!allowedBounds.contains(currentBounds)) {
-          // Handle out-of-bounds situation here
-          // Get the current zoom level
-          var currentZoom = map.getZoom();
-
-          // Increase the zoom level by one unit
-          var newZoom = currentZoom + 1;
-
-          // Set the new zoom level
-          map.setZoom(newZoom);
-
-
-          // You can also reposition the map to the allowed bounds or take other actions.
-          map.fitBounds(allowedBounds);
-        }
+      map.on('zoomend', function() {
+        checkBounds();
       });
 
       var params = new URLSearchParams(document.location.search.substring(1));
