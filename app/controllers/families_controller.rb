@@ -13,6 +13,7 @@ class FamiliesController < ApplicationController
   def show
     @vassals = Family.where(lord_id: @family.id)
     @locations = Location.where(family_id: @family.id)
+    @relations = Family.where("members LIKE ?", "%#{@family.name}%").where.not(id: @family.id)
     respond_to do | format |
       format.js
       format.html do

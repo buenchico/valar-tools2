@@ -48,7 +48,7 @@
           <div class="collapse" id="collapseVassals">
             <% @vassals.each do | vassal | %>
               <p class="ms-2">
-                — <%= vassal.title %>
+                — <%= link_to(vassal.title, family_path(vassal.id), remote: true, class: 'text-white') %>
                 <% vassal.tags.each do | v_tag | %>
                   <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><%= v_tag %></span>
                 <% end %>
@@ -64,7 +64,19 @@
           </p>
           <div class="collapse" id="collapseLocations">
             <% @locations.each do | location | %>
-              <p class="ms-2">— <%= location.name %></p>
+              <p class="ms-2">— <%= link_to(location.name, location_path(location.id), remote: true, class: 'text-white') %></p>
+            <% end %>
+          </div>
+        <% end %>
+        <% if @relations.length > 0 %>
+          <p>
+            <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseRelations" role="button" aria-expanded="false" aria-controls="collapseLocations">
+              <i class="bi bi-plus-circle"></i> <strong>Relaciones:</strong>
+            </a>
+          </p>
+          <div class="collapse" id="collapseRelations">
+            <% @relations.each do | family | %>
+              <p class="ms-2">— <%= link_to(family.title, family_path(family.id), remote: true, class: 'text-white') %></p>
             <% end %>
           </div>
         <% end %>

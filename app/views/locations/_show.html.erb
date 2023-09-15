@@ -27,7 +27,7 @@
           <% end %>
         </p>
         <p><strong>Región:</strong> <%= location.region&.name %></p>
-        <p><strong>Lord:</strong> <%= location.family&.title %></p>
+        <p><strong>Señor:</strong> <%= location.family.nil? ? '' : link_to(location.family.name, family_path(location.family.id), remote: true, class: 'text-white') %></p>
         <p><%= simple_format(location.description) %></p>
         <div class="row">
           <% if @options["types"][location&.location_type]["icon"] %>
