@@ -1,19 +1,21 @@
 class LocationsController < ApplicationController
   before_action :set_tool
   before_action :check_master, except: [:index, :show]
-  before_action :set_location, only: [:edit, :show, :update, :destroy]
+  before_action :set_location, only: [:edit, :show, :update, :destroy, :show]
+  before_action :set_locations_list, only: [:index]
   before_action :set_regions, except: [:index]
   before_action :set_options
 
   def index
-    if @current_user&.is_master?
-      @locations = Location.all
-    else
-      @locations = Location.where(visible: true).where(game_id: active_game.id)
-    end
   end
 
   def show
+    respond_to do | format |
+      format.js
+      format.html do
+        set_locations_list
+      end
+    end
   end
 
   def new
@@ -66,6 +68,14 @@ class LocationsController < ApplicationController
 private
   def set_location
     @location = Location.find(params[:id])
+  end
+
+  def set_locations_list
+    if @current_user&.is_master?
+      @locations = Location.all
+    else
+      @locations = Location.where(visible: true).where(game_id: active_game.id)
+    end
   end
 
   def set_options
