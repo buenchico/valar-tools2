@@ -42,14 +42,6 @@ $(document).on('turbolinks:load', function () {
         }
       }
 
-      resizeMap();
-      checkBounds();
-
-      $(window).resize(function(){
-        resizeMap();
-        checkBounds();
-      });
-
       var map = L.map('mapid', {
           crs: L.CRS.Simple, //CRS need to be removed for tile layer
           //drawControl: true,
@@ -60,6 +52,14 @@ $(document).on('turbolinks:load', function () {
           fullscreenControl: true,
           fullscreenControlOptions: {
             position: 'topleft' }
+      });
+
+      resizeMap();
+      checkBounds();
+
+      $(window).resize(function(){
+        resizeMap();
+        checkBounds();
       });
 
       map.on('fullscreenchange', function () {
