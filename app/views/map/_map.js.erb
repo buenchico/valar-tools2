@@ -12,7 +12,7 @@ $(document).on('turbolinks:load', function () {
           var height = Math.min(window.innerHeight)
         } else {
           var width = Math.min(window.innerWidth - 100)
-          var height = Math.min(window.innerHeight - 100)
+          var height = Math.min(window.innerHeight - 200)
         }
         $('#mapid').width(width);
         $('#mapid').height(height);
@@ -55,7 +55,6 @@ $(document).on('turbolinks:load', function () {
       });
 
       resizeMap();
-      checkBounds();
 
       $(window).resize(function(){
         resizeMap();
