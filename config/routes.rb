@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
 
   root 'static_pages#home'
-  get 'bug', to: 'static_pages#bug'
-  post 'bug_report', to: 'static_pages#bug_report'
 
   # Errors
   match "/404", to: "errors#not_found", via: :all
@@ -60,5 +58,8 @@ Rails.application.routes.draw do
   post 'travel/calculate', to: 'travel#calculate'
 
   get 'map', to: 'map#index'
+
+  get 'issues', to: 'issues#new'
+  post 'issues', to: 'issues#create'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

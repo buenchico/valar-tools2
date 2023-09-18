@@ -32,6 +32,7 @@
 es:
   helpers:
     submit:
+      submit: 'Enviar %{model}'
       create: 'Añadir %{model}'
       update: 'Guardar %{model}'
       delete: 'Borrar %{model}'
@@ -39,6 +40,8 @@ es:
       delete_multiple: 'Guardar %{model}'
       import: 'Importar %{model}'
     label:
+      title: "Título"
+      description: "Descripcción"
       from: "Origen"
       to: "Destino"
       army_type_land: "Tipo de ejércitos"
