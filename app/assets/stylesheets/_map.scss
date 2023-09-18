@@ -33,6 +33,11 @@
   text-align: center;
   font-size: 14px;
   color: black;
+  z-index: 950;
+}
+
+.leaflet-measure-path-measurement{
+  z-index: 1000;
 }
 
 .leaflet-popup-tip-container {
