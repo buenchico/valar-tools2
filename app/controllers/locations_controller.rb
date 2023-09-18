@@ -27,7 +27,7 @@ class LocationsController < ApplicationController
       if @location.save
         format.html { redirect_to locations_url, success: 'Lugar creado correctamente.' }
       else
-        format.html {  redirect_to locations_url, danger: @location.errors }
+        format.html { redirect_to locations_url, danger: @location.errors }
       end
     end
   end
@@ -38,7 +38,8 @@ class LocationsController < ApplicationController
   def update
     respond_to do |format|
       if @location.update(location_params)
-        format.html { redirect_to locations_url, success: 'Lugar editado correctamente.' }
+        flash.now[:success] = t('messages.success.update', thing: @location.name + "(" + @location.id.to_s + ")", count: 1)
+        format.js
       else
         format.html { redirect_to locations_url, danger: @location.errors }
       end

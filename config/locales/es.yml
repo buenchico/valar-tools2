@@ -131,6 +131,7 @@ es:
       location:
         one: 'Lugar'
         other: 'Lugares'
+
     errors:
       models:
         army:
@@ -199,3 +200,14 @@ es:
         other: '%{count} semanas'
   word_genders:
     ciudad: feminine
+  messages:
+    success:
+      create:
+        one:  '%{thing} ha sido creado correctamente.'
+        other:  '%{thing} han sido creado correctamente.'
+      update:
+        one:  '%{thing} ha sido editado correctamente.'
+        other:  '%{thing} han sido editado correctamente.'
+      delete:
+        one: '%{model} ha sido borrado correctamente.'
+        other: '%{thing} han sido borrado correctamente.'

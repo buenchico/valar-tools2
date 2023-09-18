@@ -1,0 +1,10 @@
+$('#location_<%= @location.id %>').addClass( "table-highlight", callback )
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+$(".modal").modal('hide');
+
+function callback() {
+  setTimeout(function() {
+    $('#location_<%= @location.id %>').removeClass( "table-highlight" );
+  }, 250 );
+}

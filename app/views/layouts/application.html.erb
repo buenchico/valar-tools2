@@ -17,22 +17,9 @@
 
   <body class="<%= controller_name %> <%= action_name %>">
     <%= render 'layouts/header' %>
-    <% flash.each do |message_type, message| %>
-      <% if message.class == Hash %>
-        <div id="error_explanation" class="container mx-auto text-center alert alert-danger">
-          <h2>Se ha encontrado un error</h2>
-          <ul class="list-unstyled text-left">
-          <% message.values.each do |msg| %>
-            <% msg.each do |m| %>
-              <li><%= m %></li>
-            <%end %>
-          <% end %>
-          </ul>
-        </div>
-      <% else %>
-        <div class="container mx-auto text-center alert alert-<%= message_type %>" style=""><%= message.html_safe %></div>
-      <% end %>
-    <% end %>
+    <div id="flash">
+      <%= render 'layouts/alert', flash: flash %>
+    </div>
     <div class="container content mt-3">
       <% if @current_user %>
         <div class="container">
