@@ -1,6 +1,6 @@
 
 <div class="row">
-  <div id="<%= faction.name %>" class="col card bg-dark border border-success text-white mb-3 me-3 faction-name">
+  <div id="<%= faction.name %>" class="<%= faction.fleets.nil? ? 'col' : 'col-md-7' %> col-sm-12 card bg-dark border border-success text-white mb-3 me-3 faction-name">
     <div class="card-body">
       <p>Hay <%= @all_armies.length %> <%= Army.model_name.human(:count => @all_armies.length).downcase %> en el mundo, con un total de <%= @all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) } %> hombres y una fuerza de <%= @all_armies.sum { |army| army.strength } %></p>
       <p>De los cuales <%= @all_armies.where(status: ARMY_STATUS[0]).length %> están alzados y <%= @all_armies.where(status: ARMY_STATUS[2]).length %> han sido aniquilados</p>
@@ -11,7 +11,7 @@
     </div>
   </div>
   <% if !faction.fleets.nil? && !@options["fleets"].nil? %>
-    <div class="col-4 card bg-dark border border-success text-white mb-3 faction-name">
+    <div class="col-md-4 col-sm-12 card bg-dark border border-success text-white mb-3 faction-name">
       <div class="card-body">
         <div class="float-end">
           <%= link_to ' Posición', edit_fleets_notes_faction_path(faction.id), remote: true, class: faction.fleets_notes.blank? ? 'bi bi-sticky text-white link-unstyled' : 'bi bi-sticky-fill text-warning link-unstyled' %>
