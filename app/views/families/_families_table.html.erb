@@ -30,7 +30,6 @@
           <td><%= truncate(family.description, length: 100, omission: '...') %></td>
           <% if @current_user&.is_master? %>
             <td><%= family.loyalties.map { |value| number_to_modifier(value) }.join(' | ') %></td>
-            <td><%= family.game.title %></td>
             <td class="text-center">
               <% if family.visible == true  %>
                 <i class="bi bi-check-lg"></i>
