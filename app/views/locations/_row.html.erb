@@ -1,0 +1,24 @@
+<td><%= location.name_es.nil? ? '' : (link_to location.name_es, location_path(location), remote: true, class: 'link-unstyled') %></td>
+<td><%= location.name_en.nil? ? '' : (link_to location.name_en, location_path(location), remote: true, class: 'link-unstyled') %></td>
+<td><%= truncate(location.description, length: 100, omission: '...') %></td>
+<td><%= location.tags.join(",") %></td>
+<td><%= location.region&.name %></td>
+<td><%= location.family&.title %></td>
+<% if @current_user&.is_master? %>
+  <td class="text-center">
+    <% if location.visible == true  %>
+      <i class="bi bi-check-lg"></i>
+    <% else %>
+      <i class="bi bi-x-lg"></i>
+    <% end %>
+  </td>
+<% end %>
+<td><%= link_to '', send("location_path", location.id), remote: true, class: 'bi bi-eye-fill text-white' %></td>
+<% if @current_user&.is_master? %>
+  <td><%= link_to '',   send("edit_location_path", location.id), remote: true, class: 'bi bi-pencil-square text-white' %></td>
+  <td>
+    <%= link_to send("location_path", location.id), method: :delete, data: { confirm: "Estás seguro de eliminar el objeto #{location.name}?" }, local: false do %>
+      <i class="bi bi-trash text-white"></i>
+    <% end %>
+  </td>
+<% end %>

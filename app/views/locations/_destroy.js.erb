@@ -1,0 +1,4 @@
+$('#location_<%= @location.id %>').remove();
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+$(".modal").modal('hide');

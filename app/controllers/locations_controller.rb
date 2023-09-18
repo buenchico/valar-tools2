@@ -38,7 +38,7 @@ class LocationsController < ApplicationController
   def update
     respond_to do |format|
       if @location.update(location_params)
-        flash.now[:success] = t('messages.success.update', thing: @location.name + "(" + @location.id.to_s + ")", count: 1)
+        flash.now[:success] = t('messages.success.update', thing: @location.name + "(id: " + @location.id.to_s + ")", count: 1)
         format.js
       else
         format.html { redirect_to locations_url, danger: @location.errors }
@@ -49,7 +49,7 @@ class LocationsController < ApplicationController
   def destroy
     respond_to do |format|
       if @location.destroy
-        format.html { redirect_to locations_url, success: 'Lugar eliminado correctamente.' }
+        format.html { redirect_to locations_url, success: t('messages.success.destroy', thing: @location.name + "(id: " + @location.id.to_s + ")", count: 1) }
       else
         format.html {  redirect_to locations_url, danger: @location.errors  }
       end

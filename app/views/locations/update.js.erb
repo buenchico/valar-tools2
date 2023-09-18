@@ -1,3 +1,4 @@
+$('#location_<%= @location.id %>').html('<%= j render "row", location: @location  %>');
 $('#location_<%= @location.id %>').addClass( "table-highlight", callback )
 
 $("#flash").html('<%= j render partial: "layouts/alert" %>');

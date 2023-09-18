@@ -208,6 +208,6 @@ es:
       update:
         one:  '%{thing} ha sido editado correctamente.'
         other:  '%{thing} han sido editado correctamente.'
-      delete:
-        one: '%{model} ha sido borrado correctamente.'
+      destroy:
+        one: '%{thing} ha sido borrado correctamente.'
         other: '%{thing} han sido borrado correctamente.'
