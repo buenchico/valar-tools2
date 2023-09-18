@@ -11,11 +11,15 @@ $(document).on('turbolinks:load', function () {
           var width = Math.min(window.innerWidth)
           var height = Math.min(window.innerHeight)
         } else {
-          var width = Math.min($('#map-container').width(), bounds[1][1] - bounds[0][1])
-          var height = Math.min(window.innerHeight - 200, bounds[1][0] - bounds[0][0])
+          var width = Math.min(window.innerWidth - 100)
+          var height = Math.min(window.innerHeight - 100)
         }
         $('#mapid').width(width);
         $('#mapid').height(height);
+        $('#mapid').css("position", "absolute");
+        $('#mapid').css("left", "50px");
+        $('#map-container').height(width);
+        $('#map-container').height(height);
       }
 
       function checkBounds() {
@@ -39,9 +43,11 @@ $(document).on('turbolinks:load', function () {
       }
 
       resizeMap();
+      checkBounds();
 
       $(window).resize(function(){
         resizeMap();
+        checkBounds();
       });
 
       var map = L.map('mapid', {
