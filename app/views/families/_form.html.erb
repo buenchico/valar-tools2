@@ -39,6 +39,12 @@
             <%= form.label :branch, class: 'input-group-text' %>
             <%= form.text_field :branch, class: 'form-control' %>
           </div>
+          <% @options["loyalties"].each_with_index do |value, index| %>
+            <div class="input-group mb-3">
+              <%= form.label "Lealtad " + value.capitalize , class: 'input-group-text' %>
+              <%= form.number_field  "loyalty_#{(index + 1)}", class: 'form-control', step: 1 %>
+            </div>
+          <% end %>
           <div class="input-group mb-3">
             <%= form.label :description, class: 'input-group-text' %>
             <%= form.text_area :description, class: 'form-control' %>

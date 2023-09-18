@@ -3,7 +3,7 @@ class FamiliesController < ApplicationController
   before_action :check_master, except: [:index, :show]
   before_action :set_family, only: [:edit, :update, :destroy, :show]
   before_action :set_families_list, only: [:index]
-  before_action :set_options, only: [:new, :edit, :update, :new, :show, :create]
+  before_action :set_options, only: [:index, :new, :edit, :update, :new, :show, :create]
   before_action :set_filters, only: [:index, :show]
   before_action :check_visble, only: [:show]
 
@@ -83,6 +83,7 @@ private
 
   def set_options
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
+    $options_families = @options
     if @options.nil?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de familias'
     end
@@ -109,7 +110,7 @@ private
   end
 
   def family_params
-    params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :members, :description, :tags).tap do |whitelisted|
+    params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :members, :description, :loyalty_1, :loyalty_2, :loyalty_3, :loyalty_4, :loyalty_5, :tags).tap do |whitelisted|
       whitelisted[:tags] = params[:family][:tags].reject(&:empty?)
 
       if @options["tags"] != "false"

@@ -15,4 +15,18 @@ class Family < ApplicationRecord
       self.name + " (" + self.branch + ")"
     end
   end
+
+  def loyalties
+    @options = $options_families
+
+    # Create an array of the loyalty values, considering only the first loyalty_count values
+    loyalty_values = []
+
+    (1..@options["loyalties"].length).each do |i|
+      loyalty_values << self.send("loyalty_#{i}")  # Use send to dynamically access loyalty attributes
+    end
+
+    loyalties = loyalty_values.map! { |value| value.nil? ? 0 : value }
+    return loyalties
+  end
 end

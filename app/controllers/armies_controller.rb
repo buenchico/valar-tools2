@@ -329,7 +329,7 @@ private
     else
       @attributes = @options["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
       @tags = @options["tags"]&.sort_by { |_, v| v["colour"] }.to_h
-      $options = @options
+      $options_armies = @options
     end
   end
 
