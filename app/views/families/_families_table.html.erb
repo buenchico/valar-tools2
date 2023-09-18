@@ -9,7 +9,9 @@
         <th scope="col">Facción</th>
         <th scope="col" data-sorter="false">Descripcción</th>
         <% if @current_user&.is_master? %>
-          <th scope="col">Lealtad a <%= @options["loyalties"].join(" | ") %></th>
+          <% @options["loyalties"].each do |value| %>
+            <th scope="col">Lealtad a <%= value %></th>
+          <% end %>
           <th scope="col" class="text-center" data-sorter="false">Visible</th>
           <th scope="col">Partida</th>
         <% end %>
@@ -29,7 +31,9 @@
           <td><%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, send("faction_path", family.faction.id), remote: true, class: 'text-white') %></td>
           <td><%= truncate(family.description, length: 100, omission: '...') %></td>
           <% if @current_user&.is_master? %>
-            <td><%= family.loyalties.map { |value| number_to_modifier(value) }.join(' | ') %></td>
+            <% @options["loyalties"].each_with_index do |value, index| %>
+              <td><%= number_to_modifier(family["loyalty_#{index + 1}"]) %></td>
+            <% end %>
             <td class="text-center">
               <% if family.visible == true  %>
                 <i class="bi bi-check-lg"></i>
