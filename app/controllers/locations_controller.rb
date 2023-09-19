@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   before_action :set_tool
-  before_action :check_master, except: [:index, :show]
+  before_action :check_master, except: [:show]
   before_action :set_location, only: [:edit, :show, :update, :destroy, :show]
   before_action :set_locations_list, only: [:index]
   before_action :set_regions, except: [:index]
@@ -80,6 +80,7 @@ private
 
   def set_options
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
+    @location_types = @options["types"]
     if @options.nil?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de lugares'
     end

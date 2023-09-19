@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   post 'travel/calculate', to: 'travel#calculate'
 
   get 'map', to: 'map#index'
+  get 'map/:id', to: 'map#show'
 
   get 'issues', to: 'issues#new'
   post 'issues', to: 'issues#create'

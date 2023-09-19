@@ -1,9 +1,13 @@
 class MapController < ApplicationController
   before_action :set_tool
   before_action :set_options
+  before_action :set_locations_list
 
   def index
-    @locations = active_game.locations.where(visible: true)
+  end
+
+  def show
+    @location = Location.find(params[:id])
   end
 
 private
@@ -13,5 +17,9 @@ private
     if @options.nil?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar el mapa'
     end
+  end
+
+  def set_locations_list
+    @locations = active_game.locations.where(visible: true)
   end
 end

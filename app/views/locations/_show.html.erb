@@ -1,8 +1,8 @@
-<div class="modal fade" id="<%= @tool.name.singularize %>Modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+<div class="modal fade" id="locationModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content bg-dark">
       <div class="modal-header">
-        <h5 class="modal-title" id="Title"><%= location&.name %> (<%= @options["types"][location&.location_type]["name"] %>)</h5>
+        <h5 class="modal-title" id="Title"><%= location&.name %> (<%= @location_types[location&.location_type]["name"] %>)</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -30,15 +30,15 @@
         <p><strong>Señor:</strong> <%= location.family.nil? ? '' : link_to(location.family.name, family_path(location.family.id), remote: true, class: 'text-white') %></p>
         <p><%= simple_format(location.description) %></p>
         <div class="row">
-          <% if @options["types"][location&.location_type]["icon"] %>
+          <% if @location_types[location&.location_type]["icon"] %>
             <div class="col-2">
-              <%= image_tag @options["types"][location&.location_type]["icon"], class: "img-fluid" %>
+              <%= image_tag @location_types[location&.location_type]["icon"], class: "img-fluid" %>
             </div>
           <% end %>
           <div class="col">
             <div>
-              <p><%= location.name %> es <%= I18n.t('articles.indefinite.' + word_gender(@options["types"][location&.location_type]["name"].singularize), count: 1) %> <strong><%= @options["types"][location&.location_type]["name"].downcase %></strong>.</p>
-              <p><%= @options["types"][location&.location_type]["desc"] %></p>
+              <p><%= location.name %> es <%= I18n.t('articles.indefinite.' + word_gender(@location_types[location&.location_type]["name"].singularize), count: 1) %> <strong><%= @location_types[location&.location_type]["name"].downcase %></strong>.</p>
+              <p><%= @location_types[location&.location_type]["desc"] %></p>
             </div>
           </div>
         </div>

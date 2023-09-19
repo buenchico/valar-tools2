@@ -1,0 +1,10 @@
+<%= render template: 'map/index' %>
+
+<script type="text/javascript">
+  $(document).on('turbolinks:load.show', function() {
+    <%= render template: 'map/show', formats: [:js] %>
+  });
+  $(document).on('turbolinks:before-render', function() {
+    $(document).off('turbolinks:load.show');
+  });
+</script>
