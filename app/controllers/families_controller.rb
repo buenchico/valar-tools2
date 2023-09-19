@@ -31,9 +31,11 @@ class FamiliesController < ApplicationController
 
     respond_to do |format|
       if @family.save
-        format.html { redirect_to families_url, success: 'Familia creada correctamente.' }
+        flash.now[:success] = t('messages.success.update', thing: @family.name.strip + " (id: " + @family.id.to_s + ")", count: 1)
+        format.js
       else
-        format.html {  redirect_to families_url, danger: @family.errors }
+        flash.now[:danger] = @family.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: 'la familia', method: 'create' } }
       end
     end
   end
@@ -42,11 +44,14 @@ class FamiliesController < ApplicationController
   end
 
   def update
+    original_title =  @family.title
     respond_to do |format|
       if @family.update(family_params)
-        format.html { redirect_to families_url, success: 'Familia editada correctamente.' }
+        flash.now[:success] = t('messages.success.update', thing: @family.name.strip + " (id: " + @family.id.to_s + ")", count: 1)
+        format.js
       else
-        format.html { redirect_to families_url, danger: @family.errors }
+        flash.now[:danger] = @family.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: original_title + " (id: " + @family.id.to_s + ")", method: 'update' } }
       end
     end
   end
@@ -54,9 +59,11 @@ class FamiliesController < ApplicationController
   def destroy
     respond_to do |format|
       if @family.destroy
-        format.html { redirect_to families_url, success: 'Familia eliminada correctamente.' }
+        flash.now[:danger] = t('messages.success.destroy', thing: @family.name.strip + " (id: " + @family.id.to_s + ")", count: 1)
+        format.js
       else
-        format.html {  redirect_to families_url, danger: @family.errors  }
+        flash.now[:danger] = @family.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: original_title + " (id: " + @family.id.to_s + ")", method: 'delete' } }
       end
     end
   end
@@ -109,7 +116,7 @@ private
   end
 
   def family_params
-    params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :members, :description, :loyalty_1, :loyalty_2, :loyalty_3, :loyalty_4, :loyalty_5, :tags).tap do |whitelisted|
+    params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :members, :description, :loyalty_1, :loyalty_2, :loyalty_3, :loyalty_4, :loyalty_5, tags: []).tap do |whitelisted|
       whitelisted[:tags] = params[:family][:tags].reject(&:empty?)
 
       if @options["tags"] != "false"

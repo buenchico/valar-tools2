@@ -1,0 +1,5 @@
+$('#family_list').find('tbody').append('<tr id="family_<%= @family.id.to_s %>"></tr>');
+$('#family_<%= @family.id %>').html('<%= j render "row", family: @family  %>');
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+$(".modal").modal('hide');

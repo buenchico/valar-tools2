@@ -20,38 +20,8 @@
     </thead>
     <tbody>
       <% @families.each do | family | %>
-        <tr>
-          <td><%= link_to family.title, family_path(family), remote: true, class: 'link-unstyled' %></td>
-          <td>
-            <% family.tags.each do | tag | %>
-              <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><%= tag %></span>
-            <% end %>
-          </td>
-          <td><%= family.lord&.title %></td>
-          <td><%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, send("faction_path", family.faction.id), remote: true, class: 'text-white') %></td>
-          <td><%= truncate(family.description, length: 100, omission: '...') %></td>
-          <% if @current_user&.is_master? %>
-            <% @options["loyalties"].each_with_index do |value, index| %>
-              <td><%= number_to_modifier(family["loyalty_#{index + 1}"]) %></td>
-            <% end %>
-            <td class="text-center">
-              <% if family.visible == true  %>
-                <i class="bi bi-check-lg"></i>
-              <% else %>
-                <i class="bi bi-x-lg"></i>
-              <% end %>
-            </td>
-            <td><%= family.game.title %></td>
-          <% end %>
-          <td><%= link_to '', send("family_path", family.id), remote: true, class: 'bi bi-eye-fill text-white' %></td>
-          <% if @current_user&.is_master? %>
-            <td><%= link_to '', send("edit_family_path", family.id), remote: true, class: 'bi bi-pencil-square text-white' %></td>
-            <td>
-              <%= link_to send("family_path", family.id), method: :delete, data: { confirm: "Estás seguro de eliminar el objeto #{family.name}?" }, remote: true do %>
-                <i class="bi bi-trash text-white"></i>
-              <% end %>
-            </td>
-          <% end %>
+        <tr id="family_<%= family.id.to_s %>">
+          <%= render 'row', family: family %>
         </tr>
       <% end %>
     </tbody>
