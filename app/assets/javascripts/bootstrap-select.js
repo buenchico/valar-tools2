@@ -3074,7 +3074,7 @@
     // Extended listeners
 
     arbitraryListener: function () {
-      $('#bs-select-1').on("click", function() {
+      $('#bs-select-' + selectId).on("click", function() {
         var userInput = $('.bs-arbitrary').val();
 
         // Create a new option element with the user's input
