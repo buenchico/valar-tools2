@@ -6,14 +6,14 @@ class ArmiesController < ApplicationController
   before_action :set_filters, only: [:index]
   before_action :check_player
   before_action :check_master, only: [:destroy, :destroy_multiple]
-  before_action :check_owner, only: [:edit, :edit_notes, :update]
+  before_action :check_owner, only: [:edit, :edit_notes, :update, :edit_multiple, :update_multiple]
   before_action :set_regions, only: [:new, :edit, :edit_multiple]
 
   def index
     @factions = Faction.where(active: true).order(:id).drop(1)
-    @all_armies = Army.all.order(:group)
+    @all_armies = Army.all.order(:id)
     if !@current_user&.is_master?
-      @armies = @current_user.faction.armies.where(visible: true)
+      @armies = @current_user.faction.armies.where(visible: true).order(:id)
     end
   end
 
@@ -42,37 +42,11 @@ class ArmiesController < ApplicationController
   def edit_multiple
     @armies = Army.where(id: params[:army_ids]).order(:name)
     @action = params[:button]
-
-    @armies.each do | army |
-      if !@current_user&.is_master?
-        if !@current_user.faction.armies.include?(army)
-          respond_to do |format|
-            flash[:danger] = 'No tienes permisos para editar esos ejércitos.'
-            format.js { render js: "window.location='/armies'" }
-            format.html { redirect_to armies_url }
-          end
-        end
-      end
-    end
   end
 
   def update
-    if !@current_user&.is_master? # modify params if user is not admin
-      keys_to_remove = ["tags", "region", "lord", "visible", "hp",
-        "col0", "col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8", "col9", "faction_ids"]
-        if @army.status == ARMY_STATUS[-1]
-          keys_to_remove << "status"
-        end
-    end
+    puts params
 
-    respond_to do |format|
-      if @army.update(army_params.reject! { |x| keys_to_remove&.include?(x) })
-        format.html { redirect_to url_for(controller: 'armies', action: 'index', anchor: ''), success: 'Ejército editado correctamente.' }
-        format.js
-      else
-        format.html { redirect_to url_for(controller: 'armies', action: 'index', anchor: ''), danger: @army.errors }
-      end
-    end
   end
 
   def update_multiple
@@ -350,10 +324,23 @@ private
   end
 
   def check_owner
+    armies_to_include = [@army] # Initialize with @army
+
+    if params[:army_ids].present?
+      armies_to_include += Army.where(id: params[:army_ids]).order(:name)
+    end
+
     if !@current_user&.is_master?
-      if !@current_user.faction.armies.include?(@army)
-        flash[:danger] = 'No tienes permisos para editar ese ejército.'
-        render js: "window.location='/armies'"
+      armies_to_include.compact.each do |army|
+        if !@current_user.faction.armies.include?(army)
+          respond_to do |format|
+            format.html { redirect_to armies_url, danger: 'No tienes permisos para editar ese ejército.' }
+            format.js do
+              flash[:danger] = 'No tienes permisos para editar ese ejército.'
+              render js: "window.location='/armies'"
+            end
+          end
+        end
       end
     end
   end

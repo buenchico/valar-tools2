@@ -99,6 +99,7 @@
 
   <td>
     <%= form_with model: army, class: 'inline-edit-select', local: false do |form| %>
+      <%= form.hidden_field :your_field_name, value: 'your_field_value' %>
       <%= form.select :group,
         options_for_select(
           ARMY_GROUPS.map { | key, value |
