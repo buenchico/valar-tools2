@@ -152,6 +152,9 @@ es:
     index:
       calculate: 'Calcular'
       add_step: 'Añadir etapa'
+  missions:
+    index:
+      calculate: 'Calcular'
   hexagon:
     one: "hexágono"
     other: "hexágonos"

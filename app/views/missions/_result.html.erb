@@ -1,0 +1,14 @@
+<div class="card mb-5 <%= true ? "bg-danger" : "border-primary bg-dark text-white" %> col-6">
+  <div class="card-body">
+    <div class="card-title">
+      <span id="mission-title" class="h5"><%= true ? "ERROR" : "Desde #{true} hasta #{@true}" %></span>
+      <button type="button" id="close_results" class="btn-close btn-close-white float-end" aria-label="Close" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar"></button>
+      <button type="button" id="copy_results" class="btn-no-style text-light float-end me-1" aria-label="Copy" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar resultado">
+        <i class="bi bi-clipboard2-fill"></i>
+      </button>
+    </div>
+    <div id="mission-text" class="card-text">
+
+    </div>
+  </div>
+</div>

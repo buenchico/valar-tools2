@@ -1,0 +1,6 @@
+$('#result').removeClass('d-none')
+$('#result').html('<%= j render partial: "result" %>')
+
+$('#close_results').click(function() {
+  $('#result').html("");
+});

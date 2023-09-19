@@ -1,0 +1,17 @@
+<% provide(:title, @tool.title) %>
+<% provide(:icon, @tool.icon_url) %>
+
+<% if @current_user&.is_master? %>
+  <div class="tool-title">
+      <i class="white <%= yield(:icon) %>"></i>
+      <%= yield(:title) %>
+  </div>
+<% end %>
+
+<div id="result" class="d-none"></div>
+
+<div class="container d-flex flex-row align-items-center flex-wrap">
+  <%= form_with url: missions_calculate_path, local: false do |form| %>
+
+  <%= form.submit t('.calculate'), class: "btn btn-primary", id: "calculate" %>
+<% end %>

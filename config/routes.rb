@@ -60,5 +60,8 @@ Rails.application.routes.draw do
   post 'travel/calculate', to: 'travel#calculate'
 
   get 'map', to: 'map#index'
+
+  get 'missions', to: 'missions#index'
+  post 'missions/calculate', to: 'missions#calculate'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
