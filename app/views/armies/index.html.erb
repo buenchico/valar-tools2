@@ -47,21 +47,17 @@
 </div>
 
 <% if @current_user&.is_master? %>
-  <ul class="nav nav-pills mb-3" id="myTabs" role="tablist">
+  <ul class="nav nav-pills mb-3">
+    <li class="me-1">Facciones:</li>
     <% @factions.each do | faction | %>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link <%= faction.name == "master" ? "active" : nil %> text-white" id="<%= faction.name %>-tab" data-bs-toggle="tab" data-bs-target="#<%= faction.name %>" type="button" role="tab" aria-controls="<%= faction.name %>" aria-selected="true"><%= faction.long_name %></button>
+      <li>
+        <%= link_to faction.long_name, get_armies_path(faction), remote: true, id: 'tab-' + faction.id.to_s, class: 'nav-link nav-links-sm text-white armies-tab' %>
       </li>
     <% end %>
   </ul>
-
-  <div class="tab-content">
-    <% @factions.each do | faction | %>
-      <div class="tab-pane fade show  <%= faction.name == "master" ? "active" : nil %>" id="<%= faction.name %>" role="tabpanel" aria-labelledby="<%= faction.name %>-tab">
-        <%= render 'armies_table', armies: @armies = faction.name == "master" ? @all_armies : faction.armies, faction: faction %>
-      </div>
-    <% end %>
-  </div>
-<% else %>
-  <%= render 'armies_table', faction: @current_user.faction %>
 <% end %>
+
+<%= render 'army_stats', faction: @faction %>
+<div id="army_table">
+  <%= render 'armies_table' %>
+</div>

@@ -1,5 +1,5 @@
-<tr id="army_<%= faction.name %>_<%= army.id %>" class="army_<%= army.id %> <%= army.status == 'Aniquilado' ? 'destroyed' : '' %><%= army.status == 'Alzado' ? 'mobilized' : '' %>">
-  <td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + faction.name + "_" + army.id.to_s,class: "checkbox_selectable" %></td>
+<tr id="army_<%= army.id %>" class="army_<%= army.id %> <%= army.status == 'Aniquilado' ? 'destroyed' : '' %><%= army.status == 'Alzado' ? 'mobilized' : '' %>">
+  <td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable" %></td>
   <td class="strenght" width = "30px" >
     <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-custom-class="army-str-data" title="
        <div class='row'>

@@ -1,15 +1,6 @@
 $(document).on('turbolinks:load', function () {
   if ($(".armies").length !== 0 ) {
 
-    // activate the right tabs  // Get the URL hash (e.g., #tab2)
-    const urlHash = window.location.hash;
-
-    // If there's a hash in the URL
-    if (urlHash) {
-      // Activate the tab with the matching ID
-      $(urlHash + '-tab').click();
-    }
-
     // Copy selected to clipboard
     $(function () {
         //Assign Click event to Button.
@@ -50,11 +41,6 @@ $(document).on('turbolinks:load', function () {
 
     // Recalculate stats
     $.fn.recalculateStats = function(){
-        if ($('#myTabs .active').length !== 0) {
-          var faction = $('#myTabs .active').attr('id').split("-tab")[0];
-        } else {
-          var faction = $('.faction-name').attr('id');
-        }
         var men_per_army = parseInt($('#men_per_army').text());
         var men_per_step = parseInt($('#men_per_step').text());
         var countArmies = $('input[type="checkbox"]:visible').length - 1;
@@ -66,10 +52,9 @@ $(document).on('turbolinks:load', function () {
         $('.strenght:visible').each(function(){
             strArmies += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
         });
-
-        $("#" + faction + "_count").html(countArmies);
-        $("#" + faction + "_str").html(strArmies);
-        $("#" + faction + "_men").html((countArmies * men_per_army) + (menArmies * men_per_step));
+        $("#count").html(countArmies);
+        $("#str").html(strArmies);
+        $("#men").html((countArmies * men_per_army) + (menArmies * men_per_step));
     }
 
     $.fn.recalculateStats()

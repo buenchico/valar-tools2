@@ -1,0 +1,10 @@
+if ($('#tab-<%= @faction.id %>').hasClass('active')) {
+  $('#tab-<%= @faction.id %>').removeClass('active');
+} else {
+  $('#tab-<%= @faction.id %>').addClass('active');
+  console.log("<%= @armies.length %>")
+  <% @armies.each do |army| %>
+    console.log("<%= @armies.length %>")
+    $('#table_body').append("<%= j render 'row', army: army %>")
+  <% end %>
+}

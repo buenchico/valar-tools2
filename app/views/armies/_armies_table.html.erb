@@ -1,28 +1,25 @@
-
-<%= render 'army_stats', faction: faction %>
-
 <div class="table-responsive">
-  <table id="army_list-<%= faction.name %>" class="table table-dark table-striped table-borderless table-hover table-sm sortable army_list">
-      <caption>Lista de ejércitos</caption>
-        <thead>
-          <tr id="table_title-<%= faction.name %>">
-            <th data-sorter="false" scope="col"><input type="checkbox" class="checkbox_select_all" /></th>
-            <th scope="col" style="width: 78px"><i class="bi bi-award"></i></th>
-            <th scope="col">Ejército</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Rasgos</th>
-            <th scope="col">Posición</th>
-            <th scope="col">Grupo</th>
-            <% if @current_user&.is_master? %>
-              <th scope="col">Visibilidad</th>
-            <% end %>
-            <th scope="col" colspan="3" data-sorter="false"></th>
-          </tr>
-        </thead>
-        <tbody id="table_body-<%= faction.name %>">
-          <% @armies.each do |army| %>
-            <%= render 'row', army: army, faction: faction %>
-          <% end %>
-        </tbody>
-    </table>
+  <table id="army_list" class="table table-dark table-striped table-borderless table-hover table-sm sortable army_list">
+    <caption>Lista de ejércitos</caption>
+    <thead>
+      <tr id="table_title">
+        <th data-sorter="false" scope="col"><input type="checkbox" class="checkbox_select_all" /></th>
+        <th scope="col" style="width: 78px"><i class="bi bi-award"></i></th>
+        <th scope="col">Ejército</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Rasgos</th>
+        <th scope="col">Posición</th>
+        <th scope="col">Grupo</th>
+        <% if @current_user&.is_master? %>
+          <th scope="col">Visibilidad</th>
+        <% end %>
+        <th scope="col" colspan="3" data-sorter="false"></th>
+      </tr>
+    </thead>
+    <tbody id="table_body">
+      <% @armies&.each do |army| %>
+        <%= render 'row', army: army %>
+      <% end %>
+    </tbody>
+  </table>
 </div>

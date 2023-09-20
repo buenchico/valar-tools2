@@ -46,6 +46,8 @@ Rails.application.routes.draw do
   put 'armies/destroy_multiple', to: 'armies#destroy_multiple', as: 'destroy_multiple_armies'
   post 'armies/import', to: 'armies#import', as: 'import_armies'
   get 'armies/export', to: 'armies#export', as: 'export_armies'
+  get 'armies/faction/:faction_id', to: 'armies#index'
+  get 'armies/get_armies/:faction_id', to: 'armies#get_armies', as: 'get_armies'
   resources :armies, :except => [:show]
 
   resources :locations
