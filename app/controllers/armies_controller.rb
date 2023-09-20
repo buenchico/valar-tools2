@@ -45,8 +45,22 @@ class ArmiesController < ApplicationController
   end
 
   def update
-    puts params
+    if !@current_user&.is_master? # modify params if user is not admin
+      keys_to_remove = ["tags", "region", "lord", "visible", "hp",
+        "col0", "col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8", "col9", "faction_ids"]
+        if @army.status == ARMY_STATUS[-1]
+          keys_to_remove << "status"
+        end
+    end
 
+    respond_to do |format|
+      if @army.update(army_params.reject! { |x| keys_to_remove&.include?(x) })
+        format.html { redirect_to url_for(controller: 'armies', action: 'index', anchor: ''), success: 'Ejército editado correctamente.' }
+        format.js
+      else
+        format.html { redirect_to url_for(controller: 'armies', action: 'index', anchor: ''), danger: @army.errors }
+      end
+    end
   end
 
   def update_multiple
@@ -257,8 +271,6 @@ class ArmiesController < ApplicationController
               end
 
               army_data = hash.merge('faction_ids' => factions.compact)
-
-              puts army_data
 
               # Update the attributes
               army.attributes = army_data
