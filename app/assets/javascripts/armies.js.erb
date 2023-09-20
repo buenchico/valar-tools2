@@ -19,7 +19,7 @@ $(document).on('turbolinks:load', function () {
             //Loop through all checked CheckBoxes in GridView.
             $("input[type=checkbox]:visible:checked").each(function () {
                 var row = $(this).closest("tr");
-                if ($(this).closest("tr")[0].id != "table_title") {
+                if (row.hasClass("tablesorter-headerRow") == false) {
                   message += "> * ";
                   // Name
                   message += row[0].cells[2].textContent;
