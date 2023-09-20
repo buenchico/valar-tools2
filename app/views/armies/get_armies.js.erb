@@ -1,10 +1,15 @@
 if ($('#tab-<%= @faction.id %>').hasClass('active')) {
   $('#tab-<%= @faction.id %>').removeClass('active');
+  var army_ids = <%= @army_ids %>; // Example array of army IDs
+
+  $.each(army_ids, function(index, armyId) {
+    // Remove the element with the calculated ID
+    $("#army_" + armyId).remove();
+  });
 } else {
   $('#tab-<%= @faction.id %>').addClass('active');
-  console.log("<%= @armies.length %>")
   <% @armies.each do |army| %>
-    console.log("<%= @armies.length %>")
     $('#table_body').append("<%= j render 'row', army: army %>")
   <% end %>
+  $('.selectpicker').selectpicker();
 }

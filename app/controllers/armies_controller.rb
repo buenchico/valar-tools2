@@ -2,7 +2,7 @@ class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
   before_action :set_options, only: [:index, :edit, :edit_multiple, :update, :new, :export, :get_armies]
-  before_action :set_factions, only: [:edit, :new]
+  before_action :set_factions, only: [:index, :edit, :new]
   before_action :set_filters, only: [:index]
   before_action :check_player
   before_action :check_master, only: [:destroy, :destroy_multiple]
@@ -10,7 +10,6 @@ class ArmiesController < ApplicationController
   before_action :set_regions, only: [:new, :edit, :edit_multiple]
 
   def index
-    @factions = Faction.where.not(name: ['admin','player']).where(active: true).order(:id)
     all_armies = Army.all.order(:id)
     @armies_total = all_armies.length
     @men_total = all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) }
@@ -33,8 +32,16 @@ class ArmiesController < ApplicationController
 
   def get_armies
     @faction = Faction.find_by(id: params[:faction_id])
-    if @faction.name = ''
-    @armies = @faction.armies.order(:id)
+    if @faction.name == 'master'
+      @armies = Army.all.order(:id)
+    elsif @faction.name == 'player'
+      @armies = Army.where(visible: false).order(:id)
+    else
+      @armies = @faction.armies.where(visible: true).order(:id)
+    end
+
+    @army_ids = @armies.pluck(:id)
+
     respond_to do | format |
       format.js
     end
@@ -347,7 +354,7 @@ private
   end
 
   def set_factions
-    @factions = Faction.where(active: true).order(:name).offset(0)
+    @factions = Faction.where.not(name: ['admin']).where(active: true).order(:id)
   end
 
   def set_filters
