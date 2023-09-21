@@ -34,8 +34,6 @@ class ArmiesController < ApplicationController
     @faction = Faction.find_by(id: params[:faction_id])
     if @faction.name == 'master'
       @armies = Army.all.order(:id)
-    elsif @faction.name == 'player'
-      @armies = Army.where(visible: false).order(:id)
     else
       @armies = @faction.armies.where(visible: true).order(:id)
     end

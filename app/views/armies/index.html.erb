@@ -51,7 +51,7 @@
     <li class="me-1">Facciones:</li>
     <% @factions.each do | faction | %>
       <li>
-        <%= link_to faction.long_name, get_armies_path(faction), remote: true, id: 'tab-' + faction.id.to_s, class: 'nav-link nav-links-sm text-white armies-tab' %>
+        <%= link_to faction.long_name, get_armies_path(faction), remote: true, id: 'tab-' + faction.id.to_s, class: 'nav-link nav-links-sm text-white armies-tab' + (@faction.id == faction.id ? ' active' : ''), onclick: '$(".spinner-border").removeClass("d-none")' %>
       </li>
     <% end %>
   </ul>

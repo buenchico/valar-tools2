@@ -90,32 +90,36 @@ $(document).on('turbolinks:load', function() {
   });
 });
 
-// Select all checkboxes
-$(document).on('turbolinks:load', function(e) {
-  var $checkboxes = $('.checkbox_selectable');
-
-  function mass_edit_buttons() {
-    var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
-    if (countCheckedCheckboxes == 0 ) {
-      $(".mass_edit_button").prop("disabled", true);
-    }
-    if (countCheckedCheckboxes != 0) {
-      $(".mass_edit_button").prop("disabled", false);
-    }
-  }
-
-  $checkboxes.change(function(){
+$.fn.checkbox_listeners = function() {
+  $('.checkbox_selectable').change(function() {
     if ($(this).prop('checked') == false) {
       $(".checkbox_select_all").prop('checked', false);
     }
-    mass_edit_buttons();
+    $.fn.mass_edit_buttons();
   });
 
   $(".checkbox_select_all").click(function () {
     $(".checkbox_selectable:visible").prop('checked', $(this).prop('checked'));
     $(".checkbox_selectable:visible").trigger('change'); // Trigger the change event on individual checkboxes
   });
+}
+
+$.fn.mass_edit_buttons = function() {
+  var countCheckedCheckboxes = $('.checkbox_selectable').filter(':checked').length;
+  if (countCheckedCheckboxes == 0 ) {
+    $(".mass_edit_button").prop("disabled", true);
+  }
+  if (countCheckedCheckboxes != 0) {
+    $(".mass_edit_button").prop("disabled", false);
+  }
+}
+
+// Select all checkboxes
+$(document).on('turbolinks:load', function() {
+  $.fn.checkbox_listeners();
+  $.fn.mass_edit_buttons();
 });
+
 
 // Change collpase icon
 function changeCollapseIcon(event) {

@@ -1,3 +1,4 @@
+// response will come underneath of ‘data’ variable
 if ($('#tab-<%= @faction.id %>').hasClass('active')) {
   $('#tab-<%= @faction.id %>').removeClass('active');
   var army_ids = <%= @army_ids %>; // Example array of army IDs
@@ -5,11 +6,19 @@ if ($('#tab-<%= @faction.id %>').hasClass('active')) {
   $.each(army_ids, function(index, armyId) {
     // Remove the element with the calculated ID
     $("#army_" + armyId).remove();
+    $('#edit_multiple').find('input[value="' + armyId + '"]').remove();
   });
 } else {
   $('#tab-<%= @faction.id %>').addClass('active');
   <% @armies.each do |army| %>
     $('#table_body').append("<%= j render 'row', army: army %>")
   <% end %>
+  $('.checkbox_select_all').prop('checked', false);
   $('.selectpicker').selectpicker();
 }
+
+$.fn.recalculateStats();
+$.fn.checkboxSelectable();
+$.fn.checkbox_listeners();
+$.fn.mass_edit_buttons();
+$(".spinner-border").addClass("d-none");

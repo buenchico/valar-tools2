@@ -189,6 +189,10 @@ es:
         one: "la"
         other: "las"
   and: "y"
+  true: "verdadero"
+  false: "falso"
+  yes: "sí"
+  no: "no"
   datetime:
     distance_in_words:
       x_hours:

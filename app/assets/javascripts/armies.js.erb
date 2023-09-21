@@ -1,6 +1,5 @@
 $(document).on('turbolinks:load', function () {
   if ($(".armies").length !== 0 ) {
-
     // Copy selected to clipboard
     $(function () {
         //Assign Click event to Button.
@@ -57,8 +56,6 @@ $(document).on('turbolinks:load', function () {
         $("#men").html((countArmies * men_per_army) + (menArmies * men_per_step));
     }
 
-    $.fn.recalculateStats()
-
     // Filters
     $.fn.armyFilters = function(){
         var value = $("#filtertext").val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -78,27 +75,29 @@ $(document).on('turbolinks:load', function () {
         $.fn.recalculateStats()
     });
 
-    // Trigger recalculate stats on changing tabs
-    $(document).on('shown.bs.tab', function (e) {
-        $.fn.recalculateStats()
-    })
-
     // Add hidden checkboxes for mass edit options
-    $('.checkbox_selectable').change(function() {
-      var form = $('#edit_multiple');
-      var armyId = $(this).val();
+    $.fn.checkboxSelectable = function(){
+      $('.checkbox_selectable').change(function() {
+        var form = $('#edit_multiple');
+        var armyId = $(this).val();
 
-      if ($(this).is(':checked')) {
-        // If the checkbox is checked, add the army_id to the form parameters
-        $('<input>').attr({
-          type: 'hidden',
-          name: 'army_ids[]',
-          value: armyId
-        }).appendTo(form);
-      } else {
-        // If the checkbox is unchecked, remove the corresponding input element from the form
-        form.find('input[value="' + armyId + '"]').remove();
-      }
-    });
+        if ($(this).is(':checked')) {
+          // If the checkbox is checked, add the army_id to the form parameters
+          $('<input>').attr({
+            type: 'hidden',
+            name: 'army_ids[]',
+            id: 'hidden_' + armyId,
+            value: armyId
+          }).appendTo(form);
+        } else {
+          // If the checkbox is unchecked, remove the corresponding input element from the form
+          form.find('input[value="' + armyId + '"]').remove();
+        }
+      });
+    }
+
+    // Trigger functions on load
+    $.fn.recalculateStats();
+    $.fn.checkboxSelectable();
   }
 });
