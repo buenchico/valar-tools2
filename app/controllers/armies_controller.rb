@@ -91,9 +91,13 @@ class ArmiesController < ApplicationController
         end
     end
 
+    puts "////////////////////////"
+    puts params
+    puts "////////////////////////"
+
     respond_to do |format|
       if @army.update(army_params.reject! { |x| keys_to_remove&.include?(x) })
-        format.html { redirect_to url_for(controller: 'armies', action: 'index', anchor: ''), success: 'Ejército editado correctamente.' }
+        flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
         format.js
       else
         format.html { redirect_to url_for(controller: 'armies', action: 'index', anchor: ''), danger: @army.errors }

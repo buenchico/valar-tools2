@@ -70,13 +70,12 @@ $.tablesorter.addParser({
 });
 
 // Inline edit select form to submit on change
-$(document).on('turbolinks:load', function() {
+
+$.fn.inline_listeners = function() {
   $('.inline-edit-select').change(function() {
     $(this).closest('form').submit();
   });
-});
 
-$(document).on('turbolinks:load', function() {
   $('.inline-edit-input').on('focus', function() {
     $(this).addClass('inline-edit-input-focus');
   });
@@ -88,6 +87,10 @@ $(document).on('turbolinks:load', function() {
       $(this).closest('form').submit();
     }
   });
+}
+
+$(document).on('turbolinks:load', function() {
+  $.fn.inline_listeners();
 });
 
 $.fn.checkbox_listeners = function() {
