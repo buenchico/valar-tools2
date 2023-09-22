@@ -1,4 +1,12 @@
 $('#family_<%= @family.id %>').html('<%= j render "row", family: @family  %>');
 
+$('.family_<%= @family.id %>').addClass( "table-highlight", callback )
+
+function callback() {
+  setTimeout(function() {
+    $('.army_<%= @army.id %>').removeClass( "table-highlight" );
+  }, 500 );
+}
+
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
 $(".modal").modal('hide');

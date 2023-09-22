@@ -91,16 +91,16 @@ class ArmiesController < ApplicationController
         end
     end
 
-    puts "////////////////////////"
-    puts params
-    puts "////////////////////////"
+    @inline = params[:inline]
+    original_title =  @army.name
 
     respond_to do |format|
       if @army.update(army_params.reject! { |x| keys_to_remove&.include?(x) })
         flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
         format.js
       else
-        format.html { redirect_to url_for(controller: 'armies', action: 'index', anchor: ''), danger: @army.errors }
+        flash.now[:danger] = @army.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: original_title + " (id: " + @army.id.to_s + ")", method: 'update' } }
       end
     end
   end
@@ -183,9 +183,11 @@ class ArmiesController < ApplicationController
   def destroy
     respond_to do |format|
       if @army.destroy
-        format.html { redirect_to armies_url, success: 'Ejército eliminado correctamente.' }
+        flash.now[:danger] = t('messages.success.destroy', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        format.js
       else
-        format.html {  redirect_to armies_url, danger: @army.errors  }
+        flash.now[:danger] = @army.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: @army.name.strip + " (id: " + @army.id.to_s + ")", method: 'delete' } }
       end
     end
   end

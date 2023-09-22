@@ -23,7 +23,9 @@
         </div>
       </div>
       <% @armies&.each do |army| %>
-        <%= render 'row', army: army %>
+        <tr id="army_<%= army.id %>" class="army_<%= army.id %> <%= army.status == 'Aniquilado' ? 'destroyed' : '' %><%= army.status == 'Alzado' ? 'mobilized' : '' %>">
+          <%= render 'row_container', army: army %>
+        </tr>
       <% end %>
     </tbody>
   </table>

@@ -63,7 +63,7 @@ class FamiliesController < ApplicationController
         format.js
       else
         flash.now[:danger] = @family.errors.to_hash
-        format.js { render 'layouts/error', locals: { thing: original_title + " (id: " + @family.id.to_s + ")", method: 'delete' } }
+        format.js { render 'layouts/error', locals: { thing: @family.name.strip + " (id: " + @family.id.to_s + ")", method: 'delete' } }
       end
     end
   end

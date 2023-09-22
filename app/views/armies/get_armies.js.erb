@@ -28,7 +28,7 @@ if ($('#visible-<%= @visible %>').hasClass('active') || $('#tab-<%= @faction&.id
   }
 
   <% @armies.each do |army| %>
-    $('#table_body').append("<%= j render 'row', army: army %>")
+    $('#table_body').append("<%= j render 'row_container', army: army %>")
   <% end %>
   $('.checkbox_select_all').prop('checked', false);
   $('.selectpicker').selectpicker();

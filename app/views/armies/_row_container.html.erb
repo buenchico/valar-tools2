@@ -1,0 +1,3 @@
+<tr id="army_<%= army.id %>" class="army_<%= army.id %> <%= army.status == 'Aniquilado' ? 'destroyed' : '' %><%= army.status == 'Alzado' ? 'mobilized' : '' %>">
+  <%= render 'row', army: army %>
+</tr>
