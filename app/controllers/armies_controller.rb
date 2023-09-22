@@ -3,6 +3,7 @@ class ArmiesController < ApplicationController
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
   before_action :set_options, only: [:index, :edit, :edit_multiple, :update, :new, :export, :get_armies]
   before_action :set_factions, only: [:index, :edit, :new]
+  before_action :army_stats, only: [:index, :get_armies]
   before_action :set_filters, only: [:index]
   before_action :check_player
   before_action :check_master, only: [:destroy, :destroy_multiple]
@@ -10,12 +11,6 @@ class ArmiesController < ApplicationController
   before_action :set_regions, only: [:new, :edit, :edit_multiple]
 
   def index
-    all_armies = Army.all.order(:id)
-    @armies_total = all_armies.length
-    @men_total = all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) }
-    @str_total = all_armies.sum { |army| army.strength }
-    @raised = all_armies.where(status: ARMY_STATUS[0]).length
-    @dead = all_armies.where(status: ARMY_STATUS[2]).length
     @faction = Faction.find_by(id: params[:faction_id])
     if @current_user&.is_master?
       if @faction
@@ -32,10 +27,25 @@ class ArmiesController < ApplicationController
 
   def get_armies
     @faction = Faction.find_by(id: params[:faction_id])
-    if @faction.name == 'master'
-      @armies = Army.all.order(:id)
+    active_factions = params[:active_factions].split(",")
+    @visible = params[:visible]
+    active_visibility = params[:active_visibility].split(",")
+    @master = Faction.find_by(name: 'master')
+
+    if active_factions.length == 1
+      @stats_faction = Faction.find_by(id: active_factions[0])
     else
-      @armies = @faction.armies.where(visible: true).order(:id)
+      @stats_faction = @master
+    end
+
+    if @faction
+      if @faction.name == 'master'
+        @armies = Army.all.where(visible: active_visibility).order(:id)
+      else
+        @armies = @faction.armies.where(visible: active_visibility).order(:id)
+      end
+    else
+      @armies = Army.joins(:factions).where(visible: @visible).where(factions: { id: active_factions })
     end
 
     @army_ids = @armies.pluck(:id)
@@ -352,7 +362,7 @@ private
   end
 
   def set_factions
-    @factions = Faction.where.not(name: ['admin']).where(active: true).order(:id)
+    @factions = Faction.where.not(name: ['admin','player']).where(active: true).order(:id)
   end
 
   def set_filters
@@ -361,6 +371,15 @@ private
     else
       @filter = [ "Ejército", "Rasgos", "Posición", "Grupo" ]
     end
+  end
+
+  def army_stats
+    all_armies = Army.all.order(:id)
+    @armies_total = all_armies.length
+    @men_total = all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) }
+    @str_total = all_armies.sum { |army| army.strength }
+    @raised = all_armies.where(status: ARMY_STATUS[0]).length
+    @dead = all_armies.where(status: ARMY_STATUS[2]).length
   end
 
   def check_owner

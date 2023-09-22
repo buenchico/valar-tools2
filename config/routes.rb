@@ -47,7 +47,8 @@ Rails.application.routes.draw do
   post 'armies/import', to: 'armies#import', as: 'import_armies'
   get 'armies/export', to: 'armies#export', as: 'export_armies'
   get 'armies/faction/:faction_id', to: 'armies#index'
-  get 'armies/get_armies/:faction_id', to: 'armies#get_armies', as: 'get_armies'
+  # get 'armies/get_armies/:faction_id', to: 'armies#get_armies', as: 'get_armies'
+  get 'armies/get_armies', to: 'armies#get_armies', as: 'get_armies'
   resources :armies, :except => [:show]
 
   resources :locations

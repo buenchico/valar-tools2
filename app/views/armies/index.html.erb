@@ -47,17 +47,30 @@
 </div>
 
 <% if @current_user&.is_master? %>
-  <ul class="nav nav-pills mb-3">
-    <li class="me-1">Facciones:</li>
-    <% @factions.each do | faction | %>
-      <li>
-        <%= link_to faction.long_name, get_armies_path(faction), remote: true, id: 'tab-' + faction.id.to_s, class: 'nav-link nav-links-sm text-white armies-tab' + (@faction.id == faction.id ? ' active' : ''), onclick: '$(".spinner-border").removeClass("d-none")' %>
-      </li>
-    <% end %>
-  </ul>
+  <%= form_with url: get_armies_path, method: :get, local: false do |form| %>
+    <ul class="nav nav-pills mb-3">
+      <li class="me-1">Facciones:</li>
+      <% @factions.each do |faction| %>
+        <li>
+          <%= form.button faction.long_name, type: 'button', id: 'tab-' + faction.id.to_s, value: faction.id, class: 'nav-link nav-links-sm text-white armies-tab armies-load' + (@faction.id == faction.id ? ' active' : '') %>
+        </li>
+      <% end %>
+    </ul>
+    <ul class="nav nav-pills mb-3">
+      <li class="me-1">Visibilidad:</li>
+      <li><%= form.button 'Visible', name: 'visibility', type: 'button', id: 'visible-true', value: 'true', class: 'nav-link nav-links-sm text-white visible-tab armies-load active' %></li>
+      <li><%= form.button 'Invisible', name: 'visibility', type: 'button', id: 'visible-false', value: 'false', class: 'nav-link nav-links-sm text-white visible-tab armies-load' %></li>
+    </ul>
+    <%= form.hidden_field :active_factions, value: @faction.nil? ? '' : @faction.id %>
+    <%= form.hidden_field :faction_id %>
+    <%= form.hidden_field :active_visibility, value: true %>
+    <%= form.hidden_field :visible %>
+  <% end %>
 <% end %>
 
-<%= render 'army_stats', faction: @faction %>
+<div class="row" id="army_stats">
+  <%= render 'army_stats', faction: @faction %>
+</div>
 <div id="army_table">
   <%= render 'armies_table' %>
 </div>
