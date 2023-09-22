@@ -42,7 +42,7 @@ $(document).on('turbolinks:load', function () {
     $.fn.recalculateStats = function(){
         var men_per_army = parseInt($('#men_per_army').text());
         var men_per_step = parseInt($('#men_per_step').text());
-        var countArmies = $('input[type="checkbox"]:visible').length - 1;
+        var countArmies = $('.checkbox_selectable:visible').length;
         var menArmies = 0
         $('.army-hp:visible').each(function(){
             menArmies += parseInt($(this).text().trim().split(" ")[1].replace(/–/g, '-'));  // Or this.innerHTML, this.innerText
@@ -61,7 +61,7 @@ $(document).on('turbolinks:load', function () {
         var value = $("#filtertext").val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         var column = $("#filterselect").children("option:selected").val();
         $(".army_list").filterTable(value, column);
-        var countArmies = $('input[type="checkbox"]:visible').length - 1;
+        var countArmies = $('.checkbox_selectable:visible').length;
         $("#count-visible").html(countArmies);
     }
 

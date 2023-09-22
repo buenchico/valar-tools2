@@ -1,7 +1,7 @@
 class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
-  before_action :set_options, only: [:index, :edit, :edit_multiple, :update, :new, :export, :get_armies]
+  before_action :set_options, only: [:index, :edit, :edit_multiple, :update, :new, :create, :export, :get_armies]
   before_action :set_factions, only: [:index, :edit, :new]
   before_action :army_stats, only: [:index, :get_armies]
   before_action :set_filters, only: [:index]
@@ -45,7 +45,11 @@ class ArmiesController < ApplicationController
         @armies = @faction.armies.where(visible: active_visibility).order(:id)
       end
     else
-      @armies = Army.joins(:factions).where(visible: @visible).where(factions: { id: active_factions })
+      if active_factions.include?(@master.id.to_s)
+        @armies = Army.all.where(visible: @visible)
+      else
+        @armies = Army.joins(:factions).where(visible: @visible).where(factions: { id: active_factions })
+      end
     end
 
     @army_ids = @armies.pluck(:id)
@@ -64,9 +68,11 @@ class ArmiesController < ApplicationController
 
     respond_to do |format|
       if @army.save
-        format.html { redirect_to armies_url, success: 'Ejército creado correctamente.' }
+        flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        format.js
       else
-        format.html {  redirect_to armies_url, danger: @army.errors }
+        flash.now[:danger] = @army.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: 'el ejército', method: 'create' } }
       end
     end
   end
