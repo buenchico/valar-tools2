@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  url: MyString
+  status: MyString
+  notes: MyString
+  started: 2023-09-23
+  resolve: 2023-09-23
+  faction: one
+  user: one
+
+two:
+  name: MyString
+  url: MyString
+  status: MyString
+  notes: MyString
+  started: 2023-09-23
+  resolve: 2023-09-23
+  faction: two
+  user: two

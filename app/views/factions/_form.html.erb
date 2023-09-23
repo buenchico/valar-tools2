@@ -24,6 +24,10 @@
             <%= form.number_field :discourse_id, class: 'form-control', step: 1, disabled: true %>
           </div>
           <div class="input-group mb-3">
+            <%= form.label :category_id, class: 'input-group-text' %>
+            <%= form.number_field :category_id, class: 'form-control', step: 1 %>
+          </div>
+          <div class="input-group mb-3">
             <%= form.label :flair_url, class: 'input-group-text' %>
             <%= form.text_field :flair_url, class: 'form-control', disabled: true %>
           </div>

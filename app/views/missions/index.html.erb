@@ -15,3 +15,9 @@
 
   <%= form.submit t('.calculate'), class: "btn btn-primary", id: "calculate" %>
 <% end %>
+
+<div>
+  <% @missions.each do |mission| %>
+    <p><%= mission.name %></p>
+  <% end %>
+</div>
