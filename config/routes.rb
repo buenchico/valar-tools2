@@ -70,6 +70,7 @@ Rails.application.routes.draw do
   resources :missions, :only => [:edit, :update]
   post 'missions/calculate', to: 'missions#calculate'
   post 'missions/initialize', to: 'missions#initialize_missions', as: 'initialize_missions'
+  post 'missions/sync', to: 'missions#sync_missions', as: 'sync_missions'
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

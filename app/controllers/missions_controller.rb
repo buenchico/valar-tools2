@@ -13,6 +13,16 @@ class MissionsController < ApplicationController
   end
 
   def update
+    original_title = @mission.name
+    respond_to do |format|
+      if @mission.update(mission_params)
+        flash.now[:success] = t('messages.success.update', thing: @mission.name.strip + " (id: " + @mission.id.to_s + ")", count: 1)
+        format.js
+      else
+        flash.now[:danger] = @mission.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: original_title + " (id: " + @mission.id.to_s + ")", method: 'update' } }
+      end
+    end
   end
 
   def calculate
@@ -43,6 +53,10 @@ private
     end
   end
 
+  def mission_params
+    params.require(:mission).permit(:name, :discourse_id, :status, :notes, :started, :resolved, :game_id, :user_id, :faction_id)
+  end
+
   def missions_api(missions)
     game_category_id = active_game.category_id
     @errors = []
@@ -55,6 +69,7 @@ private
           name: mission['title'],
           discourse_id: mission['id'],
           status: 'open',
+          started: mission['created_at'],
           faction: Faction.find_by(category_id: mission['category_id']),
           game: active_game
         )
@@ -63,16 +78,13 @@ private
         else
           @errors << mission['title']
         end
-        puts "XXXXXXXXXXXXXXXXXXXXXXXX"
-        puts mission['title']
-        puts @mission.errors.to_json
-        puts "XXXXXXXXXXXXXXXXXXXXXXXXXX"
       else
         @mission = @missions.find_by(discourse_id: mission["id"])
         if @mission.update(
           name: mission['title'],
           discourse_id: mission['id'],
           status: 'open',
+          started: mission['created_at'],
           faction: Faction.find_by(category_id: mission['category_id']),
           game: active_game
         )
@@ -87,8 +99,8 @@ private
       if @errors.length == 0
         format.html { redirect_to missions_url, success: @count.to_s + ' facciones han sido sincronizadas correctamente. Por favor, revisa las partidas.' }
       else
-        message = '<p>' + @count.to_s + ' facciones han sido sincronizadas correctamente.</p>' +
-                  '<p>' + @errors.length.to_s + ' facciones han fallado al ser creadas.</p>' +
+        message = '<p>' + @count.to_s + ' misiones han sido sincronizadas correctamente.</p>' +
+                  '<p>' + @errors.length.to_s + ' misiones han fallado al ser creadas.</p>' +
                   '<p>' + @errors.to_s + '</p>'
         format.html { redirect_to missions_url, danger: message }
       end

@@ -13,7 +13,7 @@
     </thead>
     <tbody>
       <% @missions.each do |mission| %>
-        <tr>
+        <tr id="mission_<%= mission.id %>">
           <%= render 'row', mission: mission %>
         </tr>
       <% end %>

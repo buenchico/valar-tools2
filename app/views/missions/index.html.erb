@@ -14,7 +14,8 @@
   <%= form_with url: missions_calculate_path, local: false do |form| %>
     <%= form.submit t('.calculate'), class: "btn btn-primary", id: "calculate" %>
   <% end %>
-  <%= link_to "Inicializar Misiones", initialize_missions_path, method: :post, class: 'btn btn-danger' %>
+  <%= link_to "Actualizar Misiones", sync_missions_path, method: :post, class: 'btn btn-danger ms-1' %>
+  <%= link_to "Inicializar Misiones", initialize_missions_path, method: :post, class: 'btn btn-danger d-none' %>
 </div>
 
 <%= render 'missions_table' %>

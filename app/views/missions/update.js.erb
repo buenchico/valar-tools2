@@ -1,0 +1,12 @@
+$('#mission_<%= @mission.id %>').html('<%= j render "row", mission: @mission  %>');
+
+$('.mission_<%= @mission.id %>').addClass( "table-highlight", callback )
+
+function callback() {
+  setTimeout(function() {
+    $('.mission_<%= @mission.id %>').removeClass( "table-highlight" );
+  }, 500 );
+}
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+$(".modal").modal('hide');
