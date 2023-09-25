@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
 
   root 'static_pages#home'
-  get 'bug', to: 'static_pages#bug'
-  post 'bug_report', to: 'static_pages#bug_report'
 
   # Errors
   match "/404", to: "errors#not_found", via: :all
@@ -48,6 +46,9 @@ Rails.application.routes.draw do
   put 'armies/destroy_multiple', to: 'armies#destroy_multiple', as: 'destroy_multiple_armies'
   post 'armies/import', to: 'armies#import', as: 'import_armies'
   get 'armies/export', to: 'armies#export', as: 'export_armies'
+  get 'armies/faction/:faction_id', to: 'armies#index'
+  # get 'armies/get_armies/:faction_id', to: 'armies#get_armies', as: 'get_armies'
+  get 'armies/get_armies', to: 'armies#get_armies', as: 'get_armies'
   resources :armies, :except => [:show]
 
   resources :locations
@@ -60,6 +61,10 @@ Rails.application.routes.draw do
   post 'travel/calculate', to: 'travel#calculate'
 
   get 'map', to: 'map#index'
+  get 'map/:id', to: 'map#show'
+
+  get 'issues', to: 'issues#new'
+  post 'issues', to: 'issues#create'
 
   get 'missions', to: 'missions#index'
   resources :missions, :only => [:edit, :update]

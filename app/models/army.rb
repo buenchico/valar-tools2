@@ -10,18 +10,19 @@ class Army < ApplicationRecord
 
   def strength
     base = 10
-    $options["attributes"].sort_by { |_, v| v["sort"] }.to_h.each do | key, value |
+    @options = $options_armies
+    @options["attributes"].sort_by { |_, v| v["sort"] }.to_h.each do | key, value |
       base += self["col#{value['sort']}"].to_i * value["str"]
     end
     self.tags.each do | tag |
-      if self.board.present? && $options["tags"][tag]["board"].present?
-        base += $options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"board" => 0})["board"].to_i
+      if self.board.present? && @options["tags"][tag]["board"].present?
+        base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"board" => 0})["board"].to_i
       else
-        base += $options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"str" => 0})["str"].to_i
+        base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"str" => 0})["str"].to_i
       end
     end
     if self.board.present?
-      base += $options["fleets"].fetch(self.board, {"str" => 0})["str"].to_i
+      base += @options["fleets"].fetch(self.board, {"str" => 0})["str"].to_i
     end
     str = base * self.hp / 100
     str = [0, str].max

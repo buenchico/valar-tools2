@@ -32,6 +32,7 @@
 es:
   helpers:
     submit:
+      submit: 'Enviar %{model}'
       create: 'Añadir %{model}'
       update: 'Guardar %{model}'
       delete: 'Borrar %{model}'
@@ -39,6 +40,8 @@ es:
       delete_multiple: 'Guardar %{model}'
       import: 'Importar %{model}'
     label:
+      title: "Título"
+      description: "Descripcción"
       from: "Origen"
       to: "Destino"
       army_type_land: "Tipo de ejércitos"
@@ -136,6 +139,7 @@ es:
               inclusion: 'Sólo pueden elegirse flotas de la lista'
             name:
               taken: 'El nombre del ejército debe ser único'
+              blank: 'El nombre dle ejército no puede estar en blanco'
             tags:
               inclusion: 'Sólo pueden elegirse rasgos de la lista'
             group:
@@ -146,6 +150,8 @@ es:
               options_cannot_be_changed_if_game_is_active: "No puedes cambiar las opciones de la partida %{game_name} mientres esté activa"
         family:
           attributes:
+            name:
+              blank: "El nombre no puede estar en blanco"
             base:
               invalid: "Una familia con el mismo nombre y rama existe en la partida."
   travel:
@@ -186,6 +192,10 @@ es:
         one: "la"
         other: "las"
   and: "y"
+  true: "verdadero"
+  false: "falso"
+  yes: "sí"
+  no: "no"
   datetime:
     distance_in_words:
       x_hours:
@@ -199,3 +209,19 @@ es:
         other: '%{count} semanas'
   word_genders:
     ciudad: feminine
+  messages:
+    success:
+      create:
+        one:  '%{thing} ha sido creado correctamente.'
+        other:  '%{thing} han sido creado correctamente.'
+      update:
+        one:  '%{thing} ha sido editado correctamente.'
+        other:  '%{thing} han sido editado correctamente.'
+      destroy:
+        one: '%{thing} ha sido borrado correctamente.'
+        other: '%{thing} han sido borrado correctamente.'
+    error:
+      base: "Se ha encontrado un error %{thing}"
+      create: 'Se ha encontrado un error creando %{thing}.'
+      update: 'Se ha encontrado un error editando %{thing}.'
+      destroy: 'Se ha encontrado un error borrando %{thing}.'

@@ -1,0 +1,37 @@
+if ($('#visible-' + '<%= @army.visible.to_s %>').hasClass('active')) {
+  var active_factions = $('#active_factions').val().split(",");
+  var army_faction_ids = "<%= @army.factions.pluck(:id) %>"
+
+  // Using jQuery's $.grep() function
+  var found = $.grep(army_faction_ids, function (value) {
+      return $.inArray(value, active_factions) !== -1;
+  });
+
+  console.log(active_factions)
+  console.log(army_faction_ids)
+  console.log(found)
+
+  if (found.length > 0) {
+    $('#army_list').find('tbody').append('<tr id="army_<%= @army.id.to_s %>"></tr>');
+    $('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
+
+    $('.army_<%= @army.id %>').addClass( "table-highlight", callback )
+
+    function callback() {
+      setTimeout(function() {
+        $('.army_<%= @army.id %>').removeClass( "table-highlight" );
+      }, 500 );
+    }
+  }
+}
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+
+$('.selectpicker').selectpicker();
+$.fn.recalculateStats();
+$.fn.checkboxSelectable();
+$.fn.checkbox_listeners();
+$.fn.mass_edit_buttons();
+$.fn.inline_listeners();
+
+$(".modal").modal('hide');

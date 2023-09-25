@@ -1,19 +1,61 @@
 class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
-  before_action :set_options, only: [:index, :edit, :edit_multiple, :update, :new, :export]
-  before_action :set_factions, only: [:edit, :new]
+  before_action :set_options, only: [:index, :edit, :edit_multiple, :update, :new, :create, :export, :get_armies]
+  before_action :set_factions, only: [:index, :edit, :new]
+  before_action :army_stats, only: [:index, :get_armies]
   before_action :set_filters, only: [:index]
   before_action :check_player
   before_action :check_master, only: [:destroy, :destroy_multiple]
-  before_action :check_owner, only: [:edit, :edit_notes, :update]
+  before_action :check_owner, only: [:edit, :edit_notes, :update, :edit_multiple, :update_multiple]
   before_action :set_regions, only: [:new, :edit, :edit_multiple]
 
   def index
-    @factions = Faction.where(active: true).order(:id).drop(1)
-    @all_armies = Army.all.order(:group)
-    if !@current_user&.is_master?
-      @armies = @current_user.faction.armies.where(visible: true)
+    @faction = Faction.find_by(id: params[:faction_id])
+    if @current_user&.is_master?
+      if @faction
+        @armies = @faction.armies.where(visible: true).order(:id)
+      else
+        @faction = @current_user.faction
+        @armies = nil
+      end
+    else
+      @faction = @current_user.faction
+      @armies = @faction.armies.where(visible: true).order(:id)
+    end
+  end
+
+  def get_armies
+    @faction = Faction.find_by(id: params[:faction_id])
+    active_factions = params[:active_factions].split(",")
+    @visible = params[:visible]
+    active_visibility = params[:active_visibility].split(",")
+    @master = Faction.find_by(name: 'master')
+
+    if active_factions.length == 1
+      @stats_faction = Faction.find_by(id: active_factions[0])
+    else
+      @stats_faction = @master
+    end
+
+    if @faction
+      if @faction.name == 'master'
+        @armies = Army.all.where(visible: active_visibility).order(:id)
+      else
+        @armies = @faction.armies.where(visible: active_visibility).order(:id)
+      end
+    else
+      if active_factions.include?(@master.id.to_s)
+        @armies = Army.all.where(visible: @visible)
+      else
+        @armies = Army.joins(:factions).where(visible: @visible).where(factions: { id: active_factions })
+      end
+    end
+
+    @army_ids = @armies.pluck(:id)
+
+    respond_to do | format |
+      format.js
     end
   end
 
@@ -26,9 +68,11 @@ class ArmiesController < ApplicationController
 
     respond_to do |format|
       if @army.save
-        format.html { redirect_to armies_url, success: 'Ejército creado correctamente.' }
+        flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        format.js
       else
-        format.html {  redirect_to armies_url, danger: @army.errors }
+        flash.now[:danger] = @army.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: 'el ejército', method: 'create' } }
       end
     end
   end
@@ -42,18 +86,6 @@ class ArmiesController < ApplicationController
   def edit_multiple
     @armies = Army.where(id: params[:army_ids]).order(:name)
     @action = params[:button]
-
-    @armies.each do | army |
-      if !@current_user&.is_master?
-        if !@current_user.faction.armies.include?(army)
-          respond_to do |format|
-            flash[:danger] = 'No tienes permisos para editar esos ejércitos.'
-            format.js { render js: "window.location='/armies'" }
-            format.html { redirect_to armies_url }
-          end
-        end
-      end
-    end
   end
 
   def update
@@ -65,12 +97,16 @@ class ArmiesController < ApplicationController
         end
     end
 
+    @inline = params[:inline]
+    original_title =  @army.name
+
     respond_to do |format|
       if @army.update(army_params.reject! { |x| keys_to_remove&.include?(x) })
-        format.html { redirect_to url_for(controller: 'armies', action: 'index', anchor: ''), success: 'Ejército editado correctamente.' }
+        flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
         format.js
       else
-        format.html { redirect_to url_for(controller: 'armies', action: 'index', anchor: ''), danger: @army.errors }
+        flash.now[:danger] = @army.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: original_title + " (id: " + @army.id.to_s + ")", method: 'update' } }
       end
     end
   end
@@ -153,9 +189,11 @@ class ArmiesController < ApplicationController
   def destroy
     respond_to do |format|
       if @army.destroy
-        format.html { redirect_to armies_url, success: 'Ejército eliminado correctamente.' }
+        flash.now[:danger] = t('messages.success.destroy', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        format.js
       else
-        format.html {  redirect_to armies_url, danger: @army.errors  }
+        flash.now[:danger] = @army.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: @army.name.strip + " (id: " + @army.id.to_s + ")", method: 'delete' } }
       end
     end
   end
@@ -284,8 +322,6 @@ class ArmiesController < ApplicationController
 
               army_data = hash.merge('faction_ids' => factions.compact)
 
-              puts army_data
-
               # Update the attributes
               army.attributes = army_data
 
@@ -329,7 +365,7 @@ private
     else
       @attributes = @options["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
       @tags = @options["tags"]&.sort_by { |_, v| v["colour"] }.to_h
-      $options = @options
+      $options_armies = @options
     end
   end
 
@@ -338,7 +374,7 @@ private
   end
 
   def set_factions
-    @factions = Faction.where(active: true).order(:name).offset(0)
+    @factions = Faction.where.not(name: ['admin','player']).where(active: true).order(:id)
   end
 
   def set_filters
@@ -349,11 +385,33 @@ private
     end
   end
 
+  def army_stats
+    all_armies = Army.all.order(:id)
+    @armies_total = all_armies.length
+    @men_total = all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) }
+    @str_total = all_armies.sum { |army| army.strength }
+    @raised = all_armies.where(status: ARMY_STATUS[0]).length
+    @dead = all_armies.where(status: ARMY_STATUS[2]).length
+  end
+
   def check_owner
+    armies_to_include = [@army] # Initialize with @army
+
+    if params[:army_ids].present?
+      armies_to_include += Army.where(id: params[:army_ids]).order(:name)
+    end
+
     if !@current_user&.is_master?
-      if !@current_user.faction.armies.include?(@army)
-        flash[:danger] = 'No tienes permisos para editar ese ejército.'
-        render js: "window.location='/armies'"
+      armies_to_include.compact.each do |army|
+        if !@current_user.faction.armies.include?(army)
+          respond_to do |format|
+            format.html { redirect_to armies_url, danger: 'No tienes permisos para editar ese ejército.' }
+            format.js do
+              flash[:danger] = 'No tienes permisos para editar ese ejército.'
+              render js: "window.location='/armies'"
+            end
+          end
+        end
       end
     end
   end

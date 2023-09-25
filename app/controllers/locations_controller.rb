@@ -1,19 +1,21 @@
 class LocationsController < ApplicationController
   before_action :set_tool
-  before_action :check_master, except: [:index, :show]
-  before_action :set_location, only: [:edit, :show, :update, :destroy]
+  before_action :check_master, except: [:show]
+  before_action :set_location, only: [:edit, :show, :update, :destroy, :show]
+  before_action :set_locations_list, only: [:index]
   before_action :set_regions, except: [:index]
   before_action :set_options
 
   def index
-    if @current_user&.is_master?
-      @locations = Location.all
-    else
-      @locations = Location.where(visible: true).where(game_id: active_game.id)
-    end
   end
 
   def show
+    respond_to do | format |
+      format.js
+      format.html do
+        set_locations_list
+      end
+    end
   end
 
   def new
@@ -27,7 +29,7 @@ class LocationsController < ApplicationController
       if @location.save
         format.html { redirect_to locations_url, success: 'Lugar creado correctamente.' }
       else
-        format.html {  redirect_to locations_url, danger: @location.errors }
+        format.html { redirect_to locations_url, danger: @location.errors }
       end
     end
   end
@@ -38,7 +40,8 @@ class LocationsController < ApplicationController
   def update
     respond_to do |format|
       if @location.update(location_params)
-        format.html { redirect_to locations_url, success: 'Lugar editado correctamente.' }
+        flash.now[:success] = t('messages.success.update', thing: @location.name.strip + " (id: " + @location.id.to_s + ")", count: 1)
+        format.js
       else
         format.html { redirect_to locations_url, danger: @location.errors }
       end
@@ -48,7 +51,8 @@ class LocationsController < ApplicationController
   def destroy
     respond_to do |format|
       if @location.destroy
-        format.html { redirect_to locations_url, success: 'Lugar eliminado correctamente.' }
+        flash.now[:danger] = t('messages.success.destroy', thing: @location.name.strip + " (id: " + @location.id.to_s + ")", count: 1)
+        format.js
       else
         format.html {  redirect_to locations_url, danger: @location.errors  }
       end
@@ -67,8 +71,17 @@ private
     @location = Location.find(params[:id])
   end
 
+  def set_locations_list
+    if @current_user&.is_master?
+      @locations = Location.all
+    else
+      @locations = Location.where(visible: true).where(game_id: active_game.id)
+    end
+  end
+
   def set_options
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
+    @location_types = @options["types"]
     if @options.nil?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de lugares'
     end

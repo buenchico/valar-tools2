@@ -1,15 +1,5 @@
 $(document).on('turbolinks:load', function () {
   if ($(".armies").length !== 0 ) {
-
-    // activate the right tabs  // Get the URL hash (e.g., #tab2)
-    const urlHash = window.location.hash;
-
-    // If there's a hash in the URL
-    if (urlHash) {
-      // Activate the tab with the matching ID
-      $(urlHash + '-tab').click();
-    }
-
     // Copy selected to clipboard
     $(function () {
         //Assign Click event to Button.
@@ -19,7 +9,7 @@ $(document).on('turbolinks:load', function () {
             //Loop through all checked CheckBoxes in GridView.
             $("input[type=checkbox]:visible:checked").each(function () {
                 var row = $(this).closest("tr");
-                if ($(this).closest("tr")[0].id != "table_title") {
+                if (row.hasClass("tablesorter-headerRow") == false) {
                   message += "> * ";
                   // Name
                   message += row[0].cells[2].textContent;
@@ -50,14 +40,9 @@ $(document).on('turbolinks:load', function () {
 
     // Recalculate stats
     $.fn.recalculateStats = function(){
-        if ($('#myTabs .active').length !== 0) {
-          var faction = $('#myTabs .active').attr('id').split("-tab")[0];
-        } else {
-          var faction = $('.faction-name').attr('id');
-        }
         var men_per_army = parseInt($('#men_per_army').text());
         var men_per_step = parseInt($('#men_per_step').text());
-        var countArmies = $('input[type="checkbox"]:visible').length - 1;
+        var countArmies = $('.checkbox_selectable:visible').length;
         var menArmies = 0
         $('.army-hp:visible').each(function(){
             menArmies += parseInt($(this).text().trim().split(" ")[1].replace(/–/g, '-'));  // Or this.innerHTML, this.innerText
@@ -66,20 +51,17 @@ $(document).on('turbolinks:load', function () {
         $('.strenght:visible').each(function(){
             strArmies += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
         });
-
-        $("#" + faction + "_count").html(countArmies);
-        $("#" + faction + "_str").html(strArmies);
-        $("#" + faction + "_men").html((countArmies * men_per_army) + (menArmies * men_per_step));
+        $("#count").html(countArmies);
+        $("#str").html(strArmies);
+        $("#men").html((countArmies * men_per_army) + (menArmies * men_per_step));
     }
-
-    $.fn.recalculateStats()
 
     // Filters
     $.fn.armyFilters = function(){
         var value = $("#filtertext").val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         var column = $("#filterselect").children("option:selected").val();
         $(".army_list").filterTable(value, column);
-        var countArmies = $('input[type="checkbox"]:visible').length - 1;
+        var countArmies = $('.checkbox_selectable:visible').length;
         $("#count-visible").html(countArmies);
     }
 
@@ -93,27 +75,83 @@ $(document).on('turbolinks:load', function () {
         $.fn.recalculateStats()
     });
 
-    // Trigger recalculate stats on changing tabs
-    $(document).on('shown.bs.tab', function (e) {
-        $.fn.recalculateStats()
-    })
-
     // Add hidden checkboxes for mass edit options
-    $('.checkbox_selectable').change(function() {
-      var form = $('#edit_multiple');
-      var armyId = $(this).val();
+    $.fn.checkboxSelectable = function(){
+      $('.checkbox_selectable').change(function() {
+        var form = $('#edit_multiple');
+        var armyId = $(this).val();
 
-      if ($(this).is(':checked')) {
-        // If the checkbox is checked, add the army_id to the form parameters
-        $('<input>').attr({
-          type: 'hidden',
-          name: 'army_ids[]',
-          value: armyId
-        }).appendTo(form);
-      } else {
-        // If the checkbox is unchecked, remove the corresponding input element from the form
-        form.find('input[value="' + armyId + '"]').remove();
+        if ($(this).is(':checked')) {
+          // If the checkbox is checked, add the army_id to the form parameters
+          $('<input>').attr({
+            type: 'hidden',
+            name: 'army_ids[]',
+            id: 'hidden_' + armyId,
+            value: armyId
+          }).appendTo(form);
+        } else {
+          // If the checkbox is unchecked, remove the corresponding input element from the form
+          form.find('input[value="' + armyId + '"]').remove();
+        }
+      });
+    }
+
+    // Trigger armies load for master
+    $('.armies-load').click(function() {
+      // Find the parent form of the clicked element
+      var form = $(this).closest('form');
+
+      // Find the container that holds the 'armies-tab' and 'active' buttons
+      var container = $(this).closest('form');
+      // Find all buttons with classes 'armies-tab' and 'active' within the container
+      var activeButtons = container.find('.armies-tab.active');
+      var active_factions = [];
+      // Iterate through the active buttons and get their values (IDs)
+      activeButtons.each(function() {
+        active_factions.push($(this).val());
+      });
+
+      if ($(this).hasClass('armies-tab')) {
+        var faction_id = $(this).val()
+        if ($(this).hasClass('armies-tab') && $(this).hasClass('active')) {
+          // Removing armies
+          var index = $.inArray(faction_id, active_factions); // Find the index of the value
+          if (index !== -1) {
+            active_factions.splice(index, 1); // Remove the value at the found index
+          }
+        } else {
+          // Adding armies
+          active_factions.push(faction_id);
+        }
       }
+
+      if ($(this).hasClass('visible-tab')) {
+        var visible = $(this).val();
+        $('#visible').val(visible);
+      }
+
+      var active_visibility = []
+      if ($('#visible-true').hasClass('active')) {
+        active_visibility.push(true);
+      }
+      if ($('#visible-false').hasClass('active')) {
+        active_visibility.push(false);
+      }
+
+      $('#faction_id').val(faction_id);
+      $('#visible').val(visible);
+      $('#active_factions').val(active_factions);
+      $('#active_visibility').val(active_visibility);
+
+      $('#spinner-main').removeClass('d-none');
+
+      $(this).closest('li').find('.spinner-border').removeClass('d-none');
+      // Submit the form
+      form.submit();
     });
+
+    // Trigger functions on load
+    $.fn.recalculateStats();
+    $.fn.checkboxSelectable();
   }
 });

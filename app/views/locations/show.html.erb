@@ -1,0 +1,10 @@
+<%= render template: 'locations/index' %>
+
+<script type="text/javascript">
+  $(document).on('turbolinks:load.show', function() {
+    <%= render template: 'locations/show', formats: [:js] %>
+  });
+  $(document).on('turbolinks:before-render', function() {
+    $(document).off('turbolinks:load.show');
+  });
+</script>

@@ -47,21 +47,30 @@
 </div>
 
 <% if @current_user&.is_master? %>
-  <ul class="nav nav-pills mb-3" id="myTabs" role="tablist">
-    <% @factions.each do | faction | %>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link <%= faction.name == "master" ? "active" : nil %> text-white" id="<%= faction.name %>-tab" data-bs-toggle="tab" data-bs-target="#<%= faction.name %>" type="button" role="tab" aria-controls="<%= faction.name %>" aria-selected="true"><%= faction.long_name %></button>
-      </li>
-    <% end %>
-  </ul>
-
-  <div class="tab-content">
-    <% @factions.each do | faction | %>
-      <div class="tab-pane fade show  <%= faction.name == "master" ? "active" : nil %>" id="<%= faction.name %>" role="tabpanel" aria-labelledby="<%= faction.name %>-tab">
-        <%= render 'armies_table', armies: @armies = faction.name == "master" ? @all_armies : faction.armies, faction: faction %>
-      </div>
-    <% end %>
-  </div>
-<% else %>
-  <%= render 'armies_table', faction: @current_user.faction %>
+  <%= form_with url: get_armies_path, method: :get, local: false do |form| %>
+    <ul class="nav nav-pills mb-3">
+      <li class="me-1">Facciones:</li>
+      <% @factions.each do |faction| %>
+        <li>
+          <%= form.button faction.long_name, type: 'button', id: 'tab-' + faction.id.to_s, value: faction.id, class: 'nav-link nav-links-sm text-white armies-tab armies-load' + (@faction.id == faction.id ? ' active' : '') %>
+        </li>
+      <% end %>
+    </ul>
+    <ul class="nav nav-pills mb-3">
+      <li class="me-1">Visibilidad:</li>
+      <li><%= form.button 'Visible', name: 'visibility', type: 'button', id: 'visible-true', value: 'true', class: 'nav-link nav-links-sm text-white visible-tab armies-load active' %></li>
+      <li><%= form.button 'Invisible', name: 'visibility', type: 'button', id: 'visible-false', value: 'false', class: 'nav-link nav-links-sm text-white visible-tab armies-load' %></li>
+    </ul>
+    <%= form.hidden_field :active_factions, value: @faction.nil? ? '' : @faction.id %>
+    <%= form.hidden_field :faction_id %>
+    <%= form.hidden_field :active_visibility, value: true %>
+    <%= form.hidden_field :visible %>
+  <% end %>
 <% end %>
+
+<div class="row" id="army_stats">
+  <%= render 'army_stats', faction: @faction %>
+</div>
+<div id="army_table">
+  <%= render 'armies_table' %>
+</div>
