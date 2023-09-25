@@ -125,7 +125,7 @@ private
   end
 
   def game_params
-    params.require(:game).permit(:name, :prefix, :title, :icon_url, game_tools_attributes: [:id, :active, :options])
+    params.require(:game).permit(:name, :prefix, :title, :category_id, :icon_url, game_tools_attributes: [:id, :active, :options])
           .tap do |whitelisted|
       if whitelisted[:game_tools_attributes].present?
         whitelisted[:game_tools_attributes].each do |index, tool_params|

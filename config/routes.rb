@@ -62,6 +62,9 @@ Rails.application.routes.draw do
   get 'map', to: 'map#index'
 
   get 'missions', to: 'missions#index'
+  resources :missions, :only => [:edit, :update]
   post 'missions/calculate', to: 'missions#calculate'
+  post 'missions/initialize', to: 'missions#initialize_missions', as: 'initialize_missions'
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

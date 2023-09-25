@@ -24,6 +24,10 @@
             <%= form.text_field :icon_url, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
+            <%= form.label :category_id, class: 'input-group-text' %>
+            <%= form.number_field :category_id, class: 'form-control', step: 1 %>
+          </div>
+          <div class="input-group mb-3">
             <span class="input-group-text w-100 bg-secondary" id="icon_url">Herramientas</span>
           </div>
 

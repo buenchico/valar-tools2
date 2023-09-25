@@ -12,12 +12,9 @@
 
 <div class="container d-flex flex-row align-items-center flex-wrap">
   <%= form_with url: missions_calculate_path, local: false do |form| %>
-
-  <%= form.submit t('.calculate'), class: "btn btn-primary", id: "calculate" %>
-<% end %>
-
-<div>
-  <% @missions.each do |mission| %>
-    <p><%= mission.name %></p>
+    <%= form.submit t('.calculate'), class: "btn btn-primary", id: "calculate" %>
   <% end %>
+  <%= link_to "Inicializar Misiones", initialize_missions_path, method: :post, class: 'btn btn-danger' %>
 </div>
+
+<%= render 'missions_table' %>

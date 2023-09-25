@@ -1,0 +1,9 @@
+<td><%= mission.name %></td>
+<td>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @options[mission.status]["colour"] %>"><%=  @options[mission.status]["name"].capitalize %></span>
+</td>
+<td><%= mission.started %></td>
+<td><%= mission.resolved %></td>
+<td><%= mission.faction.long_name %></td>
+<td><%= link_to '', edit_mission_path(mission), remote: true, class: 'bi bi-pencil-square text-white' %></td>
+<td><%= link_to '', mission.url, class: 'bi bi-box-arrow-up-right' %></td>
