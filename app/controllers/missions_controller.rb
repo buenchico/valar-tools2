@@ -7,6 +7,24 @@ class MissionsController < ApplicationController
 
   def index
     @missions = Mission.all
+
+    connection = Faraday.new(
+      ssl: {verify: false}, # Disabling verify for development
+      headers: {'api-username': 'valar', 'api-key': ENV['DISCOURSE_API'], 'content-type': 'multipart/form-data'},
+      url: 'https://www.valar.es'
+      )
+
+    response = connection.get('/t/2983.json')
+    json_response = JSON.parse(response.body)
+    if json_response["tags"].include?("bugs")
+      json_response["tags"] == json_response["tags"] = json_response["tags"].map { |item| item == "bugs" ? "cerrada" : item }
+    end
+
+    body = {tags[]": ["cerrada"]}
+
+    update_mission = connection.put("/t/valar-tools-bugs/2983.json", body.to_json)
+    puts json_response["tags"]
+    puts update_mission.body
   end
 
   def edit
@@ -64,11 +82,19 @@ private
     @missions = Mission.all
 
     missions.each do | mission |
+      if mission['tags'][0] == 'abierta'
+        tag = "open"
+      elsif mission['tags'][0] == 'cerrada'
+        tag = "cerrada"
+      elsif mission['tags'][0] == 'stand-by'
+        tag = 'stand-by'
+      end
+
       if !@missions.find_by(discourse_id: mission["id"])
         @mission = Mission.new(
           name: mission['title'],
           discourse_id: mission['id'],
-          status: 'open',
+          status: tag,
           started: mission['created_at'],
           faction: Faction.find_by(category_id: mission['category_id']),
           game: active_game
@@ -83,7 +109,7 @@ private
         if @mission.update(
           name: mission['title'],
           discourse_id: mission['id'],
-          status: 'open',
+          status: tag,
           started: mission['created_at'],
           faction: Faction.find_by(category_id: mission['category_id']),
           game: active_game

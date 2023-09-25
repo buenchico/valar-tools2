@@ -1,6 +1,6 @@
 <td><%= mission.name %></td>
 <td>
-  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @options[mission.status]["colour"] %>"><%=  @options[mission.status]["name"].capitalize %></span>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @options["status"][mission.status]["colour"] %>"><%=  @options["status"][mission.status]["name"].capitalize %></span>
 </td>
 <td><%= mission.started %></td>
 <td><%= mission.resolved %></td>

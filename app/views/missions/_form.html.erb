@@ -17,7 +17,7 @@
           </div>
           <div class="input-group mb-3">
             <%= form.label :status, class: 'input-group-text' %>
-            <%= form.text_field :status, class: 'form-control', disabled: true  %>
+            <%= form.select :status, @options["status"].map { |k,v| [v["name"].capitalize, k] }, {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :notes, class: 'input-group-text' %>
