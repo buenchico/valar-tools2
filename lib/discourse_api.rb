@@ -72,6 +72,23 @@ module DiscourseApi
       return groups
     end
 
+    def self.get_mission_by_id(id)
+      if Rails.env.development?
+        @verify = false
+      else
+        @verify = true
+      end
+
+      # Create a new Faraday connection
+      connection = Faraday.new(
+        ssl: {verify: @verify}, # Disabling verify for development
+        headers: {'api-username': 'valar', 'api-key': ENV['DISCOURSE_API'], 'content-type': 'multipart/form-data'},
+        url: 'https://www.valar.es'
+        )
+
+      response = connection.get('/t/' + id.to_s + '.json')
+    end
+
     def self.get_missions(category, tag)
       if Rails.env.development?
         @verify = false

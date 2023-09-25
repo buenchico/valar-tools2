@@ -7,24 +7,6 @@ class MissionsController < ApplicationController
 
   def index
     @missions = Mission.all
-
-    connection = Faraday.new(
-      ssl: {verify: false}, # Disabling verify for development
-      headers: {'api-username': 'valar', 'api-key': ENV['DISCOURSE_API'], 'content-type': 'multipart/form-data'},
-      url: 'https://www.valar.es'
-      )
-
-    response = connection.get('/t/2983.json')
-    json_response = JSON.parse(response.body)
-    if json_response["tags"].include?("bugs")
-      json_response["tags"] == json_response["tags"] = json_response["tags"].map { |item| item == "bugs" ? "cerrada" : item }
-    end
-
-    body = {tags[]": ["cerrada"]}
-
-    update_mission = connection.put("/t/valar-tools-bugs/2983.json", body.to_json)
-    puts json_response["tags"]
-    puts update_mission.body
   end
 
   def edit
@@ -32,6 +14,21 @@ class MissionsController < ApplicationController
 
   def update
     original_title = @mission.name
+
+    response = DiscourseApi::DiscourseGetData.get_mission_by_id(@mission.discourse_id)
+    tags = JSON.parse(response.body)["tags"]
+
+    puts params["mission"]["status"]
+    puts params["mission"]
+
+    if tags[0].strip == 'abierta'
+      params["mission"]["status"] = "open"
+    elsif tags[0].strip == 'cerrada'
+      params["mission"]["status"] = "closed"
+    elsif tags[0].strip == 'stand-by'
+      params["mission"]["status"] = 'stand-by'
+    end
+
     respond_to do |format|
       if @mission.update(mission_params)
         flash.now[:success] = t('messages.success.update', thing: @mission.name.strip + " (id: " + @mission.id.to_s + ")", count: 1)
