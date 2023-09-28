@@ -12,8 +12,34 @@
 
 <div class="container d-flex flex-row align-items-center flex-wrap">
   <%= form_with url: missions_calculate_path, local: false do |form| %>
-    <%= form.submit t('.calculate'), class: "btn btn-primary", id: "calculate" %>
+    <%= form.submit t('.calculate'), class: "btn btn-primary mb-3", id: "calculate" %>
+
+    <div class="input-group mb-3">
+      <%= form.label t('.difficulty'), class: 'input-group-text' %>
+      <%= form.select :difficulty, (@options["difficulty"].map { |k, v| [v["name"].capitalize, v["value"]] }.sort_by { |subarray| -subarray[1] }), { selected: 0 }, class: 'form-select' %>
+    </div>
+    <div class="input-group mb-3">
+      <%= form.label t('.tokens'), class: 'input-group-text' %>
+      <%= form.number_field :tokens, class: 'form-control', value: 0, step: 1, min: 0, max: 12 %>
+    </div>
+    <div class="input-group mb-3">
+      <%= form.label t('.advantage'), class: 'input-group-text' %>
+      <%= form.select :advantage, (@options["advantage"].map { |k, v| [v["name"].capitalize, v["value"]] }.sort_by { |subarray| -subarray[1] }), { selected: 0 }, class: 'form-select' %>
+    </div>
+    <div class="input-group mb-3">
+      <%= form.label t('.misc'), class: 'input-group-text' %>
+      <%= form.number_field :misc, class: 'form-control', value: 0, step: 1, min: -3, max: 3 %>
+    </div>
+    <div class="input-group mb-3">
+      <%= form.label t('.role'), class: 'input-group-text' %>
+      <div class="form-check form-switch switch-group fs-2">
+        <%= form.check_box :role, class: 'form-check-input switch-group h-100' %>
+      </div>
+    </div>
   <% end %>
+</div>
+
+<div class="container d-flex flex-row align-items-center flex-wrap">
   <%= link_to "Actualizar Misiones", sync_missions_path, method: :post, class: 'btn btn-danger ms-1' %>
   <%= link_to "Inicializar Misiones", initialize_missions_path, method: :post, class: 'btn btn-danger d-none' %>
 </div>

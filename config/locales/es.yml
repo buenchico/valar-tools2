@@ -160,6 +160,11 @@ es:
       add_step: 'Añadir etapa'
   missions:
     index:
+      difficulty: "Dificultad"
+      tokens: "Tokens"
+      misc: "Miscelánea"
+      role: "Roleo"
+      advantage: "Ventaja"
       calculate: 'Calcular'
   hexagon:
     one: "hexágono"

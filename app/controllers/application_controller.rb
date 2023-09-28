@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_regions
-    @regions = Location.where(location_type: "region")    
+    @regions = Location.where(location_type: "region")
   end
 
   def player_tools
@@ -84,4 +84,11 @@ class ApplicationController < ActionController::Base
   def inactive_tools
     inactive_tools = Tool.where(active: false)
   end
+
+  def generate_pseudorandom_id
+    timestamp = Time.now.to_i
+    random_hex = SecureRandom.hex(4) # You can adjust the length of the random part as needed.
+    pseudorandom_id = "#{timestamp}_#{random_hex}"
+    return pseudorandom_id
+  end  
 end
