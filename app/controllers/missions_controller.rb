@@ -2,15 +2,15 @@ class MissionsController < ApplicationController
   before_action :set_tool
   before_action :check_master
   before_action :set_mission, only: [:edit, :update]
-  before_action :set_options, only: [:index, :edit, :update, :sync_missions, :initialize_missions]
+  before_action :set_options, only: [:index, :edit, :update, :sync_missions, :initialize_missions, :calculate]
 
 
   def index
-    @missions = Mission.where(status: ["open","standby"])
+    @missions = Mission.where(status: ["open","standby"], game: active_game)
   end
 
   def edit
-    update_status_from_api(@mission)
+    update_mission_from_api(@mission)
   end
 
   def update
@@ -57,31 +57,55 @@ class MissionsController < ApplicationController
       roll = Array.new(3) { rand(1..10) }.sort
     end
 
-    difficulty = params[:difficulty].to_i,
-    tokens = params[:tokens].to_i,
-    advantage = params[:advantage].to_i,
-    misc = params[:misc].to_i,
+    difficulty = params[:difficulty].to_i
+    tokens = params[:tokens].to_i
+    advantage = params[:advantage].to_i
+    misc = params[:misc].to_i
     role = params[:role].to_i
 
-    puts params[:tokens]
-    puts "XXXXXXXXXXXXXXXXXX"
-    puts difficulty
-    #subtotal = difficulty + tokens + advantage + misc + role
-    #total = roll[1].to_i + subtotal
+    if roll[1] == 10
+      critic = 5
+    elsif roll[1] == 1
+      critic = -6
+    else
+      critic = 0
+    end
+
+    if advantage == 0
+      subtotal = difficulty + tokens + advantage + misc + role
+    else
+      subtotal = advantage
+    end
+
+    total = roll[1].to_i + critic + subtotal
+
+    @options["results"].sort.reverse.each do |range|
+        if range[0].to_i <= total
+          @result = range[1]
+          puts range[1]
+          break
+        end
+    end
 
     @data = {
       roll: roll,
+      critic: critic,
       difficulty: difficulty,
       tokens: tokens,
       advantage: advantage,
       misc: misc,
       role: role,
-      subtotal: "subtotal",
-      total: "total"
+      subtotal: subtotal,
+      total: total
     }
   end
 
   def sync_missions
+    missions = Mission.where(status: ["open","standby"], game: active_game)
+    missions.each do |mission|
+      update_mission_from_api(mission)
+    end
+
     open_missions = DiscourseApi::DiscourseGetData.get_missions(active_game.category_id, 'abierta')
     update_from_api(open_missions)
   end
@@ -116,13 +140,15 @@ private
     params.require(:mission).permit(:name, :discourse_id, :status, :notes, :started, :resolved, :game_id, :user_id, :faction_id)
   end
 
-  def update_status_from_api(mission)
+  def update_mission_from_api(mission)
     response = DiscourseApi::DiscourseGetData.get_mission_by_id(mission.discourse_id)
     tag = JSON.parse(response.body)["tags"][0].strip
 
     tag = @inverted_status.fetch(tag, "error")
 
-    mission.update(status: tag)
+    resolved = JSON.parse(response.body)&.fetch('topic_timer', {})&.fetch('execute_at', nil)
+
+    mission.update(status: tag, resolved: resolved)
   end
 
   def update_from_api(missions)
@@ -143,7 +169,11 @@ private
         end
       end
 
-      user =
+      username = mission.fetch('assigned_to_user', {}).fetch('username', nil)
+
+      if username
+        user = User.find_by(player: username)
+      end
 
       if !@missions.find_by(discourse_id: mission["id"])
         @mission = Mission.new(
