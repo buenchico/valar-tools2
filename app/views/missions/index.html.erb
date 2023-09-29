@@ -28,6 +28,10 @@
           <%= form.select :advantage, (@options["advantage"].map { |k, v| [v["name"].capitalize, v["value"]] }.sort_by { |subarray| -subarray[1] }), { selected: 0 }, class: 'form-select' %>
         </div>
         <div class="input-group mb-3">
+          <%= form.label t('.factors'), class: 'input-group-text' %>
+          <%= form.number_field :factors, class: 'form-control', value: 0, step: 1, min: -12, max: 12 %>
+        </div>
+        <div class="input-group mb-3">
           <%= form.label t('.misc'), class: 'input-group-text' %>
           <%= form.number_field :misc, class: 'form-control', value: 0, step: 1, min: -3, max: 3 %>
         </div>

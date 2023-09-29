@@ -6,7 +6,7 @@ class MissionsController < ApplicationController
 
 
   def index
-    @missions = Mission.where(status: ["open","standby"], game: active_game)
+    @missions = Mission.where(status: ["open","standby"], game: active_game).order(:resolved)
   end
 
   def edit
@@ -62,6 +62,7 @@ class MissionsController < ApplicationController
     advantage = params[:advantage].to_i
     misc = params[:misc].to_i
     role = params[:role].to_i
+    factors = params[:factors].to_i
 
     if roll[1] == 10
       critic = 5
@@ -72,7 +73,7 @@ class MissionsController < ApplicationController
     end
 
     if advantage == 0
-      subtotal = difficulty + tokens + advantage + misc + role
+      subtotal = difficulty + tokens + advantage + misc + role + factors
     else
       subtotal = advantage
     end
@@ -148,7 +149,11 @@ private
 
     resolved = JSON.parse(response.body)&.fetch('topic_timer', {})&.fetch('execute_at', nil)
 
-    mission.update(status: tag, resolved: resolved)
+    if resolved
+      mission.update(status: tag, resolved: resolved)
+    else
+      mission.update(status: tag)
+    end
   end
 
   def update_from_api(missions)
