@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
 
   def set_current_user
     @current_user ||= User.find_by(auth_token: cookies[:auth_token]) if cookies[:auth_token]
+    Thread.current[:current_user] = @current_user    
   end
 
   def active_game
@@ -62,7 +63,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_regions
-    @regions = Location.where(location_type: "region")    
+    @regions = Location.where(location_type: "region")
   end
 
   def player_tools

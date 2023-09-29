@@ -140,6 +140,24 @@
           </div>
 
           <%= form.submit nil, class: 'btn btn-primary' %>
+
+          <% if army.logs.empty? == false %>
+            <div class="input-group mt-3">
+              <%= form.label :changelog, class: 'input-group-text w-100' %>
+              <% army.logs.each do | log | %>
+                <% log = JSON.parse(log) %>
+                <div class="ms-3 mt-1 w-100 fw-bolder">
+                  <%= DateTime.parse(log["timestamp"]).strftime("%d/%m/%Y @ %H:%M") %>
+                  <%= log["username"] %>
+                  <% log["changes"].each do |change| %>
+                    <div class="ms-3 mt-1 w-100 fw-lighter">
+                      <%= change %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
         </div>
       <% end %>
   </div>

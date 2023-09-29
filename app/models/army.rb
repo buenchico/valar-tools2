@@ -8,6 +8,28 @@ class Army < ApplicationRecord
   validates :status, inclusion: ARMY_STATUS
   validates_uniqueness_of :name
 
+  before_save :log_changes
+
+  def log_changes
+    if self.persisted? # Check if the record already exists (for updates)
+      current_user = Thread.current[:current_user]
+      changes = self.changes.map { |field, values| "#{field} changed from #{values[0]} to #{values[1]}" }
+
+      change_log = {
+        timestamp: Time.now,
+        user_id: current_user.id, # Set the current user appropriately
+        username: current_user.player,
+        changes: changes
+      }
+
+      # Initialize self.logs as an empty array if it's nil
+      self.logs ||= []
+
+      # Append the change log to the "logs" array
+      self.logs << change_log.to_json
+    end
+  end
+
   def strength
     base = 10
     @options = $options_armies
