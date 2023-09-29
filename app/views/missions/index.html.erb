@@ -6,10 +6,10 @@
     <%= yield(:title) %>
 </div>
 
+<div id="result" class="d-none"></div>
+
 <div class="row">
   <div class="col-md-4 col-sm-12">
-
-    <div id="result" class="d-none"></div>
 
     <div class="container d-flex flex-row align-items-center flex-wrap">
       <%= form_with url: missions_calculate_path, local: false do |form| %>
@@ -24,13 +24,16 @@
           <%= form.number_field :tokens, class: 'form-control', value: 0, step: 1, min: 0, max: 12 %>
         </div>
         <div class="input-group mb-3">
-          <%= form.label t('.advantage'), class: 'input-group-text' %>
-          <%= form.select :advantage, (@options["advantage"].map { |k, v| [v["name"].capitalize, v["value"]] }.sort_by { |subarray| -subarray[1] }), { selected: 0 }, class: 'form-select' %>
-        </div>
-        <div class="input-group mb-3">
           <%= form.label t('.factors'), class: 'input-group-text' %>
           <%= form.number_field :factors, class: 'form-control', value: 0, step: 1, min: -12, max: 12 %>
         </div>
+        <div class="input-group mb-3 ms-3">
+          <div class="w-75 ms-1 factor btn btn-sm btn-primary" data-factor="1">◻️ Factor positivo menor</div>
+          <div class="w-75 ms-1 factor btn btn-sm btn-primary" data-factor="3"><u>◻️ Factor positivo mayor</u></div>
+          <div class="w-75 ms-1 factor btn btn-sm btn-danger" data-factor="-1">◼️ Factor negativo menor</div>
+          <div class="w-75 ms-1 factor btn btn-sm btn-danger" data-factor="-3"><u>◼️ Factor negativo mayor</u></div>
+        </div>
+
         <div class="input-group mb-3">
           <%= form.label t('.misc'), class: 'input-group-text' %>
           <%= form.number_field :misc, class: 'form-control', value: 0, step: 1, min: -3, max: 3 %>
