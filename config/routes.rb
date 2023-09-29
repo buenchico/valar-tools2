@@ -72,5 +72,7 @@ Rails.application.routes.draw do
   post 'missions/initialize', to: 'missions#initialize_missions', as: 'initialize_missions'
   post 'missions/sync', to: 'missions#sync_missions', as: 'sync_missions'
 
+  post 'recipes/get_recipe', to: 'recipe#get_recipe', as: 'get_recipe'
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

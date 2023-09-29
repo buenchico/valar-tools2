@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_24_134403) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_29_173709) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,6 +38,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_24_134403) do
     t.bigint "location_id"
     t.bigint "family_id"
     t.string "board"
+    t.text "logs", default: [], array: true
     t.index ["family_id"], name: "index_valar_armies_on_family_id"
     t.index ["location_id"], name: "index_valar_armies_on_location_id"
   end
@@ -156,6 +157,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_24_134403) do
     t.index ["faction_id"], name: "index_valar_missions_on_faction_id"
     t.index ["game_id"], name: "index_valar_missions_on_game_id"
     t.index ["user_id"], name: "index_valar_missions_on_user_id"
+  end
+
+  create_table "recipes", force: :cascade do |t|
+    t.string "name"
+    t.string "section"
+    t.string "description"
+    t.integer "difficulty"
+    t.integer "speed"
+    t.text "factors", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tools", force: :cascade do |t|

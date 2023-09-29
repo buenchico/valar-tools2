@@ -10,6 +10,12 @@
 
 <div class="row">
   <div class="col-md-4 col-sm-12">
+    <div class="float-end">
+      <%= form_with url: get_recipe_path, local: false do |form| %>
+        <%= form.label :recipe, class: 'input-group-text' %>
+        <%= form.select :recipe, ([""] + @recipes.map { |recipe| [recipe.name,recipe.id]}), { selected: nil }, class: 'form-select inline-edit-select' %>
+      <% end %>
+    </div>
 
     <div class="container d-flex flex-row align-items-center flex-wrap">
       <%= form_with url: missions_calculate_path, local: false do |form| %>

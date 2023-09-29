@@ -7,6 +7,7 @@ class MissionsController < ApplicationController
 
   def index
     @missions = Mission.where(status: ["open","standby"], game: active_game).order(:resolved)
+    @recipes = Recipe.all.order(:section)
   end
 
   def edit
