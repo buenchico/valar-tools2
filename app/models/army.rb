@@ -7,7 +7,7 @@ class Army < ApplicationRecord
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
 
   if $options_armies.nil?
-    ARMY_STATUS = ["dead","active","inactive"]
+    ARMY_STATUS = ["raised","active","inactive"]
   else
     ARMY_STATUS = $options_armies["status"].keys
   end
