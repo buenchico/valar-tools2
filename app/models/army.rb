@@ -12,7 +12,7 @@ class Army < ApplicationRecord
     ARMY_STATUS = $options_armies["status"].keys
   end
 
-  validates :status, inclusion: $options_armies["status"].keys
+  validates :status, inclusion: ARMY_STATUS
   validates_uniqueness_of :name
 
   before_save :log_changes
