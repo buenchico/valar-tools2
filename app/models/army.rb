@@ -5,6 +5,13 @@ class Army < ApplicationRecord
 
   validates :name, presence: true
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
+
+  if $options_armies.nil?
+    ARMY_STATUS = ["dead","active","inactive"]
+  else
+    ARMY_STATUS = $options_armies["status"].keys
+  end
+
   validates :status, inclusion: $options_armies["status"].keys
   validates_uniqueness_of :name
 
