@@ -1,4 +1,7 @@
 $('#location_<%= @location.id %>').html('<%= j render "row", location: @location  %>');
 
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
+
+$("table").trigger("updateAll"); 
+
 $(".modal").modal('hide');
