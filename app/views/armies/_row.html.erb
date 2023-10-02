@@ -64,9 +64,10 @@
     <%= army.strength %>
   </span>
 </td>
+<td class="d-none men"><%= army.men %></td>
 <td width = "300px"><%= link_to army.name, edit_army_path(army), remote: true, class: 'link-unstyled' %></td>
 <td>
-  <%= army.status %>
+  <%=  @army_status[army.status]["name"] %>
   <% if !army.board.blank? %>
     <span class='badge rounded-pill pill-tags bg-success'>
       <i class='bi bi-<%= @options["fleets"].fetch(army.board, {"icon" => ''})["icon"] %>'></i>

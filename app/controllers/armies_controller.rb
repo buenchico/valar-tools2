@@ -1,7 +1,7 @@
 class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
-  before_action :set_options, only: [:index, :edit, :edit_multiple, :update, :new, :create, :export, :get_armies]
+  before_action :set_options
   before_action :set_factions, only: [:index, :edit, :new]
   before_action :army_stats, only: [:index, :get_armies]
   before_action :set_filters, only: [:index]
@@ -92,7 +92,7 @@ class ArmiesController < ApplicationController
     if !@current_user&.is_master? # modify params if user is not admin
       keys_to_remove = ["tags", "region", "lord", "visible", "hp",
         "col0", "col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8", "col9", "faction_ids"]
-        if @army.status == ARMY_STATUS[-1]
+        if @army.status == 'dead'
           keys_to_remove << "status"
         end
     end
@@ -140,7 +140,7 @@ class ArmiesController < ApplicationController
         end
         if @current_user&.is_admin? # Checking the user is admin to modify the status
           if (key == "status")
-            if ARMY_STATUS.include?(value.to_s)
+            if @army_status.keys.include?(value.to_s)
               army_params_hash[key] = value
             end
           end
@@ -169,13 +169,23 @@ class ArmiesController < ApplicationController
       end
     end
 
+    @errors = 0
+    @updated_armies = []
+
     respond_to do |format|
       if params[:army][:confirm] == 'VALIDATE'
         if army_params_hash.empty?
           format.html { redirect_to armies_url, success: 'Nada que actualizar.' }
         else
-          if @armies.update_all(army_params_hash)
-            format.html { redirect_to armies_url, success: 'Ejércitos editados correctamente.' }
+          @armies.each do |army|
+            if army.update(army_params_hash)
+              @errors += 1
+              @updated_armies << army.name
+            end
+          end
+
+          if @errors = 0
+            format.html { redirect_to armies_url, success: '#{@update_armies.length} ejércitos editados correctamente.' }
           else
             format.html { redirect_to armies_url, danger: 'Ha ocurrido un error, por favor, intentalo de nuevo más tarde.' }
           end
@@ -365,6 +375,7 @@ private
     else
       @attributes = @options["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
       @tags = @options["tags"]&.sort_by { |_, v| v["colour"] }.to_h
+      @army_status = @options["status"]
       $options_armies = @options
     end
   end
@@ -390,8 +401,8 @@ private
     @armies_total = all_armies.length
     @men_total = all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) }
     @str_total = all_armies.sum { |army| army.strength }
-    @raised = all_armies.where(status: ARMY_STATUS[0]).length
-    @dead = all_armies.where(status: ARMY_STATUS[2]).length
+    @raised = all_armies.where(status: 'active').length
+    @dead = all_armies.where(status: 'dead').length
   end
 
   def check_owner

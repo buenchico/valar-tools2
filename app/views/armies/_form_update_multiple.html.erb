@@ -22,7 +22,7 @@
                     <%= army.name %>
                   </div>
                   <div class="col-md-2">
-                    <%= army.status %>
+                    <%= @army_status[army.status]["name"] %>
                   </div>
                   <div class="col-md-1">
                     <% unless army.position.blank? %>
@@ -83,7 +83,7 @@
             <% if @current_user.is_master? %>
               <div class="input-group mt-3">
                 <%= form.label :status, t('activerecord.attributes.army.status'), class: 'input-group-text' %>
-                <%= form.select :status, ([""] + ARMY_STATUS), {}, class: 'form-select' %>
+                <%= form.select :status, ([""] + @army_status.map { |k,v| [v["name"], k]}), {}, class: 'form-select' %>
               </div>
               <div class="input-group mt-3">
                 <%= form.label :location_id, t('activerecord.attributes.army.location_id'), class: 'input-group-text' %>
