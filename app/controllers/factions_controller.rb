@@ -139,7 +139,6 @@ private
   def check_fleets_owner
     if !@current_user&.is_master?
       if !(@current_user.faction == @faction)
-        puts "test///////"
         flash[:danger] = 'No tienes permisos para editar estas flotas.'
         render js: "window.location='/armies'"
       end
@@ -159,8 +158,6 @@ private
   end
 
   def faction_params
-    puts "/////////////////////"
-    puts params[:faction][:fleets]
     params.require(:faction).permit(:reputation, :description, :active, :pov, :tokens, :fleets, :fleets_notes, game_ids: []).tap do |whitelisted|
       whitelisted[:fleets] = JSON.parse(params[:faction][:fleets])
     end

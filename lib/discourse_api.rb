@@ -22,7 +22,6 @@ module DiscourseApi
       loop do
         response = connection.get('/directory_items.json', period: 'all', page: page)
         json_response = JSON.parse(response.body)
-        puts page
 
         # Append the current page's groups to the 'groups' array
         users.concat(json_response['directory_items'])
