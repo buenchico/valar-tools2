@@ -78,7 +78,7 @@ Tool.create(name: 'map', title: 'Mapa', short_title: 'Mapa', icon_url: 'bi-globe
 
 *img*, string. Nombre del archivo de la imagen base
 
-*font*, string. Nombre de la 'font-family'. Debe definirse en el CSS
+*font*, string. Nombre de la "font-family". Debe definirse en el CSS
 
 *zoom*, array con zoom mínimo y máximo
 
