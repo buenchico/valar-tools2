@@ -64,7 +64,6 @@
     <%= army.strength %>
   </span>
 </td>
-<td class="d-none men"><%= army.men %></td>
 <td width = "300px"><%= link_to army.name, edit_army_path(army), remote: true, class: 'link-unstyled' %></td>
 <td>
   <%=  @army_status[army.status]["name"] %>
@@ -92,6 +91,7 @@
   <% end %>
 </td>
 <td width = "500px">
+  <span class="d-none"><%= army.position %></span>
   <%= form_with model: army, local: false do |form| %>
     <%= form.hidden_field :inline, value: true %>
     <%= form.text_field :position, class: 'inline-edit-input form-control', "data-initialvalue": army.position %>
@@ -140,3 +140,4 @@
     <% end %>
   <% end %>
 </td>
+<td class="men d-none"><%= army.men %></td>

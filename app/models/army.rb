@@ -5,7 +5,7 @@ class Army < ApplicationRecord
 
   validates :name, presence: true
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
-  validates :status, inclusion: ARMY_STATUS
+  validates :status, inclusion: $options_armies["status"].keys
   validates_uniqueness_of :name
 
   before_save :log_changes
@@ -13,7 +13,7 @@ class Army < ApplicationRecord
   def log_changes
     if self.persisted? # Check if the record already exists (for updates)
       current_user = Thread.current[:current_user]
-      changes = self.changes.map { |field, values| "#{field} changed from #{values[0]} to #{values[1]}" }
+      changes = self.changes.map { |field, values| "#{field} changed from #{values[0]} to #{values[1].blank? ? "nil" : values[1]}" }
 
       change_log = {
         timestamp: Time.now,
@@ -28,6 +28,13 @@ class Army < ApplicationRecord
       # Append the change log to the "logs" array
       self.logs << change_log.to_json
     end
+  end
+
+  def men
+    base = $options_armies.fetch("soldiers", 1000)
+    status = $options_armies.fetch("status", {}).fetch(self.status, {}).fetch("men", 1)
+    men = base * status * self.hp / 100
+    return men
   end
 
   def strength
@@ -48,6 +55,8 @@ class Army < ApplicationRecord
     end
     str = base * self.hp / 100
     str = [0, str].max
+    status = @options.fetch("status", {}).fetch(self.status, {}).fetch("str", 1)
+    str = str * status
     return str
   end
 end

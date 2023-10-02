@@ -1,10 +1,11 @@
 $('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
 
-$('.army_<%= @army.id %>').addClass( "table-highlight", callback )
+$('#army_<%= @army.id %>').removeClass();
+$('#army_<%= @army.id %>').addClass("table-highlight <%= @army.status %>", callback )
 
 function callback() {
   setTimeout(function() {
-    $('.army_<%= @army.id %>').removeClass( "table-highlight" );
+    $('#army_<%= @army.id %>').removeClass( "table-highlight" );
   }, 500 );
 }
 
