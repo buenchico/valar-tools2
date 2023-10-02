@@ -22,7 +22,7 @@
                     <%= army.name %>
                   </div>
                   <div class="col-md-2">
-                    <%= army.status %>
+                    <%= @army_status[army.status]["name"] %>
                   </div>
                   <div class="col-md-1">
                     <% unless army.position.blank? %>

@@ -40,20 +40,24 @@ $(document).on('turbolinks:load', function () {
 
     // Recalculate stats
     $.fn.recalculateStats = function(){
-        var men_per_army = parseInt($('#men_per_army').text());
-        var men_per_step = parseInt($('#men_per_step').text());
         var countArmies = $('.checkbox_selectable:visible').length;
         var menArmies = 0
-        $('.army-hp:visible').each(function(){
-            menArmies += parseInt($(this).text().trim().split(" ")[1].replace(/–/g, '-'));  // Or this.innerHTML, this.innerText
-        });
         var strArmies = 0
-        $('.strenght:visible').each(function(){
-            strArmies += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
+        $('tr:visible').each(function(){
+          men = parseInt($(this).find('td.men').text());
+          if (isNaN(men)) {
+              men = 0;
+          }
+          menArmies += men;
+          str = parseFloat($(this).find('td.strenght').text());
+          if (isNaN(str)) {
+              str = 0;
+          }
+          strArmies += str
         });
         $("#count").html(countArmies);
         $("#str").html(strArmies);
-        $("#men").html((countArmies * men_per_army) + (menArmies * men_per_step));
+        $("#men").html(menArmies);
     }
 
     // Filters

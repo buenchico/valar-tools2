@@ -8,7 +8,6 @@ class UsersController < ApplicationController
     @users = User.joins(:faction)
                  .order(Arel.sql("CASE WHEN #{User.table_name}.faction_id = #{inactive_faction_id} THEN 1 ELSE 0 END, #{Faction.table_name}.name"))
                  .all
-    puts User.table_name
   end
 
   def edit

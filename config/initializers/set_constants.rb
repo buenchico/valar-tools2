@@ -8,5 +8,3 @@ ARMY_GROUPS = {
   "grey": {"name": "gris", "icon": "octagon", "color": "DarkGray"},
   "black": {"name": "negro", "icon": "square", "color":"Black"}
 }
-
-ARMY_STATUS = [ "Alzado", "Desmovilizado", "Aniquilado" ]

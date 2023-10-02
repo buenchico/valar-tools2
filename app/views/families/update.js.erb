@@ -9,4 +9,7 @@ function callback() {
 }
 
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
+
+$("table").trigger("updateAll");
+
 $(".modal").modal('hide');
