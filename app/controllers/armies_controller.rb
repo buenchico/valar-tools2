@@ -92,7 +92,7 @@ class ArmiesController < ApplicationController
     if !@current_user&.is_master? # modify params if user is not admin
       keys_to_remove = ["tags", "region", "lord", "visible", "hp",
         "col0", "col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8", "col9", "faction_ids"]
-        if @army.status == 'dead'
+        if @army.status == 'inactive'
           keys_to_remove << "status"
         end
     end
@@ -401,8 +401,8 @@ private
     @armies_total = all_armies.length
     @men_total = all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) }
     @str_total = all_armies.sum { |army| army.strength }
-    @raised = all_armies.where(status: 'active').length
-    @dead = all_armies.where(status: 'dead').length
+    @raised = all_armies.where(status: 'raised').length
+    @dead = all_armies.where(status: 'inactive').length
   end
 
   def check_owner
