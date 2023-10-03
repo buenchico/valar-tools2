@@ -20,6 +20,9 @@ class Army < ApplicationRecord
   def log_changes
     if self.persisted? # Check if the record already exists (for updates)
       current_user = Thread.current[:current_user]
+      if current_user.nil?
+        current_user = User.find_by(player: "valar")
+      end
       changes = self.changes.map { |field, values| "#{field} changed from #{values[0]} to #{values[1].blank? ? "nil" : values[1]}" }
 
       change_log = {
