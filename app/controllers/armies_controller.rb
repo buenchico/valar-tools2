@@ -184,7 +184,7 @@ class ArmiesController < ApplicationController
             end
           end
 
-          if @errors = 0
+          if @errors == 0
             format.html { redirect_to armies_url, success: @update_armies.length.to_s + ' ejércitos editados correctamente.' }
           else
             format.html { redirect_to armies_url, danger: 'Ha ocurrido un error, por favor, intentalo de nuevo más tarde.' }
