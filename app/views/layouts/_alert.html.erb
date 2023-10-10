@@ -9,11 +9,13 @@
       <% message.values.each do |msg| %>
         <% msg.each do |m| %>
           <li><%= m %></li>
-        <%end %>
+        <% end %>
       <% end %>
       </ul>
     </div>
   <% else %>
-    <div class="container mx-auto text-center alert alert-<%= message_type %>" style=""><%= message.html_safe %></div>
+    <div class="container mx-auto text-center alert alert-<%= message_type %>" style="">
+      <%= message.html_safe %>
+    </div>
   <% end %>
 <% end %>

@@ -169,25 +169,29 @@ class ArmiesController < ApplicationController
       end
     end
 
-    @errors = 0
+    @errors_armies = []
     @updated_armies = []
 
     respond_to do |format|
       if params[:army][:confirm] == 'VALIDATE'
         if army_params_hash.empty?
-          format.html { redirect_to armies_url, success: 'Nada que actualizar.' }
+          format.html { redirect_to armies_url, success: t('messages.multiple.nothing') }
         else
           @armies.each do |army|
             if army.update(army_params_hash)
-              @errors += 1
               @updated_armies << army.name
+            else
+              @errors_armies << (army.name.to_s + " | " + army.errors.full_messages.join(", "))
             end
           end
 
-          if @errors == 0
-            format.html { redirect_to armies_url, success: @update_armies.length.to_s + ' ejércitos editados correctamente.' }
+          if @errors_armies.length == 0
+            # format.html { redirect_to armies_url, success: @update_armies.length.to_s + ' ejércitos editados correctamente.' }
+            flash[:success] = t('messages.multiple.success', model: Army.model_name.human(:count => @updated_armies.length), succeed: ("<br>" + @updated_armies.join("<br>")).html_safe)
+            format.html { redirect_to armies_url }
           else
-            format.html { redirect_to armies_url, danger: 'Ha ocurrido un error, por favor, intentalo de nuevo más tarde.' }
+            flash[:danger] = t('messages.multiple.error', model: Army.model_name.human(:count => @errors_armies.length), failed: ("<br>" + @errors_armies.join("<br>") + "<br>").html_safe, succeed: ("<br>" + @updated_armies.join("<br>")).html_safe)
+            format.html { redirect_to armies_url }
           end
         end
       else

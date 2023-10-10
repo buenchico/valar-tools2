@@ -132,6 +132,8 @@ es:
         one: 'Lugar'
         other: 'Lugares'
     errors:
+      messages:
+        inclusion: 'Sólo pueden elegirse opciones de la lista.'
       models:
         army:
           attributes:
@@ -222,3 +224,13 @@ es:
       create: 'Se ha encontrado un error creando %{thing}.'
       update: 'Se ha encontrado un error editando %{thing}.'
       destroy: 'Se ha encontrado un error borrando %{thing}.'
+    multiple:
+      success: >
+        La operación ha sido completada con éxito. %{model} exitosos:
+        %{succeed}
+      error: >
+        Se ha encontrado un error. %{model} fallidos:
+        %{failed}
+        %{model} exitosos:
+        %{succeed}
+      nothing: 'Nada que actualizar.'
