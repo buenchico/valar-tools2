@@ -186,7 +186,6 @@ class ArmiesController < ApplicationController
           end
 
           if @errors_armies.length == 0
-            # format.html { redirect_to armies_url, success: @update_armies.length.to_s + ' ejércitos editados correctamente.' }
             flash[:success] = t('messages.multiple.success', model: Army.model_name.human(:count => @updated_armies.length), succeed: ("<br>" + @updated_armies.join("<br>")).html_safe)
             format.html { redirect_to armies_url }
           else
@@ -195,7 +194,7 @@ class ArmiesController < ApplicationController
           end
         end
       else
-        format.html { redirect_to armies_url, danger: 'La palabra de validación es incorrecta.' }
+        format.html { redirect_to armies_url, danger: t('messages.multiple.validation') }
       end
     end
   end
@@ -223,7 +222,7 @@ class ArmiesController < ApplicationController
           format.html { redirect_to armies_url, danger: 'Ha ocurrido un error, por favor, intentalo de nuevo más tarde.' }
         end
       else
-        format.html { redirect_to armies_url, danger: 'La palabra de validación es incorrecta.' }
+        format.html { redirect_to armies_url, danger: t('messages.multiple.validation') }
       end
     end
   end
@@ -420,9 +419,9 @@ private
       armies_to_include.compact.each do |army|
         if !@current_user.faction.armies.include?(army)
           respond_to do |format|
-            format.html { redirect_to armies_url, danger: 'No tienes permisos para editar ese ejército.' }
+            format.html { redirect_to armies_url, danger: t('messages.multiple.permissions', model: Army.model_name.human(:count => 1).downcase) }
             format.js do
-              flash[:danger] = 'No tienes permisos para editar ese ejército.'
+              flash[:danger] = t('messages.multiple.permissions', model: Army.model_name.human(:count => 1).downcase)
               render js: "window.location='/armies'"
             end
           end

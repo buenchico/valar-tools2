@@ -209,6 +209,7 @@ es:
   word_genders:
     ciudad: feminine
   messages:
+    permissions: "No tienes permisos para acceder a esta página"
     success:
       create:
         one:  '%{thing} ha sido creado correctamente.'
@@ -234,3 +235,4 @@ es:
         %{model} exitosos:
         %{succeed}
       nothing: 'Nada que actualizar.'
+      validation: 'La palabra de validación es incorrecta'
