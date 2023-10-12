@@ -8,7 +8,7 @@ class Army < ApplicationRecord
 
   if $options_armies.nil?
     ARMY_STATUS = ["raised","active","inactive"]
-    FLEET_TYPES = [nil "longship","galley","transport"]
+    FLEET_TYPES = [nil, "longship","galley","transport"]
   else
     ARMY_STATUS = $options_armies["status"].keys
     FLEET_TYPES = [nil] + $options_armies["fleets"].keys
