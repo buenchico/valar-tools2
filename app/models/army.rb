@@ -26,7 +26,7 @@ class Army < ApplicationRecord
       if current_user.nil?
         current_user = User.find_by(player: "valar")
       end
-      changes = self.changes.map { |field, values| "#{field} changed from #{values[0]} to #{values[1].blank? ? "nil" : values[1]}" }
+      changes = self.changes.map { |field, values| "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}" }
 
       change_log = {
         timestamp: Time.now,
