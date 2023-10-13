@@ -69,6 +69,24 @@ $.tablesorter.addParser({
   type: 'text'
 });
 
+// exclusive form fields
+$.fn.exclusive_fields =  function() {
+  $('.form-exclusive').on('input', function() {
+    // Find the nearest input with the class 'form-exclusive' and clear its value
+    $(this).closest('.input-group').find('.form-exclusive').not(this).val('');
+  });
+}
+
+// Initializing exclusive form fields
+$(document).on('turbolinks:load', function() {
+  $.fn.exclusive_fields();
+});
+
+// exclusive form fields to work in modals
+$(document).on('shown.bs.modal', function (event) {
+  $.fn.exclusive_fields();
+});
+
 // Inline edit select form to submit on change
 
 $.fn.inline_listeners = function() {
