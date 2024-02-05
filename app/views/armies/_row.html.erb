@@ -13,7 +13,7 @@
        </div>
        <% mod_str += army["col#{value['sort']}"].to_i * value["str"] %>
      <% end %>
-     <% army.tags.each do | tag | %>
+     <% army.tags&.each do | tag | %>
       <div class='row'>
         <div class='fst-italic text-start col-8'>
           <% if @tags[tag] %>
@@ -77,11 +77,11 @@
   <% end %>
 </td>
 <td width = "800px">
-  <%= ((100 - army.hp) / @options["hp"]["step"])&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-danger army-hp"><i class="bi bi-' + @options["hp"]["icon"] + '"></i> ' + @options["hp"]["name"].capitalize + " " + number_to_modifier(((army.hp - 100) / @options["hp"]["step"])) + '</span>').html_safe : nil %>
+  <%= ((100 - army.hp.to_i) / @options["hp"]["step"])&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-danger army-hp"><i class="bi bi-' + @options["hp"]["icon"] + '"></i> ' + @options["hp"]["name"].capitalize + " " + number_to_modifier(((army.hp.to_i - 100) / @options["hp"]["step"])) + '</span>').html_safe : nil %>
   <% @attributes.each do | key, value | %>
     <%= (army["col#{value['sort']}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"]) + '</span>').html_safe : nil ) %>
   <% end %>
-  <% army.tags.each do | tag | %>
+  <% army.tags&.each do | tag | %>
     <% if @tags[tag] %>
       <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %>"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
     <% else %>

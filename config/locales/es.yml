@@ -52,6 +52,11 @@ es:
       speed: "Velocidad"
       distance: "Distancia"
       obstacle: "Obstáculo"
+    placeholder:
+      sum: "Aditivo"
+      change: "Reemplazo"
+      add: "Añadir"
+      remove: "Quitar"
   activerecord:
     attributes:
       game:

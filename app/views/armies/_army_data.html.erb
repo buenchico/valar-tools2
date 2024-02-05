@@ -14,7 +14,7 @@
           <%= (army["col#{value['sort']}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary me-1 mt-1"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"]) + '</span>').html_safe : nil ) %>
         <% end %>
 
-        <% army.tags.each do | tag | %>
+        <% army.tags&.each do | tag | %>
           <% if @tags[tag] %>
             <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %> me-1 mt-1"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
           <% else %>
@@ -31,7 +31,7 @@
         <% @attributes.each do | key, value | %>
           <% (army["col#{value['sort']}"]&.nonzero? ? traits << (value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"])).html_safe : nil ) %>
         <% end %>
-        <% army.tags.each do | tag | %>
+        <% army.tags&.each do | tag | %>
           <% if @tags[tag] %>
             <% traits << @tags[tag]["name"].capitalize %>
           <% else %>

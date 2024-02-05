@@ -46,7 +46,7 @@ class Army < ApplicationRecord
   def men
     base = $options_armies.fetch("soldiers", 1000)
     status = $options_armies.fetch("status", {}).fetch(self.status, {}).fetch("men", 1)
-    men = base * status * self.hp / 100
+    men = base * status * self.hp.to_i / 100
     return men
   end
 
@@ -56,17 +56,19 @@ class Army < ApplicationRecord
     @options["attributes"].sort_by { |_, v| v["sort"] }.to_h.each do | key, value |
       base += self["col#{value['sort']}"].to_i * value["str"]
     end
-    self.tags.each do | tag |
-      if self.board.present? && @options["tags"][tag]["board"].present?
-        base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"board" => 0})["board"].to_i
-      else
-        base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"str" => 0})["str"].to_i
+    self.tags&.each do | tag |
+      if tag.blank? == false
+        if self.board.present? && @options["tags"][tag]["board"].present?
+          base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"board" => 0})["board"].to_i
+        else
+          base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"str" => 0})["str"].to_i
+        end
       end
     end
     if self.board.present?
       base += @options["fleets"].fetch(self.board, {"str" => 0})["str"].to_i
     end
-    str = base * self.hp / 100
+    str = base * self.hp.to_i / 100
     str = [0, str].max
     status = @options.fetch("status", {}).fetch(self.status, {}).fetch("str", 1)
     str = str * status

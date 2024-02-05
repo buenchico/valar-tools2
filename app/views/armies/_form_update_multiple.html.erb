@@ -86,6 +86,53 @@
                 <%= form.select :status, ([""] + @army_status.map { |k,v| [v["name"], k]}), {}, class: 'form-select' %>
               </div>
               <div class="input-group mt-3">
+                <%= form.label :hp, t('activerecord.attributes.army.hp'),class: 'input-group-text' %>
+                <%= form.number_field :hp_sum, class: 'form-control form-exclusive', step: @options["hp"]["step"], placeholder: t('helpers.placeholder.sum'), min: -200, max: 200 %>
+                <%= form.number_field :hp_change, class: 'form-control form-exclusive', step: @options["hp"]["step"], placeholder: t('helpers.placeholder.change'), min: 0, max: 200 %>
+              </div>
+              <% @attributes.each do | key, value | %>
+                <div class="input-group mt-3">
+                  <%= form.label value["name"] + " *(" + value["str"].to_s + ")", class: 'input-group-text' %>
+                  <%= form.number_field  "col#{value['sort']}_sum", class: 'form-control form-exclusive', step: 1, placeholder: t('helpers.placeholder.sum') %>
+                  <%= form.number_field  "col#{value['sort']}_change", class: 'form-control form-exclusive', step: 1, placeholder: t('helpers.placeholder.change') %>
+                </div>
+              <% end %>
+              <div class="input-group mt-3">
+                <%= form.label :tags, t('activerecord.attributes.army.tags'), class: 'input-group-text' %>
+                <%= form.select :tags_add,
+                  options_for_select(
+                    @tags.map { | tag |
+                      [
+                        tag[0],
+                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                      }
+                      ]
+                    }
+                  ),
+                  { include_blank: false },
+                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  title: t('helpers.placeholder.add'),
+                  multiple: true,
+                  data: { }
+                %>
+                <%= form.select :tags_remove,
+                  options_for_select(
+                    @tags.map { | tag |
+                      [
+                        tag[0],
+                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                      }
+                      ]
+                    }
+                  ),
+                  { include_blank: false },
+                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  title: t('helpers.placeholder.remove'),
+                  multiple: true,
+                  data: { }
+                %>
+              </div>
+              <div class="input-group mt-3">
                 <%= form.label :location_id, t('activerecord.attributes.army.location_id'), class: 'input-group-text' %>
                 <%= form.select :location_id, [[""],["Quitar región", "CLEAR"]] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
               </div>

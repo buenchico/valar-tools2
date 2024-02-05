@@ -42,7 +42,7 @@
 
           <div class="input-group mb-3">
             <%= form.label :hp, class: 'input-group-text' %>
-            <%= form.number_field :hp, class: 'form-control', step: @options["hp"]["step"] %>
+            <%= form.number_field :hp, class: 'form-control', step: @options["hp"]["step"], min: 0, max: 200 %>
           </div>
 
           <% @attributes.each do | key, value | %>
@@ -141,7 +141,7 @@
 
           <%= form.submit nil, class: 'btn btn-primary' %>
 
-          <% if army.logs.empty? == false %>
+          <% if army.logs&.empty? == false %>
             <div class="input-group mt-3">
               <%= form.label :changelog, class: 'input-group-text w-100' %>
               <% army.logs.each do | log | %>

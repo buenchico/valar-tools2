@@ -114,7 +114,33 @@ class ArmiesController < ApplicationController
   def update_multiple
     @armies = Army.where(id: params[:army_ids])
 
+    army_params_sum = {}
+    army_params_tags = {}
     army_params_hash = {}
+
+    if @current_user&.is_admin?
+      if (params["army"]["hp_change"].blank? == false)
+        army_params_hash[:hp] = params["army"]["hp_change"]
+      end
+      if (params["army"]["hp_sum"].blank? == false)
+        army_params_sum[:hp] = params["army"]["hp_sum"]
+      end
+      (0..9).each do |i|
+        if (params["army"]["col#{i}_change"].blank? == false)
+          army_params_hash["col#{i}"] = params["army"]["col#{i}_change"]
+        end
+        if (params["army"]["col#{i}_sum"].blank? == false)
+          army_params_sum["col#{i}"] = params["army"]["col#{i}_sum"]
+        end
+      end
+      if (params["army"]["tags_add"].blank? == false)
+        army_params_tags[:tags_add] = params["army"]["tags_add"]
+      end
+        if (params["army"]["tags_remove"].blank? == false)
+        army_params_tags[:tags_remove] = params["army"]["tags_remove"]
+      end
+    end
+
     army_params.to_hash.each do | key, value |
       unless value.blank?
         if key == "board"
@@ -174,10 +200,38 @@ class ArmiesController < ApplicationController
 
     respond_to do |format|
       if params[:army][:confirm] == 'VALIDATE'
-        if army_params_hash.empty?
+        if army_params_hash.empty? && army_params_sum.empty? && army_params_tags.empty?
           format.html { redirect_to armies_url, success: t('messages.multiple.nothing') }
         else
           @armies.each do |army|
+            if army_params_sum.empty? == false
+              army_params_sum.each do |key, value|
+                # Check if the attribute exists in the Army model
+                if army.respond_to?(key)
+                  old_value = army[key].to_i
+                  army_params_hash[key] = (old_value += value.to_i)
+                end
+              end
+            end
+
+            if army_params_tags.empty? == false
+              if army_params_tags[:tags_remove].empty? == false
+                puts army[:tags]
+                puts army_params_hash[:tags]
+                army_params_hash[:tags] = army[:tags]&.reject! { |tag| army_params_tags[:tags_remove].include?(tag) }
+                puts army_params_hash[:tags]
+                puts "///////////////"
+              end
+
+              if army_params_tags[:tags_add].empty? == false
+                if army[:tags].nil?
+                  army_params_hash[:tags] = army_params_tags[:tags_add]
+                else
+                  army_params_hash[:tags] = army[:tags].concat(army_params_tags[:tags_add]).uniq!
+                end
+              end
+            end
+
             if army.update(army_params_hash)
               @updated_armies << army.name
             else
@@ -402,7 +456,7 @@ private
   def army_stats
     all_armies = Army.all.order(:id)
     @armies_total = all_armies.length
-    @men_total = all_armies.sum { |army| ( army.hp * @options["soldiers"].to_i / 100 ) }
+    @men_total = all_armies.sum { |army| ( army.hp.to_i * @options["soldiers"].to_i / 100 ) }
     @str_total = all_armies.sum { |army| army.strength }
     @raised = all_armies.where(status: 'raised').length
     @dead = all_armies.where(status: 'inactive').length
