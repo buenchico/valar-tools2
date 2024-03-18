@@ -56,11 +56,13 @@ class Army < ApplicationRecord
     @options["attributes"].sort_by { |_, v| v["sort"] }.to_h.each do | key, value |
       base += self["col#{value['sort']}"].to_i * value["str"]
     end
-    self.tags.each do | tag |
-      if self.board.present? && @options["tags"][tag]["board"].present?
-        base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"board" => 0})["board"].to_i
-      else
-        base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"str" => 0})["str"].to_i
+    if self.tags.present?
+      self.tags.each do | tag |
+        if self.board.present? && @options["tags"][tag]["board"].present?
+          base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"board" => 0})["board"].to_i
+        else
+          base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"str" => 0})["str"].to_i
+        end
       end
     end
     if self.board.present?
