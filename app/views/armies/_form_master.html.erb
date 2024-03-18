@@ -141,7 +141,7 @@
 
           <%= form.submit nil, class: 'btn btn-primary' %>
 
-          <% if army.logs.empty? == false %>
+          <% if army.logs&.empty? == false %>
             <div class="input-group mt-3">
               <%= form.label :changelog, class: 'input-group-text w-100' %>
               <% army.logs.each do | log | %>
