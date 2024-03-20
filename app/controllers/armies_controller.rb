@@ -370,6 +370,24 @@ class ArmiesController < ApplicationController
     end
   end
 
+  def post_discourse_armies
+    # Extract headers and body
+    request_body = request.body.read
+    request_signature = request.headers['X-Discourse-Event-Signature']
+
+    # Your secret configured in Discourse
+    discourse_secret = ENV['DISCOURSE_WEBHOOK_SECRET'] # Make sure to set this in your environment variables
+    computed_signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), discourse_secret, request_signature)
+
+    if computed_signature == signature
+      payload = JSON.parse(request_body)
+
+      head :ok
+    else
+      head :unauthorized
+    end
+  end
+
   def get_discourse_armies
     source = request.headers['X-Discourse-Source']
 
