@@ -5,7 +5,7 @@ class ArmiesController < ApplicationController
   before_action :set_factions, only: [:index, :edit, :new]
   before_action :army_stats, only: [:index, :get_armies]
   before_action :set_filters, only: [:index]
-  before_action :check_player
+  before_action :check_player, except: [:get_discourse_armies]
   before_action :check_master, only: [:destroy, :destroy_multiple]
   before_action :check_owner, only: [:edit, :edit_notes, :update, :edit_multiple, :update_multiple]
   before_action :set_regions, only: [:new, :edit, :edit_multiple]
@@ -368,6 +368,47 @@ class ArmiesController < ApplicationController
         format.html { redirect_to armies_url, danger: 'La palabra de validación es incorrecta.' }
       end
     end
+  end
+
+  def get_discourse_armies
+    source = request.headers['X-Discourse-Source']
+
+    faction = Faction.find(params[:faction_id])
+    armies = faction.armies.where(group: params[:group])
+    armies_text = ""
+    armies.each do | army |
+      armies_text << "> * "
+      armies_text << army.name
+      armies_text << "(" + army.status + ")"
+      if army.position.present?
+        armies_text << ", " + army.position
+      end
+      armies_text << " grupo " + ARMY_GROUPS[army.group.to_sym][:name].upcase
+      tags = []
+      if army.hp != 100
+        tags << @options["hp"]["name"].capitalize + " " + number_to_modifier(((army.hp - 100) / @options["hp"]["step"]))
+      end
+      @attributes.each do | key, value |
+        if army["col#{value['sort']}"]&.nonzero?
+          tags << value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"])
+        end
+      end
+      if army.tags.present?
+        army.tags.each do | tag |
+          if @tags[tag]
+            tags << @tags[tag]["name"].capitalize
+          else
+            tags << tag.capitalize
+          end
+        end
+      end
+      if tags.present?
+        armies_text << " [" + tags.join(", ") + "]"
+      end
+      armies_text << " FUE: " + army.strength.to_s + "\n"
+    end
+    puts armies_text
+    render plain: armies_text
   end
 
 private

@@ -8,11 +8,13 @@ class ApplicationController < ActionController::Base
   helper_method :admin_tools
   helper_method :inactive_tools
 
+  helper_method :number_to_modifier
+
   add_flash_types :error, :success, :info, :danger, :warning
 
   def set_current_user
     @current_user ||= User.find_by(auth_token: cookies[:auth_token]) if cookies[:auth_token]
-    Thread.current[:current_user] = @current_user    
+    Thread.current[:current_user] = @current_user
   end
 
   def active_game
@@ -84,5 +86,15 @@ class ApplicationController < ActionController::Base
 
   def inactive_tools
     inactive_tools = Tool.where(active: false)
+  end
+
+  def number_to_modifier(number)
+    if number.nil?
+      "+0"
+    elsif number >= 0
+      "+#{number}"
+    else
+      "–#{number.abs}"
+    end
   end
 end
