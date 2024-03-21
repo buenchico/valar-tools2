@@ -388,10 +388,8 @@ class ArmiesController < ApplicationController
 
     raw = json_data["post"]["raw"]
 
-    content_without_code_blocks = raw.gsub(/(```.*?```|^\s{4,}.*)/m, '')
-
-    if raw.include?("$army.")
-      match_data = content_without_code_blocks.match(/\$army\.(\w+)/)
+    if raw.include?("$army.") && raw.match(/(```.*?```|^ {4,}.*)/m).present? # Find $army text but ignore if there is code in the message
+      match_data = raw.match(/\$army\.(\w+)/)
       if match_data
         group = match_data[1]
         text_to_replace = "$army." + group
