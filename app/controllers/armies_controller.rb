@@ -388,7 +388,7 @@ class ArmiesController < ApplicationController
 
     raw = json_data["post"]["raw"]
 
-    content_without_code_blocks = raw.gsub(/```(?:\w+)?\s*.*?\s*```|^ {4}.*?(?=\n[^ ]|$)/m, '')
+    content_without_code_blocks = raw.gsub(/(```.*?```|^\s{4,}.*)/m, '')
 
     if raw.include?("$army.")
       match_data = content_without_code_blocks.match(/\$army\.(\w+)/)
