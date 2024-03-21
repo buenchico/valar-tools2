@@ -420,7 +420,7 @@ class ArmiesController < ApplicationController
     armies.each do | army |
       armies_text << "> * "
       armies_text << army.name
-      armies_text << "(" + army.status + ")"
+      armies_text << " (" + @army_status[army.status]["name"] + ")"
       if army.position.present?
         armies_text << ", " + army.position
       end
