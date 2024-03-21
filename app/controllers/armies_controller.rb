@@ -388,8 +388,11 @@ class ArmiesController < ApplicationController
 
     raw = json_data["post"]["raw"]
 
+    CODE_BLOCK_REGEX = /```(?:\w+)?\s*.*?\s*```|^ {4}.*?(?=\n[^ ]|$)/m
+    content_without_code_blocks = raw.gsub(CODE_BLOCK_REGEX, '')
+
     if raw.include?("$army.")
-      match_data = raw.match(/\$army\.(\w+)/)
+      match_data = content_without_code_blocks.match(/\$army\.(\w+)/)
       if match_data
         group = match_data[1]
         text_to_replace = "$army." + group
