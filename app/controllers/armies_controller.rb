@@ -408,8 +408,9 @@ class ArmiesController < ApplicationController
         else
           head :unauthorized
         end
-
       end
+    else
+      head :not_modified
     end
   end
 
