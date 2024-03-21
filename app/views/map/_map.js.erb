@@ -87,6 +87,7 @@ $(document).on('turbolinks:load', function () {
           options: {
             bounds: bounds,
             tileSize: L.point(sideLength * 2 * 1.5, Math.sqrt(3) * sideLength * 2),
+            minZoom: zoom[0],
             maxNativeZoom: 0, // Define the minimum native zoom level
             minNativeZoom: 0
           },
