@@ -49,7 +49,7 @@ Rails.application.routes.draw do
   get 'armies/faction/:faction_id', to: 'armies#index'
   get 'armies/get_armies', to: 'armies#get_armies', as: 'get_armies'
   get 'armies/get_discourse_armies/:faction_id/:group', to: 'armies#get_discourse_armies'
-  ppst 'armies/post_discourse_armies', to: 'armies#post_discourse_armies'
+  post 'armies/post_discourse_armies', to: 'armies#post_discourse_armies'
   resources :armies, :except => [:show]
 
   resources :locations

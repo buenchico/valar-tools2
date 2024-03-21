@@ -5,10 +5,11 @@ class ArmiesController < ApplicationController
   before_action :set_factions, only: [:index, :edit, :new]
   before_action :army_stats, only: [:index, :get_armies]
   before_action :set_filters, only: [:index]
-  before_action :check_player, except: [:get_discourse_armies]
+  before_action :check_player, except: [:get_discourse_armies, :post_discourse_armies]
   before_action :check_master, only: [:destroy, :destroy_multiple]
   before_action :check_owner, only: [:edit, :edit_notes, :update, :edit_multiple, :update_multiple]
   before_action :set_regions, only: [:new, :edit, :edit_multiple]
+  skip_before_action :verify_authenticity_token, only: [:post_discourse_armies]
 
   def index
     @faction = Faction.find_by(id: params[:faction_id])
@@ -371,28 +372,50 @@ class ArmiesController < ApplicationController
   end
 
   def post_discourse_armies
-    # Extract headers and body
+    require 'json'
+
+    # Read the content of the request body
     request_body = request.body.read
-    request_signature = request.headers['X-Discourse-Event-Signature']
 
-    # Your secret configured in Discourse
-    discourse_secret = ENV['DISCOURSE_WEBHOOK_SECRET'] # Make sure to set this in your environment variables
-    computed_signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), discourse_secret, request_signature)
+    # Parse the JSON content
+    json_data = JSON.parse(request_body)
 
-    if computed_signature == signature
-      payload = JSON.parse(request_body)
+    # Now json_data will be a Hash containing the parsed JSON
+    post_id = json_data["post"]["id"]
+    username = json_data["post"]["username"]
 
-      head :ok
-    else
-      head :unauthorized
+    faction_id = User.find_by(player: username).faction.id
+
+    raw = json_data["post"]["raw"]
+
+    if raw.include?("$army.")
+      match_data = raw.match(/\$army\.(\w+)/)
+      if match_data
+        group = match_data[1]
+        text_to_replace = "$army." + group
+        replacement_text = get_discourse_armies(faction_id,group)
+
+        raw = json_data["post"]["raw"].gsub(text_to_replace, replacement_text)
+        edit_reason = "Ejércitos editados por las tools"
+        request_signature = request.headers['x-discourse-event-signature']
+        # Your secret configured in Discourse
+        discourse_secret = ENV['DISCOURSE_WEBHOOK_SECRET'] # Make sure to set this in your environment variables
+        computed_signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), discourse_secret, request_signature)
+
+        if discourse_secret = computed_signature
+          DiscourseApi::DiscoursePostData.post_armies_data(post_id, raw, edit_reason)
+          head :ok
+        else
+          head :unauthorized
+        end
+
+      end
     end
   end
 
-  def get_discourse_armies
-    source = request.headers['X-Discourse-Source']
-
-    faction = Faction.find(params[:faction_id])
-    armies = faction.armies.where(group: params[:group])
+  def get_discourse_armies(faction_id, group)
+    faction = Faction.find(faction_id)
+    armies = faction.armies.where(group: group).where(visible: true)
     armies_text = ""
     armies.each do | army |
       armies_text << "> * "
@@ -425,8 +448,13 @@ class ArmiesController < ApplicationController
       end
       armies_text << " FUE: " + army.strength.to_s + "\n"
     end
-    puts armies_text
-    render plain: armies_text
+
+    if armies_text.empty?
+      render plain: "No hay ejércitos en el grupo " + group
+    else
+      armies_text << "<small>Editado por las tools, grupo **" + ARMY_GROUPS[group.to_sym][:name].upcase + "**</small>\n"
+      render plain: armies_text
+    end
   end
 
 private
