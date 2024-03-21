@@ -388,7 +388,7 @@ class ArmiesController < ApplicationController
 
     raw = json_data["post"]["raw"]
 
-    if raw.include?("$army.") && raw.match(/(```.*?```|^ {4,}.*)/m).present? # Find $army text but ignore if there is code in the message
+    if raw.include?("$army.") && !raw.match(/(```.*?```|^ {4,}.*)/m).present? # Find $army text but ignore if there is code in the message
       match_data = raw.match(/\$army\.(\w+)/)
       if match_data
         group = match_data[1]
