@@ -380,37 +380,38 @@ class ArmiesController < ApplicationController
     # Parse the JSON content
     json_data = JSON.parse(request_body)
 
-    # Now json_data will be a Hash containing the parsed JSON
-    post_id = json_data["post"]["id"]
-    username = json_data["post"]["username"]
+    request_signature = request.headers['x-discourse-event-signature']
+    # Your secret configured in Discourse
+    discourse_secret = ENV['DISCOURSE_WEBHOOK_SECRET'] # Make sure to set this in your environment variables
+    computed_signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), discourse_secret, request_signature)
 
-    faction_id = User.find_by(player: username).faction.id
+    if discourse_secret = computed_signature
+      raw = json_data["post"]["raw"]
 
-    raw = json_data["post"]["raw"]
+      if raw.include?("$army.") && !raw.match(/(`.*?`|^ {4,}.*)/m).present? # Find $army text but ignore if there is code in the message
+        match_data = raw.match(/\$army\.(\w+)/)
+        if match_data
+          group = match_data[1]
+          text_to_replace = "$army." + group
 
-    if raw.include?("$army.") && !raw.match(/(```.*?```|^ {4,}.*)/m).present? # Find $army text but ignore if there is code in the message
-      match_data = raw.match(/\$army\.(\w+)/)
-      if match_data
-        group = match_data[1]
-        text_to_replace = "$army." + group
-        replacement_text = get_discourse_armies(faction_id,group)
+          post_id = json_data["post"]["id"]
+          username = json_data["post"]["username"]
 
-        raw = json_data["post"]["raw"].gsub(text_to_replace, replacement_text)
-        edit_reason = "Ejércitos editados por las tools"
-        request_signature = request.headers['x-discourse-event-signature']
-        # Your secret configured in Discourse
-        discourse_secret = ENV['DISCOURSE_WEBHOOK_SECRET'] # Make sure to set this in your environment variables
-        computed_signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), discourse_secret, request_signature)
+          faction_id = User.find_by(player: username).faction.id
 
-        if discourse_secret = computed_signature
+          replacement_text = get_discourse_armies(faction_id,group)
+
+          raw = json_data["post"]["raw"].gsub(text_to_replace, replacement_text)
+          edit_reason = "Ejércitos editados por las tools"
+
           DiscourseApi::DiscoursePostData.post_armies_data(post_id, raw, edit_reason)
-          head :ok
-        else
-          head :unauthorized
+          head :ok          
         end
+      else
+        head :not_modified
       end
     else
-      head :not_modified
+      head :unauthorized
     end
   end
 
