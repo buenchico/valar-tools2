@@ -113,6 +113,15 @@ $(document).on('turbolinks:load', function () {
 
           // render locations
           <% @locations.where(location_type: type).each do | location | %>
+            <% if location.x.nil? %>
+              <% location.x = 0 %>
+            <% end %>
+
+            <% if location.y.nil? %>
+              <% location.y = 0 %>
+            <% end %>
+
+
             var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
 
             // render only name
