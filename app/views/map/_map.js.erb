@@ -202,7 +202,8 @@ $(document).on('turbolinks:load', function () {
             defaultSizeTitles: {Current: 'Zona visible'},
             filename: 'map',
             exportOnly: true,
-            hideControlContainer: true
+            hideControlContainer: true,
+            hideClasses: ['navbar', 'tool-title']
       }).addTo(map);
 
       map.on('easyPrint-start', e => {
