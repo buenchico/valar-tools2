@@ -21,13 +21,6 @@
       <%= render 'layouts/alert', flash: flash %>
     </div>
     <div class="container content mt-3">
-      <% if @current_user %>
-        <div class="container">
-          <%= link_to send('issues_url'), class: "display-4 float-end", remote: true, "data-bs-toggle": "tooltip", "data-bs-placement": "bottom", "title": "Informa de un error." do %>
-            <i class="bi bi-bug-fill text-warning"></i>
-          <% end %>
-        </div>
-      <% end %>
       <%= yield %>
       <div id='content'></div>
     </div>

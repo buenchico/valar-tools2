@@ -5,6 +5,13 @@
       <%= link_to image_tag("tools.png", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand d-none d-sm-block" %>
 
         <ul class="navbar-nav ml-auto">
+          <% if @current_user %>
+            <div class="container">
+              <%= link_to send('issues_url'), class: "display-6 float-end", remote: true, "data-bs-toggle": "tooltip", "data-bs-placement": "bottom", "title": "Informa de un error." do %>
+                <i class="bi bi-bug-fill text-warning"></i>
+              <% end %>
+            </div>
+          <% end %>
           <% if @current_user.nil? %>
             <%= button_to login_path, method: :post, class: 'btn btn-sm btn-primary text-black', form_class: 'm-auto' do %>
               <i class="fas fa-user"></i> Iniciar sesión
