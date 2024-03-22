@@ -1,7 +1,7 @@
 <% provide(:title, @tool.title) %>
 <% provide(:icon, @tool.icon_url) %>
 
-<div class="tool-title">
+<div class="tool-title d-none d-sm-block">
     <i class="white <%= yield(:icon) %>"></i>
     <%= yield(:title) %>
 </div>
