@@ -71,7 +71,6 @@ $(document).on('turbolinks:load', function () {
       var y = params.get("y");
 
       if (x == null || y == null) {
-        console.log(zoom)
         map.setView( [bounds[1][0] / 2 , bounds[1][1] / 2 ], (zoom[2] || zoom[0]));
       } else {
         map.setView( [y, x], zoom[2]);
