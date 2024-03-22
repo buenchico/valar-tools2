@@ -121,7 +121,6 @@ $(document).on('turbolinks:load', function () {
               <% location.y = 0 %>
             <% end %>
 
-
             var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
 
             // render only name
