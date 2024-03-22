@@ -71,9 +71,10 @@ $(document).on('turbolinks:load', function () {
       var y = params.get("y");
 
       if (x == null || y == null) {
-        map.setView( [bounds[1][0] / 2 , bounds[1][1] / 2 ], zoom[0]);
+        console.log(zoom)
+        map.setView( [bounds[1][0] / 2 , bounds[1][1] / 2 ], zoom[2]);
       } else {
-        map.setView( [y, x], zoom[0]);
+        map.setView( [y, x], zoom[2]);
       }
 
       map.createPane('imagebg');
