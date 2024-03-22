@@ -208,6 +208,7 @@ es:
         other: '%{count} semanas'
   word_genders:
     ciudad: feminine
+    región: feminine
   messages:
     permissions: "No tienes permisos para acceder a esta página"
     success:
