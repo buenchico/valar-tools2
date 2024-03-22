@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_regions
-    @regions = Location.where(location_type: "region").where(game_id: active_game.id)
+    @regions = Location.where(location_type: "region").where(game_id: active_game.id).order('name_es')
   end
 
   def player_tools
