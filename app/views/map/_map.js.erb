@@ -113,14 +113,14 @@ $(document).on('turbolinks:load', function () {
 
           // render locations
           <% @locations.where(location_type: type).each do | location | %>
-            <% if location.x.nil? %>
-              <% location.x = 0 %>
-            <% end %>
-
-            <% if location.y.nil? %>
-              <% location.y = 0 %>
-            <% end %>
-
+            //Check location render type point vs line
+            <% if location.line.present? %> // Location is a line!
+              var polyline = L.polyline(<%= location.line %>, {color: '<%= layer["line-color"] %>'})
+              polyline.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                                      className: 'leaflet-popup'
+                                    })
+              <%= code %>.addLayer(polyline);
+            <% elsif location.x.present? && location.y.present? %> // location is a point
             var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
 
             // render only name
@@ -176,6 +176,9 @@ $(document).on('turbolinks:load', function () {
                       })
                 );
             }
+            <% else %> // Other locations draw types
+              console.log("<%= location.name %>")
+            <% end %>
           <% end %>
         <% end %>
 
