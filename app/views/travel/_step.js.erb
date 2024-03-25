@@ -20,7 +20,8 @@ $(document).on('turbolinks:load', function () {
 
     html_form += `
             <%= label_tag :speed, I18n.t('helpers.label.speed'), class: 'input-group-text' %>
-            <%= select_tag "speed", options_for_select(@options["speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["speed"]["default"]["name"], @options["speed"]["default"]["mod"]].to_s), {class: 'form-select me-2'} %>
+            <%= select_tag "travel_speed", options_for_select(@options["land"]["travel_speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["land"]["travel_speed"]["default"]["name"], @options["land"]["travel_speed"]["default"]["mod"]].to_s), {class: 'form-select me-2 land'} %>
+            <%= select_tag "travel_speed", options_for_select(@options["sea"]["travel_speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["sea"]["travel_speed"]["default"]["name"], @options["sea"]["travel_speed"]["default"]["mod"]].to_s), {class: 'form-select me-2 sea'} %>
 
             <%= label_tag :obstacle, I18n.t('helpers.label.obstacle'), class: 'input-group-text' %>
             `

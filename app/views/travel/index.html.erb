@@ -47,7 +47,8 @@
         <%= form.select :"step[0][terrain][sea]", options_for_select(@options["sea"]["terrain"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["sea"]["terrain"]["default"]["name"], @options["sea"]["terrain"]["default"]["mod"]].to_s), {}, class: 'form-select me-2 sea d-none', disabled: true %>
 
         <%= form.label :speed, class: 'input-group-text' %>
-        <%= form.select :"step[0][speed]", options_for_select(@options["speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["speed"]["default"]["name"], @options["speed"]["default"]["mod"]].to_s), {}, class: 'form-select me-2' %>
+        <%= form.select :"step[0][speed]", options_for_select(@options["land"]["travel_speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["land"]["travel_speed"]["default"]["name"], @options["land"]["travel_speed"]["default"]["mod"]].to_s), {}, class: 'form-select me-2 land' %>
+        <%= form.select :"step[0][speed]", options_for_select(@options["sea"]["travel_speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["sea"]["travel_speed"]["default"]["name"], @options["sea"]["travel_speed"]["default"]["mod"]].to_s), {}, class: 'form-select me-2 sea d-none' %>
 
         <%= form.label :obstacle, class: 'input-group-text' %>
         <%= form.select :"step[0][obstacle][land]",
