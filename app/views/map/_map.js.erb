@@ -129,7 +129,7 @@ $(document).on('turbolinks:load', function () {
                 L.marker(
                   [<%= location.y %>,<%= location.x %>],
                     { icon: L.divIcon({
-                      className: "region-label <%= @options['font'] %>",
+                      className: "regionLabel <%= @options['font'] %>",
                       html: "<%= location.name %>",
                       iconSize: [<%= location.name.length * 30 * 0.6 %>, 30],
                       iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
