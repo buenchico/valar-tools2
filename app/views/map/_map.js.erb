@@ -115,7 +115,6 @@ $(document).on('turbolinks:load', function () {
           <% @locations.where(location_type: type).order(priority: :desc).each do | location | %>
             //Check location render type point vs line
             <% if location.line.present? %> // Location is a line!
-              console.log("<%= location.name %>")
               var polyline = L.polyline(<%= location.line %>, {color: '<%= layer.fetch("line-color", "black")  %>'})
               polyline.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                                       className: 'leaflet-popup'
