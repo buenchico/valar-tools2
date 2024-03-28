@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_25_132653) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_28_130216) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -138,6 +138,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_25_132653) do
     t.bigint "game_id"
     t.bigint "region_id"
     t.jsonb "line", default: []
+    t.integer "priority", limit: 2, default: 0
     t.index ["family_id"], name: "index_valar_locations_on_family_id"
     t.index ["game_id"], name: "index_valar_locations_on_game_id"
     t.index ["region_id"], name: "index_valar_locations_on_region_id"
