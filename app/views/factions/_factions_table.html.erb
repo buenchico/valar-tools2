@@ -42,9 +42,9 @@
             <% end %>
             <% if @options["reputation"] %>
               <td>
-                <span id="rep_<%= faction.id %>"><%= number_to_modifier(calculate_mod(faction.reputation)) %></span>
-                <% if @current_user&.is_master? %>
-                  (<%= faction.reputation.to_i %>)
+                <span id="rep_<%= faction.id %>"><%= number_to_modifier(calculate_mod(faction.reputation)) %>
+                  <% if @current_user&.is_master? %>
+                  <span class="h6">(<%= faction.reputation.to_i %>)</span></span>
                   <%= form_with(model: faction, url: reputation_path(faction), method: :post, local: false) do |form| %>
                     <%= button_tag(type: 'submit', class: 'btn btn-outline-success', value: '1') do %>
                       <i class="bi bi-hand-thumbs-up-fill"></i>
@@ -53,6 +53,8 @@
                       <i class="bi bi-hand-thumbs-down-fill"></i>
                     <% end %>
                   <% end %>
+                <% else %>
+                  </span>
                 <% end %>
               </td>
             <% end %>
