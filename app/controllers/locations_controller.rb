@@ -91,7 +91,7 @@ private
   end
 
   def location_params
-    params.require(:location).permit(:name_en, :name_es, :description, :x, :y, :line, :region_id, :location_type, :visible, :family_id, :game_id, tags: []).tap do |whitelisted|
+    params.require(:location).permit(:name_en, :name_es, :description, :x, :y, :line, :priority, :region_id, :location_type, :visible, :family_id, :game_id, tags: []).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
     end
   end
