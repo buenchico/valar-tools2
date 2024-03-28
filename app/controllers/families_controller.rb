@@ -81,8 +81,10 @@ private
   end
 
   def set_families_list
-    if @current_user&.is_master?
+    if @current_user&.is_admin?
       @families = Family.all.order(:name)
+    elsif @current_user&.is_master?
+      @families = Family.where(game_id: active_game.id).order(:name)
     else
       @families = Family.where(visible: true).where(game_id: active_game.id).order(:name)
     end

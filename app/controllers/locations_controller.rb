@@ -75,7 +75,7 @@ private
     if @current_user&.is_admin?
       @locations = Location.all
     elsif @current_user&.is_master?
-      @locations = Location.all.where(game_id: active_game.id)
+      @locations = Location.where(game_id: active_game.id)
     else
       @locations = Location.where(visible: true).where(game_id: active_game.id)
     end
