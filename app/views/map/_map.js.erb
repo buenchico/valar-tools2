@@ -102,7 +102,7 @@ $(document).on('turbolinks:load', function () {
       var hexLayer = new hexGrid().addTo(map);
 
       <% @options["layers"].each do | code, layer | %>
-        var <%= code %> = new L.layerGroup.collision({margin: -10});
+        var <%= code %> = new L.layerGroup.collision({margin: <%= @options['margin'] || 0 %>});
 
         <% layer["types"].each do | type | %>
           // if there is a layer image
