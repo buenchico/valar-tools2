@@ -1,3 +1,5 @@
+<%= puts "///////////////////" %>
+<%= puts location.id %>
 <td><%= location.name_es.nil? ? '' : (link_to location.name_es, location_path(location), remote: true, class: 'link-unstyled') %></td>
 <td><%= location.name_en.nil? ? '' : (link_to location.name_en, location_path(location), remote: true, class: 'link-unstyled') %></td>
 <td><%= truncate(location.description, length: 100, omission: '...') %></td>
