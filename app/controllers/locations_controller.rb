@@ -73,11 +73,11 @@ private
 
   def set_locations_list
     if @current_user&.is_admin?
-      @locations = Location.all.order(:id)
+      @locations = Location.all
     elsif @current_user&.is_master?
-      @locations = Location.where(game_id: active_game.id).order(:id)
+      @locations = Location.where(game_id: active_game.id)
     else
-      @locations = Location.where(visible: true).where(game_id: active_game.id).order(:id)
+      @locations = Location.where(visible: true).where(game_id: active_game.id)
     end
   end
 
