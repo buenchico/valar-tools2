@@ -74,7 +74,7 @@
 
           <div class="input-group mb-3">
             <%= form.label :family_id, class: 'input-group-text' %>
-            <%= form.select :family_id, [""] + Family.where(visible: true).where(game_id: active_game.id).order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+            <%= form.select :family_id, [""] + Family.where(visible: true).where(game_id: active_game.id).order(visible: :desc, game_id: :asc, name: :asc).map { |x| [truncate(x.title, length: 100, omission: '...'), x.id] }, {}, class: 'form-select' %>
           </div>
 
           <div class="input-group mb-3">

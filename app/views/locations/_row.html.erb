@@ -4,7 +4,7 @@
 <td><%= location.tags.join(",") %></td>
 <td><%= @options["types"][location.location_type]["name"] %></td>
 <td><%= location.region&.name %></td>
-<td><%= location.family&.title %></td>
+<td><%= truncate(location.family&.title, length: 100, omission: '...') %></td>
 <% if @current_user&.is_master? %>
   <td class="text-center">
     <% if location.visible == true  %>
