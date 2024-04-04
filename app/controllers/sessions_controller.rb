@@ -58,7 +58,7 @@ class SessionsController < ApplicationController
   def destroy_sso
     cookies.delete(:auth_token)
 
-    redirect_to 'https://www.valar.es'
+    redirect_to "https://www.valar.es", allow_other_host: true
   end
 
   def sso
