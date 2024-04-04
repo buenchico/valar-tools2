@@ -47,7 +47,7 @@
 
           <% @attributes.each do | key, value | %>
             <div class="input-group mb-3">
-              <%= form.label value["name"] + " *(" + value["str"].to_s + ")", class: 'input-group-text' %>
+              <%= form.label "col#{value['sort']}", ('<i class="bi bi-' + value["icon"] + '"></i>&nbsp;').html_safe + value["name"].capitalize + " *(" + value["str"].to_s + ")", class: 'input-group-text' %>
               <%= form.number_field  "col#{value['sort']}", class: 'form-control', step: 1 %>
             </div>
           <% end %>
