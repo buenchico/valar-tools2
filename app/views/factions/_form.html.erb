@@ -27,7 +27,7 @@
             <%= form.label :flair_url, class: 'input-group-text' %>
             <%= form.text_field :flair_url, class: 'form-control', disabled: true %>
           </div>
-          <% if @options["reputation"] %>
+          <% if @options&.dig("reputation") %>
             <div class="input-group mb-3">
               <%= form.label :reputation, class: 'input-group-text' %>
               <%= form.label number_to_modifier(calculate_mod(faction.reputation)), class: 'input-group-text' %>

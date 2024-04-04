@@ -11,7 +11,7 @@
           <% else %>
             <th scope="col">Descripcción</th>
           <% end %>
-          <% if @options["reputation"] %>
+          <% if @options&.dig("reputation") %>
             <th scope="col">Reputación</th>
           <% end %>
           <% if @current_user&.is_master? %>
@@ -40,7 +40,7 @@
             <% else %>
               <td><%= truncate(faction.description, length: 100, omission: '...') %></td>
             <% end %>
-            <% if @options["reputation"] %>
+            <% if @options&.dig("reputation") %>
               <td>
                 <span id="rep_<%= faction.id %>"><%= number_to_modifier(calculate_mod(faction.reputation)) %>
                   <% if @current_user&.is_master? %>
