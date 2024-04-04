@@ -58,7 +58,7 @@ class Army < ApplicationRecord
     end
     if self.tags.present?
       self.tags.each do | tag |
-        if self.board.present? && @options["tags"][tag]["board"].present?
+        if self.board.present? && @options["tags"]&.[](tag)&.[]("board").present?
           base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"board" => 0})["board"].to_i
         else
           base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"str" => 0})["str"].to_i
