@@ -1,4 +1,4 @@
-<td><%= link_to family.title, family_path(family), remote: true, class: 'link-unstyled' %></td>
+<td><%= link_to truncate(family.title, length: 20, omission: '...'), family_path(family), remote: true, class: 'link-unstyled' %></td>
 <td>
   <% family.tags.each do | tag | %>
     <span class="badge rounded-pill pill-tags pill-tags-text bg-success"><%= tag %></span>

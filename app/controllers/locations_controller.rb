@@ -61,7 +61,7 @@ class LocationsController < ApplicationController
 
   def list
   #Column name must be between double quotes because, by default, pgsql column names are always lowercase
-    @locations_list = Location.order(:name_es).where(visible: true).where('LOWER("name_es") LIKE :term OR LOWER("name_en") LIKE :term', term: "%#{params[:term].downcase}%")
+    @locations_list = Location.order(:name_es).where(visible: true).where(game_id: active_game.id).where('LOWER("name_es") LIKE :term OR LOWER("name_en") LIKE :term', term: "%#{params[:term].downcase}%")
     @locations_list  = @locations_list.limit(20)
     render json: @locations_list.map(&:name_es).uniq
   end
@@ -72,8 +72,10 @@ private
   end
 
   def set_locations_list
-    if @current_user&.is_master?
+    if @current_user&.is_admin?
       @locations = Location.all
+    elsif @current_user&.is_master?
+      @locations = Location.where(game_id: active_game.id)
     else
       @locations = Location.where(visible: true).where(game_id: active_game.id)
     end
@@ -89,7 +91,7 @@ private
   end
 
   def location_params
-    params.require(:location).permit(:name_en, :name_es, :description, :x, :y, :region_id, :location_type, :visible, :family_id, :game_id, tags: []).tap do |whitelisted|
+    params.require(:location).permit(:name_en, :name_es, :description, :x, :y, :line, :priority, :region_id, :location_type, :visible, :family_id, :game_id, tags: []).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
     end
   end

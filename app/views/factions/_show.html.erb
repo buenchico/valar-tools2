@@ -31,7 +31,7 @@
             <%= Kramdown::Document.new(faction.tokens || "").to_html.html_safe %>
           </div>
         <% end %>
-        <% if @options["reputation"] %>
+        <% if @options&.dig("reputation") %>
           <div class="input-group">
             <%= label_tag :reputation, 'Reputation', class: 'input-group-text' %>
             <%= text_field_tag :faction_reputation, number_to_modifier(calculate_mod(faction.reputation)), class: 'form-control', disabled: true %>

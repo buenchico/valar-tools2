@@ -47,8 +47,9 @@ Rails.application.routes.draw do
   post 'armies/import', to: 'armies#import', as: 'import_armies'
   get 'armies/export', to: 'armies#export', as: 'export_armies'
   get 'armies/faction/:faction_id', to: 'armies#index'
-  # get 'armies/get_armies/:faction_id', to: 'armies#get_armies', as: 'get_armies'
   get 'armies/get_armies', to: 'armies#get_armies', as: 'get_armies'
+  get 'armies/get_discourse_armies/:faction_id/:group', to: 'armies#get_discourse_armies'
+  post 'armies/post_discourse_armies', to: 'armies#post_discourse_armies'
   resources :armies, :except => [:show]
 
   resources :locations
@@ -65,5 +66,6 @@ Rails.application.routes.draw do
 
   get 'issues', to: 'issues#new'
   post 'issues', to: 'issues#create'
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

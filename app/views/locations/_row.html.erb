@@ -2,8 +2,9 @@
 <td><%= location.name_en.nil? ? '' : (link_to location.name_en, location_path(location), remote: true, class: 'link-unstyled') %></td>
 <td><%= truncate(location.description, length: 100, omission: '...') %></td>
 <td><%= location.tags.join(",") %></td>
+<td><%= @options.dig("types", location.location_type, "name") || "Unknown" %></td>
 <td><%= location.region&.name %></td>
-<td><%= location.family&.title %></td>
+<td><%= truncate(location.family&.title, length: 100, omission: '...') %></td>
 <% if @current_user&.is_master? %>
   <td class="text-center">
     <% if location.visible == true  %>

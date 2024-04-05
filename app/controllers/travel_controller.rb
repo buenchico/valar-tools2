@@ -36,7 +36,7 @@ class TravelController < ApplicationController
       hex = step["hex"].to_i
       if hex > 0
         terrain = JSON.parse(step["terrain"][terrain_type])
-        speed = JSON.parse(step["speed"])
+        speed = JSON.parse(step["travel_speed"][terrain_type])
         obstacle = step["obstacle"][terrain_type].blank? ? "" : JSON(step["obstacle"][terrain_type])
         step_time = hex * ( base.to_i + @size_mod.to_i + army_speed[1].to_i + terrain[1].to_i + speed[1].to_i) + obstacle[1].to_i
         @time += step_time

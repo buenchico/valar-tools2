@@ -1,14 +1,4 @@
 module ApplicationHelper
-  def number_to_modifier(number)
-    if number.nil?
-      "+0"
-    elsif number >= 0
-      "+#{number}"
-    else
-      "–#{number.abs}"
-    end
-  end
-
   def calculate_mod(value)
     if value == nil
       0
@@ -45,20 +35,18 @@ module ApplicationHelper
 
   def word_gender(word)
     if I18n.locale == :es
-      last_letter = word[-1].downcase
-
-      # Check if the last letter indicates the gender
-      if last_letter == 'a'
-        return 'feminine'
-      elsif last_letter == 'o'
-        return 'masculine'
+      # If the last letter doesn't indicate gender, check the YAML file
+      word_genders = I18n.t('word_genders', default: {}) # Load word genders from the YAML file
+      if word_genders.key?(word.downcase.to_sym)
+        return word_genders[word.downcase.to_sym]
       else
-        # If the last letter doesn't indicate gender, check the YAML file
-        word_genders = I18n.t('word_genders', default: {}) # Load word genders from the YAML file
-        if word_genders.key?(word)
-          return word_genders[word]
+        last_letter = word[-1].downcase
+
+        # Check if the last letter indicates the gender
+        if last_letter == 'a'
+          return 'feminine'
         else
-          return 'masculine' # Default to masculine when gender is not found
+          return 'masculine' # default to masculine
         end
       end
     else

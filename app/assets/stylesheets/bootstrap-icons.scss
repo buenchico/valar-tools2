@@ -2009,6 +2009,8 @@ $bootstrap-icons-map: (
   "dwarf-warrior": "\f7a1",
   "zombie": "\f7a6",
   "kayak": "\f7a7",
+  "scythe": "\f7ac",
+  "swords-emblem": "\f7ad",
 );
 
 @each $icon, $codepoint in $bootstrap-icons-map {

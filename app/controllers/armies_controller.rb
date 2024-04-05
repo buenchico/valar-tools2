@@ -5,10 +5,11 @@ class ArmiesController < ApplicationController
   before_action :set_factions, only: [:index, :edit, :new]
   before_action :army_stats, only: [:index, :get_armies]
   before_action :set_filters, only: [:index]
-  before_action :check_player
+  before_action :check_player, except: [:get_discourse_armies, :post_discourse_armies]
   before_action :check_master, only: [:destroy, :destroy_multiple]
   before_action :check_owner, only: [:edit, :edit_notes, :update, :edit_multiple, :update_multiple]
   before_action :set_regions, only: [:new, :edit, :edit_multiple]
+  skip_before_action :verify_authenticity_token, only: [:post_discourse_armies]
 
   def index
     @faction = Faction.find_by(id: params[:faction_id])
@@ -424,6 +425,94 @@ class ArmiesController < ApplicationController
     end
   end
 
+  def post_discourse_armies
+    require 'json'
+
+    # Read the content of the request body
+    request_body = request.body.read
+
+    # Parse the JSON content
+    json_data = JSON.parse(request_body)
+
+    request_signature = request.headers['x-discourse-event-signature']
+    # Your secret configured in Discourse
+    discourse_secret = ENV['DISCOURSE_WEBHOOK_SECRET'] # Make sure to set this in your environment variables
+    computed_signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), discourse_secret, request_signature)
+
+    if discourse_secret = computed_signature
+      raw = json_data["post"]["raw"]
+
+      if raw.include?("$army.") && !raw.match(/(`.*?`|^ {4,}.*)/m).present? # Find $army text but ignore if there is code in the message
+        match_data = raw.match(/\$army\.(\w+)/)
+        if match_data
+          group = match_data[1]
+          text_to_replace = "$army." + group
+
+          post_id = json_data["post"]["id"]
+          username = json_data["post"]["username"]
+
+          faction_id = User.find_by(player: username).faction.id
+
+          replacement_text = get_discourse_armies(faction_id,group)
+
+          raw = json_data["post"]["raw"].gsub(text_to_replace, replacement_text)
+          edit_reason = "Ejércitos editados por las tools"
+
+          DiscourseApi::DiscoursePostData.post_armies_data(post_id, raw, edit_reason)
+          head :ok
+        end
+      else
+        head :not_modified
+      end
+    else
+      head :unauthorized
+    end
+  end
+
+  def get_discourse_armies(faction_id, group)
+    faction = Faction.find(faction_id)
+    armies = faction.armies.where(group: group).where(visible: true)
+    armies_text = ""
+    armies.each do | army |
+      armies_text << "> * "
+      armies_text << army.name
+      armies_text << " (" + @army_status[army.status]["name"] + ")"
+      if army.position.present?
+        armies_text << ", " + army.position
+      end
+      armies_text << " grupo " + ARMY_GROUPS[army.group.to_sym][:name].upcase
+      tags = []
+      if army.hp != 100
+        tags << @options["hp"]["name"].capitalize + " " + number_to_modifier(((army.hp - 100) / @options["hp"]["step"]))
+      end
+      @attributes.each do | key, value |
+        if army["col#{value['sort']}"]&.nonzero?
+          tags << value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"])
+        end
+      end
+      if army.tags.present?
+        army.tags.each do | tag |
+          if @tags[tag]
+            tags << @tags[tag]["name"].capitalize
+          else
+            tags << tag.capitalize
+          end
+        end
+      end
+      if tags.present?
+        armies_text << " [" + tags.join(", ") + "]"
+      end
+      armies_text << " FUE: " + army.strength.to_s + "\n"
+    end
+
+    if armies_text.empty?
+      render plain: "No hay ejércitos en el grupo " + group
+    else
+      armies_text << "<small>Editado por las tools, grupo **" + ARMY_GROUPS[group.to_sym][:name].upcase + "**</small>\n"
+      render plain: armies_text
+    end
+  end
+
 private
   def set_options
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
@@ -431,7 +520,7 @@ private
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de ejércitos'
     else
       @attributes = @options["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
-      @tags = @options["tags"]&.sort_by { |_, v| v["colour"] }.to_h
+      @tags = @options["tags"]&.sort_by { |_, v| [v["colour"], v["sort"] || Float::INFINITY] }.to_h
       @army_status = @options["status"]
       $options_armies = @options
     end

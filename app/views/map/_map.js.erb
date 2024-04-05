@@ -18,7 +18,7 @@ $(document).on('turbolinks:load', function () {
         $('#mapid').height(height);
         $('#mapid').css("position", "absolute");
         $('#mapid').css("left", "50px");
-        $('#map-container').height(width);
+        $('#map-container').width(width);
         $('#map-container').height(height);
       }
 
@@ -71,9 +71,9 @@ $(document).on('turbolinks:load', function () {
       var y = params.get("y");
 
       if (x == null || y == null) {
-        map.setView( [bounds[1][0] / 2 , bounds[1][1] / 2 ], zoom[0]);
+        map.setView( [bounds[1][0] / 2 , bounds[1][1] / 2 ], (zoom[2] || zoom[0]));
       } else {
-        map.setView( [y, x], zoom[0]);
+        map.setView( [y, x], zoom[2]);
       }
 
       map.createPane('imagebg');
@@ -83,10 +83,11 @@ $(document).on('turbolinks:load', function () {
 
       const sideLength = <%= (@options["scale"] || 1 ) %>;
 
-      var customTileLayer = L.GridLayer.extend({
+      var hexGrid = L.GridLayer.extend({
           options: {
             bounds: bounds,
             tileSize: L.point(sideLength * 2 * 1.5, Math.sqrt(3) * sideLength * 2),
+            minZoom: zoom[0],
             maxNativeZoom: 0, // Define the minimum native zoom level
             minNativeZoom: 0
           },
@@ -98,10 +99,10 @@ $(document).on('turbolinks:load', function () {
           }
       });
 
-      var hexLayer = new customTileLayer().addTo(map);
+      var hexLayer = new hexGrid().addTo(map);
 
       <% @options["layers"].each do | code, layer | %>
-        var <%= code %> = new L.layerGroup.collision({margin:0});
+        var <%= code %> = new L.layerGroup.collision({margin: <%= @options['margin'] || 0 %>});
 
         <% layer["types"].each do | type | %>
           // if there is a layer image
@@ -111,7 +112,15 @@ $(document).on('turbolinks:load', function () {
           <% end %>
 
           // render locations
-          <% @locations.where(location_type: type).each do | location | %>
+          <% @locations.where(location_type: type).order(priority: :desc).each do | location | %>
+            //Check location render type point vs line
+            <% if location.line.present? %> // Location is a line!
+              var polyline = L.polyline(<%= location.line %>, {color: '<%= layer.fetch("line-color", "black")  %>'})
+              polyline.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                                      className: 'leaflet-popup'
+                                    })
+              <%= code %>.addLayer(polyline);
+            <% elsif location.x.present? && location.y.present? %> // location is a point
             var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
 
             // render only name
@@ -120,7 +129,7 @@ $(document).on('turbolinks:load', function () {
                 L.marker(
                   [<%= location.y %>,<%= location.x %>],
                     { icon: L.divIcon({
-                      className: "region-label <%= @options['font'] %>",
+                      className: "regionLabel <%= @options['font'] %>",
                       html: "<%= location.name %>",
                       iconSize: [<%= location.name.length * 30 * 0.6 %>, 30],
                       iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
@@ -150,23 +159,22 @@ $(document).on('turbolinks:load', function () {
               <%= code %>.addLayer(
                 L.marker(
                   [<%= location.y %>,<%= location.x %>],
-                    { icon: L.icon({
-                        iconUrl: icon,
-                        className: '',
-                        iconSize: [30, 30],
-                        })
-                    })
-                    .bindTooltip("<%= location.name %>", {
-                        permanent: true,
-                        className: "locationLabel <%= @options['font'] %>",
-                        style: "background-color:powderblue;",
-                        offset: [5,0]
+                    { icon: L.divIcon({
+                      className: "locationLabel <%= @options['font'] %>",
+                      html: "<img src=" + icon + " height='30' width='30' /><%= location.name %>",
+                      style: "background:red !important;",
+                      iconSize: [<%= (location.name.length * 5) + 40 %>, 30],
+                      iconAnchor: [15,15]
                       })
+                    })
                     .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %> (<%= @location_types[location.location_type]["name"] %>)</p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                         className: 'leaflet-popup'
                       })
                 );
             }
+            <% else %> // Other locations draw types
+              console.log("<%= location.name %> con id: <%= location.id %> ha fallado al renderizar")
+            <% end %>
           <% end %>
         <% end %>
 
@@ -201,7 +209,8 @@ $(document).on('turbolinks:load', function () {
             defaultSizeTitles: {Current: 'Zona visible'},
             filename: 'map',
             exportOnly: true,
-            hideControlContainer: true
+            hideControlContainer: true,
+            hideClasses: ['navbar', 'tool-title']
       }).addTo(map);
 
       map.on('easyPrint-start', e => {

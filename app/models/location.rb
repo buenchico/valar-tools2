@@ -7,6 +7,7 @@ class Location < ApplicationRecord
 
   validates :name_en, presence: true, if: -> { name_es.blank? }
   validates :name_es, presence: true, if: -> { name_en.blank? }
+  validates :priority, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: -100, less_than_or_equal_to: 100 }
 
   def name
     if self.name_es.nil?

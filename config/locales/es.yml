@@ -49,7 +49,7 @@ es:
       size_travel_land: "Nº de ejércitos"
       size_travel_sea: "Nº de flotas"
       terrain: "Terreno"
-      speed: "Velocidad"
+      travel_speed: "Velocidad"
       distance: "Distancia"
       obstacle: "Obstáculo"
     placeholder:
@@ -119,6 +119,10 @@ es:
         name_en: "Nombre (EN)"
         tags: "Etiquetas"
         region_id: "Región"
+        y: "Lat."
+        x: "Lon."
+        line: "Línea"
+        priority: "Prioridad"
         location_type: "Tipo"
         visible: "Visible"
         family_id: "Señor"
@@ -213,6 +217,7 @@ es:
         other: '%{count} semanas'
   word_genders:
     ciudad: feminine
+    región: feminine
   messages:
     permissions: "No tienes permisos para acceder a esta página"
     success:

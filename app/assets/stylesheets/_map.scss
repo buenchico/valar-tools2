@@ -2,6 +2,11 @@
   font-family: 'caesar_dressingregular' !important;
 }
 
+.enchanted_land {
+  font-family: 'enchanted_land' !important;
+  font-size: 125%;
+}
+
 .easyPrintHolder .fullMap {
   background-image: url(icon-fullscreen.png);
 }
@@ -52,6 +57,21 @@
     }
 
 .locationLabel {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: white !important;
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+
+.regionLabel {
+  font-size: 30px;
+  text-align: center;
   background-color: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;

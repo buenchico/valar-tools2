@@ -14,15 +14,17 @@
           <%= (army["col#{value['sort']}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary me-1 mt-1"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"]) + '</span>').html_safe : nil ) %>
         <% end %>
 
-        <% army.tags&.each do | tag | %>
-          <% if @tags[tag] %>
-            <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %> me-1 mt-1"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
-          <% else %>
-            <span class="badge rounded-pill pill-tags pill-tags-text bg-danger %> me-1 mt-1"><%= tag.capitalize %></span>
+        <% if army.tags.present? %>
+          <% army.tags.each do | tag | %>
+            <% if @tags[tag] %>
+              <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %> me-1 mt-1"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
+            <% else %>
+              <span class="badge rounded-pill pill-tags pill-tags-text bg-danger %> me-1 mt-1"><%= tag.capitalize %></span>
+            <% end %>
           <% end %>
-        <% end %>
-        <% if @current_user&.is_master? %>
-          [id: #<%= sprintf('%04d', army.id) %>]
+          <% if @current_user&.is_master? %>
+            [id: #<%= sprintf('%04d', army.id) %>]
+          <% end %>
         <% end %>
       </p>
       <div class="d-none" id="army-data">
@@ -31,11 +33,13 @@
         <% @attributes.each do | key, value | %>
           <% (army["col#{value['sort']}"]&.nonzero? ? traits << (value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"])).html_safe : nil ) %>
         <% end %>
-        <% army.tags&.each do | tag | %>
-          <% if @tags[tag] %>
-            <% traits << @tags[tag]["name"].capitalize %>
-          <% else %>
-            <% traits << tag.capitalize %>
+        <% if army.tags.present? %>
+          <% army.tags.each do | tag | %>
+            <% if @tags[tag] %>
+              <% traits << @tags[tag]["name"].capitalize %>
+            <% else %>
+              <% traits << tag.capitalize %>
+            <% end %>
           <% end %>
         <% end %>
         <%= army.name %> (<%= army.status %>)<%= army.position.blank? ? nil : ", en #{army.position} " %><%= army.group.blank? ? nil : "grupo " + ARMY_GROUPS[army.group.to_sym][:name].upcase %> <%= traits.blank? ? nil : "[" + traits.join(", ") + "] " %>FUE: <%= army.strength %>

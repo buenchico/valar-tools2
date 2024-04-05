@@ -13,28 +13,30 @@
        </div>
        <% mod_str += army["col#{value['sort']}"].to_i * value["str"] %>
      <% end %>
-     <% army.tags&.each do | tag | %>
-      <div class='row'>
-        <div class='fst-italic text-start col-8'>
-          <% if @tags[tag] %>
-            <i class='bi bi-<%= @tags[tag]["icon"] %>'></i> <%= @tags[tag]["name"].capitalize %>
-          <% else %>
-            <%= tag.capitalize %>
-          <% end %>
-        </div>
-        <div class='text-end col-4'>
-          <% if @tags[tag] %>
-            <% if army.board.present? && @tags[tag]["board"].present? %>
-              <% mod_str += @tags[tag]["board"].to_i %>
-              <i class='bi bi-anchor'></i><%= number_to_modifier(@tags[tag]["board"]) %>
+     <% if army.tags.present? %>
+       <% army.tags.each do | tag | %>
+        <div class='row'>
+          <div class='fst-italic text-start col-8'>
+            <% if @tags[tag] %>
+              <i class='bi bi-<%= @tags[tag]["icon"] %>'></i> <%= @tags[tag]["name"].capitalize %>
             <% else %>
-              <% mod_str += @tags[tag]["str"].to_i %>
-              <%= number_to_modifier(@tags[tag]["str"]) %>
+              <%= tag.capitalize %>
             <% end %>
-          <% end %>
+          </div>
+          <div class='text-end col-4'>
+            <% if @tags[tag] %>
+              <% if army.board.present? && @tags[tag]["board"].present? %>
+                <% mod_str += @tags[tag]["board"].to_i %>
+                <i class='bi bi-anchor'></i><%= number_to_modifier(@tags[tag]["board"]) %>
+              <% else %>
+                <% mod_str += @tags[tag]["str"].to_i %>
+                <%= number_to_modifier(@tags[tag]["str"]) %>
+              <% end %>
+            <% end %>
+          </div>
         </div>
-      </div>
-     <% end %>
+       <% end %>
+      <% end %>
      <% if army.board.present? %>
         <div class='row'>
           <% if @options["fleets"][army.board] %>
@@ -66,7 +68,7 @@
 </td>
 <td width = "300px"><%= link_to army.name, edit_army_path(army), remote: true, class: 'link-unstyled' %></td>
 <td>
-  <%=  @army_status[army.status]["name"] %>
+  <%= @army_status[army.status]["name"] %>
   <% if !army.board.blank? %>
     <span class='badge rounded-pill pill-tags bg-success'>
       <i class='bi bi-<%= @options["fleets"].fetch(army.board, {"icon" => ''})["icon"] %>'></i>
@@ -81,13 +83,14 @@
   <% @attributes.each do | key, value | %>
     <%= (army["col#{value['sort']}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"]) + '</span>').html_safe : nil ) %>
   <% end %>
-  <% army.tags&.each do | tag | %>
-    <% if @tags[tag] %>
-      <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %>"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
-    <% else %>
-      <span class="badge rounded-pill pill-tags pill-tags-text bg-danger %>"><%= tag.capitalize %></span>
+  <% if army.tags.present? %>
+    <% army.tags.each do | tag | %>
+      <% if @tags[tag] %>
+        <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %>"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
+      <% else %>
+        <span class="badge rounded-pill pill-tags pill-tags-text bg-danger %>"><%= tag.capitalize %></span>
+      <% end %>
     <% end %>
-
   <% end %>
 </td>
 <td width = "500px">
