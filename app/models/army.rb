@@ -26,7 +26,13 @@ class Army < ApplicationRecord
       if current_user.nil?
         current_user = User.find_by(player: "valar")
       end
-      changes = self.changes.map { |field, values| "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}" }
+      changes = self.changes.map do |field, values|
+        if field.starts_with?("col")
+          field_name = ($options_armies["attributes"].keys.find { |key| $options_armies["attributes"][key]["sort"] == field.slice(3).to_i })  || "no_name"
+          field = field_name + "(" + field + ")"
+        end
+        "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
+      end
 
       change_log = {
         timestamp: Time.now,
