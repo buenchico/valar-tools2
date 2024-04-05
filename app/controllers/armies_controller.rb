@@ -217,20 +217,20 @@ class ArmiesController < ApplicationController
 
             if army_params_tags.empty? == false
               if army_params_tags[:tags_remove].empty? == false
-                puts army[:tags]
-                puts army_params_hash[:tags]
                 army_params_hash[:tags] = army[:tags]&.reject! { |tag| army_params_tags[:tags_remove].include?(tag) }
-                puts army_params_hash[:tags]
-                puts "///////////////"
               end
 
               if army_params_tags[:tags_add].empty? == false
                 if army[:tags].nil?
                   army_params_hash[:tags] = army_params_tags[:tags_add]
                 else
-                  army_params_hash[:tags] = army[:tags].concat(army_params_tags[:tags_add]).uniq!
+                  army_params_hash[:tags] = (army[:tags] || []).dup.concat(army_params_tags[:tags_add]).uniq
                 end
               end
+            end
+
+            if army_params_hash[:tags] == nil
+              army_params_hash[:tags] = [""]
             end
 
             if army.update(army_params_hash)
