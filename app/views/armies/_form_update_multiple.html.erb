@@ -144,6 +144,25 @@
                 <%= form.label :visible, t('activerecord.attributes.army.visible'), class: 'input-group-text' %>
                 <%= form.select :visible, [[""],["Invisible", "CLEAR"],["Visible", true]], {}, class: 'form-select' %>
               </div>
+              <div class="input-group mt-3">
+                <%= form.label t('activerecord.attributes.army.factions'), class: 'input-group-text' %>
+                <%= form.select :faction_ids,
+                  options_for_select(
+                    @factions.pluck(:long_name, :id).map { |name, id|
+                      [
+                        id,
+                        { "data-content": name
+                      }
+                      ]
+                    }.unshift([{"data-content": "Quitar todas las facciones"},"CLEAR"]),
+                    selected: nil
+                  ),
+                  { include_blank: true },
+                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  multiple: true,
+                  data: { noneSelectedText: ' '}
+                %>
+              </div>
             <% end %>
             <div class="input-group mt-3">
               <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'VALIDATE' para confirmar los cambios." %>

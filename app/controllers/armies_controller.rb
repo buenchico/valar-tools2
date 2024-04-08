@@ -2,7 +2,7 @@ class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
   before_action :set_options
-  before_action :set_factions, only: [:index, :edit, :new]
+  before_action :set_factions, only: [:index, :edit, :edit_multiple, :new]
   before_action :army_stats, only: [:index, :get_armies]
   before_action :set_filters, only: [:index]
   before_action :check_player, except: [:get_discourse_armies, :post_discourse_armies]
@@ -144,6 +144,15 @@ class ArmiesController < ApplicationController
 
     army_params.to_hash.each do | key, value |
       unless value.blank?
+        if key == "faction_ids"
+          if value.reject!(&:empty?).blank?
+            nil
+          elsif value == "CLEAR"
+            army_params_hash[key] = nil
+          else
+            army_params_hash[key] = value
+          end
+        end
         if key == "board"
           if value == "CLEAR"
             army_params_hash[key] = nil
