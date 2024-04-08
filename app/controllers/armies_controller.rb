@@ -103,6 +103,7 @@ class ArmiesController < ApplicationController
 
     respond_to do |format|
       if @army.update(army_params.reject! { |x| keys_to_remove&.include?(x) })
+        $faction_ids_was = @army.faction_ids
         flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
         format.js
       else
