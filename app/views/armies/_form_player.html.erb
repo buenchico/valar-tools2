@@ -52,7 +52,9 @@
             <% end %>
 
             <% army.tags.each do | tag | %>
-              <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %> me-1 mt-1"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
+              <% if tag.present? %>
+                <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %> me-1 mt-1"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
+              <% end %>
             <% end %>
           </div>
 
