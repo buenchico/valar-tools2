@@ -34,7 +34,7 @@ class Army < ApplicationRecord
         "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
       end
       if $faction_ids_was != self.faction_ids
-        changes << ("Factions changed from: " + Faction.where(id: self.faction_ids).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s + " to: " + Faction.where(id: $faction_ids_was).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s)
+        changes << ("Factions changed from: " + Faction.where(id: $faction_ids_was).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s + " to: " + Faction.where(id: self.faction_ids).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s)
       end
 
       $faction_ids_was = []
