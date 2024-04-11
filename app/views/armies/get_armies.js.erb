@@ -1,5 +1,3 @@
-var army_ids = <%= @army_ids %>; // Example array of army IDs
-
 if ($('#visible-<%= @visible %>').hasClass('active') || $('#tab-<%= @faction&.id %>').hasClass('active')) {
   // Removing armies
   $('#visible-<%= @visible %>').removeClass('active');
@@ -10,11 +8,24 @@ if ($('#visible-<%= @visible %>').hasClass('active') || $('#tab-<%= @faction&.id
     $('#tab-<%= @master.id %>').removeClass('active');
   }
 
-  $.each(army_ids, function(index, armyId) {
-    // Remove the element with the calculated ID
-    $("#army_" + armyId).remove();
-    $('#edit_multiple').find('input[value="' + armyId + '"]').remove();
+  var activeFactionIds = [];
+
+  $('.active.armies-tab').each(function() {
+      var idParts = this.id.split('-'); // Split the ID string by "-"
+      var number = idParts[1]; // Get the second part which contains the number
+      activeFactionIds.push(number);
   });
+
+  <% @armies.each do |army| %>
+    // Check if any of the army factions is visible
+    <% army.faction_ids.each do |faction_id| %>
+      if ($.inArray("<%= faction_id %>",activeFactionIds) != -1) {
+        $("#army_<%= army.id %>").remove();
+        $('#edit_multiple').find('input[value="<%= army.id %>"]').remove();
+      }
+    <% end %>
+  <% end %>
+
 } else {
   // Ading armies
   $('#visible-<%= @visible %>').addClass('active');
@@ -28,7 +39,10 @@ if ($('#visible-<%= @visible %>').hasClass('active') || $('#tab-<%= @faction&.id
   }
 
   <% @armies.each do |army| %>
-    $('#table_body').append("<%= j render 'row_container', army: army %>")
+    // Check if army already exists
+    if ($('#army_<%= army.id %>').length == 0) {
+      $('#table_body').append("<%= j render 'row_container', army: army %>")
+    }
   <% end %>
   $('.checkbox_select_all').prop('checked', false);
   $('.selectpicker').selectpicker();
@@ -41,6 +55,6 @@ $.fn.checkboxSelectable();
 $.fn.checkbox_listeners();
 $.fn.mass_edit_buttons();
 $.fn.inline_listeners();
-$("table").trigger("updateAll"); 
+$("table").trigger("updateAll");
 initPopovers();
 $(".spinner-border").addClass("d-none");
