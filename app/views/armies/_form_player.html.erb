@@ -82,12 +82,12 @@
 
           <div class="input-group mb-3">
             <%= form.label :region, class: 'input-group-text' %>
-            <%= form.text_field :region, class: 'form-control', disabled: true %>
+            <%= form.text_field :region, class: 'form-control', value: army&.location&.name, disabled: true %>
           </div>
 
           <div class="input-group mb-3">
             <%= form.label :lord, class: 'input-group-text' %>
-            <%= form.text_field :lord, class: 'form-control', disabled: true %>
+            <%= form.text_field :lord, class: 'form-control', value: army&.family&.name, disabled: true %>
           </div>
 
           <div class="input-group mb-3">
