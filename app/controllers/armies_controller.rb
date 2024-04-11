@@ -553,7 +553,7 @@ private
   end
 
   def army_stats
-    all_armies = Army.all.order(:id)
+    all_armies = Army.where(visible: true).order(:id)
     @armies_total = all_armies.length
     @men_total = all_armies.sum { |army| ( army.hp.to_i * @options["soldiers"].to_i / 100 ) }
     @str_total = all_armies.sum { |army| army.strength }
