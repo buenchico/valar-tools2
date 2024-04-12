@@ -2,6 +2,7 @@
 
 $(document).on('turbolinks:load', function() {
   $(".auto-source").autocomplete({
+    minLength : 2,
     source: $('.auto-source').data('autocomplete-source')
   });
 });

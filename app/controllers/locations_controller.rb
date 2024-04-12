@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   before_action :set_tool
-  before_action :check_master, except: [:show]
+  before_action :check_master, except: [:show, :list]
   before_action :set_location, only: [:edit, :show, :update, :destroy, :show]
   before_action :set_locations_list, only: [:index]
   before_action :set_regions, except: [:index]
