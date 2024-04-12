@@ -17,13 +17,18 @@ if ($('#visible-<%= @visible %>').hasClass('active') || $('#tab-<%= @faction&.id
   });
 
   <% @armies.each do |army| %>
+    to_delete = true
     // Check if any of the army factions is visible
     <% army.faction_ids.each do |faction_id| %>
+      // Check if faction is in active factions
       if ($.inArray("<%= faction_id %>",activeFactionIds) != -1) {
-        $("#army_<%= army.id %>").remove();
-        $('#edit_multiple').find('input[value="<%= army.id %>"]').remove();
+        to_delete = false
       }
     <% end %>
+    if (to_delete == true) {
+      $("#army_<%= army.id %>").remove();
+      $('#edit_multiple').find('input[value="<%= army.id %>"]').remove();
+    }
   <% end %>
 
 } else {
