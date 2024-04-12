@@ -1,0 +1,6 @@
+$("html, body").animate({ scrollTop: 0 }, "slow");
+
+$('#battle_<%= @battle.id %>').remove();
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+$(".modal").modal('hide');

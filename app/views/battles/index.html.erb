@@ -1,0 +1,17 @@
+<% provide(:title, @tool.title) %>
+<% provide(:icon, @tool.icon_url) %>
+
+<div class="tool-title d-none d-sm-block">
+    <i class="white <%= yield(:icon) %>"></i>
+    <%= yield(:title) %>
+</div>
+
+<div class="row my-3">
+  <div class="col">
+    <%= link_to send('new_battle_path'), class: "btn btn-primary", remote: true do %>
+      <i class="bi bi-plus-circle"></i> Crear Nueva Batalla
+    <% end %>
+  </div>
+</div>
+
+<%= render "battles_table" %>

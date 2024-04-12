@@ -1,0 +1,5 @@
+$('#battle_list').find('tbody').append('<tr id="battle_<%= @battle.id.to_s %>"></tr>');
+$('#battle_<%= @battle.id %>').html('<%= j render "row", battle: @battle  %>');
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+$(".modal").modal('hide');

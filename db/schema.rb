@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_28_130216) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_12_115712) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,27 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_28_130216) do
     t.datetime "updated_at", null: false
     t.index ["army_id"], name: "index_valar_armies_factions_on_army_id"
     t.index ["faction_id"], name: "index_valar_armies_factions_on_faction_id"
+  end
+
+  create_table "battles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "date"
+    t.string "terrain"
+    t.string "status"
+    t.string "sideA"
+    t.string "sideB"
+    t.jsonb "skirmishA", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "skirmishB", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "engagementA", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "engagementB", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "combat_1A", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "combat_1B", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "combat_2A", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "combat_2B", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "combat_3A", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "combat_3B", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "factions", force: :cascade do |t|

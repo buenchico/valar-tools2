@@ -1,0 +1,10 @@
+<td><%= link_to battle.name, battle_path(battle), class: 'link-unstyled' %></td>
+<td><%= battle.status %></td>
+<td><%= battle.date %></td>
+<td><%= battle.sideA %> vs. <%= battle.sideA %></td>
+<td><%= link_to '', send("edit_battle_path", battle.id), class: 'bi bi-pencil-square text-white' %></td>
+<td>
+  <%= link_to send("battle_path", battle.id), method: :delete, data: { confirm: "Estás seguro de eliminar el objeto #{battle.name}?" }, remote: true do %>
+    <i class="bi bi-trash text-white"></i>
+  <% end %>
+</td>

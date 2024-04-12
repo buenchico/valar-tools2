@@ -1,0 +1,20 @@
+<div class="table-responsive">
+  <table id="battle_list" class="table table-dark table-striped table-borderless table-hover table-sm align-middle sortable">
+    <caption><%= @tool.title %></caption>
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Combatientes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @battles.each do | battle | %>
+        <tr id="battle_<%= battle.id.to_s %>">
+          <%= render 'row', battle: battle %>
+        </tr>
+      <% end %>
+    </tbody>
+    </table>
+  </div>
