@@ -239,10 +239,6 @@ class ArmiesController < ApplicationController
               end
             end
 
-            if army_params_hash[:tags] == nil
-              army_params_hash[:tags] = [""]
-            end
-
             if army.update(army_params_hash)
               @updated_armies << army.name
             else
