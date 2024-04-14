@@ -90,6 +90,7 @@ class ArmiesController < ApplicationController
   end
 
   def update
+    army_params[:tags] = army_params[:tags].compact.reject(&:empty?).sort.compact.reject(&:empty?).sort
     if !@current_user&.is_master? # modify params if user is not admin
       keys_to_remove = ["tags", "region", "lord", "visible", "hp",
         "col0", "col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8", "col9", "faction_ids"]
@@ -237,6 +238,8 @@ class ArmiesController < ApplicationController
                   army_params_hash[:tags] = (army[:tags] || []).dup.concat(army_params_tags[:tags_add]).uniq
                 end
               end
+
+              army_params_hash[:tags].compact.reject(&:empty?).sort
             end
 
             if army.update(army_params_hash)
