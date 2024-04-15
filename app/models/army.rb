@@ -6,6 +6,8 @@ class Army < ApplicationRecord
   validates :name, presence: true
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
 
+  attr_accessor :faction_ids_was
+
   if $options_armies.nil?
     ARMY_STATUS = ["raised","active","inactive"]
     FLEET_TYPES = [nil, "longship","galley","transport"]
@@ -33,11 +35,9 @@ class Army < ApplicationRecord
         end
         "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
       end
-      if $faction_ids_was != self.faction_ids
-        changes << ("Factions changed from: " + Faction.where(id: $faction_ids_was).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s + " to: " + Faction.where(id: self.faction_ids).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s)
+      if self.faction_ids_was != self.faction_ids
+        changes << ("Factions changed from: " + Faction.where(id: self.faction_ids_was).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s + " to: " + Faction.where(id: self.faction_ids).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s)
       end
-
-      $faction_ids_was = []
 
       change_log = {
         timestamp: Time.now,

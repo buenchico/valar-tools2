@@ -103,8 +103,8 @@ class ArmiesController < ApplicationController
     original_title =  @army.name
 
     respond_to do |format|
+      @army.faction_ids_was = @army.faction_ids
       if @army.update(army_params.reject! { |x| keys_to_remove&.include?(x) })
-        $faction_ids_was = @army.faction_ids
         flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
         format.js
       else
@@ -209,6 +209,7 @@ class ArmiesController < ApplicationController
 
     @errors_armies = []
     @updated_armies = []
+    $aaa = []
 
     respond_to do |format|
       if params[:army][:confirm] == 'VALIDATE'
@@ -242,6 +243,7 @@ class ArmiesController < ApplicationController
               army_params_hash[:tags].compact.reject(&:empty?).sort
             end
 
+            army.faction_ids_was = army.faction_ids
             if army.update(army_params_hash)
               @updated_armies << army.name
             else
