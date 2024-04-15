@@ -1,17 +1,21 @@
 // Autocomplete
+function initAutocomplete() {
+  $(".auto-source").each(function() {
+    var $this = $(this);
+    $this.autocomplete({
+      minLength: 2,
+      source: $this.data('autocomplete-source')
+    });
+  });
+}
 
 $(document).on('turbolinks:load', function() {
-  $(".auto-source").autocomplete({
-    minLength : 2,
-    source: $('.auto-source').data('autocomplete-source')
-  });
+  initAutocomplete();
 });
 
 // In modals
 $(document).on('shown.bs.modal', function (event) {
-  $(".auto-source").autocomplete({
-    source: $('.auto-source').data('autocomplete-source')
-  });
+  initAutocomplete();
 });
 
 // Initializing popovers & tooltips
