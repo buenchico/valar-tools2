@@ -2,6 +2,7 @@ class BattlesController < ApplicationController
   before_action :set_tool
   before_action :check_master
   before_action :set_battle, only: [:edit, :update, :destroy, :show]
+  before_action :set_options
 
   def index
     @battles = Battle.all
@@ -40,6 +41,13 @@ class BattlesController < ApplicationController
 private
   def set_battle
     @battle = Battle.find(params[:id])
+  end
+
+  def set_options
+    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
+    if @options.blank?
+      redirect_to settings_url, warning: 'Prepara una partida antes de usar la calculadora de ejércitos'
+    end
   end
 
   def battle_params

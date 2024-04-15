@@ -9,23 +9,23 @@
         <div class="modal-body">
           <div class="input-group mb-3">
             <%= form.label :name, class: 'input-group-text' %>
-            <%= form.text_field :name, class: 'form-control' %>
+            <%= form.text_field :name, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path}, required: true %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :date, class: 'input-group-text' %>
-            <%= form.date_field :date, class: 'form-control' %>
+            <%= form.date_field :date, class: 'form-control', value: Date.today, required: true %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :terrain, class: 'input-group-text' %>
-            <%= form.text_field :terrain, class: 'form-control' %>
+            <%= form.select :terrain, @options["types"].sort_by { |key, value| value["name"] }.map { |key, value| [value["name"].titleize, key] }, {}, { class: 'form-select', required: true } %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :sideA, class: 'input-group-text' %>
-            <%= form.text_field :sideA, class: 'form-control' %>
+            <%= form.text_field :sideA, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: families_list_path}, required: true %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :sideB, class: 'input-group-text' %>
-            <%= form.text_field :sideB, class: 'form-control' %>
+            <%= form.text_field :sideB, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: families_list_path}, required: true %>
           </div>
 
           <%= form.submit nil, class: 'btn btn-primary' %>
