@@ -157,6 +157,13 @@ private
     end
   end
 
+  def list
+  #Column name must be between double quotes because, by default, pgsql column names are always lowercase
+    @factions_list = Location.order(:long_name).where(visible: true).where(game_id: active_game.id).where('LOWER("long_name") LIKE :term OR LOWER("long_name") LIKE :term', term: "%#{params[:term].downcase}%")
+    @factions_list  = @factions_list.limit(20)
+    render json: @factions_list.map(&:long_name).uniq
+  end
+
   def faction_params
     params.require(:faction).permit(:reputation, :description, :active, :pov, :tokens, :fleets, :fleets_notes, game_ids: []).tap do |whitelisted|
       whitelisted[:fleets] = JSON.parse(params[:faction][:fleets])

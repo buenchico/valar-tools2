@@ -38,6 +38,8 @@ Rails.application.routes.draw do
   get 'factions/:id/edit_fleets_notes', to: 'factions#edit_fleets_notes', as: 'edit_fleets_notes_faction'
   patch 'factions/:id/update_fleets_notes', to: 'factions#update_fleets_notes', as: 'update_fleets_notes_faction'
   get 'factions/:id/edit_fleets', to: 'factions#edit_fleets', as: 'edit_fleets_faction'
+  get 'lists/factions', to: 'factions#list', as: 'factions_list'
+
 
   get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'
   get 'armies/:id/confirm_delete', to: 'armies#confirm', as: 'confirm_delete_army'
@@ -53,10 +55,10 @@ Rails.application.routes.draw do
   resources :armies, :except => [:show]
 
   resources :locations
-  get 'locations_list', to: 'locations#list', as: 'locations_list'
+  get '/lists/locations', to: 'locations#list', as: 'locations_list'
 
   resources :families
-  get 'families_list', to: 'families#list', as: 'families_list'
+  get 'lists/families', to: 'families#list', as: 'families_list'
 
   get 'travel', to: 'travel#index'
   post 'travel/calculate', to: 'travel#calculate'
