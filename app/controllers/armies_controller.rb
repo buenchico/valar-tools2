@@ -121,7 +121,7 @@ class ArmiesController < ApplicationController
     army_params_tags = {}
     army_params_hash = {}
 
-    if @current_user&.is_admin?
+    if @current_user&.is_master?
       if (params["army"]["hp_change"].blank? == false)
         army_params_hash[:hp] = params["army"]["hp_change"]
       end
