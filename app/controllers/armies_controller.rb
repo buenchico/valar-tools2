@@ -176,7 +176,7 @@ class ArmiesController < ApplicationController
             army_params_hash[key] = value
           end
         end
-        if @current_user&.is_admin? # Checking the user is admin to modify the status
+        if @current_user&.is_master? # Checking the user is admin to modify the status
           if (key == "status")
             if @army_status.keys.include?(value.to_s)
               army_params_hash[key] = value
