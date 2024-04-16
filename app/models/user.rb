@@ -1,6 +1,9 @@
 class User < ApplicationRecord
   belongs_to :faction
+  has_many :battles
+
   validates_uniqueness_of :player
+
   before_create :generate_token
 
   def generate_token

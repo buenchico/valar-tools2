@@ -69,8 +69,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_12_115712) do
     t.jsonb "combat_2B", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
     t.jsonb "combat_3A", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
     t.jsonb "combat_3B", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_valar_battles_on_user_id"
   end
 
   create_table "factions", force: :cascade do |t|
@@ -220,6 +222,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_12_115712) do
 
   add_foreign_key "armies_factions", "armies"
   add_foreign_key "armies_factions", "factions"
+  add_foreign_key "battles", "users"
   add_foreign_key "factions_games", "factions"
   add_foreign_key "factions_games", "games"
   add_foreign_key "families", "families", column: "lord_id"

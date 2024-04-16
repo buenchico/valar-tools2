@@ -5,7 +5,12 @@ class BattlesController < ApplicationController
   before_action :set_options
 
   def index
-    @battles = Battle.all
+    if @current_user&.is_master?
+      @battles = Battle.all.order(:id)
+    else
+      @battles = Battle.where(user: @current_user)
+    end
+
   end
 
   def new
@@ -13,13 +18,16 @@ class BattlesController < ApplicationController
   end
 
   def create
-    @battle = Battle.new(battle_params)
+    battle_params_mod = battle_params.merge(user_id: @current_user.id)
+
+    @battle = Battle.new(battle_params_mod)
 
     respond_to do |format|
       if @battle.save
         flash.now[:success] = t('messages.success.update', thing: @battle.name.strip + " (id: " + @battle.id.to_s + ")", count: 1)
         format.js
       else
+        puts @battle.errors
         flash.now[:danger] = @battle.errors.to_hash
         format.js { render 'layouts/error', locals: { thing: 'la batalla', method: 'create' } }
       end
@@ -51,6 +59,6 @@ private
   end
 
   def battle_params
-    params.require(:battle).permit(:name, :date, :status, :terrain, :sideA, :sideB)
+    params.require(:battle).permit(:name, :date, :status, :terrain, :sideA, :sideB, :user_id)
   end
 end

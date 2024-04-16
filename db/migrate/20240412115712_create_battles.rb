@@ -17,6 +17,7 @@ class CreateBattles < ActiveRecord::Migration[7.0]
       t.jsonb :combat_2B, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
       t.jsonb :combat_3A, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
       t.jsonb :combat_3B, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
+      t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end
