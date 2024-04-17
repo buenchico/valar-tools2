@@ -27,10 +27,13 @@
     <%= debug(params) if Rails.env.development? %>
     <% if Rails.env.development? %>
       <%= button_to login_hammer_path, method: :post, class: 'btn btn-sm btn-danger', form_class: 'm-auto' do %>
-        <i class="fas fa-user"></i> Iniciar sesión como Hammer
+        <i class="fas fa-user"></i> Iniciar sesión como Hammer/Player
       <% end %>
-      <%= button_to login_master_path, method: :post, class: 'btn btn-sm btn-danger', form_class: 'm-auto' do %>
-        <i class="fas fa-user"></i> Iniciar sesión como Master
+      <%= button_to login_nemo_path, method: :post, class: 'btn btn-sm btn-danger', form_class: 'm-auto' do %>
+        <i class="fas fa-user"></i> Iniciar sesión como Nemo/Master
+      <% end %>
+      <%= button_to login_admin_path, method: :post, class: 'btn btn-sm btn-danger', form_class: 'm-auto' do %>
+        <i class="fas fa-user"></i> Iniciar sesión como Valar/Admin
       <% end %>
     <% end %>
   </body>
