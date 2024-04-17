@@ -90,6 +90,7 @@ class ArmiesController < ApplicationController
   end
 
   def update
+    army_params[:tags] = army_params[:tags].compact.reject(&:empty?).sort.compact.reject(&:empty?).sort
     if !@current_user&.is_master? # modify params if user is not admin
       keys_to_remove = ["tags", "region", "lord", "visible", "hp",
         "col0", "col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8", "col9", "faction_ids"]
@@ -102,8 +103,8 @@ class ArmiesController < ApplicationController
     original_title =  @army.name
 
     respond_to do |format|
+      @army.faction_ids_was = @army.faction_ids
       if @army.update(army_params.reject! { |x| keys_to_remove&.include?(x) })
-        $faction_ids_was = @army.faction_ids
         flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
         format.js
       else
@@ -120,7 +121,7 @@ class ArmiesController < ApplicationController
     army_params_tags = {}
     army_params_hash = {}
 
-    if @current_user&.is_admin?
+    if @current_user&.is_master?
       if (params["army"]["hp_change"].blank? == false)
         army_params_hash[:hp] = params["army"]["hp_change"]
       end
@@ -175,7 +176,7 @@ class ArmiesController < ApplicationController
             army_params_hash[key] = value
           end
         end
-        if @current_user&.is_admin? # Checking the user is admin to modify the status
+        if @current_user&.is_master? # Checking the user is admin to modify the status
           if (key == "status")
             if @army_status.keys.include?(value.to_s)
               army_params_hash[key] = value
@@ -208,6 +209,7 @@ class ArmiesController < ApplicationController
 
     @errors_armies = []
     @updated_armies = []
+    $aaa = []
 
     respond_to do |format|
       if params[:army][:confirm] == 'VALIDATE'
@@ -237,12 +239,11 @@ class ArmiesController < ApplicationController
                   army_params_hash[:tags] = (army[:tags] || []).dup.concat(army_params_tags[:tags_add]).uniq
                 end
               end
+
+              army_params_hash[:tags].compact.reject(&:empty?).sort
             end
 
-            if army_params_hash[:tags] == nil
-              army_params_hash[:tags] = [""]
-            end
-
+            army.faction_ids_was = army.faction_ids
             if army.update(army_params_hash)
               @updated_armies << army.name
             else

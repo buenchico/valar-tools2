@@ -15,7 +15,8 @@ Rails.application.routes.draw do
 
   if Rails.env.development?
     post 'login_hammer', to: 'sessions#create_hammer', as: 'login_hammer'
-    post 'login_master', to: 'sessions#create_master', as: 'login_master'
+    post 'login_nemo', to: 'sessions#create_nemo', as: 'login_nemo'
+    post 'login_admin', to: 'sessions#create_master', as: 'login_admin'
   end
 
   # Games and Tools
