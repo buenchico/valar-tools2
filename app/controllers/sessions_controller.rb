@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
       redirect_to root_url
     end
 
-    def create_admin
+    def create_master
       @user = User.find_by(player: 'valar')
       cookies.permanent[:auth_token] = @user.auth_token
       redirect_to root_url
