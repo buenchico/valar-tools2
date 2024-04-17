@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
     end
 
     def create_nemo
-      @user = User.find_by(player: 'nemo')
+      @user = User.find_by(player: 'Nemo')
       cookies.permanent[:auth_token] = @user.auth_token
       redirect_to root_url
     end
