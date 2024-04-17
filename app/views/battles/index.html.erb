@@ -6,6 +6,8 @@
     <%= yield(:title) %>
 </div>
 
+<%= @status.keys %>
+
 <div class="row my-3">
   <div class="col">
     <%= link_to send('new_battle_path'), class: "btn btn-primary", remote: true do %>

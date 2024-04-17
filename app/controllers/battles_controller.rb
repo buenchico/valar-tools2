@@ -18,7 +18,7 @@ class BattlesController < ApplicationController
   end
 
   def create
-    battle_params_mod = battle_params.merge(user_id: @current_user.id)
+    battle_params_mod = battle_params.merge(user_id: @current_user.id).merge(status: @status.keys[0])
 
     @battle = Battle.new(battle_params_mod)
 
@@ -55,6 +55,9 @@ private
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
     if @options.blank?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la calculadora de ejércitos'
+    else
+      @status = @options["status"].sort_by { |key, value| value["sort"] }.to_h
+      $options_battles = @options
     end
   end
 
