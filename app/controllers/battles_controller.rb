@@ -17,6 +17,9 @@ class BattlesController < ApplicationController
     @battle = Battle.new
   end
 
+  def add_tokens
+  end
+
   def create
     battle_params_mod = battle_params.merge(user_id: @current_user.id).merge(status: @status.keys[0])
 

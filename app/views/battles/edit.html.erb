@@ -1,0 +1,28 @@
+<% provide(:title, @battle.name + ' ' + @battle.date.strftime("%d/%m/%y")) %>
+<% provide(:icon, @tool.icon_url) %>
+
+<div class="tool-title d-none d-sm-block">
+    <i class="white <%= yield(:icon) %>"></i>
+    <%= yield(:title) %>
+</div>
+
+<ul class="nav nav-pills mb-3" id="myTab" role="tablist">
+  <% @status.each do | key, value | %>
+    <% if value["sort"] != 0 %>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link disabled px-2 py-1">
+          <i class="bi bi-chevron-double-right"></i>
+        </button>
+      </li>
+    <% end %>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link disabled <%= (key == @battle.status) ? 'active' : nil %> px-2 py-1" id="factions-tab" data-bs-toggle="tab" data-bs-target="#<%= key %>" type="button" role="tab" aria-controls="factions" aria-selected="true"><i class="bi bi-<%= value["icon"] %>"></i> <%= value["name"].titleize %></button>
+    </li>
+  <% end %>
+</ul>
+
+<div class="row my-3">
+  <div class="col">
+    <%= link_to t('.add_tokens').html_safe, send("battle_add_tokens_path"), remote: true, class: 'btn btn-danger' %>
+  </div>
+</div>

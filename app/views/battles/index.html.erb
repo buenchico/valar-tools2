@@ -6,13 +6,9 @@
     <%= yield(:title) %>
 </div>
 
-<%= @status.keys %>
-
 <div class="row my-3">
   <div class="col">
-    <%= link_to send('new_battle_path'), class: "btn btn-primary", remote: true do %>
-      <i class="bi bi-plus-circle"></i> Crear Nueva Batalla
-    <% end %>
+    <%= link_to t('helpers.submit.create', model: t('activerecord.models.battle', count: 1)).html_safe, send("new_battle_path"), remote: true, class: 'btn btn-primary' %>
   </div>
 </div>
 

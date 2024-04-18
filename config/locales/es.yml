@@ -33,7 +33,7 @@ es:
   helpers:
     submit:
       submit: 'Enviar %{model}'
-      create: 'Añadir %{model}'
+      create: '<i class="bi bi-plus-circle"></i> Añadir %{model}'
       update: 'Guardar %{model}'
       delete: 'Borrar %{model}'
       update_multiple: 'Guardar %{model}'
@@ -127,9 +127,11 @@ es:
         visible: "Visible"
         family_id: "Señor"
         description: "Descripción"
-        game_id: "Partida"
+        game_id:  "Partida"
       battle:
         name: "Nombre"
+        status: "Fase"
+        user_id: "Jugador"
         date: "Fecha"
         terrain: "Tipo de batalla"
         sideA: "Combatiente A"
@@ -178,6 +180,9 @@ es:
     index:
       calculate: 'Calcular'
       add_step: 'Añadir etapa'
+  battles:
+    edit:
+      add_tokens: '<i class="bi bi-plus-circle"></i> Añadir tokens'
   hexagon:
     one: "hexágono"
     other: "hexágonos"
