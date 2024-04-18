@@ -2011,6 +2011,9 @@ $bootstrap-icons-map: (
   "kayak": "\f7a7",
   "scythe": "\f7ac",
   "swords-emblem": "\f7ad",
+  "blueprint": "\f7b2",
+  "damage-kinetic": "\f7b3",
+  "skull-solid": "\f7b8",
 );
 
 @each $icon, $codepoint in $bootstrap-icons-map {
