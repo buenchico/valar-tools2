@@ -33,7 +33,7 @@ es:
   helpers:
     submit:
       submit: 'Enviar %{model}'
-      create: '<i class="bi bi-plus-circle"></i> Añadir %{model}'
+      create: 'Añadir %{model}'
       update: 'Guardar %{model}'
       delete: 'Borrar %{model}'
       update_multiple: 'Guardar %{model}'
@@ -182,7 +182,8 @@ es:
       add_step: 'Añadir etapa'
   battles:
     edit:
-      add_tokens: '<i class="bi bi-plus-circle"></i> Añadir tokens'
+      goto: 'Ir a %{step}'
+      add_tokens: 'Añadir tokens'
   hexagon:
     one: "hexágono"
     other: "hexágonos"

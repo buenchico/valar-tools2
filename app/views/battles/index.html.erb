@@ -8,7 +8,7 @@
 
 <div class="row my-3">
   <div class="col">
-    <%= link_to t('helpers.submit.create', model: t('activerecord.models.battle', count: 1)).html_safe, send("new_battle_path"), remote: true, class: 'btn btn-primary' %>
+    <%= link_to ('<i class="bi bi-plus-circle"></i> Crear Nueva Batalla').html_safe, send("new_battle_path"), remote: true, class: 'btn btn-primary' %>
   </div>
 </div>
 

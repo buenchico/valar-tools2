@@ -4,9 +4,10 @@ class CreateBattles < ActiveRecord::Migration[7.0]
       t.string :name
       t.datetime :date
       t.string :terrain
-      t.string :status
+      t.string :integer
       t.string :sideA
       t.string :sideB
+      t.integer :status
       t.jsonb :skirmishA, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil}
       t.jsonb :skirmishB, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil}
       t.jsonb :engagementA, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }

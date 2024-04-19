@@ -1,32 +1,14 @@
 <div class="modal fade" id="battleModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title">Crear nueva batalla</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
       <%= form_with model: battle, local: false do |form| %>
-        <div class="modal-header">
-          <h5 class="modal-title" id="Title">Crear nueva batalla</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+
         <div class="modal-body">
-          <div class="input-group mb-3">
-            <%= form.label :name, class: 'input-group-text' %>
-            <%= form.text_field :name, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path}, required: true %>
-          </div>
-          <div class="input-group mb-3">
-            <%= form.label :date, class: 'input-group-text' %>
-            <%= form.date_field :date, class: 'form-control', value: Date.today, required: true %>
-          </div>
-          <div class="input-group mb-3">
-            <%= form.label :terrain, class: 'input-group-text' %>
-            <%= form.select :terrain, @options["types"].sort_by { |key, value| value["name"] }.map { |key, value| [value["name"].titleize, key] }, {}, { class: 'form-select', required: true } %>
-          </div>
-          <div class="input-group mb-3">
-            <%= form.label :sideA, class: 'input-group-text' %>
-            <%= form.text_field :sideA, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: families_list_path}, required: true %>
-          </div>
-          <div class="input-group mb-3">
-            <%= form.label :sideB, class: 'input-group-text' %>
-            <%= form.text_field :sideB, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: families_list_path}, required: true %>
-          </div>
+          <%= render 'form_draft', form: form %>
 
           <%= form.submit nil, class: 'btn btn-primary' %>
         </div>

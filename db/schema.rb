@@ -56,9 +56,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_12_115712) do
     t.string "name"
     t.datetime "date"
     t.string "terrain"
-    t.string "status"
+    t.string "integer"
     t.string "sideA"
     t.string "sideB"
+    t.integer "status"
     t.jsonb "skirmishA", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
     t.jsonb "skirmishB", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
     t.jsonb "engagementA", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}

@@ -1,5 +1,5 @@
 <td><%= link_to battle.name, battle_path(battle), class: 'link-unstyled' %></td>
-<td><%= @status.fetch(battle.status, {"name" => battle.status})["name"].titleize %></td>
+<td><%= @status[battle.status]["name"].titleize %></td>
 <td><%= battle.date.strftime("%d/%m/%y") %></td>
 <td><%= battle.sideA %> <i class="bi bi-lightning-charge-fill"></i> <%= battle.sideB %></td>
 <td><%= link_to '', send("edit_battle_path", battle.id), class: 'bi bi-pencil-square text-white' %></td>
