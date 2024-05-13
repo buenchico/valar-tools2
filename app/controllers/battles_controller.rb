@@ -65,6 +65,6 @@ private
   end
 
   def battle_params
-    params.require(:battle).permit(:name, :date, :status, :terrain, :sideA, :sideB, :user_id)
+    params.require(:battle).permit(:name, :date, :status, :terrain, :user_id, :skirmish, :engagement, :combat_1, :combat_2, :combat_3, :sides)
   end
 end

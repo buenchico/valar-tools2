@@ -5,19 +5,14 @@ class CreateBattles < ActiveRecord::Migration[7.0]
       t.datetime :date
       t.string :terrain
       t.string :integer
-      t.string :sideA
-      t.string :sideB
       t.integer :status
-      t.jsonb :skirmishA, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil}
-      t.jsonb :skirmishB, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil}
-      t.jsonb :engagementA, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
-      t.jsonb :engagementB, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
-      t.jsonb :combat_1A, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
-      t.jsonb :combat_1B, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
-      t.jsonb :combat_2A, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
-      t.jsonb :combat_2B, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
-      t.jsonb :combat_3A, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
-      t.jsonb :combat_3B, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
+      t.string :sides_a
+      t.string :sides_b
+      t.jsonb :skirmish, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil}
+      t.jsonb :engagement, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
+      t.jsonb :combat_1, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
+      t.jsonb :combat_2, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
+      t.jsonb :combat_3, default: { armies: nil, tokens: nil, strategy: nil, rolls: nil, results: nil }
       t.references :user, null: false, foreign_key: true
 
       t.timestamps
