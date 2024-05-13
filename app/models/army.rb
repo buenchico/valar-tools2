@@ -23,7 +23,7 @@ class Army < ApplicationRecord
   before_save :log_changes
 
   def log_changes
-    if self.persisted? # Check if the record already exists (for updates)
+    if self.persisted? && self.changes.keys != ['logs'] # Check if the record already exists (for updates) and if the only changes are not of the logs
       current_user = Thread.current[:current_user]
       if current_user.nil?
         current_user = User.find_by(player: "valar")
