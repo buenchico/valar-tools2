@@ -1,30 +1,30 @@
 class Army < ApplicationRecord
+  before_validation :set_options_armies
+
   has_and_belongs_to_many :factions
   belongs_to :family, class_name: 'Family', foreign_key: 'family_id', optional: true
   belongs_to :location, class_name: 'Location', foreign_key: 'location_id', optional: true
 
   validates :name, presence: true
+  validates_uniqueness_of :name
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
 
   attr_accessor :faction_ids_was
 
-  if $options_armies.nil?
-    ARMY_STATUS = ["raised","active","inactive"]
-    FLEET_TYPES = [nil, "longship","galley","transport"]
-    puts FLEET_TYPES
-    puts "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"
-  else
-    ARMY_STATUS = $options_armies["status"].keys
-    FLEET_TYPES = [nil] + $options_armies["fleets"].keys
-    puts FLEET_TYPES
-    puts "////////////////////////////////"
+  ARMY_STATUS = ["raised", "active", "inactive"]
+  FLEET_TYPES = [nil, "longship", "galley", "transport"]
+
+  before_save :log_changes
+
+  def set_options_armies
+    if $options_armies.present?
+      ARMY_STATUS.replace($options_armies["status"].keys)
+      FLEET_TYPES.replace([nil] + $options_armies["fleets"].keys)
+    end
   end
 
   validates :status, inclusion: ARMY_STATUS
   validates :board, inclusion: FLEET_TYPES
-  validates_uniqueness_of :name
-
-  before_save :log_changes
 
   def log_changes
     if self.persisted? && self.changes.keys != ['logs'] # Check if the record already exists (for updates) and if the only changes are not of the logs
