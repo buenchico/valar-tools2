@@ -11,9 +11,13 @@ class Army < ApplicationRecord
   if $options_armies.nil?
     ARMY_STATUS = ["raised","active","inactive"]
     FLEET_TYPES = [nil, "longship","galley","transport"]
+    puts FLEET_TYPES
+    puts "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"
   else
     ARMY_STATUS = $options_armies["status"].keys
     FLEET_TYPES = [nil] + $options_armies["fleets"].keys
+    puts FLEET_TYPES
+    puts "////////////////////////////////"
   end
 
   validates :status, inclusion: ARMY_STATUS
