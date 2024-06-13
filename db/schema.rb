@@ -58,8 +58,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_12_115712) do
     t.string "terrain"
     t.string "integer"
     t.integer "status"
-    t.string "sides_a"
-    t.string "sides_b"
+    t.string "side_a"
+    t.string "side_b"
     t.jsonb "skirmish", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
     t.jsonb "engagement", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
     t.jsonb "combat_1", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}

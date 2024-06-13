@@ -1,11 +1,6 @@
 <% provide(:title, @battle.name + ' ' + @battle.date.strftime("%d/%m/%y")) %>
 <% provide(:icon, @tool.icon_url) %>
 
-<div class="tool-title d-none d-sm-block">
-    <i class="white <%= yield(:icon) %>"></i>
-    <%= yield(:title) %>
-</div>
-
 <ul class="nav nav-pills mb-3" id="myTab" role="tablist">
   <% @status.each_with_index do | status , index | %>
     <% if index != 0 %>
@@ -16,18 +11,17 @@
       </li>
     <% end %>
     <li class="nav-item" role="presentation">
-      <button class="nav-link disabled <%= (@battle.status == index) ? 'active' : nil %> px-2 py-1" id="factions-tab" data-bs-toggle="tab" data-bs-target="#status_<%= index %>" type="button" role="tab" aria-controls="factions" aria-selected="true"><i class="bi bi-<%= status["icon"] %>"></i> <%= status["name"].titleize %></button>
+      <button class="nav-link disabled <%= (@battle.status == index) ? 'active' : nil %> px-2 py-1" data-bs-toggle="tab" data-bs-target="#status_<%= index %>" type="button" role="tab" aria-controls="factions" aria-selected="true"><i class="bi bi-<%= status["icon"] %>"></i> <%= status["name"].titleize %></button>
     </li>
   <% end %>
 </ul>
 
-<% if @battle.status == 0 %>
-  <div class="row my-3">
-    <div class="col">
-      <%= form_with model: @battle, local: true do |form| %>
-        <%= render 'form_draft', form: form %>
-        <%= form.submit t('.goto', step: @status[@battle.status + 1]["name"]), class: 'btn btn-primary' %>
-      <% end %>
-    </div>
+<div class="row my-3">
+  <div class="col">
+    <%= form_with model: @battle, local: true do |form| %>
+      <%= render "form_#{@status[@battle.status]['code'].downcase}", form: form %>
+
+      <%= form.submit t('.goto', step: @status[@battle.status + 1]["name"]), class: 'btn btn-primary' %>
+    <% end %>
   </div>
-<% end %>
+</div>

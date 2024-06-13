@@ -11,7 +11,7 @@
   <%= form.select :terrain, @options["types"].sort_by { |key, value| value["name"] }.map { |key, value| [value["name"].titleize, key] }, {}, { class: 'form-select', required: true } %>
 </div>
 <div class="input-group mb-3">
-  <%= form.text_field :sides, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: families_list_path}, required: true %>
+  <%= form.text_field :side_a, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: families_list_path}, required: true %>
   <i class="bi bi-swords-emblem"></i>
-  <%= form.text_field 'sides[1]', class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: families_list_path}, required: true %>
+  <%= form.text_field :side_b, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: families_list_path}, required: true %>
 </div>

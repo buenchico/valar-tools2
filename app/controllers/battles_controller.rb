@@ -17,6 +17,20 @@ class BattlesController < ApplicationController
     @battle = Battle.new
   end
 
+  def update
+    battle_params_with_status = battle_params.merge("status": @battle.status + 1)
+
+    respond_to do |format|
+      if @battle.update(battle_params_with_status)
+        flash[:success] = t('messages.success.update', thing: @battle.name.strip + " (id: " + @battle.id.to_s + ")", count: 1)
+        format.html { redirect_to edit_battle_path(@battle) }
+      else
+        flash[:danger] = @battle.errors.to_hash
+        format.html { render :edit }
+      end
+    end
+  end
+
   def add_tokens
   end
 
@@ -65,6 +79,6 @@ private
   end
 
   def battle_params
-    params.require(:battle).permit(:name, :date, :status, :terrain, :user_id, :skirmish, :engagement, :combat_1, :combat_2, :combat_3, :sides)
+    params.require(:battle).permit(:name, :date, :status, :terrain, :user_id, :skirmish, :engagement, :combat_1, :combat_2, :combat_3, :side_a, :side_b)
   end
 end
