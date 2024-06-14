@@ -33,7 +33,7 @@ es:
   helpers:
     submit:
       submit: 'Enviar %{model}'
-      create: 'Añadir %{model}'
+      create: 'Crear %{model}'
       update: 'Guardar %{model}'
       delete: 'Borrar %{model}'
       update_multiple: 'Guardar %{model}'
@@ -140,6 +140,9 @@ es:
       location:
         one: 'Lugar'
         other: 'Lugares'
+      clock:
+        one: 'Reloj'
+        other: 'Relojes'
     errors:
       messages:
         inclusion: 'Sólo pueden elegirse opciones de la lista.'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_28_130216) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_14_150736) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,37 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_28_130216) do
     t.datetime "updated_at", null: false
     t.index ["army_id"], name: "index_valar_armies_factions_on_army_id"
     t.index ["faction_id"], name: "index_valar_armies_factions_on_faction_id"
+  end
+
+  create_table "battles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "date"
+    t.string "terrain"
+    t.string "integer"
+    t.integer "status"
+    t.string "side_a"
+    t.string "side_b"
+    t.jsonb "skirmish", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "engagement", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "combat_1", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "combat_2", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "combat_3", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_valar_battles_on_user_id"
+  end
+
+  create_table "clocks", force: :cascade do |t|
+    t.string "name"
+    t.string "logs"
+    t.integer "status"
+    t.integer "size"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "family_id"
+    t.index ["family_id"], name: "index_valar_clocks_on_family_id"
   end
 
   create_table "factions", force: :cascade do |t|
@@ -199,6 +230,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_28_130216) do
 
   add_foreign_key "armies_factions", "armies"
   add_foreign_key "armies_factions", "factions"
+  add_foreign_key "battles", "users"
+  add_foreign_key "clocks", "families"
   add_foreign_key "factions_games", "factions"
   add_foreign_key "factions_games", "games"
   add_foreign_key "families", "families", column: "lord_id"

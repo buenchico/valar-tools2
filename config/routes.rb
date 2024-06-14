@@ -68,5 +68,7 @@ Rails.application.routes.draw do
   get 'issues', to: 'issues#new'
   post 'issues', to: 'issues#create'
 
+  resources :clocks
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

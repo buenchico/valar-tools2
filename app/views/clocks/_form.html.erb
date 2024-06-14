@@ -1,0 +1,48 @@
+<div class="modal fade" id="clockModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark">
+      <%= form_with model: clock, local: false do |form| %>
+        <div class="modal-header">
+          <h5 class="modal-title" id="Title"><%= clock&.name %></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <%= form.label :name, class: 'input-group-text' %>
+            <%= form.text_field :name, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :description, class: 'input-group-text' %>
+            <%= form.text_area :description, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :size, class: 'input-group-text' %>
+            <%= form.number_field :status, class: 'form-control', min: 0, max: 12, step: 1 %>
+            <%= form.number_field :size, class: 'form-control', min: 0, max: 12, step: 1 %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :family_id, class: 'input-group-text' %>
+            <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [truncate(x.title, length: 20, omission: '...'), x.id] }, {}, class: 'form-select' %>
+          </div>
+
+          <%= form.submit nil, class: 'btn btn-primary' %>
+        </div>
+        <% if clock&.logs&.empty? == false %>
+          <div class="input-group mt-3">
+            <%= form.label :changelog, class: 'input-group-text w-100' %>
+            <% clock.logs.reverse.each do | log | %>
+              <% log = JSON.parse(log) %>
+              <div class="ms-3 mt-1 w-100 fw-bolder">
+                <%= DateTime.parse(log["timestamp"]).strftime("%d/%m/%Y @ %H:%M") + ", by " + log["username"] %>
+                <% log["changes"].each do |change| %>
+                  <div class="ms-3 mt-1 w-100 fw-lighter">
+                    <%= change %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+  </div>
+</div>

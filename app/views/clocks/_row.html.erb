@@ -1,0 +1,18 @@
+<td><%= link_to truncate(clock.name, length: 20, omission: '...'), clock_path(clock), remote: true, class: 'link-unstyled' %></td>
+<td>
+  <% clock.display[0].times do |square| %>
+    <i class="bi bi-square-fill"></i>
+  <% end %>
+  <% clock.display[1].times do |square|  %>
+    <i class="bi bi-square"></i>
+  <% end %>
+</td>
+<td><%= clock.family&.title %></td>
+<td><%= truncate(clock.description, length: 100, omission: '...') %></td>
+<td><%= link_to '', send("clock_path", clock.id), remote: true, class: 'bi bi-eye-fill text-white' %></td>
+<td><%= link_to '', send("edit_clock_path", clock.id), remote: true, class: 'bi bi-pencil-square text-white' %></td>
+<td>
+  <%= link_to send("clock_path", clock.id), method: :delete, data: { confirm: "Estás seguro de eliminar el objeto #{clock.name}?" }, remote: true do %>
+    <i class="bi bi-trash text-white"></i>
+  <% end %>
+</td>
