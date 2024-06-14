@@ -1,0 +1,23 @@
+<div class="modal fade" id="battleModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title"><%= t('battles.edit.add_tokens') + " " + battle.send("side_#{@side}") %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with model: battle, url: update_battle_tokens_path(@battle), local: false do |form| %>
+
+          <div class="modal-body">
+            <div class="input-group mb-3">
+              <%= form.label :token, class: 'input-group-text' %>
+              <%= form.text_field :token_name, class: 'form-control', placeholder: "Nombre" %>
+              <%= form.select :token_value, @token_status.map { |value| [value["name"].titleize, value["code"]] }, {}, class: 'form-select' %>
+            </div>
+            <%= form.submit nil, class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

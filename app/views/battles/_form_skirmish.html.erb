@@ -1,36 +1,19 @@
 <div class="row">
-  <div class="col-6">
-    <div class="row h1 text-right ">
-      <%= @battle.side_a %>
+  <% ["a","b"].each do | side | %>
+    <div class="col-6">
+      <div class="row h1 text-right ">
+        <%= @battle.send("side_#{side}") %>
+      </div>
+      <div>
+        <%= link_to t('battles.edit.add_tokens'), add_battle_tokens_path(@battle, side: side), remote: true, class: 'btn btn-danger' %>
+      </div>
+      Añadir ejércitos
+      Tipo de movimiento
+      Tipo de terreno
+      Estrategia de escaramuza (sigilo/info)
+      Miscelánea Sigilo
+      Miscelánea Información
+      Ventaja?
     </div>
-    <div class="row">
-      <%= @battle.skirmish["tokens"]&.each do |token| %>
-      <% end %>
-    </div>
-    <%= link_to t('battles.edit.add_tokens'), edit_battle_path(@battle), remote: true, class: 'btn btn-danger' %>
-
-    Añadir ejércitos
-    Tipo de movimiento
-    Tipo de terreno
-    Estrategia de escaramuza (sigilo/info)
-    Miscelánea Sigilo
-    Miscelánea Información
-    Ventaja?
-
-  </div>
-  <div class="col-6">
-    <div class="row h1 text-right ">
-      <%= @battle.side_b %>
-    </div>
-    Añadir tokens
-    Añadir ejércitos
-    Tipo de movimiento
-    Tipo de terreno
-    Estrategia de escaramuza (sigilo/info)
-    Miscelánea Sigilo
-    Miscelánea Información
-    Ventaja?
-  </div>
-
-  <div id="complete" class="d-none">false</div>
+  <% end %>
 </div>

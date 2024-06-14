@@ -71,7 +71,7 @@ Rails.application.routes.draw do
   post 'issues', to: 'issues#create'
 
   resources :battles
-  get '/battles/:id/tokens', to: 'battles#add_tokens', as: 'battle_add_tokens'
-
+  get '/battles/:id/tokens', to: 'battles#add_tokens', as: 'add_battle_tokens'
+  patch '/battles/:id/tokens', to: 'battles#update_tokens', as: 'update_battle_tokens'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

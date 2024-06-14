@@ -1,7 +1,7 @@
 class BattlesController < ApplicationController
   before_action :set_tool
   before_action :check_master
-  before_action :set_battle, only: [:edit, :update, :destroy, :show]
+  before_action :set_battle, only: [:edit, :update, :destroy, :show, :add_tokens, :update_tokens]
   before_action :set_options
 
   def index
@@ -32,6 +32,24 @@ class BattlesController < ApplicationController
   end
 
   def add_tokens
+    @side = params[:side]
+  end
+
+  def update_tokens
+
+    phase = @options["status"][@battle.status]["code"].to_sym
+    data = @battle.send(phase)
+    data["tokens"] = params[:battle]
+
+    respond_to do |format|
+      if @battle.update(phase => data)
+        flash[:success] = t('messages.success.update', thing: @battle.name.strip + " (id: " + @battle.id.to_s + ")", count: 1)
+        format.html { redirect_to edit_battle_path(@battle) }
+      else
+        flash[:danger] = @battle.errors.to_hash
+        format.html { render :edit }
+      end
+    end
   end
 
   def create
@@ -71,9 +89,10 @@ private
   def set_options
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
     if @options.blank?
-      redirect_to settings_url, warning: 'Prepara una partida antes de usar la calculadora de ejércitos'
+      redirect_to settings_url, warning: 'Prepara una partida antes de usar la calculadora de batallas'
     else
       @status = @options["status"]
+      @token_status = @options["tokens"]
       $options_battles = @options
     end
   end
