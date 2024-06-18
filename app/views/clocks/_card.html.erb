@@ -1,0 +1,70 @@
+<div class="card-body d-flex flex-column justify-content-center align-items-center">
+  <div class="position-absolute top-0 end-0 mt-2 me-2">
+    <i class="bi bi-three-dots"></i>
+  </div>
+  <div class="mb-2">
+    <%= link_to truncate(clock.name, length: 20, omission: '...'), clock_path(clock), remote: true, class: 'link-unstyled' %>
+  </div>
+  <div>
+    <%= image_tag("clock_" + clock.size.to_s + "-" + clock.status.to_s + ".svg", size: "200x200", class: "clock-svg", id: "clock-svg_" + clock.id.to_s) %>
+  </div>
+  <div>
+    <%= clock.description.blank? ? '&nbsp;'.html_safe : truncate(clock.description, length: 100, omission: '...') %>
+  </div>
+  <div>
+    <%= clock.family.blank? ? '&nbsp;'.html_safe : link_to(clock.family.title, family_path(clock.family.id), remote: true, class: 'text-white') %>
+  </div>
+</div>
+
+<script>
+  $("#clock-svg_<%= clock.id.to_s %>").on("click", function(event) {
+    // Get the bounding rectangle of the clicked SVG
+    var rect = this.getBoundingClientRect();
+
+    // Calculate the center coordinates of the SVG
+    var centerX = rect.left + rect.width / 2;
+    var centerY = rect.top + rect.height / 2;
+
+    // Calculate the click coordinates relative to the center
+    var clickX = event.clientX - centerX;
+    var clickY = event.clientY - centerY;
+
+    // Calculate the angle in degrees from the center to the click point
+    var angle = (Math.atan2(clickY, clickX) * (180 / Math.PI)) + 90;
+
+    // Normalize the angle to be between 0 and 360 degrees
+    if (angle < 0) {
+      angle += 360;
+    }
+
+    // Number of sectors (can be dynamically set or passed as a data attribute)
+    var numSectors = <%= clock.size %>; // Example value, change as needed
+
+    // Calculate the size of each sector in degrees
+    var sectorSize = 360 / numSectors;
+
+    // Determine which sector the click is in
+    var sector = Math.floor(angle / sectorSize) + 1 ;
+
+    // Log the sector number to the console
+    console.log("Clicked on element with ID: " + this.id + " - Sector: " + sector);
+
+    // Send an AJAX request to update the clock status
+    $.ajax({
+      type: "PATCH", // Use PATCH method to update existing resource
+      url: "/clocks/<%= clock.id %>", // Replace with your actual endpoint
+      data: {
+        clock: {
+          status: sector // Pass status as part of clock object
+        }
+      },        success: function(response) {
+      console.log("Clock status updated successfully.");
+        // Optionally update any UI or handle success scenario
+      },
+      error: function(xhr, status, error) {
+        console.error("Error updating clock status:", error);
+        // Handle error scenario
+      }
+    });
+  });
+</script>

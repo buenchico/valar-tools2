@@ -1,0 +1,3 @@
+$('#clock_<%= @clock.id %>').html('<%= j render "card", clock: @clock  %>');
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');

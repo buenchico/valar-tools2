@@ -1,0 +1,7 @@
+<div class="row">
+  <% @clocks.each do |clock| %>
+    <div class="card bg-secondary col-3 mx-1" id="clock_<%= clock.id.to_s %>">
+      <%= render 'card', clock: clock %>
+    </div>
+  <% end %>
+</div>
