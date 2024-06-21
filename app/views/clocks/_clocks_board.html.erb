@@ -1,6 +1,18 @@
 <div class="row">
-  <% @clocks.each do |clock| %>
-    <div class="card bg-secondary col-3 mx-1" id="clock_<%= clock.id.to_s %>">
+  <% @clocks_open.each do |clock| %>
+    <div class="card bg-<%= @outcomes[clock.outcome.to_s]['color']%> col-3 mx-1" id="clock_<%= clock.id.to_s %>">
+      <%= render 'card', clock: clock %>
+    </div>
+  <% end %>
+</div>
+
+<div class="row mt-2 h2">
+  Relojes cerrados
+</div>
+
+<div class="row mt-2">
+  <% @clocks_closed.each do |clock| %>
+    <div class="card bg-<%= @outcomes[clock.outcome.to_s]['color']%> col-3 mx-1" id="clock_<%= clock.id.to_s %>">
       <%= render 'card', clock: clock %>
     </div>
   <% end %>

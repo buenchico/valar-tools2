@@ -161,3 +161,12 @@ function changeCollapseIcon(event) {
 $(document).on('shown.bs.collapse hidden.bs.collapse', function (event) {
   changeCollapseIcon(event);
 })
+
+// Flipable cards
+
+$(document).on('turbolinks:load', function() {
+  $('.flip-trigger').click(function() {
+    $(this).closest('.card-body').find('.front').toggleClass('d-none');
+    $(this).closest('.card-body').find('.back').toggleClass('d-none');
+  });
+});

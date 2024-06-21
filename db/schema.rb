@@ -73,10 +73,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_14_150736) do
 
   create_table "clocks", force: :cascade do |t|
     t.string "name"
-    t.string "logs"
-    t.integer "status"
+    t.integer "status", default: 0
     t.integer "size"
+    t.integer "outcome", default: 0
     t.string "description"
+    t.string "logs"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "family_id"
@@ -231,7 +232,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_14_150736) do
   add_foreign_key "armies_factions", "armies"
   add_foreign_key "armies_factions", "factions"
   add_foreign_key "battles", "users"
-  add_foreign_key "clocks", "families"
   add_foreign_key "factions_games", "factions"
   add_foreign_key "factions_games", "games"
   add_foreign_key "families", "families", column: "lord_id"

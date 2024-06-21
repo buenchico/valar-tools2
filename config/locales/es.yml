@@ -31,13 +31,17 @@
 
 es:
   helpers:
+    action:
+      view: 'Ver %{thing}'
+      edit: 'Editar %{thing}'
+      delete: 'Borrar %{thing}'
     submit:
       submit: 'Enviar %{model}'
       create: 'Crear %{model}'
       update: 'Guardar %{model}'
       delete: 'Borrar %{model}'
       update_multiple: 'Guardar %{model}'
-      delete_multiple: 'Guardar %{model}'
+      delete_multiple: 'Borrar %{model}'
       import: 'Importar %{model}'
     label:
       title: "Título"
@@ -146,6 +150,7 @@ es:
     errors:
       messages:
         inclusion: 'Sólo pueden elegirse opciones de la lista.'
+        game_not_ready: 'No puedes usar la herramienta %{tool_name} mientres esté activa'
       models:
         army:
           attributes:

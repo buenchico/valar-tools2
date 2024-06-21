@@ -1,9 +1,11 @@
 class ClocksController < ApplicationController
   before_action :set_tool
+  before_action :set_options
   before_action :set_clock, only: [:show, :update]
 
   def index
-    @clocks = Clock.all
+    @clocks_open = Clock.where.not("size = status")
+    @clocks_closed = Clock.where("size = status")
   end
 
   def new
@@ -38,12 +40,21 @@ class ClocksController < ApplicationController
   end
 
 private
-
   def set_clock
     @clock = Clock.find(params[:id])
   end
 
+  def set_options
+    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
+    if @options.blank?
+      redirect_to settings_url, warning: t('activerecord.errors.messages.game_not_ready', tool_name: @tool.title)
+    else
+      @sizes = @options["size"]
+      @outcomes = @options["outcome"]
+    end
+  end
+
   def clock_params
-    params.require(:clock).permit(:name, :size, :status, :description, :family)
+    params.require(:clock).permit(:name, :size, :status, :description, :family_id, :outcome)
   end
 end

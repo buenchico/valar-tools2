@@ -1,5 +1,5 @@
 class Army < ApplicationRecord
-  before_validation :set_options_armies
+  before_validation :set_options
 
   has_and_belongs_to_many :factions
   belongs_to :family, class_name: 'Family', foreign_key: 'family_id', optional: true
@@ -16,7 +16,7 @@ class Army < ApplicationRecord
 
   before_save :log_changes
 
-  def set_options_armies
+  def set_options
     if $options_armies.present?
       ARMY_STATUS.replace($options_armies["status"].keys)
       FLEET_TYPES.replace([nil] + $options_armies["fleets"].keys)
