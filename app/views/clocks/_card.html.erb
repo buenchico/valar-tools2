@@ -1,55 +1,63 @@
-<div class="card-body d-flex flex-column justify-content-center align-items-center card-flip-container" style="height: 300px">
-  <div class="position-absolute top-0 start-0 mt-2 ms-2">
-    <%= check_box_tag "clock_ids[]", clock.id, false, id: 'id_' + clock.id.to_s,class: "checkbox_selectable" %>
-    <i class="bi bi-eye-slash-fill" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= t('activerecord.attributes.clock.invisible_tooltip') %>"></i>
-  </div>
-  <div class="position-absolute top-0 end-0 mt-2 me-2">
-    <a class="link-unstyled" href="#" role="button" id="dropdownMenuCard_<%= clock.id.to_s %>" data-bs-toggle="dropdown" aria-expanded="false">
-      <i class="bi bi-three-dots"></i>
-    </a>
-
-    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
-      <li>
-        <%= link_to clock_path(clock), remote: true, class: 'dropdown-item' do %>
-          <i class="bi bi-eye-fill text-white"></i>
-          <%= t('helpers.action.view', thing: nil) %>
-        <% end %>
-      </li>
-      <% if @current_user&.is_master? %>
-        <li>
-          <%= link_to edit_clock_path(clock), remote: true, class: 'dropdown-item' do %>
-            <i class="bi bi-pencil-square text-white"></i>
-            <%= t('helpers.action.edit', thing: nil) %>
-          <% end %>
-        </li>
-        <li>
-          <%= link_to clock_path(clock), method: :delete, data: { confirm: "Estás seguro de eliminar el reloj '#{clock.name}'?" }, remote: true, class: 'dropdown-item' do %>
-            <i class="bi bi-trash text-white"></i>
-            <%= t('helpers.action.delete', thing: nil) %>
-          <% end %>
-        </li>
+<div class="card bg-<%= @outcomes[clock.outcome.to_s]['color']%>" id="clock_card_<%= clock.id.to_s %>">
+  <div class="card-body d-flex flex-column justify-content-center align-items-center card-flip-container" style="height: 300px">
+    <div class="position-absolute top-0 start-0 mt-2 ms-2">
+      <%= check_box_tag "clock_ids[]", clock.id, false, id: 'id_' + clock.id.to_s,class: "checkbox_selectable" %>
+      <% if clock.visible == false %>
+        <i class="bi bi-eye-slash-fill" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= t('activerecord.attributes.clock.invisible_tooltip') %>"></i>
       <% end %>
-    </ul>
-  </div>
-
-  <div class="position-absolute bottom-0 end-0 mb-2 me-2 flip-trigger">
-    <i class="bi bi-phone-flip"></i>
-  </div>
-
-  <div class="position-absolute top-0 mt-2 my-auto">
-    <%= link_to truncate(clock.name, length: 20, omission: '...'), clock_path(clock), remote: true, class: 'link-unstyled' %>
-  </div>
-  <div class="front mt-3">
-    <div class="mt-3">
-      <%= image_tag("clock_" + clock.size.to_s + "-" + clock.status.to_s + ".svg", size: "200x200", class: "clock-svg", id: "clock-svg_" + clock.id.to_s) %>
     </div>
-    <div class="mt-3 text-center">
-      <%= clock.family.blank? ? '&nbsp;'.html_safe : link_to(clock.family.title, family_path(clock.family.id), remote: true, class: 'text-white') %>
+    <div class="position-absolute top-0 end-0 mt-2 me-2">
+      <a class="link-unstyled" href="#" role="button" id="dropdownMenuCard_<%= clock.id.to_s %>" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-three-dots"></i>
+      </a>
+
+      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
+        <li>
+          <%= link_to clock_path(clock), remote: true, class: 'dropdown-item' do %>
+            <i class="bi bi-eye-fill text-white"></i>
+            <%= t('helpers.action.view', thing: nil) %>
+          <% end %>
+        </li>
+        <% if @current_user&.is_master? %>
+          <li>
+            <%= link_to edit_clock_path(clock), remote: true, class: 'dropdown-item' do %>
+              <i class="bi bi-pencil-square text-white"></i>
+              <%= t('helpers.action.edit', thing: nil) %>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to clock_path(clock), method: :delete, data: { confirm: "Estás seguro de eliminar el reloj '#{clock.name}'?" }, remote: true, class: 'dropdown-item' do %>
+              <i class="bi bi-trash text-white"></i>
+              <%= t('helpers.action.delete', thing: nil) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
     </div>
-  </div>
-  <div class="back d-none">
-    <div>
-      <%= truncate(clock.description, length: 250, omission: '...') %>
+
+    <div class="position-absolute bottom-0 end-0 mb-2 me-2 flip-trigger">
+      <i class="bi bi-phone-flip"></i>
+    </div>
+
+    <div class="position-absolute top-0 mt-2 my-auto">
+      <%= link_to truncate(clock.name, length: 20, omission: '...'), clock_path(clock), remote: true, class: 'link-unstyled' %>
+    </div>
+    <div class="front mt-3">
+      <div class="mt-3">
+        <%= image_tag("clock_" + clock.size.to_s + "-" + clock.status.to_s + ".svg", size: "200x200", class: "clock-svg", id: "clock-svg_" + clock.id.to_s) %>
+      </div>
+      <div class="mt-3 text-center">
+        <%= clock.family.blank? ? '&nbsp;'.html_safe : link_to(clock.family.title, family_path(clock.family.id), remote: true, class: 'text-white') %>
+      </div>
+    </div>
+    <div class="back d-none">
+      <div>
+        <% if clock.description.blank? %>
+          N/A
+        <% else %>
+          <%= truncate(clock.description, length: 250, omission: '...') %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
@@ -100,7 +108,7 @@
 <% end %>
 
 <script>
-  $("#clock_<%= clock.id.to_s %>").hover(
+  $("#clock_card_<%= clock.id.to_s %>").hover(
     function() {
       $(this).addClass('active-card');
     },

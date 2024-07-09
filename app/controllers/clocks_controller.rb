@@ -1,7 +1,7 @@
 class ClocksController < ApplicationController
   before_action :set_tool
   before_action :set_options
-  before_action :set_clock, only: [:show, :update]
+  before_action :set_clock, only: [:show, :update, :edit]
   before_action :check_master, except: [:index, :show]
 
   def index
@@ -21,6 +21,9 @@ class ClocksController < ApplicationController
   def show
   end
 
+  def edit
+  end
+
   def create
     @clock = Clock.new(clock_params)
 
@@ -34,13 +37,14 @@ class ClocksController < ApplicationController
   end
 
   def update
+    original_name = @clock.name
     respond_to do |format|
       if @clock.update(clock_params)
         flash.now[:success] = t('messages.success.update', thing: @clock.name.strip + " (id: " + @clock.id.to_s + ")", count: 1)
         format.js
       else
         flash.now[:danger] = @clock.errors.to_hash
-        format.js { render 'layouts/error', locals: { thing: original_title + " (id: " + @clock.id.to_s + ")", method: 'update' } }
+        format.js { render 'layouts/error', locals: { thing: original_name + " (id: " + @clock.id.to_s + ")", method: 'update' } }
       end
     end
   end

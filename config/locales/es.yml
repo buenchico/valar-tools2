@@ -140,7 +140,6 @@ es:
         visible: "Visible"
         invisible_tooltip: "Invisible para los jugadores"
         family_id: "Familia"
-
     models:
       game: 'Partida'
       tool: 'Herramienta'
@@ -172,6 +171,9 @@ es:
               inclusion: 'Sólo pueden elegirse rasgos de la lista'
             group:
               inclusion: 'Sólo pueden elegirse grupos de la lista'
+          clock:
+            size:
+              inclusion: 'Sólo pueden elegirse tamaños de la lista'
         game_tool:
           attributes:
             options:
