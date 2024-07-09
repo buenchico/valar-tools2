@@ -2,10 +2,16 @@ class ClocksController < ApplicationController
   before_action :set_tool
   before_action :set_options
   before_action :set_clock, only: [:show, :update]
+  before_action :check_master, except: [:index, :show]
 
   def index
-    @clocks_open = Clock.where.not("size = status")
-    @clocks_closed = Clock.where("size = status")
+    if @current_user&.is_master?
+      clocks = Clock.all
+    else
+      clocks = Clock.where(visible: true)
+    end
+    @clocks_open = clocks.where.not("size = status")
+    @clocks_closed = clocks.where("size = status")
   end
 
   def new
@@ -55,6 +61,6 @@ private
   end
 
   def clock_params
-    params.require(:clock).permit(:name, :size, :status, :description, :family_id, :outcome)
+    params.require(:clock).permit(:name, :size, :status, :description, :family_id, :outcome, :visible)
   end
 end

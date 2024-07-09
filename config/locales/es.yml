@@ -132,6 +132,12 @@ es:
         family_id: "Señor"
         description: "Descripción"
         game_id: "Partida"
+      clock:
+        name: "Nombre"
+        description: "Descripción"
+        size: "Tamaño"
+        outcome: "Consecuencia"
+        family_id: "Familia"
     models:
       game: 'Partida'
       tool: 'Herramienta'

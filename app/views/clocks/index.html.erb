@@ -8,17 +8,19 @@
     <%= yield(:title) %>
 </div>
 
-<div class="row my-3">
-  <div class="col">
-    <%= link_to new_clock_path, class: "btn btn-primary", remote: true do %>
-      <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
-    <% end %>
-    <%= form_tag(edit_multiple_armies_path, method: :get, id: 'edit_multiple', class: 'mt-2', remote: true) do %>
-      <%= button_tag(type: 'submit', class: "btn btn-danger mass_edit_button", disabled: true, value: "destroy") do %>
-        <i class="bi bi-trash"></i> Borrar en masa
+<% if @current_user&.is_master? %>
+  <div class="row my-3">
+    <div class="col">
+      <%= link_to new_clock_path, class: "btn btn-primary", remote: true do %>
+        <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
       <% end %>
-    <% end %>
+      <%= form_tag(edit_multiple_armies_path, method: :get, id: 'edit_multiple', class: 'mt-2', remote: true) do %>
+        <%= button_tag(type: 'submit', class: "btn btn-danger mass_edit_button", disabled: true, value: "destroy") do %>
+          <i class="bi bi-trash"></i> Borrar en masa
+        <% end %>
+      <% end %>
+    </div>
   </div>
-</div>
+<% end %>
 
 <%= render 'clocks_board' %>

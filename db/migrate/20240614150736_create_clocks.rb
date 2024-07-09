@@ -7,6 +7,7 @@ class CreateClocks < ActiveRecord::Migration[7.0]
       t.integer :outcome, default: 0
       t.string :description
       t.string :logs
+      t.boolean :visible, default: true
 
       t.timestamps
     end

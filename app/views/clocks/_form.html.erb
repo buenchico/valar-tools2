@@ -24,6 +24,12 @@
             <%= form.select :outcome, options_for_select(@outcomes.map { |key, value| [value["name"], key] }, "0"), { include_blank: false }, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
+            <%= form.label :visible, class: 'input-group-text' %>
+            <div class="form-check form-switch switch-group fs-2">
+              <%= form.check_box :visible, class: 'form-check-input switch-group h-100' %>
+            </div>
+          </div>
+          <div class="input-group mb-3">
             <%= form.label :family_id, class: 'input-group-text' %>
             <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [truncate(x.title, length: 20, omission: '...'), x.id] }, {}, class: 'form-select' %>
           </div>

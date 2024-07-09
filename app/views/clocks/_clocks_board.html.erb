@@ -6,9 +6,11 @@
   <% end %>
 </div>
 
-<div class="row mt-2 h2">
-  Relojes cerrados
-</div>
+<% if @clocks_closed.present? %>
+  <div class="row mt-2 h2">
+    Relojes cerrados
+  </div>
+<% end %>
 
 <div class="row mt-2">
   <% @clocks_closed.each do |clock| %>

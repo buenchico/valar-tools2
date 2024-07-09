@@ -2,11 +2,16 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content bg-dark">
       <div class="modal-header">
-        <h5 class="modal-title" id="Title"><%= clock.name %></h5>
+        <h5 class="modal-title" id="Title"><%= clock.name %><%= clock.family.blank? ? '' : (' (' + link_to(clock.family.title, family_path(clock.family.id), remote: true, class: 'text-white') + ')').html_safe %></h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-
+        <div class="float-start me-2">
+          <%= image_tag("clock_" + clock.size.to_s + "-" + clock.status.to_s + ".svg", size: "200x200", class: "clock-svg rounded-circle bg-"+ @outcomes[@clock.outcome.to_s]['color'], id: "clock-svg_" + clock.id.to_s) %>
+        </div>
+        <div class="">
+          <%= @clock.description %>
+        </div>
       </div>
     </div>
   </div>

@@ -78,6 +78,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_14_150736) do
     t.integer "outcome", default: 0
     t.string "description"
     t.string "logs"
+    t.boolean "visible", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "family_id"
