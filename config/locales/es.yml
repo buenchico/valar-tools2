@@ -137,7 +137,10 @@ es:
         description: "Descripción"
         size: "Tamaño"
         outcome: "Consecuencia"
+        visible: "Visible"
+        invisible_tooltip: "Invisible para los jugadores"
         family_id: "Familia"
+
     models:
       game: 'Partida'
       tool: 'Herramienta'

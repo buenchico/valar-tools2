@@ -1,6 +1,7 @@
 <div class="card-body d-flex flex-column justify-content-center align-items-center card-flip-container" style="height: 300px">
   <div class="position-absolute top-0 start-0 mt-2 ms-2">
     <%= check_box_tag "clock_ids[]", clock.id, false, id: 'id_' + clock.id.to_s,class: "checkbox_selectable" %>
+    <i class="bi bi-eye-slash-fill" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= t('activerecord.attributes.clock.invisible_tooltip') %>"></i>
   </div>
   <div class="position-absolute top-0 end-0 mt-2 me-2">
     <a class="link-unstyled" href="#" role="button" id="dropdownMenuCard_<%= clock.id.to_s %>" data-bs-toggle="dropdown" aria-expanded="false">
@@ -27,7 +28,7 @@
             <%= t('helpers.action.delete', thing: nil) %>
           <% end %>
         </li>
-      <% end %>        
+      <% end %>
     </ul>
   </div>
 
