@@ -73,6 +73,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_14_150736) do
 
   create_table "clocks", force: :cascade do |t|
     t.string "name"
+    t.string "style", default: "clock"
     t.integer "status", default: 0
     t.integer "size"
     t.integer "outcome", default: 0

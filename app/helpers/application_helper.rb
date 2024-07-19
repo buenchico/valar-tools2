@@ -53,5 +53,4 @@ module ApplicationHelper
       return 'masculine' # Default to masculine when the locale is not 'es'
     end
   end
-
 end

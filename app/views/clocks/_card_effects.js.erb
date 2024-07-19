@@ -1,0 +1,8 @@
+$("#clock_card_<%= clock.id.to_s %>").hover(
+  function() {
+    $(this).addClass('active-card');
+  },
+  function() {
+    $(this).removeClass('active-card');
+  }
+);

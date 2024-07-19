@@ -2,29 +2,37 @@ class Clock < ApplicationRecord
   before_validation :set_options
 
   belongs_to :family, optional: true
-  validates :status, numericality: { greater_than_or_equal_to: 0 }
-  validate :status_less_than_or_equal_to_size
+  validate :validate_status_for_clock_style
+  validate :validate_status_for_balance_style
 
-  SIZES = [4, 6]
-
-  validates :size, inclusion: { in: SIZES }
-
+  STYLES = ["clock", "scale"]
+  SIZES = [4, 6, 8]
   OUTCOMES = [-1 , 0 , 1]
 
+  validates :style, inclusion: { in: STYLES}
+  validates :size, inclusion: { in: SIZES }
   validates :outcome, inclusion: { in: OUTCOMES }
 
 private
   def set_options
     active_game = Game.find_by(active: true)
     options = Tool.find_by(name: "clocks").game_tools.find_by(game_id: active_game&.id)&.options
-    if options.present?
-      SIZES.replace(options["size"].map { |s| s["size"] })
+    SIZES.replace(options["sizes"].map { |s| s["size"] })
+  end
+
+  def validate_status_for_clock_style
+    if style == 'clock'
+      unless status >= 0 && status <= size
+        errors.add(:status, "must be greater or equal to 0 and smaller or equal to size for clock style")
+      end
     end
   end
 
-  def status_less_than_or_equal_to_size
-    if status.present? && size.present? && status > size
-      errors.add(:status, "must be less than or equal to size")
+  def validate_status_for_balance_style
+    if style == 'scale'
+      unless status >= -size && status <= size
+        errors.add(:status, "must be greater or equal to negative size and smaller or equal to size for balance style")
+      end
     end
   end
 

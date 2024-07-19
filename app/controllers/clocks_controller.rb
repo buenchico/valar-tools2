@@ -24,6 +24,11 @@ class ClocksController < ApplicationController
   def edit
   end
 
+  def edit_multiple
+    @clocks = Clock.where(id: params[:clock_ids]).order(:name)
+    @action = params[:button]
+  end
+
   def create
     @clock = Clock.new(clock_params)
 
@@ -49,6 +54,22 @@ class ClocksController < ApplicationController
     end
   end
 
+  def destroy_multiple
+    @clocks = Clock.where(id: params[:army_ids])
+
+    respond_to do |format|
+      if params[:clock][:confirm] == 'DELETE'
+        if @clocks.destroy_all
+          format.html { redirect_to clocks_url, success: t('messages.multiple.success', model:  Clock.model_name.human(:count => 2).downcase), succeed: @clocks.count }
+        else
+          format.html { redirect_to clocks_url, danger: t('messages.multiple.success', model:  Clock.model_name.human(:count => 2).downcase), failed: @clocks.count, succeed: 0 }
+        end
+      else
+        format.html { redirect_to clocks_url, danger: t('messages.multiple.validation') }
+      end
+    end
+  end
+
 private
   def set_clock
     @clock = Clock.find(params[:id])
@@ -57,14 +78,15 @@ private
   def set_options
     @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
     if @options.blank?
-      redirect_to settings_url, warning: t('activerecord.errors.messages.game_not_ready', tool_name: @tool.title)
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      @sizes = @options["size"]
-      @outcomes = @options["outcome"]
+      @sizes = @options["sizes"]
+      @outcomes = @options["outcomes"]
+      @styles = @options["styles"]
     end
   end
 
   def clock_params
-    params.require(:clock).permit(:name, :size, :status, :description, :family_id, :outcome, :visible)
+    params.require(:clock).permit(:name, :size, :status, :description, :family_id, :outcome, :visible, :style)
   end
 end

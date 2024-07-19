@@ -69,6 +69,8 @@ Rails.application.routes.draw do
   post 'issues', to: 'issues#create'
 
   resources :clocks
+  get 'clocks/edit_multiple', to: 'clocks#edit_multiple', as: 'edit_multiple_clocks'
+
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
