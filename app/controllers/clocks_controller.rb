@@ -55,12 +55,12 @@ class ClocksController < ApplicationController
   end
 
   def destroy_multiple
-    @clocks = Clock.where(id: params[:army_ids])
+    @clocks = Clock.where(id: params[:clock_ids])
 
     respond_to do |format|
       if params[:clock][:confirm] == 'DELETE'
         if @clocks.destroy_all
-          format.html { redirect_to clocks_url, success: t('messages.multiple.success', model:  Clock.model_name.human(:count => 2).downcase), succeed: @clocks.count }
+          format.html { redirect_to clocks_url, success: t('messages.multiple.success', model:  Clock.model_name.human(:count => 2).downcase), succeed: 2 }
         else
           format.html { redirect_to clocks_url, danger: t('messages.multiple.success', model:  Clock.model_name.human(:count => 2).downcase), failed: @clocks.count, succeed: 0 }
         end

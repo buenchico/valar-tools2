@@ -160,6 +160,8 @@ es:
       messages:
         inclusion: 'Sólo pueden elegirse opciones de la lista.'
         options_not_ready: 'No puedes usar la herramienta %{tool_name} mientres las opciones no estén completadas'
+        status_clock_style: 'Debe ser igual o mayor que cero y menor o igual que el tamaño.'
+        status_balance_style: 'Debe estar entre la mitad del tamaño negativo y la mitad del tamaño positivo.'
       models:
         army:
           attributes:

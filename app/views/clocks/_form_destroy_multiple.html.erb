@@ -1,0 +1,36 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title">Borrar masivo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <%= form_for :clock, url: destroy_multiple_clocks_path, method: :put do | form | %>
+            <div class="alert alert-danger">
+              <div class="float-left mr-2"><i class="fas fa-exclamation-triangle fa-3x"></i></div>
+              <div>Los siguientes relojes serán eliminados:</div>
+            </div>
+              <% clocks.each do | clock | %>
+                <div class="row">
+                  <div class="col-md-2">
+                    id: #<%= sprintf('%04d', clock.id) %>
+                  </div>
+                  <div class="col-md-5">
+                    <%= hidden_field_tag "clock_ids[]", clock.id %>
+                    <%= clock.name %>
+                  </div>
+                </div>
+              <% end %>
+            <div class="input-group mt-3">
+              <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'DELETE' para confirmar los cambios." %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.submit t('helpers.submit.delete_multiple', model: Army.model_name.human.pluralize), class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+      </div>
+    </div>
+  </div>
+</div>

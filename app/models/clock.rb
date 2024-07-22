@@ -23,15 +23,15 @@ private
   def validate_status_for_clock_style
     if style == 'clock'
       unless status >= 0 && status <= size
-        errors.add(:status, "must be greater or equal to 0 and smaller or equal to size for clock style")
+        errors.add(:status, I18n.t('errors.messages.status_clock_style'))
       end
     end
   end
 
   def validate_status_for_balance_style
     if style == 'scale'
-      unless status >= -size && status <= size
-        errors.add(:status, "must be greater or equal to negative size and smaller or equal to size for balance style")
+      unless status >= -(size/2) && status <= (size/2)
+        errors.add(:status, I18n.t('errors.messages.status_balance_style'))
       end
     end
   end
