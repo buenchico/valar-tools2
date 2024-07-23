@@ -164,9 +164,9 @@ $(document).on('shown.bs.collapse hidden.bs.collapse', function (event) {
 
 // Flipable cards
 
-$(document).on('turbolinks:load', function() {
+$.fn.flip_cards = function() {
   $('.flip-trigger').click(function() {
     $(this).closest('.card-body').find('.front').toggleClass('d-none');
     $(this).closest('.card-body').find('.back').toggleClass('d-none');
   });
-});
+}
