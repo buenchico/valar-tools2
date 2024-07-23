@@ -15,7 +15,7 @@
         <li>
           <%= link_to clock_path(clock), remote: true, class: 'dropdown-item' do %>
             <i class="bi bi-eye-fill text-white"></i>
-            <%= t('helpers.action.view', thing: nil) %>
+            <%= t('helpers.action.gview', thing: nil) %>
           <% end %>
         </li>
         <% if @current_user&.is_master? %>
