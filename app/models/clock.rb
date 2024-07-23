@@ -2,6 +2,15 @@ class Clock < ApplicationRecord
   before_validation :set_options
 
   belongs_to :family, optional: true
+
+  scope :closed, -> {
+    where("(style = 'clock' AND status = size) OR (style = 'scale' AND ABS(status) = (size / 2))")
+  }
+
+  scope :open, -> {
+    where.not("(style = 'clock' AND status = size) OR (style = 'scale' AND ABS(status) = (size / 2))")
+  }
+
   validate :validate_status_for_clock_style
   validate :validate_status_for_balance_style
 
@@ -13,7 +22,7 @@ class Clock < ApplicationRecord
   validates :size, inclusion: { in: SIZES }
   validates :outcome, inclusion: { in: OUTCOMES }
 
-  before_save :log_changes  
+  before_save :log_changes
 
 private
   def log_changes

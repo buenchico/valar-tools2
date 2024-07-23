@@ -10,8 +10,8 @@ class ClocksController < ApplicationController
     else
       clocks = Clock.where(visible: true)
     end
-    @clocks_open = clocks.where.not("size = status")
-    @clocks_closed = clocks.where("size = status")
+    @clocks_open = clocks.open
+    @clocks_close = clocks.closed
   end
 
   def new

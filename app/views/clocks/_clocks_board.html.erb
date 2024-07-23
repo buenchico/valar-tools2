@@ -6,15 +6,15 @@
   <% end %>
 </div>
 
-<% if @clocks_closed.present? %>
+<% if @clocks_close.present? %>
   <div class="row mt-2 h2">
     Relojes cerrados
   </div>
 <% end %>
 
 <div class="row mt-2">
-  <% @clocks_closed.each do |clock| %>
-    <div id="clock_<%= clock.id.to_s %> col-3 mx-1">
+  <% @clocks_close.each do |clock| %>
+    <div id="clock_<%= clock.id.to_s %>" class="col-3 mx-1">
       <%= render 'card', clock: clock %>
     </div>
   <% end %>
