@@ -13,7 +13,34 @@ class Clock < ApplicationRecord
   validates :size, inclusion: { in: SIZES }
   validates :outcome, inclusion: { in: OUTCOMES }
 
+  before_save :log_changes  
+
 private
+  def log_changes
+    if self.persisted? && self.changes.keys != ['logs'] # Check if the record already exists (for updates) and if the only changes are not of the logs
+      current_user = Thread.current[:current_user]
+      if current_user.nil?
+        current_user = User.find_by(player: "valar")
+      end
+      changes = self.changes.map do |field, values|
+        "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
+      end
+
+      change_log = {
+        timestamp: Time.now,
+        user_id: current_user.id, # Set the current user appropriately
+        username: current_user.player,
+        changes: changes
+      }
+
+      # Initialize self.logs as an empty array if it's nil
+      self.logs ||= []
+
+      # Append the change log to the "logs" array
+      self.logs << change_log.to_json
+    end
+  end
+
   def set_options
     active_game = Game.find_by(active: true)
     options = Tool.find_by(name: "clocks").game_tools.find_by(game_id: active_game&.id)&.options

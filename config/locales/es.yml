@@ -35,6 +35,7 @@ es:
       view: 'Ver %{thing}'
       edit: 'Editar %{thing}'
       delete: 'Borrar %{thing}'
+      confirm: '¿Estás seguro de eliminar %{thing}?'
     submit:
       submit: 'Enviar %{model}'
       create: 'Crear %{model}'

@@ -15,7 +15,7 @@
         <li>
           <%= link_to clock_path(clock), remote: true, class: 'dropdown-item' do %>
             <i class="bi bi-eye-fill text-white"></i>
-            <%= t('helpers.action.gview', thing: nil) %>
+            <%= t('helpers.action.view', thing: nil) %>
           <% end %>
         </li>
         <% if @current_user&.is_master? %>
@@ -26,7 +26,7 @@
             <% end %>
           </li>
           <li>
-            <%= link_to clock_path(clock), method: :delete, data: { confirm: "Estás seguro de eliminar el reloj '#{clock.name}'?" }, remote: true, class: 'dropdown-item' do %>
+            <%= link_to clock_path(clock), method: :delete, data: { confirm: t('helpers.action.confirm', thing: clock.name) }, remote: true, class: 'dropdown-item' do %>
               <i class="bi bi-trash text-white"></i>
               <%= t('helpers.action.delete', thing: nil) %>
             <% end %>
@@ -62,7 +62,9 @@
   </div>
 </div>
 
-<script>
-  <%= render partial: 'card_effects', formats: [:js], locals: { clock: clock } %>
-  <%= render partial: 'card_effects_' + clock.style, formats: [:js], locals: { clock: clock } %>
-</script>
+<% if @current_user.is_master? %>
+  <script>
+    <%= render partial: 'card_effects', formats: [:js], locals: { clock: clock } %>
+    <%= render partial: 'card_effects_' + clock.style, formats: [:js], locals: { clock: clock } %>
+  </script>
+<% end %>
