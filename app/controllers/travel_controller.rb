@@ -7,7 +7,6 @@ class TravelController < ApplicationController
 
   def calculate
     #get data from the form
-    terrain_type = params[:type]
 
     @from = params[:from] != "" ? params[:from] : "Origen"
     @to = params[:to] != "" ? params[:to] : "Destino"
@@ -69,6 +68,10 @@ class TravelController < ApplicationController
 private
   def set_options
     @options = @tool.game_tools.find_by(game_id: active_game.id).options
+    @terrain = @options["terrain"]
+    @speed = @options["speed"]
+    @obstacles = @options["obstacles"]
+    @size_formula = @options["size_formula"]
 
     if @options.nil?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la calculadora de rutas'

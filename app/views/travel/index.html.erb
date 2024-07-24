@@ -1,71 +1,84 @@
-<script>
-  <%= render partial: 'step', formats: [:js] %>
-</script>
-
 <% provide(:title, @tool.title) %>
 <% provide(:icon, @tool.icon_url) %>
 
-<div class="tool-title">
+<div class="tool-title d-none d-sm-block">
   <i class="white <%= yield(:icon) %>"></i>
-  <%= yield(:title) %> — <span class="land">Tierra</span><span class="sea d-none">Mar</span>
-  <%= button_tag 'Cambiar terreno', id: 'path_type_btn', class: 'btn btn-info float-end mt-3', value: 'land' %>
+  <%= yield(:title) %>
 </div>
 
-<div id="result" class="d-none">
+<div id="result" class="d-none"></div>
 
-</div>
-
-<div class="container d-flex flex-row align-items-center flex-wrap">
+<div class="container">
   <%= form_with url: travel_calculate_path, local: false do |form| %>
-    <%= form.hidden_field :type, value: 'land' %>
-
-    <div class="input-group mb-3 w-auto">
-      <%= form.label :from, class: 'input-group-text' %>
-      <%= form.text_field :from, class: 'form-control me-2 ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path} %>
-      <%= form.label :to, class: 'input-group-text' %>
-      <%= form.text_field :to, class: 'form-control me-2 ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path} %>
-    </div>
-
-    <div class="input-group mb-3 w-auto">
-      <%= form.label :size_travel_land, class: 'input-group-text land' %>
-      <%= form.label :size_travel_sea, class: 'input-group-text sea d-none' %>
-      <%= form.number_field :size, class: 'form-control me-2', min: 0, step: 1 %>
-
-      <%= form.label :army_type_land, class: 'input-group-text land' %>
-      <%= form.label :army_type_sea, class: 'input-group-text sea d-none' %>
-      <%= form.select "army_speed[land]", options_for_select(@options["land"]["army_speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"], speed_option["mod"]]] }, [@options["land"]["army_speed"]["default"]["name"], @options["land"]["army_speed"]["default"]["mod"]].to_s), {}, id: 'army_type_land', class: 'form-select me-2 land' %>
-      <%= form.select "army_speed[sea]", options_for_select(@options["sea"]["army_speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"], speed_option["mod"]]] }, [@options["sea"]["army_speed"]["default"]["name"], @options["sea"]["army_speed"]["default"]["mod"]].to_s), {}, id: 'army_type_sea', class: 'form-select me-2 sea d-none', disabled: true %>
-    </div>
-
-    <div id="steps" class="ms-5">
-      <div id="step_0" class="input-group mb-3 w-auto pe-3">
-        <%= form.label :distance, class: 'input-group-text' %>
-        <%= form.number_field "step[0][hex]", class: 'form-control me-2', min: 0, step: 1 %>
-
-        <%= form.label :terrain, class: 'input-group-text' %>
-        <%= form.select :"step[0][terrain][land]", options_for_select(@options["land"]["terrain"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["land"]["terrain"]["default"]["name"], @options["land"]["terrain"]["default"]["mod"]].to_s), {}, class: 'form-select me-2 land' %>
-        <%= form.select :"step[0][terrain][sea]", options_for_select(@options["sea"]["terrain"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["sea"]["terrain"]["default"]["name"], @options["sea"]["terrain"]["default"]["mod"]].to_s), {}, class: 'form-select me-2 sea d-none', disabled: true %>
-
-        <%= form.label :travel_speed, class: 'input-group-text' %>
-        <%= form.select :"step[0][travel_speed][land]", options_for_select(@options["land"]["travel_speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["land"]["travel_speed"]["default"]["name"], @options["land"]["travel_speed"]["default"]["mod"]].to_s), {}, class: 'form-select me-2 land' %>
-        <%= form.select :"step[0][travel_speed][sea]", options_for_select(@options["sea"]["travel_speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["sea"]["travel_speed"]["default"]["name"], @options["sea"]["travel_speed"]["default"]["mod"]].to_s), {}, class: 'form-select me-2 sea d-none' %>
-
-        <%= form.label :obstacle, class: 'input-group-text' %>
-        <%= form.select :"step[0][obstacle][land]",
-          options_for_select(@options["land"]["obstacles"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }),
-          {include_blank: true},
-          class: 'form-select me-2 land' %>
-        <%= form.select :"step[0][obstacle][sea]",
-          options_for_select(@options["sea"]["obstacles"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }),
-          {include_blank: true},
-          class: 'form-select me-2 sea d-none', disabled: true %>
+    <!-- Form Fields: From and To -->
+    <div class="row mb-3">
+      <div class="col-12 col-md-6 mb-3">
+        <div class="input-group">
+          <%= form.label :from, class: 'input-group-text' %>
+          <%= form.text_field :from, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path} %>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 mb-3">
+        <div class="input-group">
+          <%= form.label :to, class: 'input-group-text' %>
+          <%= form.text_field :to, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path} %>
+        </div>
       </div>
     </div>
 
-    <div class="input-group mb-3 w-auto">
+    <!-- Form Fields: Size and Army Type -->
+    <div class="row mb-3">
+      <div class="col-12 col-md-6 mb-3">
+        <div class="input-group">
+          <%= form.label :size, class: 'input-group-text' %>
+          <%= form.number_field :size, class: 'form-control', min: 0, step: 1 %>
+        </div>
+      </div>
+      <div class="col-6 col-md-2 mb-3">
+        <div class="input-group">
+          <div class="input-group-text"><%= t('helpers.label.size_mod') %></div>
+          <div id="size_mod" class="form-control text-center"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Steps Section -->
+    <div id="steps" class="mb-3">
+      <div id="step_0" class="row step ms-1">
+        <div class="col-12 col-md-2 mb-3">
+          <div class="input-group">
+            <%= form.label :hex, class: 'input-group-text' %>
+            <%= form.number_field "step[0][hex]", class: 'form-control', min: 0, step: 1 %>
+          </div>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <div class="input-group">
+            <%= form.label :terrain, class: 'input-group-text' %>
+            <%= form.select :"step[0][terrain]", options_for_select(@terrain.map { |t| [t["name"], t["mod"]] }), {}, class: 'form-select' %>
+          </div>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <div class="input-group">
+            <%= form.label :speed, class: 'input-group-text' %>
+            <%= form.select :"step[0][speed]", options_for_select(@speed.map { |s| [s["name"], s["mod"]] }), {}, class: 'form-select' %>
+          </div>
+        </div>
+        <div class="col-11 col-md-3 mb-3">
+          <div class="input-group">
+            <%= form.label :obstacle, class: 'input-group-text' %>
+            <%= form.select :"step[0][obstacle]", options_for_select(@obstacles.map { |o| [o["name"], o["hex"]] }), {include_blank: true}, class: 'form-select' %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Step Button and Submit Button -->
+    <div class="mb-3">
       <%= form.button t('.add_step'), class: "btn btn-success", id: "add_step", type: "button" %>
     </div>
 
-    <%= form.submit t('.calculate'), class: "btn btn-primary", id: "calculate" %>
+    <div class="mb-3">
+      <%= form.submit t('.calculate'), class: "btn btn-primary", id: "calculate" %>
+    </div>
   <% end %>
 </div>
