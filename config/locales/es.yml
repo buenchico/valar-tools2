@@ -236,6 +236,10 @@ es:
       x_weeks:
         one: 'una semana'
         other: '%{count} semanas'
+      x_half_days:
+        zero: 'muy poco tiempo'
+        one: 'medio día'
+        other: ' y medio'
   word_genders:
     ciudad: feminine
     región: feminine

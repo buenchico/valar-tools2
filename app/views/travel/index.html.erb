@@ -54,19 +54,19 @@
         <div class="col-12 col-md-3 mb-3">
           <div class="input-group">
             <%= form.label :terrain, class: 'input-group-text' %>
-            <%= form.select :"step[0][terrain]", options_for_select(@terrain.map { |t| [t["name"], t["mod"]] }), {}, class: 'form-select' %>
+            <%= form.select :"step[0][terrain]", options_for_select(@terrain.map { |t| [t["name"], [t["name"], t["mod"]]] }), {}, class: 'form-select' %>
           </div>
         </div>
         <div class="col-12 col-md-3 mb-3">
           <div class="input-group">
             <%= form.label :speed, class: 'input-group-text' %>
-            <%= form.select :"step[0][speed]", options_for_select(@speed.map { |s| [s["name"], s["mod"]] }), {}, class: 'form-select' %>
+            <%= form.select :"step[0][speed]", options_for_select(@speed.map { |s| [s["name"], [s["name"], s["mod"]]] }), {}, class: 'form-select' %>
           </div>
         </div>
         <div class="col-11 col-md-3 mb-3">
           <div class="input-group">
             <%= form.label :obstacle, class: 'input-group-text' %>
-            <%= form.select :"step[0][obstacle]", options_for_select(@obstacles.map { |o| [o["name"], o["hex"]] }), {include_blank: true}, class: 'form-select' %>
+            <%= form.select :"step[0][obstacle]", options_for_select(@obstacles.map { |o| [o["name"],[o["desc"], o["hex"]]] }), {include_blank: true}, class: 'form-select' %>
           </div>
         </div>
       </div>

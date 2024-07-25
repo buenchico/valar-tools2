@@ -10,57 +10,47 @@ class TravelController < ApplicationController
 
     @from = params[:from] != "" ? params[:from] : "Origen"
     @to = params[:to] != "" ? params[:to] : "Destino"
-    size = params[:size].to_i
-
-    army_speed = JSON.parse(params[:army_speed][terrain_type])
-
-    steps = params[:step].nil? ? 0 : params[:step].to_unsafe_h
+    @size = params[:size].to_i
+    size_mod = army_size_mod(@size)
 
     #get travel data
-    base = @options[terrain_type]["base"] # hours per hexagon
+    base = @options["base"] # hours per hexagon
+    size_time = 1 + (@options["size"] * size_mod)
 
-    size_table = @options["size"].sort_by { |item| -item[0] }
+    steps = params[:step].nil? ? 0 : params[:step]
 
-    size_table.each do |threshold, modifier|
-      if size > threshold
-        @size_mod = modifier
-        break
-      end
-    end
-
-    @time = 0
-    @message = []
+    time = 0
+    @steps = []
     steps.each do | index, step |
-      line = ""
       hex = step["hex"].to_i
       if hex > 0
-        terrain = JSON.parse(step["terrain"][terrain_type])
-        speed = JSON.parse(step["travel_speed"][terrain_type])
-        obstacle = step["obstacle"][terrain_type].blank? ? "" : JSON(step["obstacle"][terrain_type])
-        step_time = hex * ( base.to_i + @size_mod.to_i + army_speed[1].to_i + terrain[1].to_i + speed[1].to_i) + obstacle[1].to_i
-        @time += step_time
-        line << "<p class='ms-2'>#{hex} #{t('hexagon', count: hex)} de #{terrain[0].downcase}, a marcha #{speed[0].downcase}"
-        obstacle.blank? ? nil : line << ", cruzando un #{obstacle[0].downcase},"
-        line << " en #{step_time} #{t('hours', count: step_time)}</p>"
-        @message << line
+        terrain_name = JSON.parse(step["terrain"])[0]
+        terrain = JSON.parse(step["terrain"])[1]
+
+        speed_name = JSON.parse(step["speed"])[0]
+        speed = JSON.parse(step["speed"])[1]
+
+        modifier = (terrain * speed)
+
+        if step["obstacle"].blank?
+          obstacle_name = ""
+          obstacle = 0
+        else
+          obstacle_name = JSON(step["obstacle"])[0]
+          obstacle = JSON(step["obstacle"])[1]
+        end
+
+        step_time = (hex * base * size_time * modifier).round + (obstacle * base * size_time).round # in hours
+
+        time += step_time
+        line = { hex: hex, step_time: step_time, terrain_name: terrain_name, speed_name: speed_name, obstacle_name: obstacle_name }
+        puts line
+        @steps << line
       end
     end
 
-    count = [size, 1].min
-
-    if terrain_type == "land"
-      @html = "<p>Un #{Army.model_name.human(:count => count).downcase} "
-    else
-      @html = "<p>Una #{I18n.t("fleet", count: count).downcase}"
-    end
-
-    @html += ((size == 0) ? "" : " de tamaño #{size}")
-
-    @html += " necesita #{travel_time(@time)} para ir desde #{@from} hasta #{@to}</p>"
-
-    @message.each do | line |
-      @html += line
-    end
+    @time = time
+    @travel_time = travel_time(time)
 
     respond_to :js
   end
@@ -82,9 +72,15 @@ private
     options = {
       scope: :'datetime.distance_in_words'
     }
-    weeks = time / ( 24 * 5 ) # using 5 days weeks
-    days = (time % ( 24 * 5 ) / 24)
-    hours = (time % ( 24 * 5 ) % 24)
+
+    phase_shift = 3
+    adjusted_time = [(time + phase_shift),0].max
+
+    half_days = adjusted_time / 12
+
+    weeks = half_days / ( 5 * 2 ) # Using 5 days weeks
+    days = ( half_days - ( weeks * 5 * 2 ) ) / 2
+    half =
 
     I18n.with_options scope: options[:scope] do |locale|
       message = ""
@@ -93,21 +89,14 @@ private
       end
 
       if days != 0
-        if !weeks.zero?
-          if hours != 0
-            message += ","
-          else
-            message += " #{I18n.t('and')}"
-          end
+        if weeks != 0
+          message += " #{I18n.t('and')} "
         end
-        message += " #{locale.t :x_days, count: days}"
+        message += locale.t :x_days, count: days
       end
 
-      if hours != 0
-        if (!weeks.zero? || !days.zero?)
-          message += " #{I18n.t('and')}"
-        end
-        message += " #{locale.t :x_hours, count: hours}"
+      if (half_days <= 1 || half_days.odd?)
+        message += locale.t :x_half_days, count: half_days
       end
 
       return message

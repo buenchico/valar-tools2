@@ -15,7 +15,7 @@ $(document).on('turbolinks:load', function () {
       <div class="col-12 col-md-3 mb-3">
         <div class="input-group">
           <%= label_tag :terrain, I18n.t('helpers.label.terrain'), class: 'input-group-text' %>
-          <%= select_tag "terrain", options_for_select(@terrain.map { |t| [t["name"], t["mod"]] }), {class: 'form-select'} %>
+          <%= select_tag "terrain", options_for_select(@terrain.map { |t| [t["name"], [t["name"], t["mod"]]] }), {class: 'form-select'} %>
         </div>
       </div>
     `
@@ -24,7 +24,7 @@ $(document).on('turbolinks:load', function () {
       <div class="col-12 col-md-3 mb-3">
         <div class="input-group">
           <%= label_tag :speed, I18n.t('helpers.label.speed'), class: 'input-group-text' %>
-          <%= select_tag "speed", options_for_select(@speed.map { |s| [s["name"], s["mod"]] }), {class: 'form-select'} %>
+          <%= select_tag "speed", options_for_select(@speed.map { |s| [s["name"], [s["name"], s["mod"]]] }), {class: 'form-select'} %>
         </div>
       </div>
     `
@@ -33,7 +33,7 @@ $(document).on('turbolinks:load', function () {
       <div class="col-11 col-md-3 mb-3">
         <div class="input-group">
           <%= label_tag :obstacle, I18n.t('helpers.label.obstacle'), class: 'input-group-text' %>
-          <%= select_tag "obstacle", options_for_select(@obstacles.map { |o| [o["name"], o["hex"]] }), {class: 'form-select', include_blank: true} %>
+          <%= select_tag "obstacle", options_for_select(@obstacles.map { |o| [o["name"],[o["desc"], o["hex"]]] }), {class: 'form-select', include_blank: true} %>
         </div>
       </div>
     `
@@ -60,7 +60,7 @@ $(document).on('turbolinks:load', function () {
               .attr("id","step["+step_id+"][hex]")
     $('#terrain').attr("name","step["+step_id+"][terrain]")
                   .attr("id","step["+step_id+"][terrain]")
-    $('#travel_speed').attr("name","step["+step_id+"][speed]")
+    $('#speed').attr("name","step["+step_id+"][speed]")
                 .attr("id","step["+step_id+"][speed]")
     $('#obstacle').attr("name","step["+ step_id +"][obstacle]")
                    .attr("id","step["+step_id+"][obstacle]")
