@@ -104,88 +104,88 @@ $(document).on('turbolinks:load', function () {
       <% @options["layers"].each do | code, layer | %>
         var <%= code %> = new L.layerGroup.collision({margin: <%= @options['margin'] || 0 %>});
 
-        <% layer["types"].each do | type_hash | %>
-          <% type_hash.each do | type, color | %>
-            // if there is a layer image
-            <% if !layer["img"].nil? %>
-              var imageOverlay = L.imageOverlay('<%= asset_path(layer["img"]) %>', [[0,0],imgSize], {opacity: 0.5})
-              imageOverlay.addTo(<%= code %>);
-            <% end %>
+        <% layer["types"].each do | type | %>
+          // if there is a layer image
+          <% if !layer["img"].nil? %>
+            var imageOverlay = L.imageOverlay('<%= asset_path(layer["img"]) %>', [[0,0],imgSize], {opacity: 0.5})
+            imageOverlay.addTo(<%= code %>);
+          <% end %>
 
-            // render locations
-            <% @locations.where(location_type: type).order(priority: :desc).each do | location | %>
-              //Check location render type point vs line vs polygon
-              <% if location.line.present? %> // Location is a line!
-                var polyline = L.polyline(<%= location.line %>, {color: '<%= color %>'})
-                polyline.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
-                                        className: 'leaflet-popup'
-                                      })
-                <%= code %>.addLayer(polyline);
-              <% elsif location.polygon.present? %> // Location is a polygon!
-                var polygon = L.polygon(<%= location.polygon %>, {
-                    color: '<%= color %>',
-                    fillColor: '<%= color %>',
-                    fillOpacity: 0.5
-                });
-                polygon.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
-                                        className: 'leaflet-popup'
-                                      })
-                <%= code %>.addLayer(polygon);
-              <% elsif location.x.present? && location.y.present? %> // location is a point
-              var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
+          // render locations
+          <% @locations.where(location_type: type).order(priority: :desc).each do | location | %>
+            var color = '<%= @location_types[type].fetch("color", "black") %>'
 
-              // render only name
-              if (icon == "") {
-                <%= code %>.addLayer(
-                  L.marker(
-                    [<%= location.y %>,<%= location.x %>],
-                      { icon: L.divIcon({
-                        className: "regionLabel <%= @options['font'] %>",
-                        html: "<%= location.name %>",
-                        iconSize: [<%= location.name.length * 30 * 0.6 %>, 30],
-                        iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
-                        })
-                      })
-                      .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
-                          className: 'leaflet-popup'
-                        })
-                  );
-              // render only icon
-            } else if (<%= layer["display"] == "icons" %>) {
+            //Check location render type point vs line vs polygon
+            <% if location.line.present? %> // Location is a line!
+              var polyline = L.polyline(<%= location.line %>, {color: color})
+              polyline.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                                      className: 'leaflet-popup'
+                                    })
+              <%= code %>.addLayer(polyline);
+            <% elsif location.polygon.present? %> // Location is a polygon!
+              var polygon = L.polygon(<%= location.polygon %>, {
+                  color: color,
+                  fillColor: color,
+                  fillOpacity: 0.5
+              });
+              polygon.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                                      className: 'leaflet-popup'
+                                    })
+              <%= code %>.addLayer(polygon);
+            <% elsif location.x.present? && location.y.present? %> // location is a point
+            var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
+
+            // render only name
+            if (icon == "") {
               <%= code %>.addLayer(
                 L.marker(
                   [<%= location.y %>,<%= location.x %>],
-                    { icon: L.icon({
-                        iconUrl: icon,
-                        className: '',
-                        iconSize: [30, 30],
-                        })
+                    { icon: L.divIcon({
+                      className: "regionLabel <%= @options['font'] %>",
+                      html: "<%= location.name %>",
+                      iconSize: [<%= location.name.length * 30 * 0.6 %>, 30],
+                      iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
+                      })
+                    })
+                    .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                        className: 'leaflet-popup'
+                      })
+                );
+            // render only icon
+          } else if (<%= layer["display"] == "icons" %>) {
+            <%= code %>.addLayer(
+              L.marker(
+                [<%= location.y %>,<%= location.x %>],
+                  { icon: L.icon({
+                      iconUrl: icon,
+                      className: '',
+                      iconSize: [30, 30],
+                      })
+                  })
+                  .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %> (<%= @location_types[location.location_type]["name"] %>)</p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                      className: 'leaflet-popup'
+                    })
+              );
+            // render icons & name
+            } else {
+              <%= code %>.addLayer(
+                L.marker(
+                  [<%= location.y %>,<%= location.x %>],
+                    { icon: L.divIcon({
+                      className: "locationLabel <%= @options['font'] %>",
+                      html: "<img src=" + icon + " height='30' width='30' /><%= location.name %>",
+                      style: "background:red !important;",
+                      iconSize: [<%= (location.name.length * 5) + 40 %>, 30],
+                      iconAnchor: [15,15]
+                      })
                     })
                     .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %> (<%= @location_types[location.location_type]["name"] %>)</p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                         className: 'leaflet-popup'
                       })
                 );
-              // render icons & name
-              } else {
-                <%= code %>.addLayer(
-                  L.marker(
-                    [<%= location.y %>,<%= location.x %>],
-                      { icon: L.divIcon({
-                        className: "locationLabel <%= @options['font'] %>",
-                        html: "<img src=" + icon + " height='30' width='30' /><%= location.name %>",
-                        style: "background:red !important;",
-                        iconSize: [<%= (location.name.length * 5) + 40 %>, 30],
-                        iconAnchor: [15,15]
-                        })
-                      })
-                      .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %> (<%= @location_types[location.location_type]["name"] %>)</p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
-                          className: 'leaflet-popup'
-                        })
-                  );
-              }
-              <% else %> // Other locations draw types
-                console.log("<%= location.name %> con id: <%= location.id %> ha fallado al renderizar")
-              <% end %>
+            }
+            <% else %> // Other locations draw types
+              console.log("<%= location.name %> con id: <%= location.id %> ha fallado al renderizar")
             <% end %>
           <% end %>
         <% end %>
