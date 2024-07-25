@@ -4,6 +4,9 @@
 <div class="tool-title d-none d-sm-block">
   <i class="white <%= yield(:icon) %>"></i>
   <%= yield(:title) %>
+  <% if !@options["rules_post"].nil? %>
+    <%= link_to '<sup ><i class="bi bi-info-circle-fill"></i></sup>'.html_safe, @options["rules_post"], class: 'text-white', target: :_blank %>
+  <% end %>
 </div>
 
 <div id="result" class="d-none"></div>
