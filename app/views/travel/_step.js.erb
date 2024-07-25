@@ -3,8 +3,6 @@ $(document).on('turbolinks:load', function () {
   $("#add_step").click(function(){
     step_id++;
 
-    var terrain = "land"
-
     var html_form = `
       <div class="col-12 col-md-2 mb-3">
         <div class="input-group">
@@ -17,7 +15,7 @@ $(document).on('turbolinks:load', function () {
       <div class="col-12 col-md-3 mb-3">
         <div class="input-group">
           <%= label_tag :terrain, I18n.t('helpers.label.terrain'), class: 'input-group-text' %>
-          <%= select_tag "terrain", options_for_select(@options["land"]["terrain"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["land"]["terrain"]["default"]["name"], @options["land"]["terrain"]["default"]["mod"]].to_s), {class: 'form-select'} %>
+          <%= select_tag "terrain", options_for_select(@terrain.map { |t| [t["name"], t["mod"]] }), {class: 'form-select'} %>
         </div>
       </div>
     `
@@ -25,8 +23,8 @@ $(document).on('turbolinks:load', function () {
     html_form += `
       <div class="col-12 col-md-3 mb-3">
         <div class="input-group">
-          <%= label_tag :travel_speed, I18n.t('helpers.label.travel_speed'), class: 'input-group-text' %>
-          <%= select_tag "travel_speed", options_for_select(@options["land"]["travel_speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["land"]["travel_speed"]["default"]["name"], @options["land"]["travel_speed"]["default"]["mod"]].to_s), {class: 'form-select'} %>
+          <%= label_tag :speed, I18n.t('helpers.label.speed'), class: 'input-group-text' %>
+          <%= select_tag "speed", options_for_select(@speed.map { |s| [s["name"], s["mod"]] }), {class: 'form-select'} %>
         </div>
       </div>
     `
@@ -35,7 +33,7 @@ $(document).on('turbolinks:load', function () {
       <div class="col-11 col-md-3 mb-3">
         <div class="input-group">
           <%= label_tag :obstacle, I18n.t('helpers.label.obstacle'), class: 'input-group-text' %>
-          <%= select_tag "obstacle", options_for_select(@options["land"]["obstacles"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }), {class: 'form-select', include_blank: true} %>
+          <%= select_tag "obstacle", options_for_select(@obstacles.map { |o| [o["name"], o["hex"]] }), {class: 'form-select', include_blank: true} %>
         </div>
       </div>
     `
@@ -60,11 +58,11 @@ $(document).on('turbolinks:load', function () {
 
     $('#hex_').attr("name","step["+step_id+"][hex]")
               .attr("id","step["+step_id+"][hex]")
-    $('#terrain').attr("name","step["+step_id+"][terrain][" + terrain + "]")
-                  .attr("id","step["+step_id+"][terrain][" + terrain + "]")
-    $('#travel_speed').attr("name","step["+step_id+"][travel_speed][" + terrain + "]")
-                .attr("id","step["+step_id+"][travel_speed][" + terrain + "]")
-    $('#obstacle').attr("name","step["+ step_id +"][obstacle][" + terrain + "]")
-                   .attr("id","step["+step_id+"][obstacle][" + terrain + "]")
+    $('#terrain').attr("name","step["+step_id+"][terrain]")
+                  .attr("id","step["+step_id+"][terrain]")
+    $('#travel_speed').attr("name","step["+step_id+"][speed]")
+                .attr("id","step["+step_id+"][speed]")
+    $('#obstacle').attr("name","step["+ step_id +"][obstacle]")
+                   .attr("id","step["+step_id+"][obstacle]")
   });
 });
