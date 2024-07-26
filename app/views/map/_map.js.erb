@@ -124,7 +124,7 @@ $(document).on('turbolinks:load', function () {
               <%= code %>.addLayer(polyline);
             <% elsif location.polygon.present? %> // Location is a polygon!
               var polygon = L.polygon(<%= location.polygon %>, {
-                  color: color,
+                  color: null,
                   fillColor: color,
                   fillOpacity: 0.5
               });
@@ -256,7 +256,9 @@ $(document).on('turbolinks:load', function () {
               weight: 10
             }
           },
-          polygon: false,
+          <% if @current_user&.is_admin? %>
+            polygon: true,
+          <% end %>
           rectangle: false,
           circle: false,
           marker: {icon: new L.DivIcon({
@@ -280,6 +282,12 @@ $(document).on('turbolinks:load', function () {
         (type == 'polyline') ? poly++ : '';
         (type == 'marker') ? mark++ : '';
 
+        <% if @current_user&.is_admin? %>
+          var shape = layer.toGeoJSON()
+          var shape_for_db = JSON.stringify(shape);
+          console.log(shape_for_db)
+        <% end %>
+
         map.removeControl(drawControl);
         drawControl.setDrawingOptions({
           polyline: {
@@ -302,7 +310,7 @@ $(document).on('turbolinks:load', function () {
         map.addControl(drawControl);
       });
 
-      <% if @current_user&.is_master? %>
+      <% if @current_user&.is_admin? %>
         // Debug coords
         map.on('click', function(e){
           var coord = e.latlng;
