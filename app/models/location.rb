@@ -21,11 +21,25 @@ class Location < ApplicationRecord
     render = nil
 
     if self.line.present?
-      render = "polyline"
+      begin
+        parsed = JSON.parse(self.line)
+        if parsed.is_a?(Array)
+          render = "polyline"
+        end
+      rescue JSON::ParserError
+        nil
+      end
     end
 
     if self.polygon.present?
-      render = "polygon"
+      begin
+        parsed = JSON.parse(self.polygon)
+        if parsed.is_a?(Array)
+          render = "polygon"
+        end
+      rescue JSON::ParserError
+        nil
+      end
     end
 
     if self.x.present? && self.y.present?
