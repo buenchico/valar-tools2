@@ -121,26 +121,45 @@ $(document).on('turbolinks:load', function () {
               polyline.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                                       className: 'leaflet-popup'
                                     });
-              <% if @current_user&.is_admin? %>
-                polyline.enableEdit(map);
-              <% end %>
 
               <%= code %>.addLayer(polyline);
 
+              <% if @current_user.is_admin? %>
+                (function(polyline) {
+                  polyline.on('click', function(e){
+                    if (polyline.editEnabled()) {
+                      polyline.disableEdit();
+                    } else {
+                      polyline.enableEdit(map);
+                    }
+                  });
+                })(polyline);
+              <% end %>
+
             <% elsif location.render == 'polygon' %>
               var polygon = L.polygon(<%= location.polygon %>, {
-                  color: null,
+                  color: color,
+                  opacity: 0.5,
                   fillColor: color,
                   fillOpacity: 0.5
               });
               polygon.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                                       className: 'leaflet-popup'
                                     })
-              <% if @current_user&.is_admin? %>
-                polygon.enableEdit(map);
-              <% end %>
 
               <%= code %>.addLayer(polygon);
+
+              <% if @current_user.is_admin? %>
+                (function(polygon) {
+                  polygon.on('click', function(e){
+                    if (polygon.editEnabled()) {
+                      polygon.disableEdit();
+                    } else {
+                      polygon.enableEdit(map);
+                    }
+                  });
+                })(polygon);
+              <% end %>
 
             <% elsif (location.render == 'point' || location.render == 'multipoint') %>
               var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
@@ -357,21 +376,6 @@ $(document).on('turbolinks:load', function () {
           var lat = coord.lat;
           var lng = coord.lng;
           console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
-
-          var message = lat + '\t' + lng
-          // Create a dummy input to copy the string array inside it
-          var dummy = document.createElement("textarea");
-          // Add it to the document
-          document.body.appendChild(dummy);
-          // Output the array into it
-          dummy.value = message;
-          // Select it
-          dummy.select();
-          // Copy its contents
-          document.execCommand("copy");
-          // Remove it as its not needed anymore
-          document.body.removeChild(dummy);
-
         });
 
         // Debug grid
