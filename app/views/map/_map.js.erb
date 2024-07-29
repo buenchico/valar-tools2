@@ -44,6 +44,7 @@ $(document).on('turbolinks:load', function () {
 
       var map = L.map('mapid', {
           crs: L.CRS.Simple, //CRS need to be removed for tile layer
+          editable: true,
           //drawControl: true,
           minZoom: zoom[0],
           maxZoom: zoom[1],
@@ -121,6 +122,13 @@ $(document).on('turbolinks:load', function () {
               polyline.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                                       className: 'leaflet-popup'
                                     })
+              <% if @current_user&.is_admin? %>
+                polyline.enableEdit(map);
+                // Listen for editing events
+                polyline.on('editable:vertex:dragend', logCoordinates);
+                polyline.on('editable:vertex:deleted', logCoordinates);
+                polyline.on('editable:vertex:new', logCoordinates);
+              <% end %>
               <%= code %>.addLayer(polyline);
             <% elsif location.polygon.present? %> // Location is a polygon!
               var polygon = L.polygon(<%= location.polygon %>, {
@@ -131,6 +139,13 @@ $(document).on('turbolinks:load', function () {
               polygon.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                                       className: 'leaflet-popup'
                                     })
+              <% if @current_user&.is_admin? %>
+                polygon.enableEdit(map);
+                // Listen for editing events
+                polygon.on('editable:vertex:dragend', logCoordinates);
+                polygon.on('editable:vertex:deleted', logCoordinates);
+                polygon.on('editable:vertex:new', logCoordinates);
+              <% end %>
               <%= code %>.addLayer(polygon);
             <% elsif location.x.present? && location.y.present? %> // location is a point
             var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
@@ -283,7 +298,7 @@ $(document).on('turbolinks:load', function () {
         (type == 'marker') ? mark++ : '';
 
         <% if @current_user&.is_admin? %>
-          var shape = layer.toGeoJSON()
+          var shape = layer.getLatLngs()
           var shape_for_db = JSON.stringify(shape);
           console.log(shape_for_db)
         <% end %>
@@ -309,6 +324,14 @@ $(document).on('turbolinks:load', function () {
         });
         map.addControl(drawControl);
       });
+
+      <% if @current_user&.is_admin? %>
+        // Function to log polygon coordinates
+        function logCoordinates() {
+          var latlngs = polygon.getLatLngs();
+          console.log("Coordinates:", latlngs);
+        }
+      <% end %>
 
       <% if @current_user&.is_admin? %>
         // Debug coords
@@ -361,6 +384,6 @@ $(document).on('turbolinks:load', function () {
       map.addControl(layerControl);
 
       $('#map-container').data('loaded', true);
+    }
   }
-}
 });
