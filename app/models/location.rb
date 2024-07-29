@@ -17,6 +17,28 @@ class Location < ApplicationRecord
     end
   end
 
+  def render
+    render = nil
+
+    if self.line.present?
+      render = "polyline"
+    end
+
+    if self.polygon.present?
+      render = "polygon"
+    end
+
+    if self.x.present? && self.y.present?
+      if self.x.is_a?(Array) && self.y.is_a?(Array)
+        render = "multipoint"
+      end
+
+      render = "point"
+    end
+
+    return render
+  end
+
   scope :search_by_name, ->(query) do
     where("lower(name_en) LIKE :query OR lower(name_es) LIKE :query", query: "%#{query.downcase}%")
   end
