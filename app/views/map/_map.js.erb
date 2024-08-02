@@ -115,6 +115,7 @@ $(document).on('turbolinks:load', function () {
           // render locations
           <% @locations.where(location_type: type).order(priority: :desc).each do | location | %>
             var color = '<%= @location_types[type].fetch("color", "black") %>'
+            var opacity = '<%= @location_types[type].fetch("opacity", 0.5) %>'
 
             <% if location.render == 'polyline' %>
               var polyline = L.polyline(<%= location.line %>, {color: color})
@@ -137,11 +138,12 @@ $(document).on('turbolinks:load', function () {
               <% end %>
 
             <% elsif location.render == 'polygon' %>
+              console.log('<%= location.name_es %>' + opacity)
               var polygon = L.polygon(<%= location.polygon %>, {
                   color: color,
-                  opacity: 0.5,
+                  opacity: opacity,
                   fillColor: color,
-                  fillOpacity: 0.5
+                  fillOpacity: opacity
               });
               polygon.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                                       className: 'leaflet-popup'
