@@ -7,17 +7,19 @@ $(document).on('turbolinks:load', function () {
       var zoom = <%= @options["zoom"] %>
 
       function resizeMap() {
-        if ($('#map-container').hasClass('fs')) {
-          var width = Math.min(window.innerWidth)
-          var height = Math.min(window.innerHeight)
+        if ($('#map-container').hasClass('fs') || window.innerWidth <= 576) {
+          var width = Math.min(window.innerWidth);
+          var height = Math.min(window.innerHeight - 50);
+          var margin = 0;
         } else {
           var width = Math.min(window.innerWidth - 100)
           var height = Math.min(window.innerHeight - 200)
+          var margin = 50;
         }
         $('#mapid').width(width);
         $('#mapid').height(height);
         $('#mapid').css("position", "absolute");
-        $('#mapid').css("left", "50px");
+        $('#mapid').css("left", margin);
         $('#map-container').width(width);
         $('#map-container').height(height);
       }
@@ -138,7 +140,6 @@ $(document).on('turbolinks:load', function () {
               <% end %>
 
             <% elsif location.render == 'polygon' %>
-              console.log('<%= location.name_es %>' + opacity)
               var polygon = L.polygon(<%= location.polygon %>, {
                   color: color,
                   opacity: opacity,
