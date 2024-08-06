@@ -138,6 +138,8 @@ es:
         size: "Tamaño"
         outcome: "Consecuencia"
         visible: "Visible"
+        left: "Izquierda"
+        right: "Derecha"
         invisible_tooltip: "Invisible para los jugadores"
         family_id: "Familia"
     models:
@@ -176,6 +178,11 @@ es:
           clock:
             size:
               inclusion: 'Sólo pueden elegirse tamaños de la lista'
+            attributes:
+              left:
+                too_long: "es demasiado largo (máximo %{count} caracteres)"
+              right:
+                too_long: "es demasiado largo (máximo %{count} caracteres)"
         game_tool:
           attributes:
             options:

@@ -87,6 +87,6 @@ private
   end
 
   def clock_params
-    params.require(:clock).permit(:name, :size, :status, :description, :family_id, :outcome, :visible, :style)
+    params.require(:clock).permit(:name, :size, :status, :description, :family_id, :outcome, :visible, :style, :left, :right)
   end
 end

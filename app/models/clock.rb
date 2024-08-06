@@ -22,6 +22,9 @@ class Clock < ApplicationRecord
   validates :size, inclusion: { in: SIZES }
   validates :outcome, inclusion: { in: OUTCOMES }
 
+  validates :left, length: { maximum: 10 }
+  validates :right, length: { maximum: 10 }
+
   before_save :log_changes
 
 private

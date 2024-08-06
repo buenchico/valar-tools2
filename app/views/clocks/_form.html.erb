@@ -15,6 +15,12 @@
             <%= form.label :style, class: 'input-group-text' %>
             <%= form.select :style, options_for_select(@styles.map { |key, value| [value["name"],key] }, @clock.style), { include_blank: '' }, class: 'form-select' %>
           </div>
+          <div class="input-group mb-3 <%= clock.style == 'scale' ? nil : 'd-none' %>" id="sides">
+            <%= form.label :left, class: 'input-group-text' %>
+            <%= form.text_field :left, class: 'form-control', maxlength: 10 %>
+            <%= form.label :right, class: 'input-group-text' %>
+            <%= form.text_field :right, class: 'form-control', maxlength: 10 %>
+          </div>
           <div class="input-group mb-3">
             <%= form.label :size, class: 'input-group-text' %>
             <%= form.select :size, options_for_select(@sizes.map { |element| [element["name"], element["size"]] }, @clock.size), { include_blank: '' }, class: 'form-select' %>

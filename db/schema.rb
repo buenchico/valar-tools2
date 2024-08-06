@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_25_182452) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_06_170528) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -83,6 +83,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_25_182452) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "family_id"
+    t.text "left"
+    t.text "right"
     t.index ["family_id"], name: "index_valar_clocks_on_family_id"
   end
 
