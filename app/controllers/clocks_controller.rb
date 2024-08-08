@@ -1,7 +1,7 @@
 class ClocksController < ApplicationController
   before_action :set_tool
   before_action :set_options
-  before_action :set_clock, only: [:show, :update, :edit]
+  before_action :set_clock, only: [:show, :update, :edit, :destroy]
   before_action :check_master, except: [:index, :show]
 
   def index
@@ -54,15 +54,27 @@ class ClocksController < ApplicationController
     end
   end
 
+  def destroy
+    respond_to do |format|
+      if @clock.destroy
+        flash.now[:danger] = t('messages.success.destroy', thing: @clock.name.strip + " (id: " + @clock.id.to_s + ")", count: 1)
+        format.js
+      else
+        format.html {  redirect_to locations_url, danger: @clock.errors  }
+      end
+    end
+  end
+
   def destroy_multiple
     @clocks = Clock.where(id: params[:clock_ids])
+    count = @clocks.count
 
     respond_to do |format|
       if params[:clock][:confirm] == 'DELETE'
         if @clocks.destroy_all
-          format.html { redirect_to clocks_url, success: t('messages.multiple.success', model:  Clock.model_name.human(:count => 2).downcase), succeed: 2 }
+          format.html { redirect_to clocks_url, success: t('messages.multiple.success', model:  Clock.model_name.human(:count => 2).downcase, succeed: count) }
         else
-          format.html { redirect_to clocks_url, danger: t('messages.multiple.success', model:  Clock.model_name.human(:count => 2).downcase), failed: @clocks.count, succeed: 0 }
+          format.html { redirect_to clocks_url, danger: t('messages.multiple.success', model:  Clock.model_name.human(:count => 2).downcase, failed: count, succeed: 0) }
         end
       else
         format.html { redirect_to clocks_url, danger: t('messages.multiple.validation') }
