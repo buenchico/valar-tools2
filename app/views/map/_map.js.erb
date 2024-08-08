@@ -127,7 +127,7 @@ $(document).on('turbolinks:load', function () {
 
               <%= code %>.addLayer(polyline);
 
-              <% if @current_user.is_admin? %>
+              <% if @current_user&.is_admin? %>
                 (function(polyline) {
                   polyline.on('click', function(e){
                     if (polyline.editEnabled()) {
@@ -152,7 +152,7 @@ $(document).on('turbolinks:load', function () {
 
               <%= code %>.addLayer(polygon);
 
-              <% if @current_user.is_admin? %>
+              <% if @current_user&.is_admin? %>
                 (function(polygon) {
                   polygon.on('click', function(e){
                     if (polygon.editEnabled()) {
