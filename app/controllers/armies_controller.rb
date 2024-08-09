@@ -303,7 +303,7 @@ class ArmiesController < ApplicationController
         headers['Content-Disposition'] = "attachment; filename=\"armies.csv\""
         headers['Content-Type'] ||= 'text/csv'
 
-        header_row = ["id", "name", "status", "position", "group", "factions", "hp *(#{@options["hp"]["step"]})", "tags", "location", "family"] # Adjust the attributes as needed
+        header_row = ["id", "name", "status", "position", "group", "factions", "hp *(#{@options["hp"]["step"]})", "hp_start", "tags", "location", "family"] # Adjust the attributes as needed
         @attributes.each do | key, value |
           header_row << "col#{value['sort']} #{key} *(#{value["str"]})"
         end
@@ -312,7 +312,7 @@ class ArmiesController < ApplicationController
           csv << header_row # Adjust the attributes as needed
 
           @armies.each do |army|
-            data_row = [army.id, army.name, army.status, army.position, army.group, army.factions.pluck(:name).join(","), army.hp, army.tags.join(","), army.location&.name, army.family&.title]
+            data_row = [army.id, army.name, army.status, army.position, army.group, army.factions.pluck(:name).join(","), army.hp, army.hp_start, army.tags.join(","), army.location&.name, army.family&.title]
             @attributes.each do | key, value |
               data_row << army["col#{value['sort']}"]
             end
