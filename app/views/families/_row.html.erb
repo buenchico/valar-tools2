@@ -11,6 +11,9 @@
   <% @options["loyalties"].each_with_index do |value, index| %>
     <td><%= number_to_modifier(family["loyalty_#{index + 1}"]) %></td>
   <% end %>
+  <td class="no-wrap-column"><%= family.hp_raised %> de</td>
+  <td class="no-wrap-column ps-0"><%= family.hp_start %></td>
+  <td class="no-wrap-column"><i class="bi bi-skull-solid"></i><%= family.hp_inactive %></td>
   <td class="text-center">
     <% if family.visible == true  %>
       <i class="bi bi-check-lg"></i>
@@ -18,6 +21,8 @@
       <i class="bi bi-x-lg"></i>
     <% end %>
   </td>
+<% end %>
+<% if @current_user&.is_admin? %>
   <td><%= family.game.title %></td>
 <% end %>
 <td><%= link_to '', send("family_path", family.id), remote: true, class: 'bi bi-eye-fill text-white' %></td>

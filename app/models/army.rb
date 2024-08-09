@@ -9,6 +9,8 @@ class Army < ApplicationRecord
   validates_uniqueness_of :name
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
 
+  before_create :set_hp_start
+
   attr_accessor :faction_ids_was
 
   ARMY_STATUS = ["raised", "active", "inactive"]
@@ -88,5 +90,11 @@ class Army < ApplicationRecord
     status = @options.fetch("status", {}).fetch(self.status, {}).fetch("str", 1)
     str = str * status
     return str
+  end
+
+private
+  # Method to set hp_start to the value of hp
+  def set_hp_start
+    self.hp_start = self.hp
   end
 end

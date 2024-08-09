@@ -12,7 +12,10 @@
           <% @options["loyalties"].each do |value| %>
             <th scope="col">Lealtad a <%= value %></th>
           <% end %>
+          <th scope="col" colspan="3">Ejércitos</th>
           <th scope="col" class="text-center" data-sorter="false">Visible</th>
+        <% end %>
+        <% if @current_user&.is_admin? %>
           <th scope="col">Partida</th>
         <% end %>
         <th scope="col" colspan="2" data-sorter="false"></th>
