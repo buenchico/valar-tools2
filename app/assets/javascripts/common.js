@@ -163,10 +163,11 @@ $(document).on('shown.bs.collapse hidden.bs.collapse', function (event) {
 })
 
 // Flipable cards
-
-$.fn.flip_cards = function() {
-  $('.flip-trigger').click(function() {
+// Use delegated event handling
+$(document).on('turbolinks:load', function() {
+  // Attach event handlers for flip actions
+  $(document).on('click', '.flip-trigger', function() {
     $(this).closest('.card-body').find('.front').toggleClass('d-none');
     $(this).closest('.card-body').find('.back').toggleClass('d-none');
   });
-}
+});

@@ -7,4 +7,10 @@ $('#clock_style').on('change', function() {
   } else {
     $('#sides').addClass('d-none');
   }
+
+  if ($(this).val() === 'memory') {
+    $('.no-memory').addClass('d-none');
+  } else {
+    $('.no-memory').removeClass('d-none');
+  }  
 });

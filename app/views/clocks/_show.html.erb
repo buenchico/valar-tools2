@@ -7,7 +7,9 @@
       </div>
       <div class="modal-body">
         <div class="float-start me-2 mb-2 bg-<%= @outcomes[clock.outcome.to_s]['color'] %>">
-          <%= image_tag(clock.style + "_" + clock.size.to_s + "-" + clock.status.to_s + ".svg", size: "200x200", class: clock.style + "-svg", id: "clock-svg_" + clock.id.to_s) %>
+          <% if clock.style != 'memory' %>
+            <%= image_tag(clock.style + "_" + clock.size.to_s + "-" + clock.status.to_s + ".svg", size: "200x200", class: clock.style + "-svg", id: "clock-svg_" + clock.id.to_s) %>
+          <% end %>
         </div>
         <div class="">
           <%= @clock.description %>

@@ -21,11 +21,11 @@
             <%= form.label :right, class: 'input-group-text' %>
             <%= form.text_field :right, class: 'form-control', maxlength: 10 %>
           </div>
-          <div class="input-group mb-3">
+          <div class="input-group mb-3 no-memory <%= clock.style == 'memory' ? 'd-none' : nil %>">
             <%= form.label :size, class: 'input-group-text' %>
             <%= form.select :size, options_for_select(@sizes.map { |element| [element["name"], element["size"]] }, @clock.size), { include_blank: '' }, class: 'form-select' %>
           </div>
-          <div class="input-group mb-3">
+          <div class="input-group mb-3 <%= clock.style == 'memory' ? 'd-none' : nil %>">
             <%= form.label :outcome, class: 'input-group-text' %>
             <%= form.select :outcome, options_for_select(@outcomes.map { |key, value| [value["name"], key] }, @clock.outcome), { include_blank: false }, class: 'form-select' %>
           </div>
