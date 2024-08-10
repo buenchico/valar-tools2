@@ -2,7 +2,7 @@ class FamiliesController < ApplicationController
   before_action :set_tool
   before_action :check_master, except: [:index, :show]
   before_action :set_family, only: [:edit, :update, :destroy, :show]
-  before_action :set_families_list, only: [:index]
+  before_action :set_families_list, only: [:index, :export]
   before_action :set_options, only: [:index, :new, :edit, :update, :new, :show, :create, :export]
   before_action :set_filters, only: [:index, :show]
   before_action :check_visble, only: [:show]
@@ -81,8 +81,6 @@ class FamiliesController < ApplicationController
   end
 
   def export
-    @families = Family.all
-
     respond_to do |format|
       format.csv do
         headers['Content-Disposition'] = "attachment; filename=\"families.csv\""
