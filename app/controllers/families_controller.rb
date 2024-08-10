@@ -3,7 +3,7 @@ class FamiliesController < ApplicationController
   before_action :check_master, except: [:index, :show]
   before_action :set_family, only: [:edit, :update, :destroy, :show]
   before_action :set_families_list, only: [:index]
-  before_action :set_options, only: [:index, :new, :edit, :update, :new, :show, :create]
+  before_action :set_options, only: [:index, :new, :edit, :update, :new, :show, :create, :export]
   before_action :set_filters, only: [:index, :show]
   before_action :check_visble, only: [:show]
 
@@ -74,6 +74,39 @@ class FamiliesController < ApplicationController
     @families_list  = @families_list.limit(20)
     render json: @families_list.map(&:title).uniq
   end
+
+  def export
+    @families = Family.all
+    puts @families.count
+    puts "/////////////"
+
+    respond_to do |format|
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"families.csv\""
+        headers['Content-Type'] ||= 'text/csv'
+
+        header_row = ["id", "name", "branch", "tags", "visible", "armies_hp_raised", "armies_hp_start", "armies_hp_inactive", "faction_id", "faction", "lord_id", "lord", "description", "members", "game_id", "game"]
+        @options["loyalties"].each do | value |
+          header_row << value
+        end
+
+        csv_data = CSV.generate(col_sep: ";", headers: true) do |csv|
+          csv << header_row # Adjust the attributes as needed
+
+          @families.each do |family|
+            data_row = [family.id, family.name, family.branch, family.tags.join(","), family.visible, family.hp_raised, family.hp_start, family.hp_inactive, family&.faction&.id, family&.faction&.name, family&.lord&.id, family&.lord&.title, family.description, family.members, family&.game&.id, family&.game&.name]
+            @options["loyalties"].each_with_index do | value, index |
+              data_row << family["loyalty_#{index}"]
+            end
+            csv << data_row
+          end
+        end
+
+        render plain: csv_data
+      end
+    end
+  end
+
 
 private
   def set_family

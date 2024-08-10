@@ -43,7 +43,8 @@ es:
       delete: 'Borrar %{model}'
       update_multiple: 'Guardar %{model}'
       delete_multiple: 'Borrar %{model}'
-      import: 'Importar %{model}'
+      import: 'Importar'
+      export: 'Exportar'
     label:
       title: "Título"
       description: "Descripcción"

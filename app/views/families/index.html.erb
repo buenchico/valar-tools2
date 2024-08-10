@@ -12,8 +12,12 @@
   <div class="col">
     <% if @current_user&.is_master? %>
       <%= link_to send('new_family_path'), class: "btn btn-primary", remote: true do %>
-        <i class="bi bi-plus-circle"></i> Crear Nueva Familia
+        <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
       <% end %>
+      <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm", value: "import") do %>
+        <%= t('helpers.submit.import') %>
+      <% end %>
+      <%= link_to t('helpers.submit.export'), export_families_path(format: :csv), class: 'btn btn-danger btn-sm' %>
     <% end %>
   </div>
   <div class="col-6">
@@ -23,6 +27,5 @@
     </div>
   </div>
 </div>
-
 
 <%= render "families_table" %>
