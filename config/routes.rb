@@ -56,6 +56,8 @@ Rails.application.routes.draw do
   resources :locations
   get 'locations_list', to: 'locations#list', as: 'locations_list'
 
+  get 'families/edit_multiple', to: 'families#edit_multiple', as: 'edit_multiple_families'
+  post 'families/import', to: 'families#import', as: 'import_families'
   get 'families/export', to: 'families#export', as: 'export_families'
   resources :families
   get 'families_list', to: 'families#list', as: 'families_list'

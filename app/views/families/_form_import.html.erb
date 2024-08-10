@@ -1,0 +1,30 @@
+<div class="modal fade" id="familyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title"><%= t('helpers.submit.import') %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <%= form_for :family, url: import_families_path, method: :post do | form | %>
+            <div class="alert alert-danger">
+              <div class="float-left mr-2"><i class="fas fa-exclamation-triangle fa-3x"></i></div>
+              <p>Utiliza un archivo csv con cada columna separada por 'punto y coma' <span class="text-monospace">';'</span>. Para aquellas columnas con múltiples elementos usa 'coma' <span class="text-monospace">','</span> para separarlos.</p>
+              <p>Las familias serán identificadas por la columna <span class="text-monospace">'id'</span>. Familias sin 'id' serán creadas, las familias con 'id' serán actualizados.</p>
+              <p><%= link_to 'Exporta', export_families_path(format: :csv), class: 'btn btn-warning btn-sm' %> las familias antes de importar un nuevo archivo para poder restaurarlas si fuera necesario.</p>
+            </div>
+            <div class="form-group">
+              <%= form.file_field :file_upload, class: "form-control", :accept => 'text/csv' %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'IMPORT' para confirmar los cambios." %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.submit t('helpers.submit.import'), class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+      </div>
+    </div>
+  </div>
+</div>

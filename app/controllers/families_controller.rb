@@ -43,6 +43,11 @@ class FamiliesController < ApplicationController
   def edit
   end
 
+  def edit_multiple
+    @families = Family.where(id: params[:army_ids]).order(:name)
+    @action = params[:button]
+  end
+
   def update
     original_title =  @family.title
     respond_to do |format|
@@ -77,8 +82,6 @@ class FamiliesController < ApplicationController
 
   def export
     @families = Family.all
-    puts @families.count
-    puts "/////////////"
 
     respond_to do |format|
       format.csv do
@@ -106,7 +109,6 @@ class FamiliesController < ApplicationController
       end
     end
   end
-
 
 private
   def set_family
