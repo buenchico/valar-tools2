@@ -12,6 +12,8 @@
         <th scope="col">Señor</th>
         <% if @current_user&.is_master? %>
           <th scope="col" class="text-center">Visible</th>
+        <% end %>
+        <% if @current_user&.is_admin? %>
           <th scope="col">Partida</th>
         <% end %>
         <th scope="col" colspan="2" data-sorter="false"></th>

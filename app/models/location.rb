@@ -1,5 +1,5 @@
 class Location < ApplicationRecord
-  has_many :games
+  belongs_to :game
   belongs_to :family, optional: true
   belongs_to :region, class_name: "Location", optional: true, foreign_key: "region_id"
   has_many :sublocations, class_name: "Location", foreign_key: "region_id"
