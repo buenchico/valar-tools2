@@ -86,19 +86,21 @@ class FamiliesController < ApplicationController
         headers['Content-Disposition'] = "attachment; filename=\"families.csv\""
         headers['Content-Type'] ||= 'text/csv'
 
-        header_row = ["id", "name", "branch", "tags", "visible", "armies_hp_raised", "armies_hp_start", "armies_hp_inactive", "faction_id", "faction", "lord_id", "lord", "description", "members", "game_id", "game"]
+        header_row = ["id", "name", "branch", "tags", "visible", "faction_id", "faction", "lord_id", "lord", "description", "members"]
         @options["loyalties"].each do | value |
           header_row << value
         end
+        header_row += ["game_id", "game", "armies_hp_raised", "armies_hp_start", "armies_hp_inactive", "location_total", "location_names"]
 
         csv_data = CSV.generate(col_sep: ";", headers: true) do |csv|
           csv << header_row # Adjust the attributes as needed
 
           @families.each do |family|
-            data_row = [family.id, family.name, family.branch, family.tags.join(","), family.visible, family.hp_raised, family.hp_start, family.hp_inactive, family&.faction&.id, family&.faction&.name, family&.lord&.id, family&.lord&.title, family.description, family.members, family&.game&.id, family&.game&.name]
+            data_row = [family.id, family.name, family.branch, family.tags.join(","), family.visible, family&.faction&.id, family&.faction&.name, family&.lord&.id, family&.lord&.title, family.description, family.members]
             @options["loyalties"].each_with_index do | value, index |
               data_row << family["loyalty_#{index}"]
             end
+            data_row += [family&.game&.id, family&.game&.name, family.hp_raised, family.hp_start, family.hp_inactive, family.locations.count, family.locations.map { |l| [l.name, l.location_type] }]
             csv << data_row
           end
         end
