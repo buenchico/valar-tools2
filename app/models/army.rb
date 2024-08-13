@@ -149,7 +149,7 @@ class Army < ApplicationRecord
 
     subtotal = (base_str + men_str.sum + tags_str.sum)
 
-    str_total = ( subtotal * attr_str * hp).round(1)
+    str_total = ( subtotal * attr_str * hp).round(2)
 
     str = { "total": str_total, "subtotal": subtotal, "type": base_str, "men": men_str, "tags": tags_str, "attributes": attr_mod, "hp": hp}
 
