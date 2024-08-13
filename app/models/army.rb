@@ -69,7 +69,7 @@ class Army < ApplicationRecord
   end
 
   def men0
-    return composition[0]
+    return composition[0] * 0.1
   end
 
   def composition
@@ -124,7 +124,10 @@ class Army < ApplicationRecord
     men = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["str"] }
     men_board = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["board"] || value["str"] }
 
-    men_str = (men.zip(self.composition).map { |a, b| a * b * 0.1})
+    men_str = []
+    men.each_with_index do | value, index |
+      men_str << (self.send("men#{index}") * value)
+    end
 
     tags_str = []
     self.tags.each do | tag |

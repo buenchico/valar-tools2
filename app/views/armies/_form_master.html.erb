@@ -45,6 +45,25 @@
             <%= form.number_field :hp, class: 'form-control', step: @options["hp"]["step"], min: 0, max: 200 %>
           </div>
 
+          <div class="input-group mb-3">
+            <%= form.label :army_type, class: 'input-group-text' %>
+            <%= form.select :army_type,
+              options_for_select(
+              @army_types.map { |key, value|
+                [
+                  key,
+                  { "data-content": "<span class='badge rounded-pill pill-tags bg-brass'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe
+                  }
+                ]
+              },
+                selected: army.army_type
+              ),
+              { include_blank: true },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              data: { noneSelectedText: ' '}
+            %>
+          </div>
+
           <% @men.each do | key, value | %>
             <% if key != "default" %>
               <div class="input-group mb-3">

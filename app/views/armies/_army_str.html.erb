@@ -16,7 +16,7 @@
             <i class='bi bi-<%= value["icon"] %>'></i> <%= value["name"].capitalize %>
           </div>
           <div class='text-end col-4'>
-            <%= number_to_modifier(army_str[:men][value["sort"]].to_i) %>
+            <%= number_to_modifier(army_str[:men][value["sort"]]) %>
           </div>
         </div>
       <% end %>

@@ -536,7 +536,7 @@ private
       @men = @options["men"]&.sort_by { |_, v| v["sort"] }.to_h
       @tags = @options["tags"]&.sort_by { |key, _value| key }.to_h
       @army_status = @options["status"]
-      $options_armies = @options
+      @army_types = @options["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     end
   end
 
@@ -590,7 +590,7 @@ private
   def army_params
     params.require(:army).permit(
       :name, :status, :position, :group, :location_id, :family_id, :confirm,
-      :visible, :hp, :men1, :men2, :men3, :men4, :men5, :men6, :men7, :men8, :men9, :attr0, :attr1, :attr2, :attr3, :attr4, :attr5, :attr6, :attr7, :attr8, :attr9, :notes, :board, faction_ids: [], tags: []
+      :visible, :hp, :army_type, :men1, :men2, :men3, :men4, :men5, :men6, :men7, :men8, :men9, :attr0, :attr1, :attr2, :attr3, :attr4, :attr5, :attr6, :attr7, :attr8, :attr9, :notes, :board, faction_ids: [], tags: []
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
       whitelisted[:board] = nil if whitelisted[:board].blank?

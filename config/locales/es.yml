@@ -91,6 +91,7 @@ es:
         factions: "Facciones"
         hp: "Salud"
         board: "Embarcar"
+        army_type: "Tipo"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"
