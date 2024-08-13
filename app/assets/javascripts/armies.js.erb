@@ -12,7 +12,7 @@ $(document).on('turbolinks:load', function () {
                 if (row.hasClass("tablesorter-headerRow") == false) {
                   message += "> * ";
                   // Name
-                  message += row[0].cells[2].textContent;
+                  message += row[0].cells[2].textContent.replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ");
                   // Status
                   message += " (" + row[0].cells[3].textContent.trim().replace(/\s+/g, '/') + ")"
                   if (row.find(".inline-edit-input").val() != "") message += ", en " + row.find(".inline-edit-input").val();
@@ -28,7 +28,7 @@ $(document).on('turbolinks:load', function () {
             // Add it to the document
             document.body.appendChild(dummy);
             // Output the array into it
-            dummy.value = message;
+            dummy.value = message
             // Select it
             dummy.select();
             // Copy its contents

@@ -1,0 +1,22 @@
+<! -- hit points -->
+<%= ((100 - army.hp.to_i) / @options["hp"]["step"])&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-danger army-hp"><i class="bi bi-' + @options["hp"]["icon"] + '"></i> ' + @options["hp"]["name"].capitalize + " " + number_to_modifier(((army.hp.to_i - 100) / @options["hp"]["step"])) + '</span>').html_safe : nil %>
+<! -- army type -->
+<span class="badge rounded-pill pill-tags pill-tags-text bg-brass"><i class="bi bi-<%= @options["army_type"][army.army_type]['icon'] %>"></i> <%= @options["army_type"][army.army_type]["name"].capitalize %></span>
+<! -- composition -->
+<% @men.each do | key, value | %>
+  <%= (army["men#{value['sort']}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_modifier(army["men#{value['sort']}"]) + '</span>').html_safe : nil ) %>
+<% end %>
+<! -- attributes -->
+<% @attributes.each do | key, value | %>
+  <%= (army["attr#{value['sort']}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_modifier(army["attr#{value['sort']}"]) + '</span>').html_safe : nil ) %>
+<% end %>
+<! -- tags -->
+<% if army.tags.present? %>
+  <% army.tags.each do | tag | %>
+    <% if @tags[tag] %>
+      <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %>"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
+    <% else %>
+      <span class="badge rounded-pill pill-tags pill-tags-text bg-danger %>"><%= tag.capitalize %></span>
+    <% end %>
+  <% end %>
+<% end %>

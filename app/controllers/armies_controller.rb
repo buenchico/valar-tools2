@@ -533,7 +533,8 @@ private
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de ejércitos'
     else
       @attributes = @options["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
-      @tags = @options["tags"]&.sort_by { |_, v| [v["colour"], v["sort"] || Float::INFINITY] }.to_h
+      @men = @options["men"]&.sort_by { |_, v| v["sort"] }.to_h
+      @tags = @options["tags"]&.sort_by { |key, _value| key }.to_h
       @army_status = @options["status"]
       $options_armies = @options
     end
@@ -589,7 +590,7 @@ private
   def army_params
     params.require(:army).permit(
       :name, :status, :position, :group, :location_id, :family_id, :confirm,
-      :visible, :hp, :col0, :col1, :col2, :col3, :col4, :col5, :col6, :col7, :col8, :col9, :notes, :board, faction_ids: [], tags: []
+      :visible, :hp, :men1, :men2, :men3, :men4, :men5, :men6, :men7, :men8, :men9, :attr0, :attr1, :attr2, :attr3, :attr4, :attr5, :attr6, :attr7, :attr8, :attr9, :notes, :board, faction_ids: [], tags: []
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
       whitelisted[:board] = nil if whitelisted[:board].blank?

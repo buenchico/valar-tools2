@@ -1,72 +1,11 @@
 <td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable" %></td>
 <td class="strenght" width = "30px" >
-  <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-custom-class="army-str-data" title="
-     <div class='row'>
-       <div class='fst-italic text-start col-8'>Base:</div>
-       <div class='text-end col-4'>10</div>
-     </div>
-     <% mod_str = 0 %>
-     <% @attributes.each do | key, value | %>
-       <div class='row'>
-         <div class='fst-italic text-start col-8'><i class='bi bi-<%= value["icon"] %>'></i> <%= value["name"].capitalize %></div>
-         <div class='text-end col-4'><%= number_to_modifier(army["col#{value['sort']}"].to_i * value["str"]) %></div>
-       </div>
-       <% mod_str += army["col#{value['sort']}"].to_i * value["str"] %>
-     <% end %>
-     <% if army.tags.present? %>
-       <% army.tags.each do | tag | %>
-        <div class='row'>
-          <div class='fst-italic text-start col-8'>
-            <% if @tags[tag] %>
-              <i class='bi bi-<%= @tags[tag]["icon"] %>'></i> <%= @tags[tag]["name"].capitalize %>
-            <% else %>
-              <%= tag.capitalize %>
-            <% end %>
-          </div>
-          <div class='text-end col-4'>
-            <% if @tags[tag] %>
-              <% if army.board.present? && @tags[tag]["board"].present? %>
-                <% mod_str += @tags[tag]["board"].to_i %>
-                <i class='bi bi-anchor'></i><%= number_to_modifier(@tags[tag]["board"]) %>
-              <% else %>
-                <% mod_str += @tags[tag]["str"].to_i %>
-                <%= number_to_modifier(@tags[tag]["str"]) %>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
-       <% end %>
-      <% end %>
-     <% if army.board.present? %>
-        <div class='row'>
-          <% if @options["fleets"][army.board] %>
-            <% mod_str += @options["fleets"][army.board]["str"].to_i %>
-            <div class='text-start col-8'><i class='bi bi-<%= @options["fleets"][army.board]["icon"] %>'></i> <%= @options["fleets"][army.board]["name"] %>:</div>
-            <div class='text-end col-4'><%= number_to_modifier(@options["fleets"][army.board]["str"]) %></div>
-          <% else %>
-            <div class='text-start col-8'><i class='bi bi-anchor'></i><%= army.board.capitalize %></div>
-          <% end %>
-        </div>
-     <% end %>
-
-     <div class='row'>
-       <div class='text-decoration-underline text-start col-8'>Subtotal:</div>
-       <div class='text-end col-4'><%= 10 + mod_str %></div>
-     </div>
-     <div class='row'>
-       <div class='fst-italic text-start col-7'><i class='bi bi-<%= @options["hp"]["icon"] %>'></i> <%=  @options["hp"]["name"].capitalize %></div>
-       <div class='text-end col-5'>* <%= army.hp.to_i %>%</div>
-     </div>
-     <hr>
-     <div class='row'>
-        <div class='text-start fw-bold col-8'>Total:</div>
-        <div class='text-end col-4'><%= army.strength %></div>
-      </div>
-    ">
-    <%= army.strength %>
-  </span>
+  <%= render 'army_str', army: army %>
+  <%= army.strength %>
 </td>
-<td width = "300px"><%= link_to army.name, edit_army_path(army), remote: true, class: 'link-unstyled' %></td>
+<td width = "300px">
+  <%= link_to army.name, edit_army_path(army), remote: true, class: 'link-unstyled' %>
+</td>
 <td>
   <%= @army_status[army.status]["name"] %>
   <% if !army.board.blank? %>
@@ -79,19 +18,7 @@
   <% end %>
 </td>
 <td width = "800px">
-  <%= ((100 - army.hp.to_i) / @options["hp"]["step"])&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-danger army-hp"><i class="bi bi-' + @options["hp"]["icon"] + '"></i> ' + @options["hp"]["name"].capitalize + " " + number_to_modifier(((army.hp.to_i - 100) / @options["hp"]["step"])) + '</span>').html_safe : nil %>
-  <% @attributes.each do | key, value | %>
-    <%= (army["col#{value['sort']}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"]) + '</span>').html_safe : nil ) %>
-  <% end %>
-  <% if army.tags.present? %>
-    <% army.tags.each do | tag | %>
-      <% if @tags[tag] %>
-        <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %>"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
-      <% else %>
-        <span class="badge rounded-pill pill-tags pill-tags-text bg-danger %>"><%= tag.capitalize %></span>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= render 'army_traits', army: army %>
 </td>
 <td width = "500px">
   <span class="d-none"><%= army.position %></span>
@@ -143,4 +70,5 @@
     <% end %>
   <% end %>
 </td>
-<td class="men d-none"><%= army.men %></td>
+
+<td class="men"><%= army.men %></td>
