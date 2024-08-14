@@ -162,7 +162,7 @@ class Army < ApplicationRecord
       fleet_str = @option_armies.fetch("fleets", {})&.fetch(self.board, {})&.fetch("str", 0)
     end
 
-    subtotal = (base_str + men_str.sum + tags_str.sum + fleet_str)
+    subtotal = [(base_str + men_str.sum + tags_str.sum + fleet_str), 0].max
 
     str_total = ( subtotal * attr_str * hp).round(2)
 
