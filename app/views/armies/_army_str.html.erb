@@ -22,15 +22,17 @@
       <% end %>
     <% end %>
 
-    <% army.tags.each_with_index do | tag, index | %>
-      <div class='row'>
-        <div class='fst-italic text-start col-8'>
-          <i class='bi bi-<%= @tags[tag]["icon"] %>'></i> <%= @tags[tag]["name"].capitalize %>
+    <% if army.tags.present? %>
+      <% army.tags.each_with_index do | tag, index | %>
+        <div class='row'>
+          <div class='fst-italic text-start col-8'>
+            <i class='bi bi-<%= @tags.fetch(tag, {}).fetch("icon", nil) %>'></i> <%= @tags.fetch(tag, {}).fetch("name", tag).capitalize %>
+          </div>
+          <div class='text-end col-4'>
+            <%= number_to_modifier(army_str[:tags][index]) %>
+          </div>
         </div>
-        <div class='text-end col-4'>
-          <%= number_to_modifier(army_str[:tags][index]) %>
-        </div>
-      </div>
+      <% end %>
     <% end %>
 
     <% if army.board.present? %>
