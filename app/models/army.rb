@@ -121,17 +121,26 @@ class Army < ApplicationRecord
 
     hp = (self.hp * 0.01).to_f
 
-    men = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["str"] }
-    men_board = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["board"] || value["str"] }
+    if self.board.nil?
+      men = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["str"] }
+    else
+      men = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["board"] || value["str"] }
+    end
 
     men_str = []
     men.each_with_index do | value, index |
       men_str << (self.send("men#{index}") * value)
     end
 
+    if self.board.nil?
+      terrain = "str"
+    else
+      terrain = "board"
+    end
+
     tags_str = []
     self.tags.each do | tag |
-      tags_str << tags.fetch(tag, {}).fetch("str", 0)
+      tags_str << tags.fetch(tag, {}).fetch(terrain, 0)
     end
 
     attributes = @option_armies.fetch("attributes", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["str"] }
@@ -147,11 +156,17 @@ class Army < ApplicationRecord
       attr_str = attr_str * (100 + value) * 0.01
     end
 
-    subtotal = (base_str + men_str.sum + tags_str.sum)
+    if self.board.nil?
+      fleet_str = 0
+    else
+      fleet_str = @option_armies.fetch("fleets", {})&.fetch(self.board, {})&.fetch("str", 0)
+    end
+
+    subtotal = (base_str + men_str.sum + tags_str.sum + fleet_str)
 
     str_total = ( subtotal * attr_str * hp).round(2)
 
-    str = { "total": str_total, "subtotal": subtotal, "type": base_str, "men": men_str, "tags": tags_str, "attributes": attr_mod, "hp": hp}
+    str = { "total": str_total, "subtotal": subtotal, "type": base_str, "men": men_str, "tags": tags_str, "attributes": attr_mod, "fleet": fleet_str, "hp": hp}
 
     return str
   end

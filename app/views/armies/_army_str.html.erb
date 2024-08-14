@@ -22,7 +22,27 @@
       <% end %>
     <% end %>
 
-    TAGS
+    <% army.tags.each_with_index do | tag, index | %>
+      <div class='row'>
+        <div class='fst-italic text-start col-8'>
+          <i class='bi bi-<%= @tags[tag]["icon"] %>'></i> <%= @tags[tag]["name"].capitalize %>
+        </div>
+        <div class='text-end col-4'>
+          <%= number_to_modifier(army_str[:tags][index]) %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if army.board.present? %>
+      <div class='row'>
+        <div class='fst-italic text-start col-8'>
+          <i class='bi bi-<%= @options["fleets"][army.board]["icon"] %>'></i> <%= @options["fleets"][army.board]["name"].capitalize %>
+        </div>
+        <div class='text-end col-4'>
+          <%= number_to_modifier(army_str[:fleet].to_i) %>
+        </div>
+      </div>
+    <% end %>
 
     <div class='row'>
      <div class='text-decoration-underline text-start col-8'>Subtotal:</div>
