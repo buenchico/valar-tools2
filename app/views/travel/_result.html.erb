@@ -16,12 +16,16 @@
       <% @steps.each do | step | %>
         <% line = "" %>
         <% line << "<p class='ms-2'>#{step[:hex]} #{t('hexagon', count: step[:hex])} de #{step[:terrain_name].downcase}, a marcha #{step[:speed_name].downcase}" %>
-        <% step[:bstacle_name].blank? ? nil : line << ", #{step[:obstacle_name].downcase}," %>
+        <% step[:obstacle_name].blank? ? nil : line << ", #{step[:obstacle_name].downcase}," %>
         <% line << " en #{step[:step_time]} #{t('hours', count: step[:step_time])}</p>" %>
         <% @html += line %>
       <% end %>
 
       <%= @time.zero? ? "Por favor, rellena todos los datos necesarios." : @html.html_safe %>
     </div>
+    <div class="d-none">
+      <p><%= @time %> horas</p>
+      <p><%= @steps %></p>
+    </div>    
   </div>
 </div>
