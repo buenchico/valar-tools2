@@ -9,11 +9,19 @@
 </div>
 
 <div class="row my-3">
-  <div class="col">
+  <div class="col d-flex align-items-center gap-2">
     <% if @current_user&.is_master? %>
-      <%= link_to send('new_family_path'), class: "btn btn-primary", remote: true do %>
-        <i class="bi bi-plus-circle"></i> Crear Nueva Familia
+      <%= link_to new_family_path, class: "btn btn-primary", remote: true do %>
+        <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
       <% end %>
+
+      <%= form_tag(edit_multiple_families_path, method: :get, id: 'edit_multiple', remote: true) do %>
+        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm d-none", value: "import") do %>
+          <%= t('helpers.submit.import') %>
+        <% end %>
+      <% end %>
+
+      <%= link_to t('helpers.submit.export'), export_families_path(format: :csv), class: 'btn btn-danger btn-sm' %>
     <% end %>
   </div>
   <div class="col-6">
@@ -23,6 +31,5 @@
     </div>
   </div>
 </div>
-
 
 <%= render "families_table" %>

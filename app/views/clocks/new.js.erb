@@ -1,0 +1,16 @@
+$(".modal").modal('hide');
+$("#content").html("<%= j render 'form', clock: @clock %>");
+$("#clockModal").modal('show');
+$('#clock_style').on('change', function() {
+  if ($(this).val() === 'scale') {
+    $('#sides').removeClass('d-none');
+  } else {
+    $('#sides').addClass('d-none');
+  }
+
+  if ($(this).val() === 'memory') {
+    $('.no-memory').addClass('d-none');
+  } else {
+    $('.no-memory').removeClass('d-none');
+  }  
+});

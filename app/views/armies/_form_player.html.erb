@@ -44,18 +44,8 @@
             <%= form.label :tags, class: 'input-group-text w-100' %>
           </div>
 
-          <div class="input-group mb-3">
-            <%= ((100 - army.hp) / @options["hp"]["step"])&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-danger me-1 mt-1"><i class="bi bi-' + @options["hp"]["icon"] + '"></i> ' + @options["hp"]["name"].capitalize + " " + number_to_modifier(((army.hp - 100) / @options["hp"]["step"])) + '</span>').html_safe : nil %>
-
-            <% @attributes.each do | key, value | %>
-              <%= (army["col#{value['sort']}"]&.nonzero? ? ('<span class="badge rounded-pill pill-tags pill-tags-text bg-primary me-1 mt-1"><i class="bi bi-' + value["icon"] + '"></i> ' + value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"]) + '</span>').html_safe : nil ) %>
-            <% end %>
-
-            <% army.tags.each do | tag | %>
-              <% if tag.present? %>
-                <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @tags[tag]['colour'] %> me-1 mt-1"><i class="bi bi-<%= @tags[tag]['icon'] %>"></i> <%= @tags[tag]["name"].capitalize %></span>
-              <% end %>
-            <% end %>
+          <div class="mt-3 mb-3">
+            <%= render 'army_traits', army: army %>
           </div>
 
           <div class="input-group mb-3">

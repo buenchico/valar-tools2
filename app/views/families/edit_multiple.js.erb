@@ -1,0 +1,9 @@
+console.log("test")
+
+$(".modal").modal('hide');
+
+if ('<%= @action %>' == 'import') {
+  $('#content').html("<%= j render 'form_import', action: @action %>");
+}
+
+$('#familyModal').modal('show');

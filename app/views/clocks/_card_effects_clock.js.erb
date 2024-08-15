@@ -1,0 +1,40 @@
+$("#clock-svg_<%= clock.id.to_s %>").on("click", function(event) {
+  // Get the bounding rectangle of the clicked SVG
+  var rect = this.getBoundingClientRect();
+
+  // Calculate the center coordinates of the SVG
+  var centerX = rect.left + rect.width / 2;
+  var centerY = rect.top + rect.height / 2;
+
+  // Calculate the click coordinates relative to the center
+  var clickX = event.clientX - centerX;
+  var clickY = event.clientY - centerY;
+
+  // Calculate the angle in degrees from the center to the click point
+  var angle = (Math.atan2(clickY, clickX) * (180 / Math.PI)) + 90;
+
+  // Normalize the angle to be between 0 and 360 degrees
+  if (angle < 0) {
+    angle += 360;
+  }
+
+  // Number of sectors (can be dynamically set or passed as a data attribute)
+  var numSectors = <%= clock.size %>; // Example value, change as needed
+
+  // Calculate the size of each sector in degrees
+  var sectorSize = 360 / numSectors;
+
+  // Determine which sector the click is in
+  var sector = Math.floor(angle / sectorSize) + 1 ;
+
+  // Send an AJAX request to update the clock status
+  $.ajax({
+    type: "PATCH", // Use PATCH method to update existing resource
+    url: "/clocks/<%= clock.id %>", // Replace with your actual endpoint
+    data: {
+      clock: {
+        status: sector // Pass status as part of clock object
+      }
+    }
+  });
+});

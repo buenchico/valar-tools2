@@ -165,3 +165,13 @@ function changeCollapseIcon(event) {
 $(document).on('shown.bs.collapse hidden.bs.collapse', function (event) {
   changeCollapseIcon(event);
 })
+
+// Flipable cards
+// Use delegated event handling
+$(document).on('turbolinks:load', function() {
+  // Attach event handlers for flip actions
+  $(document).on('click', '.flip-trigger', function() {
+    $(this).closest('.card-body').find('.front').toggleClass('d-none');
+    $(this).closest('.card-body').find('.back').toggleClass('d-none');
+  });
+});

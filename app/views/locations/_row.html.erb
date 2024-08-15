@@ -14,6 +14,9 @@
     <% end %>
   </td>
 <% end %>
+<% if @current_user&.is_admin? %>
+  <th scope="col"><%= location&.game&.title %></th>
+<% end %>
 <td><%= link_to '', send("location_path", location.id), remote: true, class: 'bi bi-eye-fill text-white' %></td>
 <% if @current_user&.is_master? %>
   <td><%= link_to '',   send("edit_location_path", location.id), remote: true, class: 'bi bi-pencil-square text-white' %></td>

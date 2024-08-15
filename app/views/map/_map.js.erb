@@ -7,17 +7,19 @@ $(document).on('turbolinks:load', function () {
       var zoom = <%= @options["zoom"] %>
 
       function resizeMap() {
-        if ($('#map-container').hasClass('fs')) {
-          var width = Math.min(window.innerWidth)
-          var height = Math.min(window.innerHeight)
+        if ($('#map-container').hasClass('fs') || window.innerWidth <= 576) {
+          var width = Math.min(window.innerWidth);
+          var height = Math.min(window.innerHeight - 50);
+          var margin = 0;
         } else {
           var width = Math.min(window.innerWidth - 100)
           var height = Math.min(window.innerHeight - 200)
+          var margin = 50;
         }
         $('#mapid').width(width);
         $('#mapid').height(height);
         $('#mapid').css("position", "absolute");
-        $('#mapid').css("left", "50px");
+        $('#mapid').css("left", margin);
         $('#map-container').width(width);
         $('#map-container').height(height);
       }
@@ -44,6 +46,7 @@ $(document).on('turbolinks:load', function () {
 
       var map = L.map('mapid', {
           crs: L.CRS.Simple, //CRS need to be removed for tile layer
+          editable: true,
           //drawControl: true,
           minZoom: zoom[0],
           maxZoom: zoom[1],
@@ -113,67 +116,109 @@ $(document).on('turbolinks:load', function () {
 
           // render locations
           <% @locations.where(location_type: type).order(priority: :desc).each do | location | %>
-            //Check location render type point vs line
-            <% if location.line.present? %> // Location is a line!
-              var polyline = L.polyline(<%= location.line %>, {color: '<%= layer.fetch("line-color", "black")  %>'})
+            var color = '<%= @location_types[type].fetch("color", "black") %>'
+            var opacity = '<%= @location_types[type].fetch("opacity", 0.5) %>'
+
+            <% if location.render == 'polyline' %>
+              var polyline = L.polyline(<%= location.line %>, {color: color})
               polyline.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                                       className: 'leaflet-popup'
-                                    })
-              <%= code %>.addLayer(polyline);
-            <% elsif location.x.present? && location.y.present? %> // location is a point
-            var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
+                                    });
 
-            // render only name
-            if (icon == "") {
+              <%= code %>.addLayer(polyline);
+
+              <% if @current_user&.is_admin? %>
+                (function(polyline) {
+                  polyline.on('click', function(e){
+                    if (polyline.editEnabled()) {
+                      polyline.disableEdit();
+                    } else {
+                      polyline.enableEdit(map);
+                    }
+                  });
+                })(polyline);
+              <% end %>
+
+            <% elsif location.render == 'polygon' %>
+              var polygon = L.polygon(<%= location.polygon %>, {
+                  color: color,
+                  opacity: opacity,
+                  fillColor: color,
+                  fillOpacity: opacity
+              });
+              polygon.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                                      className: 'leaflet-popup'
+                                    })
+
+              <%= code %>.addLayer(polygon);
+
+              <% if @current_user&.is_admin? %>
+                (function(polygon) {
+                  polygon.on('click', function(e){
+                    if (polygon.editEnabled()) {
+                      polygon.disableEdit();
+                    } else {
+                      polygon.enableEdit(map);
+                    }
+                  });
+                })(polygon);
+              <% end %>
+
+            <% elsif (location.render == 'point' || location.render == 'multipoint') %>
+              var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
+
+              // render only name
+              if (icon == "") {
+                <%= code %>.addLayer(
+                  L.marker(
+                    [<%= location.y %>,<%= location.x %>],
+                      { icon: L.divIcon({
+                        className: "regionLabel <%= @options['font'] %>",
+                        html: "<%= location.name %>",
+                        iconSize: [<%= location.name.length * 30 * 0.6 %>, 30],
+                        iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
+                        })
+                      })
+                      .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                          className: 'leaflet-popup'
+                        })
+                  );
+              // render only icon
+            } else if (<%= layer["display"] == "icons" %>) {
               <%= code %>.addLayer(
                 L.marker(
                   [<%= location.y %>,<%= location.x %>],
-                    { icon: L.divIcon({
-                      className: "regionLabel <%= @options['font'] %>",
-                      html: "<%= location.name %>",
-                      iconSize: [<%= location.name.length * 30 * 0.6 %>, 30],
-                      iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
-                      })
-                    })
-                    .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
-                        className: 'leaflet-popup'
-                      })
-                );
-            // render only icon
-          } else if (<%= layer["display"] == "icons" %>) {
-            <%= code %>.addLayer(
-              L.marker(
-                [<%= location.y %>,<%= location.x %>],
-                  { icon: L.icon({
-                      iconUrl: icon,
-                      className: '',
-                      iconSize: [30, 30],
-                      })
-                  })
-                  .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %> (<%= @location_types[location.location_type]["name"] %>)</p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
-                      className: 'leaflet-popup'
-                    })
-              );
-            // render icons & name
-            } else {
-              <%= code %>.addLayer(
-                L.marker(
-                  [<%= location.y %>,<%= location.x %>],
-                    { icon: L.divIcon({
-                      className: "locationLabel <%= @options['font'] %>",
-                      html: "<img src=" + icon + " height='30' width='30' /><%= location.name %>",
-                      style: "background:red !important;",
-                      iconSize: [<%= (location.name.length * 5) + 40 %>, 30],
-                      iconAnchor: [15,15]
-                      })
+                    { icon: L.icon({
+                        iconUrl: icon,
+                        className: '',
+                        iconSize: [30, 30],
+                        })
                     })
                     .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %> (<%= @location_types[location.location_type]["name"] %>)</p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                         className: 'leaflet-popup'
                       })
                 );
-            }
-            <% else %> // Other locations draw types
-              console.log("<%= location.name %> con id: <%= location.id %> ha fallado al renderizar")
+              // render icons & name
+              } else {
+                <%= code %>.addLayer(
+                  L.marker(
+                    [<%= location.y %>,<%= location.x %>],
+                      { icon: L.divIcon({
+                        className: "locationLabel <%= @options['font'] %>",
+                        html: "<img src=" + icon + " height='30' width='30' /><%= location.name %>",
+                        style: "background:red !important;",
+                        iconSize: [<%= (location.name.length * 5) + 40 %>, 30],
+                        iconAnchor: [15,15]
+                        })
+                      })
+                      .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %> (<%= @location_types[location.location_type]["name"] %>)</p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                          className: 'leaflet-popup'
+                        })
+                  );
+              }
+
+            <% else %>
+              console.log("<%= location.name %> con id: <%= location.id %> ha fallado")
             <% end %>
           <% end %>
         <% end %>
@@ -244,7 +289,9 @@ $(document).on('turbolinks:load', function () {
               weight: 10
             }
           },
-          polygon: false,
+          <% if @current_user&.is_admin? %>
+            polygon: true,
+          <% end %>
           rectangle: false,
           circle: false,
           marker: {icon: new L.DivIcon({
@@ -268,6 +315,10 @@ $(document).on('turbolinks:load', function () {
         (type == 'polyline') ? poly++ : '';
         (type == 'marker') ? mark++ : '';
 
+        <% if @current_user&.is_admin? %>
+          logCoordinates(layer)
+        <% end %>
+
         map.removeControl(drawControl);
         drawControl.setDrawingOptions({
           polyline: {
@@ -290,28 +341,44 @@ $(document).on('turbolinks:load', function () {
         map.addControl(drawControl);
       });
 
-      <% if @current_user&.is_master? %>
+      <% if @current_user&.is_admin? %>
+
+        // Event handler for when a shape is edited
+        map.on('editable:vertex:dragend', function (event) {
+            var layer = event.layer;
+            logCoordinates(layer);
+        });
+
+        function logCoordinates(layer) {
+            var latLngs = layer.getLatLngs();
+            var coordinatesArray;
+
+            // Check if the first element is an array (indicating multiple paths)
+            if (Array.isArray(latLngs[0])) {
+                coordinatesArray = latLngs.map(function(path) {
+                    return path.map(function(latlng) {
+                        return [latlng.lat, latlng.lng];
+                    });
+                });
+            } else {
+                // Single path case
+                coordinatesArray = latLngs.map(function(latlng) {
+                    return [latlng.lat, latlng.lng];
+                });
+            }
+
+            // Log the coordinates array as a JSON string
+            console.log(JSON.stringify(coordinatesArray));
+        }
+      <% end %>
+
+      <% if @current_user&.is_admin? %>
         // Debug coords
         map.on('click', function(e){
           var coord = e.latlng;
           var lat = coord.lat;
           var lng = coord.lng;
           console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
-
-          var message = lat + '\t' + lng
-          // Create a dummy input to copy the string array inside it
-          var dummy = document.createElement("textarea");
-          // Add it to the document
-          document.body.appendChild(dummy);
-          // Output the array into it
-          dummy.value = message;
-          // Select it
-          dummy.select();
-          // Copy its contents
-          document.execCommand("copy");
-          // Remove it as its not needed anymore
-          document.body.removeChild(dummy);
-
         });
 
         // Debug grid
@@ -341,6 +408,6 @@ $(document).on('turbolinks:load', function () {
       map.addControl(layerControl);
 
       $('#map-container').data('loaded', true);
+    }
   }
-}
 });

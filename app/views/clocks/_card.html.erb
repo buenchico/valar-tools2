@@ -1,0 +1,87 @@
+<div class="card clock bg-<%= @outcomes[clock.outcome.to_s]['color'] %>" id="clock_card_<%= clock.id.to_s %>">
+  <div class="card-body d-flex flex-column justify-content-center align-items-center card-flip-container">
+    <div class="position-absolute top-0 start-0 mt-2 ms-2">
+      <%= check_box_tag "clock_ids[]", clock.id, false, id: 'id_' + clock.id.to_s,class: "checkbox_selectable" %>
+      <% if clock.visible == false %>
+        <i class="bi bi-eye-slash-fill" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= t('activerecord.attributes.clock.invisible_tooltip') %>"></i>
+      <% end %>
+    </div>
+    <div class="position-absolute top-0 end-0 mt-2 me-2">
+      <a class="link-unstyled" href="#" role="button" id="dropdownMenuCard_<%= clock.id.to_s %>" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-three-dots"></i>
+      </a>
+
+      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
+        <li>
+          <%= link_to clock_path(clock), remote: true, class: 'dropdown-item' do %>
+            <i class="bi bi-eye-fill text-white"></i>
+            <%= t('helpers.action.view', thing: nil) %>
+          <% end %>
+        </li>
+        <% if @current_user&.is_master? %>
+          <li>
+            <%= link_to edit_clock_path(clock), remote: true, class: 'dropdown-item' do %>
+              <i class="bi bi-pencil-square text-white"></i>
+              <%= t('helpers.action.edit', thing: nil) %>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to clock_path(clock), method: :delete, data: { confirm: t('helpers.action.confirm', thing: clock.name) }, remote: true, class: 'dropdown-item' do %>
+              <i class="bi bi-trash text-white"></i>
+              <%= t('helpers.action.delete', thing: nil) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <% if clock.style != 'memory' %>
+      <div class="position-absolute bottom-0 end-0 mb-2 me-2 flip-trigger">
+        <i class="bi bi-phone-flip"></i>
+      </div>
+    <% end %>
+
+    <div class="position-absolute top-0 mt-2 my-auto">
+      <%= link_to truncate(clock.name, length: 20, omission: '...'), clock_path(clock), remote: true, class: 'link-unstyled' %>
+    </div>
+    <div class="front mt-3  <%= clock.open? ? '' : 'd-none' %>">
+      <div class="mt-3">
+        <% if clock.style != 'memory' %>
+          <%= image_tag(clock.style + "_" + clock.size.to_s + "-" + clock.status.to_s + ".svg", class: clock.style + "-svg w-100", id: "clock-svg_" + clock.id.to_s) %>
+        <% end %>
+      </div>
+      <% if clock.style == 'scale' %>
+        <div class="float-start">
+          <%= clock.left %>
+        </div>
+        <div class="float-end">
+          <%= clock.right %>
+        </div>
+      <% end %>
+      <div class="mt-3 text-center">
+        <%= clock.family.blank? ? '&nbsp;'.html_safe : link_to(clock.family.title, family_path(clock.family.id), remote: true, class: 'text-white') %>
+      </div>
+    </div>
+    <div class="back h-75 <%= clock.open? ? 'd-none' : '' %>">
+      <div class="text-center">
+        <span class="badge bg-primary"><%= @styles[clock.style]["name"] %></span>
+      </div>
+      <div>
+        <% if clock.description.blank? %>
+          N/A
+        <% else %>
+          <%= truncate(clock.description, length: 250, omission: '...') %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if @current_user.is_master? %>
+  <script>
+    <%= render partial: 'card_effects', formats: [:js], locals: { clock: clock } %>
+    <% if clock.style != 'memory' %>
+      <%= render partial: 'card_effects_' + clock.style, formats: [:js], locals: { clock: clock } %>
+    <% end %>
+  </script>
+<% end %>

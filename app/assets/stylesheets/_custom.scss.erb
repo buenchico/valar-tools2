@@ -17,8 +17,8 @@
 }
 
 body {
-  background-color:#222222;
-  color: #ddd;
+  background-color: var(--bs-dark);
+  color: var(--bs-light);
 }
 
 .container {
@@ -237,6 +237,10 @@ body {
   font-size: 0.6em;
 }
 
+.no-wrap-column {
+  white-space: nowrap;
+}
+
 // Link Unstyled
 
 .link-unstyled {
@@ -275,6 +279,12 @@ body {
 .input-group-text-wrap {
   white-space: normal;
   max-width: 150px;
+}
+
+.input-group-text {
+  background-color: var( --bs-dark);
+  color: var( --bs-light);
+  font-variant: small-caps;
 }
 
 /* Pills for army groups */
@@ -387,6 +397,19 @@ body {
 
 .raised {
   font-weight: bold !important;
+}
+
+/* cards */
+
+.active-card {
+  border-color: yellow;
+}
+
+/* clocks */
+
+.clock {
+  width: 250px;
+  height: 300px;
 }
 
 /* map */

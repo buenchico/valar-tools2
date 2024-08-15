@@ -8,7 +8,24 @@
       </button>
     </div>
     <div id="travel-text" class="card-text">
+
+      <% count = [@size, 1].min %>
+      <% @html = "<p>Un #{Army.model_name.human(:count => count).downcase} " %>
+      <% @html += ((@size == 0) ? "" : " de tamaño #{@size}") %>
+      <% @html += " necesita <span class='badge fs-6 bg-success'>#{@travel_time}</span> para ir desde #{@from} hasta #{@to}</p>" %>
+      <% @steps.each do | step | %>
+        <% line = "" %>
+        <% line << "<p class='ms-2'>#{step[:hex]} #{t('hexagon', count: step[:hex])} de #{step[:terrain_name].downcase}, a marcha #{step[:speed_name].downcase}" %>
+        <% step[:obstacle_name].blank? ? nil : line << ", #{step[:obstacle_name].downcase}," %>
+        <% line << " en #{step[:step_time]} #{t('hours', count: step[:step_time])}</p>" %>
+        <% @html += line %>
+      <% end %>
+
       <%= @time.zero? ? "Por favor, rellena todos los datos necesarios." : @html.html_safe %>
     </div>
+    <div class="d-none">
+      <p><%= @time %> horas</p>
+      <p><%= @steps %></p>
+    </div>    
   </div>
 </div>

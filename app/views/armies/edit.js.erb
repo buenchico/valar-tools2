@@ -8,7 +8,7 @@ $('#armyModal').modal('show');
 // Attach a click event handler to the button
 $('#copy_army').click(function() {
     // Get the contents of the div
-    var content = "> * " + $('#army-data').text().trim();
+    var content = "> * " + $('#army-data').text().replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
     // Create a temporary textarea element
     var textarea = $('<textarea>').val(content).appendTo('.modal-body').select();
     // Execute the "copy" command

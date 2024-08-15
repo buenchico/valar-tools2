@@ -131,11 +131,19 @@ class ArmiesController < ApplicationController
         army_params_sum[:hp] = params["army"]["hp_sum"]
       end
       (0..9).each do |i|
-        if (params["army"]["col#{i}_change"].blank? == false)
-          army_params_hash["col#{i}"] = params["army"]["col#{i}_change"]
+        if (params["army"]["attr#{i}_change"].blank? == false)
+          army_params_hash["attr#{i}"] = params["army"]["attr#{i}_change"]
         end
-        if (params["army"]["col#{i}_sum"].blank? == false)
-          army_params_sum["col#{i}"] = params["army"]["col#{i}_sum"]
+        if (params["army"]["attr#{i}_sum"].blank? == false)
+          army_params_sum["attr#{i}"] = params["army"]["attr#{i}_sum"]
+        end
+      end
+      (1..9).each do |i|
+        if (params["army"]["men#{i}_change"].blank? == false)
+          army_params_hash["men#{i}"] = params["army"]["men#{i}_change"]
+        end
+        if (params["army"]["men#{i}_sum"].blank? == false)
+          army_params_sum["men#{i}"] = params["army"]["men#{i}_sum"]
         end
       end
       if (params["army"]["tags_add"].blank? == false)
@@ -171,7 +179,7 @@ class ArmiesController < ApplicationController
             army_params_hash[key] = value
           end
         end
-        if (key == "group")
+        if key == "group"
           if value == "CLEAR"
             army_params_hash[key] = nil
           else (ARMY_GROUPS.keys.map { |k| k.to_s }).include?(value.to_s)
@@ -179,26 +187,33 @@ class ArmiesController < ApplicationController
           end
         end
         if @current_user&.is_master? # Checking the user is admin to modify the status
-          if (key == "status")
+          if key == "status"
             if @army_status.keys.include?(value.to_s)
               army_params_hash[key] = value
             end
           end
-          if (key == "location_id")
+          if key == "army_type"
             if value == "CLEAR"
               army_params_hash[key] = nil
             else
               army_params_hash[key] = value
             end
           end
-          if (key == "family_id")
+          if key == "location_id"
             if value == "CLEAR"
               army_params_hash[key] = nil
             else
               army_params_hash[key] = value
             end
           end
-          if (key == "visible")
+          if key == "family_id"
+            if value == "CLEAR"
+              army_params_hash[key] = nil
+            else
+              army_params_hash[key] = value
+            end
+          end
+          if key == "visible"
             if value == "CLEAR"
               army_params_hash[key] = nil
             else
@@ -211,7 +226,6 @@ class ArmiesController < ApplicationController
 
     @errors_armies = []
     @updated_armies = []
-    $aaa = []
 
     respond_to do |format|
       if params[:army][:confirm] == 'VALIDATE'
@@ -303,18 +317,24 @@ class ArmiesController < ApplicationController
         headers['Content-Disposition'] = "attachment; filename=\"armies.csv\""
         headers['Content-Type'] ||= 'text/csv'
 
-        header_row = ["id", "name", "status", "position", "group", "factions", "hp *(#{@options["hp"]["step"]})", "tags", "location", "family"] # Adjust the attributes as needed
+        header_row = ["id", "name", "status", "position", "group", "factions", "hp *(#{@options["hp"]["step"]})", "hp_start", "army_type", "tags", "location", "family"] # Adjust the attributes as needed
         @attributes.each do | key, value |
-          header_row << "col#{value['sort']} #{key} *(#{value["str"]})"
+          header_row << "attr#{value['sort']} #{key} *(#{value["attr"]})"
+        end
+        @men.each do | key, value |
+          header_row << "men#{value['sort']} #{key} *(#{value["men"]})"
         end
 
         csv_data = CSV.generate(col_sep: ";", headers: true) do |csv|
           csv << header_row # Adjust the attributes as needed
 
           @armies.each do |army|
-            data_row = [army.id, army.name, army.status, army.position, army.group, army.factions.pluck(:name).join(","), army.hp, army.tags.join(","), army.location&.name, army.family&.title]
+            data_row = [army.id, army.name, army.status, army.position, army.group, army.factions.pluck(:name).join(","), army.hp, army.hp_start, army.army_type, army.tags.join(","), army.location&.name, army.family&.title]
             @attributes.each do | key, value |
-              data_row << army["col#{value['sort']}"]
+              data_row << army["attr#{value['sort']}"]
+            end
+            @men.each do | key, value |
+              data_row << army["men#{value['sort']}"]
             end
             csv << data_row
           end
@@ -533,9 +553,10 @@ private
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de ejércitos'
     else
       @attributes = @options["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
-      @tags = @options["tags"]&.sort_by { |_, v| [v["colour"], v["sort"] || Float::INFINITY] }.to_h
+      @men = @options["men"]&.sort_by { |_, v| v["sort"] }.to_h
+      @tags = @options["tags"]&.sort_by { |key, _value| key }.to_h
       @army_status = @options["status"]
-      $options_armies = @options
+      @army_types = @options["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     end
   end
 
@@ -559,7 +580,7 @@ private
     all_armies = Army.where(visible: true).order(:id)
     @armies_total = all_armies.length
     @men_total = all_armies.sum { |army| ( army.hp.to_i * @options["soldiers"].to_i / 100 ) }
-    @str_total = all_armies.sum { |army| army.strength }
+    @str_total = all_armies.sum { |army| army.strength }.round(2)
     @raised = all_armies.where(status: 'raised').length
     @dead = all_armies.where(status: 'inactive').length
   end
@@ -589,7 +610,7 @@ private
   def army_params
     params.require(:army).permit(
       :name, :status, :position, :group, :location_id, :family_id, :confirm,
-      :visible, :hp, :col0, :col1, :col2, :col3, :col4, :col5, :col6, :col7, :col8, :col9, :notes, :board, faction_ids: [], tags: []
+      :visible, :hp, :army_type, :men1, :men2, :men3, :men4, :men5, :men6, :men7, :men8, :men9, :attr0, :attr1, :attr2, :attr3, :attr4, :attr5, :attr6, :attr7, :attr8, :attr9, :notes, :board, faction_ids: [], tags: []
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
       whitelisted[:board] = nil if whitelisted[:board].blank?

@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   helper_method :inactive_tools
 
   helper_method :number_to_modifier
+  helper_method :army_size_mod
 
   add_flash_types :error, :success, :info, :danger, :warning
 
@@ -96,5 +97,9 @@ class ApplicationController < ActionController::Base
     else
       "–#{number.abs}"
     end
+  end
+
+  def army_size_mod(number)
+    ((-1 + Math.sqrt(1 + 8 * number)) / 2).floor
   end
 end

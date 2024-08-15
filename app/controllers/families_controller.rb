@@ -2,8 +2,8 @@ class FamiliesController < ApplicationController
   before_action :set_tool
   before_action :check_master, except: [:index, :show]
   before_action :set_family, only: [:edit, :update, :destroy, :show]
-  before_action :set_families_list, only: [:index]
-  before_action :set_options, only: [:index, :new, :edit, :update, :new, :show, :create]
+  before_action :set_families_list, only: [:index, :export]
+  before_action :set_options, only: [:index, :new, :edit, :update, :new, :show, :create, :export]
   before_action :set_filters, only: [:index, :show]
   before_action :check_visble, only: [:show]
 
@@ -43,6 +43,11 @@ class FamiliesController < ApplicationController
   def edit
   end
 
+  def edit_multiple
+    @families = Family.where(id: params[:army_ids]).order(:name)
+    @action = params[:button]
+  end
+
   def update
     original_title =  @family.title
     respond_to do |format|
@@ -73,6 +78,36 @@ class FamiliesController < ApplicationController
     @families_list = Family.order(:name).where(visible: true).where('LOWER("name") LIKE :term OR LOWER("branch") LIKE :term', term: "%#{params[:term].downcase}%")
     @families_list  = @families_list.limit(20)
     render json: @families_list.map(&:title).uniq
+  end
+
+  def export
+    respond_to do |format|
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"families.csv\""
+        headers['Content-Type'] ||= 'text/csv'
+
+        header_row = ["id", "name", "branch", "tags", "visible", "faction_id", "faction", "lord_id", "lord", "description", "members"]
+        @options["loyalties"].each do | value |
+          header_row << value
+        end
+        header_row += ["game_id", "game", "armies_hp_raised", "armies_hp_start", "armies_hp_inactive", "location_total", "location_names"]
+
+        csv_data = CSV.generate(col_sep: ";", headers: true) do |csv|
+          csv << header_row # Adjust the attributes as needed
+
+          @families.each do |family|
+            data_row = [family.id, family.name, family.branch, family.tags.join(","), family.visible, family&.faction&.id, family&.faction&.name, family&.lord&.id, family&.lord&.title, family.description, family.members]
+            @options["loyalties"].each_with_index do | value, index |
+              data_row << family["loyalty_#{index}"]
+            end
+            data_row += [family&.game&.id, family&.game&.name, family.hp_raised, family.hp_start, family.hp_inactive, family.locations.count, family.locations.map { |l| [l.name, l.location_type] }]
+            csv << data_row
+          end
+        end
+
+        render plain: csv_data
+      end
+    end
   end
 
 private

@@ -1,0 +1,76 @@
+<span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-custom-class="army-str-data" title="
+    <% army_str = army.strength_calc %>
+    <div class='row'>
+      <div class='fst-italic text-start col-8'>
+        <i class='bi bi-<%= @options["army_type"][army.army_type]["icon"] %>'></i> <%= @options["army_type"][army.army_type]["name"].capitalize %>
+      </div>
+      <div class='text-end col-4'>
+        <%= number_to_modifier(army_str[:base].to_i) %>
+      </div>
+    </div>
+
+    <% @men.each do | key, value | %>
+      <% if army_str[:men][value["sort"]].nonzero? %>
+        <div class='row'>
+          <div class='fst-italic text-start col-8'>
+            <i class='bi bi-<%= value["icon"] %>'></i> <%= value["name"].capitalize %>
+          </div>
+          <div class='text-end col-4'>
+            <%= number_to_modifier(army_str[:men][value["sort"]]) %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if army.tags.present? %>
+      <% army.tags.each_with_index do | tag, index | %>
+        <div class='row'>
+          <div class='fst-italic text-start col-8'>
+            <i class='bi bi-<%= @tags.fetch(tag, {}).fetch("icon", nil) %>'></i> <%= @tags.fetch(tag, {}).fetch("name", tag).capitalize %>
+          </div>
+          <div class='text-end col-4'>
+            <%= number_to_modifier(army_str[:tags][index]) %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if army.board.present? %>
+      <div class='row'>
+        <div class='fst-italic text-start col-8'>
+          <i class='bi bi-<%= @options["fleets"][army.board]["icon"] %>'></i> <%= @options["fleets"][army.board]["name"].capitalize %>
+        </div>
+        <div class='text-end col-4'>
+          <%= number_to_modifier(army_str[:fleet].to_i) %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class='row'>
+     <div class='text-decoration-underline text-start col-8'>Subtotal:</div>
+     <div class='text-end col-4'><%= army_str[:subtotal] %></div>
+    </div>
+
+    <% @attributes.each do | key, value | %>
+      <% if army_str[:attributes][value["sort"]].nonzero? %>
+        <div class='row'>
+          <div class='fst-italic text-start col-7'>
+            <i class='bi bi-<%= value["icon"] %>'></i> <%= value["name"].capitalize %>
+          </div>
+          <div class='text-end col-5'>
+            * <%= ((100 + army_str[:attributes][value["sort"]])).to_i %>%
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <div class='row'>
+     <div class='fst-italic text-start col-7'><i class='bi bi-<%= @options["hp"]["icon"] %>'></i> <%=  @options["hp"]["name"].capitalize %></div>
+     <div class='text-end col-5'>* <%= (army_str[:hp] * 100).to_i %>%</div>
+    </div>
+    <hr>
+    <div class='row'>
+      <div class='text-start fw-bold col-8'>Total:</div>
+      <div class='text-end col-4'><%= army.strength %></div>
+    </div>
+  ">

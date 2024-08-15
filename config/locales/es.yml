@@ -31,26 +31,30 @@
 
 es:
   helpers:
+    action:
+      view: 'Ver %{thing}'
+      edit: 'Editar %{thing}'
+      delete: 'Borrar %{thing}'
+      confirm: '¿Estás seguro de eliminar %{thing}?'
     submit:
       submit: 'Enviar %{model}'
-      create: 'Añadir %{model}'
+      create: 'Crear %{model}'
       update: 'Guardar %{model}'
       delete: 'Borrar %{model}'
       update_multiple: 'Guardar %{model}'
-      delete_multiple: 'Guardar %{model}'
-      import: 'Importar %{model}'
+      delete_multiple: 'Borrar %{model}'
+      import: 'Importar'
+      export: 'Exportar'
     label:
       title: "Título"
       description: "Descripcción"
       from: "Origen"
       to: "Destino"
-      army_type_land: "Tipo de ejércitos"
-      army_type_sea: "Tipo de flotas"
-      size_travel_land: "Nº de ejércitos"
-      size_travel_sea: "Nº de flotas"
+      size: "Nº de ejércitos"
+      size_mod: "Tamaño"
       terrain: "Terreno"
-      travel_speed: "Velocidad"
-      distance: "Distancia"
+      speed: "Velocidad"
+      hex: "Hex"
       obstacle: "Obstáculo"
     placeholder:
       sum: "Aditivo"
@@ -87,6 +91,7 @@ es:
         factions: "Facciones"
         hp: "Salud"
         board: "Embarcar"
+        army_type: "Tipo"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"
@@ -136,6 +141,18 @@ es:
         terrain: "Tipo de batalla"
         sideA: "Combatiente A"
         sideB: "Combatiente B"
+        game_id: "Partida"
+      clock:
+        name: "Nombre"
+        description: "Descripción"
+        style: "Tipo"
+        size: "Tamaño"
+        outcome: "Consecuencia"
+        visible: "Visible"
+        left: "Izquierda"
+        right: "Derecha"
+        invisible_tooltip: "Invisible para los jugadores"
+        family_id: "Familia"
     models:
       game: 'Partida'
       tool: 'Herramienta'
@@ -148,12 +165,18 @@ es:
       location:
         one: 'Lugar'
         other: 'Lugares'
+      clock:
+        one: 'Reloj'
+        other: 'Relojes'
       battle:
         one: 'Batalla'
         other: 'Batallas'
     errors:
       messages:
         inclusion: 'Sólo pueden elegirse opciones de la lista.'
+        options_not_ready: 'No puedes usar la herramienta %{tool_name} mientres las opciones no estén completadas'
+        status_clock_style: 'Debe ser igual o mayor que cero y menor o igual que el tamaño.'
+        status_balance_style: 'Debe estar entre la mitad del tamaño negativo y la mitad del tamaño positivo.'
       models:
         army:
           attributes:
@@ -166,6 +189,14 @@ es:
               inclusion: 'Sólo pueden elegirse rasgos de la lista'
             group:
               inclusion: 'Sólo pueden elegirse grupos de la lista'
+          clock:
+            size:
+              inclusion: 'Sólo pueden elegirse tamaños de la lista'
+            attributes:
+              left:
+                too_long: "es demasiado largo (máximo %{count} caracteres)"
+              right:
+                too_long: "es demasiado largo (máximo %{count} caracteres)"
         game_tool:
           attributes:
             options:
@@ -230,6 +261,10 @@ es:
       x_weeks:
         one: 'una semana'
         other: '%{count} semanas'
+      x_half_days:
+        zero: 'muy poco tiempo'
+        one: 'medio día'
+        other: ' y medio'
   word_genders:
     ciudad: feminine
     región: feminine

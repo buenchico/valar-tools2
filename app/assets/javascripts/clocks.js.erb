@@ -1,0 +1,27 @@
+$(document).on('turbolinks:load', function () {
+  if ($(".clocks").length !== 0 ) {
+    // Add hidden checkboxes for mass edit options
+    $.fn.checkboxSelectable = function(){
+      $('.checkbox_selectable').change(function() {
+        var form = $('#edit_multiple');
+        var clockId = $(this).val();
+
+        if ($(this).is(':checked')) {
+          // If the checkbox is checked, add the clock_id to the form parameters
+          $('<input>').attr({
+            type: 'hidden',
+            name: 'clock_ids[]',
+            id: 'hidden_' + clockId,
+            value: clockId
+          }).appendTo(form);
+        } else {
+          // If the checkbox is unchecked, remove the corresponding input element from the form
+          form.find('input[value="' + clockId + '"]').remove();
+        }
+      });
+    }
+
+    // Trigger functions on load
+    $.fn.checkboxSelectable();    
+  }
+});

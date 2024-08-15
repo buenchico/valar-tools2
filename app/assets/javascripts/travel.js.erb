@@ -2,34 +2,18 @@
 $(document).on('turbolinks:load', function () {
   if ($(".travel").length !== 0 ) {
 
-    $("#path_type_btn").click(function() {
-      if ($(this).val() == 'land') {
-        $(this).val('sea')
-        $('#type').val('sea')
-        $('.sea').removeClass('d-none')
-        $(".sea").prop("disabled", false);
-        $(".sea :input").prop("disabled", false);
-        $('.land').addClass('d-none')
-        $(".land").prop("disabled", true);
-        $(".land :input").prop("disabled", true);
-      } else {
-        $(this).val('land')
-        $('#type').val('land')
-        $('.land').removeClass('d-none')
-        $(".land :input").prop("disabled", false);
-        $(".land").prop("disabled", false);
-        $('.sea').addClass('d-none')
-        $(".sea").prop("disabled", true);
-        $(".sea :input").prop("disabled", true);
-      }
-    })
-
     $('#close_results').click(function() {
       $('#result').addClass('d-none')
     })
 
+    $('#size').on('change', function() {
+      var size = $(this).val();
+      var mod = Math.floor((-1 + Math.sqrt(1 + 8 * size)) / 2);
+      $('#size_mod').html(mod);
+    });
+
     $(document).on("click", ".remstep", function() {
-      $(this).parent().remove();
+      $(this).closest('.step').remove();
     });
   }
 });

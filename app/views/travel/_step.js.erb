@@ -3,45 +3,52 @@ $(document).on('turbolinks:load', function () {
   $("#add_step").click(function(){
     step_id++;
 
-    var terrain = $("#path_type_btn").val()
-
     var html_form = `
-      <%= j label_tag :distance, I18n.t('helpers.label.distance'), class: 'input-group-text' %>
-      <%= j number_field "hex", nil, class: 'form-control me-2', min: 0, step: 1 %>
-
-      <%= label_tag :terrain, I18n.t('helpers.label.terrain'), class: 'input-group-text' %>
-      `
-
-    if (terrain == 'land') {
-      html_form += `<%= select_tag "terrain", options_for_select(@options["land"]["terrain"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["land"]["terrain"]["default"]["name"], @options["land"]["terrain"]["default"]["mod"]].to_s), {class: 'form-select me-2 land'} %>`
-    } else {
-      html_form += `<%= select_tag "terrain", options_for_select(@options["sea"]["terrain"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["sea"]["terrain"]["default"]["name"], @options["sea"]["terrain"]["default"]["mod"]].to_s), {class: 'form-select me-2 sea'} %>`
-    }
-
-    html_form += `<%= label_tag :travel_speed, I18n.t('helpers.label.travel_speed'), class: 'input-group-text' %>`
-
-    if (terrain == 'land') {
-      html_form += `<%= select_tag "travel_speed", options_for_select(@options["land"]["travel_speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["land"]["travel_speed"]["default"]["name"], @options["land"]["travel_speed"]["default"]["mod"]].to_s), {class: 'form-select me-2 land'} %>`
-    } else {
-      html_form += `<%= select_tag "travel_speed", options_for_select(@options["sea"]["travel_speed"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }, [@options["sea"]["travel_speed"]["default"]["name"], @options["sea"]["travel_speed"]["default"]["mod"]].to_s), {class: 'form-select me-2 sea'} %>`
-    }
-
-    html_form += `<%= label_tag :obstacle, I18n.t('helpers.label.obstacle'), class: 'input-group-text' %>`
-
-    if (terrain == 'land') {
-      html_form += `<%= select_tag "obstacle", options_for_select(@options["land"]["obstacles"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }), {class: 'form-select me-2 land', include_blank: true} %>`
-    } else {
-      html_form += `<%= select_tag "obstacle", options_for_select(@options["sea"]["obstacles"].sort_by { |key, speed_option| speed_option["mod"] }.map { |key, speed_option| [speed_option["name"], [speed_option["name"],speed_option["mod"]]] }), {class: 'form-select me-2 sea', include_blank: true} %>`
-    }
+      <div class="col-12 col-md-2 mb-3">
+        <div class="input-group">
+          <%= j label_tag :hex, I18n.t('helpers.label.hex'), class: 'input-group-text' %>
+          <%= j number_field "hex", nil, class: 'form-control', min: 0, step: 1 %>
+        </div>
+      </div>
+    `
+    html_form += `
+      <div class="col-12 col-md-3 mb-3">
+        <div class="input-group">
+          <%= label_tag :terrain, I18n.t('helpers.label.terrain'), class: 'input-group-text' %>
+          <%= select_tag "terrain", options_for_select(@terrain.map { |t| [t["name"], [t["name"], t["mod"]]] }), {class: 'form-select'} %>
+        </div>
+      </div>
+    `
 
     html_form += `
-            <div class="mt-1 text-danger remstep">
-              <i class="bi bi-x-circle-fill"></i>
-            </div>
-            `
+      <div class="col-12 col-md-3 mb-3">
+        <div class="input-group">
+          <%= label_tag :speed, I18n.t('helpers.label.speed'), class: 'input-group-text' %>
+          <%= select_tag "speed", options_for_select(@speed.map { |s| [s["name"], [s["name"], s["mod"]]] }), {class: 'form-select'} %>
+        </div>
+      </div>
+    `
+
+    html_form += `
+      <div class="col-11 col-md-3 mb-3">
+        <div class="input-group">
+          <%= label_tag :obstacle, I18n.t('helpers.label.obstacle'), class: 'input-group-text' %>
+          <%= select_tag "obstacle", options_for_select(@obstacles.map { |o| [o["name"],[o["desc"], o["hex"]]] }), {class: 'form-select', include_blank: true} %>
+        </div>
+      </div>
+    `
+
+    html_form += `
+      <div class="col-1 col-md-1">
+        <div class="mt-1 text-danger remstep">
+          <i class="bi bi-x-circle-fill"></i>
+        </div>
+      </div>
+    `
+
     var newStep = $('<div/>', {
       'id' : 'step_' + step_id,
-      'class' : 'input-group mb-3 w-auto ' + terrain,
+      'class' : 'row ms-1 step',
       'html' : html_form
 
     }).hide().fadeIn("normal").css("display", "");
@@ -51,11 +58,11 @@ $(document).on('turbolinks:load', function () {
 
     $('#hex_').attr("name","step["+step_id+"][hex]")
               .attr("id","step["+step_id+"][hex]")
-    $('#terrain').attr("name","step["+step_id+"][terrain][" + terrain + "]")
-                  .attr("id","step["+step_id+"][terrain][" + terrain + "]")
-    $('#travel_speed').attr("name","step["+step_id+"][travel_speed][" + terrain + "]")
-                .attr("id","step["+step_id+"][travel_speed][" + terrain + "]")
-    $('#obstacle').attr("name","step["+ step_id +"][obstacle][" + terrain + "]")
-                   .attr("id","step["+step_id+"][obstacle][" + terrain + "]")
+    $('#terrain').attr("name","step["+step_id+"][terrain]")
+                  .attr("id","step["+step_id+"][terrain]")
+    $('#speed').attr("name","step["+step_id+"][speed]")
+                .attr("id","step["+step_id+"][speed]")
+    $('#obstacle').attr("name","step["+ step_id +"][obstacle]")
+                   .attr("id","step["+step_id+"][obstacle]")
   });
 });

@@ -1,36 +1,50 @@
 class Army < ApplicationRecord
+  before_validation :set_options
+
   has_and_belongs_to_many :factions
   belongs_to :family, class_name: 'Family', foreign_key: 'family_id', optional: true
   belongs_to :location, class_name: 'Location', foreign_key: 'location_id', optional: true
 
   validates :name, presence: true
+  validates_uniqueness_of :name
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
+
+  before_create :set_hp_start
 
   attr_accessor :faction_ids_was
 
-  if $options_armies.nil?
-    ARMY_STATUS = ["raised","active","inactive"]
-    FLEET_TYPES = [nil, "longship","galley","transport"]
-  else
-    ARMY_STATUS = $options_armies["status"].keys
-    FLEET_TYPES = [nil] + $options_armies["fleets"].keys
-  end
-
-  validates :status, inclusion: ARMY_STATUS
-  validates :board, inclusion: FLEET_TYPES
-  validates_uniqueness_of :name
+  ARMY_STATUS = ["raised", "active", "inactive"]
+  ARMY_TYPE = ["conscript"]
+  FLEET_TYPES = [nil, "longship", "galley", "transport"]
 
   before_save :log_changes
 
+  def set_options
+    active_game = Game.find_by(active: true)
+    @option_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
+
+    @army_status = @option_armies["status"].keys
+    @fleet_types = [nil] + @option_armies["fleets"].keys
+    @army_type = @option_armies["army_type"].keys
+  end
+
+  validates :status, inclusion: { in: ->(army) { army.instance_variable_get(:@army_status) || ARMY_STATUS } }
+  validates :board, inclusion: { in: ->(army) { army.instance_variable_get(:@fleet_types) || FLEET_TYPES } }
+  validates :army_type, inclusion: { in: ->(army) { army.instance_variable_get(:@army_type) || ARMY_TYPE } }
+
   def log_changes
-    if self.persisted? # Check if the record already exists (for updates)
+    if self.persisted? && self.changes.keys != ['logs'] # Check if the record already exists (for updates) and if the only changes are not of the logs
       current_user = Thread.current[:current_user]
       if current_user.nil?
         current_user = User.find_by(player: "valar")
       end
       changes = self.changes.map do |field, values|
-        if field.starts_with?("col")
-          field_name = ($options_armies["attributes"].keys.find { |key| $options_armies["attributes"][key]["sort"] == field.slice(3).to_i })  || "no_name"
+        if field.starts_with?("attr")
+          field_name = (@option_armies["attributes"].keys.find { |key| @option_armies["attributes"][key]["sort"] == field.slice(3).to_i })  || "no_name"
+          field = field_name + "(" + field + ")"
+        end
+        if field.starts_with?("men")
+          field_name = (@option_armies["men"].keys.find { |key| @option_armies["men"][key]["sort"] == field.slice(3).to_i })  || "no_name"
           field = field_name + "(" + field + ")"
         end
         "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
@@ -54,35 +68,116 @@ class Army < ApplicationRecord
     end
   end
 
+  def men0
+    return composition[0] * 0.1
+  end
+
+  def composition
+    set_options if @option_armies.nil?
+
+    status = @option_armies.fetch("status", {}).fetch(self.status, {}).fetch("men", 1)
+    fill = @option_armies.fetch("army_type", {}).fetch(self.army_type, {}).fetch("fill", 1)
+    composition = []
+
+    @option_armies.fetch("men", {})&.sort_by { |_, v| v["sort"] }.to_h.each do | key, value |
+      if key != "default"
+        troops = (value["men"] || 10)
+        number = (self["men#{value['sort']}"] || 0)
+
+        composition << (number * troops * status).to_i
+      end
+    end
+
+    if fill == 1
+      troops = (100 - composition.sum)
+    else
+      troops = 0
+    end
+
+    composition.unshift(troops * status)
+
+    return composition
+  end
+
   def men
-    base = $options_armies.fetch("soldiers", 1000)
-    status = $options_armies.fetch("status", {}).fetch(self.status, {}).fetch("men", 1)
-    men = base * status * self.hp.to_i / 100
+    set_options if @option_armies.nil?
+
+    base = @option_armies.fetch("soldiers", 1000)
+
+    men = (self.composition.sum * self.hp * base * 0.01 * 0.01).to_i
+
     return men
   end
 
-  def strength
-    base = 10
-    @options = $options_armies
-    @options["attributes"].sort_by { |_, v| v["sort"] }.to_h.each do | key, value |
-      base += self["col#{value['sort']}"].to_i * value["str"]
+  def strength_calc
+    set_options if @option_armies.nil?
+
+    army_type = @option_armies.fetch("army_type", {}).fetch(self.army_type, {})
+
+    base_str = army_type.fetch("str", 0)
+    fill = army_type.fetch("fill", 1)
+
+    tags = @option_armies.fetch("tags", {})&.sort_by { |key, _value| key }.to_h
+
+    hp = (self.hp * 0.01).to_f
+
+    if self.board.nil?
+      men = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["str"] }
+    else
+      men = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["board"] || value["str"] }
     end
-    if self.tags.present?
-      self.tags.each do | tag |
-        if self.board.present? && @options["tags"]&.[](tag)&.[]("board").present?
-          base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"board" => 0})["board"].to_i
-        else
-          base += @options["tags"].sort_by { |_, v| v["colour"] }.to_h.fetch(tag, {"str" => 0})["str"].to_i
-        end
-      end
+
+    men_str = []
+    men.each_with_index do | value, index |
+      men_str << (self.send("men#{index}") * value)
     end
-    if self.board.present?
-      base += @options["fleets"].fetch(self.board, {"str" => 0})["str"].to_i
+
+    if self.board.nil?
+      terrain = "str"
+    else
+      terrain = "board"
     end
-    str = base * self.hp.to_i / 100
-    str = [0, str].max
-    status = @options.fetch("status", {}).fetch(self.status, {}).fetch("str", 1)
-    str = str * status
+
+    tags_str = []
+    self.tags.each do | tag |
+      tags_str << tags.fetch(tag, {}).fetch(terrain, 0)
+    end
+
+    attributes = @option_armies.fetch("attributes", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["str"] }
+
+    attr = []
+    attributes.each_with_index do | value, index |
+      attr << self["attr#{index}"]
+    end
+
+    attr_mod = (attr.zip(attributes).map { |a, b| a * b})
+    attr_str = 1
+    attr_mod.each do | value |
+      attr_str = attr_str * (100 + value) * 0.01
+    end
+
+    if self.board.nil?
+      fleet_str = 0
+    else
+      fleet_str = @option_armies.fetch("fleets", {})&.fetch(self.board, {})&.fetch("str", 0)
+    end
+
+    subtotal = [(base_str + men_str.sum + tags_str.sum + fleet_str), 0].max
+
+    str_total = ( subtotal * attr_str * hp).round(2)
+
+    str = { "total": str_total, "subtotal": subtotal, "type": base_str, "men": men_str, "tags": tags_str, "attributes": attr_mod, "fleet": fleet_str, "hp": hp}
+
     return str
+  end
+
+  def strength
+    self.strength_calc[:total]
+  end
+
+private
+  # Method to set hp_start to the value of hp
+  def set_hp_start
+    self.hp_start = self.hp
   end
 end
