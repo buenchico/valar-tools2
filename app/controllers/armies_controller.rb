@@ -27,16 +27,22 @@ class ArmiesController < ApplicationController
   end
 
   def get_armies
+    origin = URI(request.referer).path.split('/')[1]
+    stats = params[:stats]
     @faction = Faction.find_by(id: params[:faction_id])
-    active_factions = params[:active_factions].split(",")
+    active_factions = params[:active_factions]
     @visible = params[:visible]
     active_visibility = params[:active_visibility].split(",")
+    group = params[:group]
+    @checkboxes = params[:checkboxes]
     @master = Faction.find_by(name: 'master')
 
-    if active_factions.length == 1
-      @stats_faction = Faction.find_by(id: active_factions[0])
-    else
-      @stats_faction = @master
+    if stats
+      if active_factions.length == 1
+        @stats_faction = Faction.find_by(id: active_factions[0])
+      else
+        @stats_faction = @master
+      end
     end
 
     if @faction
@@ -53,10 +59,20 @@ class ArmiesController < ApplicationController
       end
     end
 
+    if group.present?
+      @armies = @armies.where(group: group)
+    end
+
     @army_ids = @armies.pluck(:id)
 
-    respond_to do | format |
-      format.js
+    respond_to do |format|
+      format.js do
+        if origin.present?
+          render "#{origin}/get_armies" # Render the JS template based on the origin
+        else
+          render js: "alert('Invalid referer');" # Handle cases where origin is nil or empty
+        end
+      end
     end
   end
 

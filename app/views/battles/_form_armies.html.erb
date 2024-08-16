@@ -43,15 +43,25 @@
               data: { noneselectedtext: 'Sin agrupar'}
             %>
           </div>
+          <div class="input-group mb-3">
+            <%= form.label :visible, class: 'input-group-text' %>
+            <div class="form-check form-switch switch-group fs-2">
+              <%= form.check_box :visible, class: 'form-check-input switch-group h-100', checked: true %>
+            </div>
+          </div>
 
-          <%= form.submit nil, class: 'btn btn-primary' %>
+          <%= form.hidden_field :active_visibility, value: true %>
+          <%= form.hidden_field :checkboxes, value: true %>
+
+          <%= form.submit 'Load armies', class: 'btn btn-primary' %>
 
         <% end %>
 
-        <div class="armies">
-        </div>
-
         <%= form_with model: battle, url: update_battle_armies_path(@battle), local: false do |form| %>
+          <%= form.hidden_field :side, value: @side %>
+          <div id="armies">
+          </div>
+          <%= form.submit nil, class: 'btn btn-primary' %>
         <% end %>
       </div>
     </div>

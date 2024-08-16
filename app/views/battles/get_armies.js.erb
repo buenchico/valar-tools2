@@ -1,1 +1,6 @@
-console.log("<%= @armies.count %>")
+console.log("<%= @armies.count %>");
+$('#armies').html(`
+  <% @armies.each do | army | %>
+    <%= render 'army_p', army: army %>
+  <% end %>
+  `)

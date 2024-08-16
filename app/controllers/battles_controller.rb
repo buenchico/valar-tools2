@@ -38,8 +38,27 @@ class BattlesController < ApplicationController
 
   def update_armies
     phase = @options["status"][@battle.status]["code"].to_sym
+    army_ids = params[:army_ids]
+    # get the phase data
+    side = params[:battle][:side]
+
     data = @battle.send(phase)
-    data["tokens"] = params[:battle]
+
+    # Ensure "armies" key exists
+    data["armies"] ||= {}
+
+    # Ensure the specific side key exists
+    data["armies"][side] ||= {}
+
+    armies = data["armies"][side]
+    new_armies = Army.where(id: army_ids)
+
+    new_armies.each do | army |
+      armies[army.id] = army.as_json(except: [:logs, :updated_at, :created_at, :location_id], methods: [:men0, :strength])
+    end
+
+    # Update the specific side with new data
+    data["armies"][side] = armies
 
     respond_to do |format|
       if @battle.update(phase => data)

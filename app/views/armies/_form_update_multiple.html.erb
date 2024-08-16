@@ -13,30 +13,7 @@
               <div>Los siguientes ejércitos serán actualizados, cualquier campo dejado en blanco no será actualizado:</div>
             </div>
               <% armies.each do | army | %>
-                <div class="row">
-                  <div class="col-md-2">
-                    id: #<%= sprintf('%04d', army.id) %>
-                  </div>
-                  <div class="col-md-5">
-                    <%= hidden_field_tag "army_ids[]", army.id %>
-                    <%= army.name %>
-                  </div>
-                  <div class="col-md-2">
-                    <%= @army_status[army.status]["name"] %>
-                  </div>
-                  <div class="col-md-1">
-                    <% unless army.position.blank? %>
-                      <em><%= army.position %></em>
-                    <% end %>
-                  </div>
-                  <div class="col-md-2">
-                    <% if army.group.blank? %>
-                      <span class='badge rounded-pill pill-tags bg-secondary'><span class='pill-tags-text'>Sin agrupar</span>
-                    <% else %>
-                      <span class='badge rounded-pill pill-tags pill-<%= army.group %>'><i class='bi bi-<%= ARMY_GROUPS[army.group.to_sym][:icon] %>'></i> <span class='pill-tags-text'><%= ARMY_GROUPS[army.group.to_sym][:name] %></span></span>
-                    <% end %>
-                  </div>
-                </div>
+                <%= render 'army_p', army: army %>
               <% end %>
               <% if (!@current_user.faction.fleets.nil? || @current_user.is_master?) && !@options["fleets"].nil? %>
                 <div class="input-group mt-3">

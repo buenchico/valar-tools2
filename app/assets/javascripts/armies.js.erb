@@ -144,7 +144,7 @@ $(document).on('turbolinks:load', function () {
 
       $('#faction_id').val(faction_id);
       $('#visible').val(visible);
-      $('#active_factions').val(active_factions);
+      $('#active_factions').val(JSON.stringify(active_factions));
       $('#active_visibility').val(active_visibility);
 
       $('#spinner-main').removeClass('d-none');
