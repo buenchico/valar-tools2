@@ -1,7 +1,8 @@
 class BattlesController < ApplicationController
   before_action :set_tool
   before_action :check_master
-  before_action :set_battle, only: [:edit, :update, :destroy, :show, :add_tokens, :update_tokens]
+  before_action :set_battle, only: [:edit, :update, :destroy, :show, :add_armies, :update_armies]
+  before_action :set_factions, only: [:add_armies]
   before_action :set_options
 
   def index
@@ -31,12 +32,11 @@ class BattlesController < ApplicationController
     end
   end
 
-  def add_tokens
+  def add_armies
     @side = params[:side]
   end
 
-  def update_tokens
-
+  def update_armies
     phase = @options["status"][@battle.status]["code"].to_sym
     data = @battle.send(phase)
     data["tokens"] = params[:battle]
@@ -84,6 +84,10 @@ class BattlesController < ApplicationController
 private
   def set_battle
     @battle = Battle.find(params[:id])
+  end
+
+  def set_factions
+    @factions = Faction.where.not(name: ['admin','player']).where(active: true).order(:id)
   end
 
   def set_options

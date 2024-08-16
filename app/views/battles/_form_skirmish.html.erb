@@ -5,9 +5,8 @@
         <%= @battle.send("side_#{side}") %>
       </div>
       <div>
-        <%= link_to t('battles.edit.add_tokens'), add_battle_tokens_path(@battle, side: side), remote: true, class: 'btn btn-danger' %>
+        <%= link_to t('battles.edit.add_armies'), add_battle_armies_path(@battle, side: side), remote: true, class: 'btn btn-danger' %>
       </div>
-      Añadir ejércitos
       Tipo de movimiento
       Tipo de terreno
       Estrategia de escaramuza (sigilo/info)

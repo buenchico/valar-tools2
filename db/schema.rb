@@ -71,15 +71,32 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_12_120406) do
     t.integer "status"
     t.string "side_a"
     t.string "side_b"
-    t.jsonb "skirmish", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
-    t.jsonb "engagement", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
-    t.jsonb "combat_1", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
-    t.jsonb "combat_2", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
-    t.jsonb "combat_3", default: {"rolls"=>nil, "armies"=>nil, "tokens"=>nil, "results"=>nil, "strategy"=>nil}
+    t.jsonb "skirmish", default: {"rolls"=>nil, "armies"=>nil, "results"=>nil, "missions"=>nil}
+    t.jsonb "engagement", default: {"rolls"=>nil, "armies"=>nil, "results"=>nil, "missions"=>nil}
+    t.jsonb "combat_1", default: {"rolls"=>nil, "armies"=>nil, "results"=>nil, "missions"=>nil}
+    t.jsonb "combat_2", default: {"rolls"=>nil, "armies"=>nil, "results"=>nil, "missions"=>nil}
+    t.jsonb "combat_3", default: {"rolls"=>nil, "armies"=>nil, "results"=>nil, "missions"=>nil}
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_valar_battles_on_user_id"
+  end
+
+  create_table "clocks", force: :cascade do |t|
+    t.string "name"
+    t.string "style", default: "clock"
+    t.integer "status", default: 0
+    t.integer "size"
+    t.integer "outcome", default: 0
+    t.string "description"
+    t.string "logs", default: [], array: true
+    t.boolean "visible", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "family_id"
+    t.text "left"
+    t.text "right"
+    t.index ["family_id"], name: "index_valar_clocks_on_family_id"
   end
 
   create_table "factions", force: :cascade do |t|

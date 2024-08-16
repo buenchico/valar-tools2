@@ -214,7 +214,7 @@ es:
   battles:
     edit:
       goto: 'Ir a %{step}'
-      add_tokens: 'Añadir tokens'
+      add_armies: 'Añadir ejércitos'
   hexagon:
     one: "hexágono"
     other: "hexágonos"

@@ -1,0 +1,59 @@
+<div class="modal fade" id="battleModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title"><%= t('battles.edit.add_tokens') + " " + battle.send("side_#{@side}") %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with url: get_armies_path, method: :get, local: false do |form| %>
+          <div class="input-group mb-3">
+            <%= form.label :factions, class: 'input-group-text' %>
+            <%= form.select :active_factions,
+              options_for_select(
+                @factions.pluck(:long_name, :id).map { |name, id|
+                  [
+                    id,
+                    { "data-content": name
+                  }
+                  ]
+                }
+              ),
+              { include_blank: true },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              title: 'Sin facción',
+              multiple: true,
+              data: { }
+            %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :group, class: 'input-group-text' %>
+            <%= form.select :group,
+              options_for_select(
+                ARMY_GROUPS.map { | key, value |
+                  [
+                    key,
+                    { "data-content": "<span class='badge rounded-pill pill-tags pill-#{key}'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe
+                  }
+                  ]
+                }
+              ),
+              { include_blank: true },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              data: { noneselectedtext: 'Sin agrupar'}
+            %>
+          </div>
+
+          <%= form.submit nil, class: 'btn btn-primary' %>
+
+        <% end %>
+
+        <div class="armies">
+        </div>
+
+        <%= form_with model: battle, url: update_battle_armies_path(@battle), local: false do |form| %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

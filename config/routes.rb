@@ -74,8 +74,8 @@ Rails.application.routes.draw do
   post 'issues', to: 'issues#create'
 
   resources :battles
-  get '/battles/:id/tokens', to: 'battles#add_tokens', as: 'add_battle_tokens'
-  patch '/battles/:id/tokens', to: 'battles#update_tokens', as: 'update_battle_tokens'
+  get '/battles/:id/armies', to: 'battles#add_armies', as: 'add_battle_armies'
+  patch '/battles/:id/armies', to: 'battles#update_armies', as: 'update_battle_armies'
 
   get 'clocks/edit_multiple', to: 'clocks#edit_multiple', as: 'edit_multiple_clocks'
   put 'clocks/destroy_multiple', to: 'clocks#destroy_multiple', as: 'destroy_multiple_clocks'
