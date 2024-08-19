@@ -23,7 +23,7 @@
     </thead>
     <tbody>
       <% @families.each do | family | %>
-        <tr id="family_<%= family.id.to_s %>">
+        <tr id="family_<%= family.id.to_s %>" class="<%= family.visible ? nil : 'toggle-visibility d-none'%>">
           <%= render 'row', family: family %>
         </tr>
       <% end %>
