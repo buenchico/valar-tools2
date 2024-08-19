@@ -1,3 +1,10 @@
+// Toggle visibility
+$(document).on('turbolinks:load', function() {
+  $('.toggle-visibility').on('click', function() {
+      $('.toggle-visibility').toggleClass('d-none');
+  });
+});
+
 // Autocomplete
 
 $(document).on('turbolinks:load', function() {

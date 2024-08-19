@@ -22,6 +22,8 @@
       <% end %>
 
       <%= link_to t('helpers.submit.export'), export_families_path(format: :csv), class: 'btn btn-danger btn-sm' %>
+      <button id="toggle_visibility_visible" class="btn btn-warning btn-sm toggle-visibility"> <%= t('helpers.label.toggle_visibility_visible') %></button>
+      <button id="toggle_visibility_invisible" class="btn btn-warning btn-sm d-none toggle-visibility"><%= t('helpers.label.toggle_visibility_invisible') %></button>
     <% end %>
   </div>
   <div class="col-6">

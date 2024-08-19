@@ -56,6 +56,8 @@ es:
       speed: "Velocidad"
       hex: "Hex"
       obstacle: "Obstáculo"
+      toggle_visibility_visible: "Mostrar invisibles"
+      toggle_visibility_invisible: "Ocultar invisibles"
     placeholder:
       sum: "Aditivo"
       change: "Reemplazo"

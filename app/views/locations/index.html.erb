@@ -3,17 +3,21 @@
 <% provide(:title, @tool.title) %>
 <% provide(:icon, @tool.icon_url) %>
 
-<% if @current_user&.is_master? %>
-  <div class="tool-title">
-      <i class="white <%= yield(:icon) %>"></i>
-      <%= yield(:title) %>
-  </div>
-<% end %>
+<div class="tool-title">
+  <i class="white <%= yield(:icon) %>"></i>
+  <%= yield(:title) %>
+</div>
+
 
 <div class="col">
-  <%= link_to send('new_location_path'), class: "btn btn-primary", remote: true do %>
-    <i class="bi bi-plus-circle"></i> Crear Nuevo Lugar
-  <% end %>
+  <% if @current_user&.is_master? %>
+    <%= link_to send('new_location_path'), class: "btn btn-primary", remote: true do %>
+      <i class="bi bi-plus-circle"></i> Crear Nuevo Lugar
+    <% end %>
+
+    <button id="toggle_visibility_visible" class="btn btn-warning btn-sm toggle-visibility"> <%= t('helpers.label.toggle_visibility_visible') %></button>
+    <button id="toggle_visibility_invisible" class="btn btn-warning btn-sm d-none toggle-visibility"><%= t('helpers.label.toggle_visibility_invisible') %></button>
+  <% end %>    
 </div>
 
 <%= render "locations_table" %>
