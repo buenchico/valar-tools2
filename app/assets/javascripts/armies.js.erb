@@ -10,31 +10,16 @@ $(document).on('turbolinks:load', function () {
             $("input[type=checkbox]:visible:checked").each(function () {
                 var row = $(this).closest("tr");
                 if (row.hasClass("tablesorter-headerRow") == false) {
-                  message += "> * ";
-                  // Name
-                  message += row[0].cells[2].textContent.replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ");
-                  // Status
-                  message += " (" + row[0].cells[3].textContent.trim().replace(/\s+/g, '/') + ")"
-                  if (row.find(".inline-edit-input").val() != "") message += ", en " + row.find(".inline-edit-input").val();
-                  if (row[0].cells[6].textContent.trim().split(" ").slice(-1)[0] != "agrupar") message += " grupo " + row[0].cells[6].textContent.trim().split(" ").slice(-1)[0].toUpperCase();
-                  if (row[0].cells[4].textContent.trim() != "") message += " [" + row[0].cells[4].textContent.trim().replace(/\s{2,}/g, ', ') + "]";
-                  message += " FUE: " + row[0].cells[1].textContent.trim();
+                  message += "> * " + row.find('.army-data').text().replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
                   message += "\n";
-                };
+                }
             });
 
-            // Create a dummy input to copy the string array inside it
-            var dummy = document.createElement("textarea");
-            // Add it to the document
-            document.body.appendChild(dummy);
-            // Output the array into it
-            dummy.value = message
-            // Select it
-            dummy.select();
-            // Copy its contents
-            document.execCommand("copy");
-            // Remove it as its not needed anymore
-            document.body.removeChild(dummy);
+            var textarea = $('<textarea>').val(message).appendTo('.container').select();
+            // Execute the "copy" command
+            textarea.select(); //SET FOCUS on the TEXTFIELD
+            document.execCommand('copy');
+            textarea.remove();
         });
     });
 

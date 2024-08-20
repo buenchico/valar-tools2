@@ -573,6 +573,8 @@ private
       @tags = @options["tags"]&.sort_by { |key, _value| key }.to_h
       @army_status = @options["status"]
       @army_types = @options["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
+      @hp = @options["hp"]
+      @fleets = @options["fleets"]
     end
   end
 

@@ -12,7 +12,7 @@ $('#copy_army').click(function() {
     // Create a temporary textarea element
     var textarea = $('<textarea>').val(content).appendTo('.modal-body').select();
     // Execute the "copy" command
-    textarea.focus(); //SET FOCUS on the TEXTFIELD
+    textarea.select(); //SET FOCUS on the TEXTFIELD
     document.execCommand('copy');
     textarea.remove();
 });

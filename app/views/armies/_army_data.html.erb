@@ -28,28 +28,7 @@
       <% end %>
 
       <div class="d-none" id="army-data">
-        <% traits = [] %>
-        <% ((100 - army.hp) / @options["hp"]["step"])&.nonzero? ? traits << (@options["hp"]["name"].capitalize + " " + number_to_modifier(((army.hp - 100) / @options["hp"]["step"]))).html_safe : nil %>
-        <% @men.each do | key, value | %>
-          <% (army["men#{value['sort']}"]&.nonzero? ? traits << (value["name"].capitalize + " " + number_to_modifier(army["men#{value['sort']}"])).html_safe : nil ) %>
-        <% end %>
-        <% @attributes.each do | key, value | %>
-          <% (army["attr#{value['sort']}"]&.nonzero? ? traits << (value["name"].capitalize + " " + number_to_modifier(army["attr#{value['sort']}"])).html_safe : nil ) %>
-        <% end %>
-        <% if army.tags.present? %>
-          <% army.tags.each do | tag | %>
-            <% if @tags[tag] %>
-              <% traits << @tags[tag]["name"].capitalize %>
-            <% else %>
-              <% traits << tag.capitalize %>
-            <% end %>
-          <% end %>
-        <% end %>
-        <%= army.name %> (<%= @options["status"].fetch(army.status, {}).fetch("name", army.status) %>)
-        <%= army.position.blank? ? nil : ", en #{army.position} " %>
-        <%= army.group.blank? ? nil : " grupo " + ARMY_GROUPS[army.group.to_sym][:name].upcase %>
-        <%= traits.blank? ? nil : " [" + traits.join(", ") + "] " %>
-        FUE: <%= army.strength %>
+        <%= render 'army_plain_txt', army: army %>
       </div>
     </div>
   </div>
