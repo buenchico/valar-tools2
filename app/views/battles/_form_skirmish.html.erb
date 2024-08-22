@@ -1,11 +1,13 @@
 <div class="row">
   <% ["a","b"].each do | side | %>
-    <div class="col-6">
+    <div class="col-md-6">
       <div class="row h1 text-right ">
         <%= @battle.send("side_#{side}") %>
       </div>
       <div class="armies">
-        <%= @battle.skirmish["armies"][side] %>
+        <% @battle.skirmish.fetch("armies", {}).fetch(side, {})&.each do |id, army| %>
+          <p><%= render 'army', army: army %></p>
+        <% end %>
       </div>
       <div>
         <%= link_to t('battles.edit.add_armies'), add_battle_armies_path(@battle, side: side), remote: true, class: 'btn btn-danger' %>

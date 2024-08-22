@@ -4,6 +4,7 @@ class BattlesController < ApplicationController
   before_action :set_battle, only: [:edit, :update, :destroy, :show, :add_armies, :update_armies]
   before_action :set_factions, only: [:add_armies]
   before_action :set_options
+  before_action :set_army_options, only: [:edit]
 
   def index
     if @current_user&.is_master?
@@ -11,7 +12,9 @@ class BattlesController < ApplicationController
     else
       @battles = Battle.where(user: @current_user)
     end
+  end
 
+  def edit
   end
 
   def new
@@ -54,7 +57,7 @@ class BattlesController < ApplicationController
     new_armies = Army.where(id: army_ids)
 
     new_armies.each do | army |
-      armies[army.id] = army.as_json(except: [:logs, :updated_at, :created_at, :location_id], methods: [:men0, :strength])
+      armies[army.id] = army.as_json(except: [:notes, :visible, :logs, :updated_at, :created_at, :location_id, :family_id], methods: [:men0, :strength])
     end
 
     # Update the specific side with new data
@@ -117,6 +120,21 @@ private
       @status = @options["status"]
       @token_status = @options["tokens"]
       $options_battles = @options
+    end
+  end
+
+  def set_army_options
+    options = Tool.find_by(name: 'armies').game_tools.find_by(game_id: active_game&.id)&.options
+    if options.blank?
+      redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de ejércitos'
+    else
+      @attributes = options["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
+      @fleets = options["fleets"]
+      @men = options["men"]&.sort_by { |_, v| v["sort"] }.to_h
+      @tags = options["tags"]&.sort_by { |key, _value| key }.to_h
+      @army_status = options["status"]
+      @army_types = options["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
+      @hp = options["hp"]
     end
   end
 
