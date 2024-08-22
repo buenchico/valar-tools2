@@ -64,13 +64,18 @@ $(document).on('turbolinks:load', function() {
       cssIconNone: 'bi bi-sort-caret sorter-icon',
       cssIconAsc:  'bi bi-sort-caret-up sorter-icon',
       cssIconDesc: 'bi bi-sort-caret-down sorter-icon',
-      imgAttr: 'title' // image attribute used by "image" parser
+      imgAttr: 'title', // image attribute used by "image" parser
+
+      textExtraction: function(node) {
+          // Replace en dash with hyphen
+          return $(node).text().replace(/–/g, '-');
+      }
     });
   });
 });
 
 $.tablesorter.addParser({
-  id: 'font-awesome',
+  id: 'bootstrap-icons',
   is: function(s) {
     return false;
   },
