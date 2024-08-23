@@ -15,10 +15,7 @@ module FamiliesHelper
     end_index = end_line_index || family.members.length
 
     # Extract the snippet
-    puts start_index
-    puts end_index
     snippet = family.members[start_index...end_index]
-    puts snippet
 
     return snippet
   end
