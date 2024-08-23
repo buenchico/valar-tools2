@@ -399,7 +399,7 @@ class ArmiesController < ApplicationController
               end
 
               # Checking visibility
-              visible = hash.delete('visible') || false
+              hash["visible"] ||= false
 
               # Adding location and family info
               location_name = hash.delete('location')
