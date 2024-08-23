@@ -76,7 +76,7 @@
           </p>
           <div class="collapse" id="collapseRelations">
             <% @relations.each do | family | %>
-              <p class="ms-2">— <%= link_to(family.title, family_path(family.id), remote: true, class: 'text-white') %></p>
+              <p class="ms-2">— <%= link_to(family.title, family_path(family.id), remote: true, class: 'text-white') %> : <%= snippet_for_members(family, @family.name) %></p>
             <% end %>
           </div>
         <% end %>
