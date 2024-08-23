@@ -437,7 +437,7 @@ class ArmiesController < ApplicationController
                 end
 
                 if family_branch.nil?
-                  family = Family.where(name: family_name)
+                  family = Family.find_by(name: family_name)
                 else
                   family = Family.where(name: family_name).find_by(branch: family_branch)
                 end
