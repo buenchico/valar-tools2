@@ -456,7 +456,9 @@ class ArmiesController < ApplicationController
               end
 
               # Save the army to the database
-              if !army.save
+              if army.save
+                nil
+              else
                 @failed += 1
                 @errors[army.name] ||= []
                 @errors[army.name] << ("#{army.errors.full_messages}")
