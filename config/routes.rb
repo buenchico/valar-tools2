@@ -41,7 +41,6 @@ Rails.application.routes.draw do
   get 'factions/:id/edit_fleets', to: 'factions#edit_fleets', as: 'edit_fleets_faction'
   get 'lists/factions', to: 'factions#list', as: 'factions_list'
 
-
   get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'
   get 'armies/:id/confirm_delete', to: 'armies#confirm', as: 'confirm_delete_army'
   get 'armies/edit_multiple', to: 'armies#edit_multiple', as: 'edit_multiple_armies'

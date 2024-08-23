@@ -80,6 +80,17 @@
             <% end %>
           </div>
         <% end %>
+        <% if @current_user.is_master? %>
+          <% if @family.armies.present? %>
+            <p class="h4">Ejércitos</p>
+            <p><%= @family.hp_raised %> HP alzados</p>
+            <p><%= @family.hp_start_no_bleed %> HP leva / <%= @family.hp_start_total %> HP total</p>
+            <p><%= @family.hp_inactive %> <i class="bi bi-skull-solid"></i>HP muertos</p>
+            <% @family.armies.each do | army | %>
+              <p><%= link_to(army.name, edit_army_path(army.id), remote: true, class: 'text-white') %></p>
+            <% end %>
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>

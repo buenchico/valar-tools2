@@ -34,7 +34,12 @@ class Family < ApplicationRecord
     (armies.where(status: 'inactive').sum(:hp_start) / hp_step)
   end
 
-  def hp_start
+  def hp_start_no_bleed
+    set_army_options if hp_step.nil?
+    (armies.where.not(army_type: 'bleed').sum(:hp_start) / hp_step)
+  end
+
+  def hp_start_total
     set_army_options if hp_step.nil?
     (armies.sum(:hp_start) / hp_step)
   end

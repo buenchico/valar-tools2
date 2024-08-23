@@ -12,7 +12,7 @@
     <td><%= number_to_modifier(family["loyalty_#{index + 1}"]) %></td>
   <% end %>
   <td class="no-wrap-column"><%= family.hp_raised %> de</td>
-  <td class="no-wrap-column ps-0"><%= family.hp_start %></td>
+  <td class="no-wrap-column ps-0"><%= family.hp_start_no_bleed %>(<%= family.hp_start_total %>)</td>
   <td class="no-wrap-column"><i class="bi bi-skull-solid"></i><%= family.hp_inactive %></td>
   <td class="text-center">
     <% if family.visible == true  %>
