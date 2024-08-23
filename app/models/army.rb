@@ -129,7 +129,7 @@ class Army < ApplicationRecord
 
     men_str = []
     men.each_with_index do | value, index |
-      men_str << (self.send("men#{index}").to_i * value)
+      men_str << (self.send("men#{index}").to_f * value)
     end
 
     if self.board.nil?
