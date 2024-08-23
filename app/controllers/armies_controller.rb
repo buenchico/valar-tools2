@@ -435,7 +435,13 @@ class ArmiesController < ApplicationController
                   # If the pattern doesn't match, assume the entire string is the family_name
                   family_name = family_title
                 end
-                family = Family.where(name: family_name).find_by(branch: family_branch)
+
+                if family_branch.nil?
+                  family = Family.where(name: family_name)
+                else
+                  family = Family.where(name: family_name).find_by(branch: family_branch)
+                end
+
                 if family
                   hash["family_id"] = family.id
                 else
