@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
 
   def number_to_modifier(number)
     if number.nil?
-      "+0"
+      "–"
     elsif number >= 0
       "+#{number}"
     else
