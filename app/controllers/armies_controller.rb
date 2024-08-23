@@ -55,6 +55,7 @@ class ArmiesController < ApplicationController
       if active_factions.include?(@master.id.to_s)
         @armies = Army.all.where(visible: @visible)
       else
+        active_factions = JSON.parse(active_factions)
         @armies = Army.joins(:factions).where(visible: @visible).where(factions: { id: active_factions })
       end
     end
@@ -446,7 +447,7 @@ class ArmiesController < ApplicationController
               army_data = hash.merge('faction_ids' => factions.compact)
 
               # Update the attributes
-              army.attributes = army_data
+                  army.attributes = army_data
 
               # Check if the army is new or not
               if army.new_record?
