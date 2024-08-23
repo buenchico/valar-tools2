@@ -30,7 +30,7 @@ class ArmiesController < ApplicationController
     origin = URI(request.referer).path.split('/')[1]
     stats = params[:stats]
     @faction = Faction.find_by(id: params[:faction_id])
-    active_factions = params[:active_factions]
+    active_factions = JSON.parse(params[:active_factions])
     @visible = params[:visible]
     active_visibility = params[:active_visibility].split(",")
     group = params[:group]
@@ -39,8 +39,10 @@ class ArmiesController < ApplicationController
 
     if stats
       if active_factions.length == 1
+        puts 1111
         @stats_faction = Faction.find_by(id: active_factions[0])
       else
+        puts 2222
         @stats_faction = @master
       end
     end
@@ -55,7 +57,6 @@ class ArmiesController < ApplicationController
       if active_factions.include?(@master.id.to_s)
         @armies = Army.all.where(visible: @visible)
       else
-        active_factions = JSON.parse(active_factions)
         @armies = Army.joins(:factions).where(visible: @visible).where(factions: { id: active_factions })
       end
     end
