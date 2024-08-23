@@ -366,7 +366,10 @@ class ArmiesController < ApplicationController
       if params[:army][:confirm] == 'IMPORT'
         uploaded_file = params[:army][:file_upload]
         headers = nil
-        @errors = []
+        @errors = {}
+        @new = 0
+        @mod = 0
+        @failed = 0
 
         if uploaded_file.present?
           File.foreach(uploaded_file.path) do |line|
@@ -378,7 +381,7 @@ class ArmiesController < ApplicationController
               hash = Hash[headers.zip(data)]
 
               # Formatting tags correctly
-              hash["tags"] = hash["tags"].split(",")
+              hash["tags"] = (hash["tags"] || "").split(",")
 
               # Find the army by its 'id'
               army = Army.find_or_initialize_by(id: hash["id"])
@@ -390,28 +393,31 @@ class ArmiesController < ApplicationController
                 if faction
                   faction.id
                 else
-                  @errors << "(#{army.id}) #{army.name} : la facción no existe"
-                  nil
+                  @errors[army.name] ||= []
+                  @errors[army.name] << ("la facción #{faction_name} no existe")
                 end
               end
 
+              # Checking visibility
+              visible = hash.delete('visible') || false
+
               # Adding location and family info
-              location = hash.delete('location')
-              if location.nil?
+              location_name = hash.delete('location')
+              if location_name.nil?
                 hash["location_id"] = nil
               else
-                location = Location.where(location_type: "region").search_by_name(location).first
+                location = Location.where(location_type: "region").search_by_name(location_name).first
                 if location
                   hash["location_id"] = location.id
                 else
-                  @errors << "(#{army.id}) #{army.name} : la región no existe"
-                  nil
+                  @errors[army.name] ||= []
+                  @errors[army.name] << ("la región #{location_name} no existe")
                 end
               end
 
-              family = hash.delete('family')
+              family_title = hash.delete('family')
 
-              if family.nil?
+              if family_title.nil?
                 hash["family_id"] = nil
               else
                 # Initialize family_name and family_branch variables
@@ -419,21 +425,21 @@ class ArmiesController < ApplicationController
                 family_branch = ""
 
                 # Use a regular expression to match the pattern
-                match = family.match(/^(.*?)\s?\((.*?)\)$/)
+                match = family_title.match(/^(.*?)\s?\((.*?)\)$/)
 
                 if match
                   family_name = match[1]
                   family_branch = match[2]
                 else
                   # If the pattern doesn't match, assume the entire string is the family_name
-                  family_name = family
+                  family_name = family_title
                 end
                 family = Family.where(name: family_name).find_by(branch: family_branch)
                 if family
                   hash["family_id"] = family.id
                 else
-                  @errors << "(#{army.id}) #{army.name} : la familia no existe"
-                  nil
+                  @errors[army.name] ||= []
+                  @errors[army.name] << ("la familia #{family_title} no existe")
                 end
               end
 
@@ -443,8 +449,6 @@ class ArmiesController < ApplicationController
               army.attributes = army_data
 
               # Check if the army is new or not
-              @new = 0
-              @mod = 0
               if army.new_record?
                 @new += 1
               else
@@ -453,7 +457,9 @@ class ArmiesController < ApplicationController
 
               # Save the army to the database
               if !army.save
-                @errors << "(#{army.id}) #{army.name} : #{army.errors}"
+                @failed += 1
+                @errors[army.name] ||= []
+                @errors[army.name] << ("#{army.errors.full_messages}")
               end
             end
           end
@@ -462,9 +468,14 @@ class ArmiesController < ApplicationController
         if @errors.blank?
           format.html { redirect_to armies_url, success: "#{(@new + @mod)} ejércitos importados correctamente. #{@new} han sido creados. #{@mod} ejércitos han sido modificados." }
         else
+          errors_message = ''
+          @errors.each do | key, value |
+            errors_message += '<p>' + key.to_s + " " + value.to_s + '</p>'
+          end
+
           message = '<p>' + (@new + @mod).to_s + ' ejércitos han sido importados correctamente.</p>' +
-                    '<p>' + @errors.length.to_s + ' ejércitos han fallado al ser creadas.</p>' +
-                    '<p>' + @errors.to_s + '</p>'
+                    '<p>' + @failed.to_s + ' ejércitos han fallado al ser creadas.</p>' +
+                    errors_message
           format.html { redirect_to armies_url, danger: message }
         end
 
