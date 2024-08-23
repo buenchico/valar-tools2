@@ -129,7 +129,7 @@ class Army < ApplicationRecord
 
     men_str = []
     men.each_with_index do | value, index |
-      men_str << (self.send("men#{index}") * value)
+      men_str << (self.send("men#{index}").to_i * value)
     end
 
     if self.board.nil?
@@ -150,7 +150,7 @@ class Army < ApplicationRecord
       attr << self["attr#{index}"]
     end
 
-    attr_mod = (attr.zip(attributes).map { |a, b| a * b})
+    attr_mod = (attr.zip(attributes).map { |a, b| a.to_f * b.to_f})
     attr_str = 1
     attr_mod.each do | value |
       attr_str = attr_str * (100 + value) * 0.01
