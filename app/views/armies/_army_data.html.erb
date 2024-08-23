@@ -17,8 +17,9 @@
       </p>
 
       <p class="card-text">
-        Este ejército está compuesto por <%= (@options["soldiers"] * ( army.hp.to_f / 100)).to_i %> hombres y tiene una fuerza de combate&nbsp;<i class="bi bi-award"></i><%= army.strength %>
+        Este ejército está compuesto por <%= (@options["soldiers"] * ( army.hp.to_f * 0.01) * (army.composition.sum() * 0.01)).to_i  %> hombres y tiene una fuerza de combate&nbsp;<i class="bi bi-award"></i><%= army.strength %>
       </p>
+      <%= (army.composition.sum() * 0.01) %>
 
       <% men = @men.keys %>
       <% army.composition.each_with_index do | soldiers, index | %>
