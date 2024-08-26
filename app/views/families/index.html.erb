@@ -9,7 +9,7 @@
 </div>
 
 <div class="row my-3">
-  <div class="col d-flex align-items-center gap-2">
+  <div class="col">
     <% if @current_user&.is_master? %>
       <%= link_to new_family_path, class: "btn btn-primary", remote: true do %>
         <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
@@ -26,7 +26,7 @@
       <button id="toggle_visibility_invisible" class="btn btn-warning btn-sm d-none toggle-visibility"><%= t('helpers.label.toggle_visibility_invisible') %></button>
     <% end %>
   </div>
-  <div class="col-6">
+  <div class="col">
     <div class="d-flex align-items-center justify-content-end">
       <%= select_tag "filter", options_for_select(@filter), id: "filterselect", class: "form-select form-select-sm me-2" %>
       <input id="filtertext" class="form-control form-control-sm" type="text" placeholder="Filtrar...">
