@@ -14,6 +14,7 @@ class FamiliesController < ApplicationController
     @vassals = Family.where(lord_id: @family.id)
     @locations = Location.where(family_id: @family.id)
     @relations = Family.where("LOWER(members) LIKE ?", "%#{@family.name.downcase}%").where.not(id: @family.id)
+    @army_options = Tool.find_by(name: 'armies').game_tools.find_by(game_id: active_game&.id)&.options
     respond_to do | format |
       format.js
       format.html do
@@ -44,7 +45,7 @@ class FamiliesController < ApplicationController
   end
 
   def edit_multiple
-    @families = Family.where(id: params[:army_ids]).order(:name)
+    @families = Family.where(id: params[:family_ids]).order(:name)
     @action = params[:button]
   end
 

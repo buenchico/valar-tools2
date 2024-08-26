@@ -24,23 +24,18 @@ class Family < ApplicationRecord
     self.hp_step = (Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options.dig("hp", "step") || 10)
   end
 
-  def hp_raised
-    set_army_options if hp_step.nil?
-    (armies.where(status: 'raised').sum(:hp) / hp_step)
+  def hp(status)
+    set_army_options if self.hp_step.nil?
+    (self.armies.where(status: status).sum(:hp) / self.hp_step)
   end
 
-  def hp_inactive
-    set_army_options if hp_step.nil?
-    (armies.where(status: 'inactive').sum(:hp_start) / hp_step)
-  end
+  def hp_start(type)
+    set_army_options if self.hp_step.nil?
 
-  def hp_start_no_bleed
-    set_army_options if hp_step.nil?
-    (armies.where.not(army_type: 'bleed').sum(:hp_start) / hp_step)
-  end
-
-  def hp_start_total
-    set_army_options if hp_step.nil?
-    (armies.sum(:hp_start) / hp_step)
+    if type == 'all'
+      (self.armies.sum(:hp_start) / self.hp_step)
+    else
+      (self.armies.where(army_type: type).sum(:hp_start) / self.hp_step)
+    end
   end
 end

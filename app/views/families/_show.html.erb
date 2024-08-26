@@ -19,7 +19,7 @@
         <p><strong>Señor:</strong> <%= family.lord.nil? ? '' : link_to(family.lord.name, family_path(family.lord.id), remote: true, class: 'text-white') %></p>
         <p><strong>Facción:</strong> <%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, faction_path(family.faction.id), remote: true, class: 'text-white') %></p>
 
-        <% if !family.description.blank? %>
+        <% if family.description.present? %>
           <p>
             <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseDesc" role="button" aria-expanded="false" aria-controls="collapseDesc">
               <i class="bi bi-plus-circle"></i> <strong>Descripción:</strong>
@@ -29,7 +29,7 @@
             <%= simple_format(family.description) %>
           </div>
         <% end %>
-        <% if !family.members.blank? %>
+        <% if family.members.present? %>
           <p>
             <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseMembers" role="button" aria-expanded="false" aria-controls="collapseMembers">
               <i class="bi bi-plus-circle"></i> <strong>Miembros:</strong>
@@ -39,7 +39,7 @@
             <%= simple_format(family.members) %>
           </div>
         <% end %>
-        <% if @vassals.length > 0 %>
+        <% if @vassals.present? %>
           <p>
             <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseVassals" role="button" aria-expanded="false" aria-controls="collapseVassals">
               <i class="bi bi-plus-circle"></i> <strong>Vasallos:</strong>
@@ -56,7 +56,7 @@
             <% end %>
           </div>
         <% end %>
-        <% if @locations.length > 0 %>
+        <% if @locations.present? %>
           <p>
             <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseLocations" role="button" aria-expanded="false" aria-controls="collapseLocations">
               <i class="bi bi-plus-circle"></i> <strong>Lugares:</strong>
@@ -68,7 +68,7 @@
             <% end %>
           </div>
         <% end %>
-        <% if @relations.length > 0 %>
+        <% if @relations.present? %>
           <p>
             <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseRelations" role="button" aria-expanded="false" aria-controls="collapseLocations">
               <i class="bi bi-plus-circle"></i> <strong>Relaciones:</strong>
@@ -82,12 +82,45 @@
         <% end %>
         <% if @current_user.is_master? %>
           <% if @family.armies.present? %>
-            <p class="h4">Ejércitos</p>
-            <p><%= @family.hp_raised %> HP alzados</p>
-            <p><%= @family.hp_start_no_bleed %> HP leva / <%= @family.hp_start_total %> HP total</p>
-            <p><%= @family.hp_inactive %> <i class="bi bi-skull-solid"></i>HP muertos</p>
+            <div class="h4">Ejércitos</div>
+            <div class="row ms-1">
+              <% @army_options["status"]&.sort_by { |_, v| v["sort"] }.to_h.each do | key, status | %>
+                <div class="col">
+                  <i class="bi bi-<%= status['icon'] %>"></i>
+                  HP <%= status["name"] %> :
+                  <%= @family.hp(key) %>
+                </div>
+              <% end %>
+            </div>
+            <div class="row ms-1 mt-1 h5">
+              HP iniciales
+            </div>
+            <div class="row ms-1 mb-1">
+              <% @army_options["army_type"]&.sort_by { |_, v| v["sort"] }.to_h.each do | key, status | %>
+                <% if family.hp_start(key) != 0 %>
+                  <div class="col">
+                    <i class="bi bi-<%= status['icon'] %>"></i>
+                    HP <%= status["name"] %> :
+                    <%= @family.hp_start(key) %>
+                  </div>
+                <% end %>
+              <% end %>
+              <div class="col">
+                HP total :
+                <%= @family.hp_start('all') %>
+              </div>
+            </div>
+            <div class="row ms-1 mt-1 h5">
+              Lista
+            </div>
             <% @family.armies.each do | army | %>
-              <p><%= link_to(army.name, edit_army_path(army.id), remote: true, class: 'text-white') %></p>
+              <div class="row ms-1">
+                <div class="col <%= army.status %>">
+                  <%= link_to(army.name, edit_army_path(army.id), remote: true, class: 'text-white') %>
+                  <%= army.position.blank? ? '' : 'en ' + army.position %>
+                  (<%= @army_options["status"][army.status]["name"] %>)
+                </div>
+              </div>
             <% end %>
           <% end %>
         <% end %>
