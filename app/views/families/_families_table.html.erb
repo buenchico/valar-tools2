@@ -12,7 +12,7 @@
           <% @options["loyalties"].each do |value| %>
             <th scope="col">Lealtad a <%= value %></th>
           <% end %>
-          <th scope="col" colspan="3">Ejércitos</th>
+          <th scope="col" colspan="3" data-bs-toggle="tooltip" data-bs-placement="left" title="HP alzados de HP totales leva (sangrado). HP muertos">Ejércitos</th>
           <th scope="col" class="text-center sorter-bootstrap-icons">Visible</th>
         <% end %>
         <% if @current_user&.is_admin? %>
