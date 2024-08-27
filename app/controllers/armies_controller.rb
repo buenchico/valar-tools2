@@ -622,7 +622,7 @@ private
   def army_stats
     all_armies = Army.where(visible: true).order(:id)
     @armies_total = all_armies.length
-    @men_total = all_armies.sum { |army| ( army.hp.to_i * @options["soldiers"].to_i / 100 ) }
+    @men_total = all_armies.sum { |army| army.men }
     @str_total = all_armies.sum { |army| army.strength }.round(2)
     @raised = all_armies.where(status: 'raised').length
     @dead = all_armies.where(status: 'inactive').length

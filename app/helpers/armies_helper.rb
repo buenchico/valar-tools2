@@ -4,6 +4,6 @@ module ArmiesHelper
   end
 
   def total_men(armies)
-    armies.sum { |army| ( army.hp.to_i * @options["soldiers"].to_i / 100 ) }
+    armies.sum { |army| army.men }
   end
 end
