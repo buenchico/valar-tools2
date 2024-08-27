@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_12_120406) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_27_154559) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -143,6 +143,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_12_120406) do
     t.integer "loyalty_3"
     t.integer "loyalty_4"
     t.integer "loyalty_5"
+    t.string "tier"
     t.index ["faction_id"], name: "index_valar_families_on_faction_id"
     t.index ["game_id"], name: "index_valar_families_on_game_id"
     t.index ["lord_id"], name: "index_valar_families_on_lord_id"

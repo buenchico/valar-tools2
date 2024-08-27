@@ -154,7 +154,7 @@ private
   end
 
   def family_params
-    params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :members, :description, :loyalty_1, :loyalty_2, :loyalty_3, :loyalty_4, :loyalty_5, tags: []).tap do |whitelisted|
+    params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :tier, :members, :description, :loyalty_1, :loyalty_2, :loyalty_3, :loyalty_4, :loyalty_5, tags: []).tap do |whitelisted|
       whitelisted[:tags] = params[:family][:tags].reject(&:empty?)
 
       if @options["tags"] != "false"
