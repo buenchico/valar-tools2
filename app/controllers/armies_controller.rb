@@ -2,11 +2,11 @@ class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
   before_action :set_options
-  before_action :set_factions, only: [:index, :edit, :edit_multiple, :new]
+  before_action :set_factions, only: [:index, :edit, :edit_multiple, :new, :stats]
   before_action :army_stats, only: [:index, :get_armies]
   before_action :set_filters, only: [:index]
   before_action :check_player, except: [:get_discourse_armies, :post_discourse_armies]
-  before_action :check_master, only: [:destroy, :destroy_multiple]
+  before_action :check_master, only: [:destroy, :destroy_multiple, :stats]
   before_action :check_owner, only: [:edit, :edit_notes, :update, :edit_multiple, :update_multiple]
   before_action :set_regions, only: [:new, :edit, :edit_multiple]
   skip_before_action :verify_authenticity_token, only: [:post_discourse_armies]
@@ -581,6 +581,10 @@ class ArmiesController < ApplicationController
       armies_text << "<small>Editado por las tools, grupo **" + ARMY_GROUPS[group.to_sym][:name].upcase + "**</small>\n"
       render plain: armies_text
     end
+  end
+
+  def stats
+    @armies = Army.all
   end
 
 private
