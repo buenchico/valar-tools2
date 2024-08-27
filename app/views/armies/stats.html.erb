@@ -32,7 +32,7 @@
       <tr>
       <% @factions.each do | faction | %>
         <tr>
-          <td><%= faction.title %></td>
+          <td><%= faction.long_name %></td>
           <td><%= faction.armies.count %></td>
           <td><%= total_men(faction.armies) %></td>
           <td><%= total_strength(faction.armies) %></td>
