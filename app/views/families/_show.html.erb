@@ -113,7 +113,7 @@
             <div class="row ms-1 mt-1 h5">
               Lista
             </div>
-            <% @family.armies.each do | army | %>
+            <% @family.armies.order(:name).each do | army | %>
               <div class="row ms-1">
                 <div class="col <%= army.status %>">
                   <%= link_to(army.name, edit_army_path(army.id), remote: true, class: 'text-white') %>
