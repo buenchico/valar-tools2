@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_02_185148) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_02_191201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -208,6 +208,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_02_185148) do
     t.index ["faction_id"], name: "index_valar_missions_on_faction_id"
     t.index ["game_id"], name: "index_valar_missions_on_game_id"
     t.index ["user_id"], name: "index_valar_missions_on_user_id"
+  end
+
+  create_table "recipes", force: :cascade do |t|
+    t.string "name"
+    t.string "section"
+    t.string "description"
+    t.integer "difficulty", default: 0
+    t.integer "speed", default: 2
+    t.jsonb "factors", default: {"plus"=>[], "minus"=>[], "double_plus"=>[], "double_minus"=>[]}
+    t.jsonb "results", default: {"major"=>[], "minor"=>[], "improvement"=>[]}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tools", force: :cascade do |t|
