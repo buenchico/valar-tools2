@@ -55,13 +55,33 @@
             </div>
             <div class="input-group mb-3">
               <%= form.label t('activerecord.attributes.recipe.factors'), class: 'input-group-text' %>
-              <%= form.number_field :factors, class: 'form-control', value: 0, step: 1, min: -12, max: 12 %>
+              <%= form.number_field :factors, class: 'form-control', value: 0, step: 1, min: -99, max: 99 %>
             </div>
-            <div class="input-group mb-3 ms-3 d-flex flex-wrap">
-              <div class="ms-1 mb-1 factor btn btn-sm btn-primary flex-fill" data-factor="1"><%= t('activerecord.attributes.recipe.factors_plus') %></div>
-              <div class="ms-1 mb-1 factor btn btn-sm btn-primary flex-fill" data-factor="3"><%= t('activerecord.attributes.recipe.factors_double_plus').html_safe %></div>
-              <div class="ms-1 mb-1 factor btn btn-sm btn-danger flex-fill" data-factor="-1"><%= t('activerecord.attributes.recipe.factors_minus') %></div>
-              <div class="ms-1 mb-1 factor btn btn-sm btn-danger flex-fill" data-factor="-3"><%= t('activerecord.attributes.recipe.factors_double_minus').html_safe %></div>
+            <div class="input-group mb-3 ms-3 d-flex flex-wrap" id ="factors-group" data-bs-toggle="tooltip" data-bs-placement="left" title="<%= t('.factors_tooltip') %>" >
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill" data-factor="1">
+                <%= t('activerecord.attributes.recipe.factors_plus') %>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                  0
+                </span>
+              </div>
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill" data-factor="3">
+                <%= t('activerecord.attributes.recipe.factors_double_plus').html_safe %>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                  0
+                </span>
+              </div>
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill" data-factor="-1">
+                <%= t('activerecord.attributes.recipe.factors_minus') %>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                  0
+                </span>
+              </div>
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill" data-factor="-3">
+                <%= t('activerecord.attributes.recipe.factors_double_minus').html_safe %>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                  0
+                </span>
+              </div>
             </div>
             <div class="input-group mb-3">
               <%= form.label t('activerecord.attributes.recipe.misc'), class: 'input-group-text' %>

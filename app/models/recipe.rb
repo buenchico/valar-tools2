@@ -1,5 +1,5 @@
 class Recipe < ApplicationRecord
-  before_validation :set_options
+  # before_validation :set_options
 
   validates :name, presence: true
   validates :section, presence: true
@@ -15,5 +15,5 @@ class Recipe < ApplicationRecord
     @sections = @option_recipes["sections"]
   end
 
-  validates :section, inclusion: { in: ->(army) { recipe.instance_variable_get(:@sections) || SECTIONS } }
+  validates :section, inclusion: { in: ->(recipe) { recipe.instance_variable_get(:@sections) || SECTIONS } }
 end

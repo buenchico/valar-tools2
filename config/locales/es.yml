@@ -225,6 +225,7 @@ es:
               invalid: "Una familia con el mismo nombre y rama existe en la partida."
   missions:
     index:
+      factors_tooltip: "Click para incrementar, manten pulsado o ctrl+click para reducir"
       calculate: "Calcular"
   travel:
     index:
