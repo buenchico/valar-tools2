@@ -102,4 +102,11 @@ class ApplicationController < ActionController::Base
   def army_size_mod(number)
     ((-1 + Math.sqrt(1 + 8 * number)) / 2).floor
   end
+
+  def generate_pseudorandom_id
+    timestamp = Time.now.to_i
+    random_hex = SecureRandom.hex(4) # You can adjust the length of the random part as needed.
+    pseudorandom_id = "#{timestamp}_#{random_hex}"
+    return pseudorandom_id
+  end  
 end
