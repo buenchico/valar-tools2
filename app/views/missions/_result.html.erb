@@ -1,0 +1,29 @@
+<div class="card mb-5 <%= @result["success"] ? "bg-success text-white" : "bg-danger" %> col-10">
+  <div class="card-body">
+    <div class="card-title">
+      <span id="mission-title" class="h5"><%= @result["name"] %></span>
+      <button type="button" id="close_results" class="btn-close btn-close-white float-end" aria-label="Close" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar"></button>
+      <button type="button" id="copy_results" class="btn-no-style text-light float-end me-1" aria-label="Copy" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar resultado">
+        <i class="bi bi-clipboard2-fill"></i>
+      </button>
+    </div>
+    <div id="mission-text" class="card-text">
+      <div class="row">
+        <%= @result %>
+        <% @data[:roll].each_with_index do |number, index| %>
+          <div class="p-0" style="position: relative; width: 60px">
+            <%= image_tag('d10.svg', alt: '10 sided dice', width: 60, height: 60) %>
+            <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); font-size: 24px" class="text-monospace text-white">
+              <% if index == 1 %>
+                <strong><%= number %></strong>
+              <% else %>
+                <%= number %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <%= @data %>
+    </div>
+  </div>
+</div>

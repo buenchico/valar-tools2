@@ -155,6 +155,17 @@ es:
         right: "Derecha"
         invisible_tooltip: "Invisible para los jugadores"
         family_id: "Familia"
+      recipe:
+        name: 'Nombre'
+        difficulty: "Dificultad"
+        tokens: "Tokens"
+        factors: "Factores"
+        factors_plus: "◻️ Factor positivo menor"
+        factors_double_plus: "<u>◻️ Factor positivo mayor</u>"
+        factors_minus: "◼️ Factor negativo menor"
+        factors_double_minus: "<u>◼️ Factor negativo mayor</u>"
+        misc: "Miscelánea"
+        role: "Roleo"
     models:
       game: 'Partida'
       tool: 'Herramienta'
@@ -173,6 +184,9 @@ es:
       battle:
         one: 'Batalla'
         other: 'Batallas'
+      recipe:
+        one: 'Receta'
+        other: 'Recetas'
     errors:
       messages:
         inclusion: 'Sólo pueden elegirse opciones de la lista.'
@@ -209,6 +223,9 @@ es:
               blank: "El nombre no puede estar en blanco"
             base:
               invalid: "Una familia con el mismo nombre y rama existe en la partida."
+  missions:
+    index:
+      calculate: "Calcular"
   travel:
     index:
       calculate: 'Calcular'

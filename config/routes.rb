@@ -82,7 +82,8 @@ Rails.application.routes.draw do
   resources :clocks
 
   get 'missions', to: 'missions#index'
-  post 'missions/calculate', to: 'missions#calculate'  
+  post 'missions/recipe', to: 'missions#get_recipe', as: 'get_recipe'
+  post 'missions/calculate', to: 'missions#calculate'
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

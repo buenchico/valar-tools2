@@ -1,0 +1,86 @@
+<% provide(:title, @tool.title) %>
+<% provide(:icon, @tool.icon_url) %>
+
+<div class="tool-title">
+    <i class="white <%= yield(:icon) %>"></i>
+    <%= yield(:title) %>
+</div>
+
+<div id="result" class="d-none"></div>
+
+<div class="col-md-7 col-sm-12">
+  <%= form_with url: get_recipe_path, local: false do |form| %>
+    <div class="input-group mb-3">
+      <%= form.label :recipe, class: 'input-group-text' %>
+      <%= form.select :recipe,
+        grouped_options_for_select(
+          @sections.map do |section|
+            [
+              section,
+              @recipes.select { |recipe| recipe.section == section }.map { |recipe| [recipe.name, recipe.id, { "data-difficulty" => recipe.difficulty }] }
+            ]
+          end,
+          selected: 1
+        ),
+        { include_blank: false },
+        class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+        multiple: false,
+        data: { "live-search": "true" }
+      %>
+    </div>
+  <% end %>
+  <%= @options["difficulty"] %>
+</div>
+
+<div class="row gx-2">
+  <div class="col-md-6 col-sm-12">
+    <div class="card border-primary bg-dark" >
+      <div class="card-body">
+        <div class="container d-flex flex-row align-items-center flex-wrap">
+          <%= form_with url: missions_calculate_path, local: false do |form| %>
+            <%= form.submit t('.calculate'), class: "btn btn-primary mb-3", id: "calculate" %>
+
+            <div class="input-group mb-3">
+              <%= form.label t('activerecord.attributes.recipe.difficulty'), class: 'input-group-text' %>
+              <%= form.select :difficulty, (@options["difficulty"].map { |dif| [dif["name"].capitalize, dif["value"]] }.sort_by { |subarray| -subarray[1] }), { selected: 0 }, class: 'form-select' %>
+            </div>
+            <div class="input-group mb-3">
+              <%= form.label t('activerecord.attributes.recipe.tokens'), class: 'input-group-text' %>
+              <%= form.number_field :tokens, class: 'form-control', value: 0, step: 1, min: 0, max: 12 %>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-sm btn-warning ms-1 tokens-set" data-token="3">+1</div>
+                <div class="btn btn-sm btn-warning ms-1 tokens-set" data-token="5">+2</div>
+                <div class="btn btn-sm btn-warning ms-1 tokens-set" data-token="6">+3</div>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <%= form.label t('activerecord.attributes.recipe.factors'), class: 'input-group-text' %>
+              <%= form.number_field :factors, class: 'form-control', value: 0, step: 1, min: -12, max: 12 %>
+            </div>
+            <div class="input-group mb-3 ms-3 d-flex flex-wrap">
+              <div class="ms-1 mb-1 factor btn btn-sm btn-primary flex-fill" data-factor="1"><%= t('activerecord.attributes.recipe.factors_plus') %></div>
+              <div class="ms-1 mb-1 factor btn btn-sm btn-primary flex-fill" data-factor="3"><%= t('activerecord.attributes.recipe.factors_double_plus').html_safe %></div>
+              <div class="ms-1 mb-1 factor btn btn-sm btn-danger flex-fill" data-factor="-1"><%= t('activerecord.attributes.recipe.factors_minus') %></div>
+              <div class="ms-1 mb-1 factor btn btn-sm btn-danger flex-fill" data-factor="-3"><%= t('activerecord.attributes.recipe.factors_double_minus').html_safe %></div>
+            </div>
+            <div class="input-group mb-3">
+              <%= form.label t('activerecord.attributes.recipe.misc'), class: 'input-group-text' %>
+              <%= form.number_field :misc, class: 'form-control', value: 0, step: 1, min: -3, max: 3 %>
+            </div>
+            <div class="input-group mb-3">
+              <%= form.label t('activerecord.attributes.recipe.role'), class: 'input-group-text' %>
+              <div class="form-check form-switch switch-group fs-2">
+                <%= form.check_box :role, class: 'form-check-input switch-group h-100' %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-sm-12">
+    <div class="card border-success bg-dark" >
+    </div>
+  </div>
+</div>
