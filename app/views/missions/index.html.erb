@@ -8,28 +8,37 @@
 
 <div id="result" class="d-none"></div>
 
-<div class="col-md-7 col-sm-12">
-  <%= form_with url: get_recipe_path, local: false do |form| %>
-    <div class="input-group mb-3">
-      <%= form.label :recipe, class: 'input-group-text' %>
-      <%= form.select :recipe,
-        grouped_options_for_select(
-          @sections.map do |section|
-            [
-              section,
-              @recipes.select { |recipe| recipe.section == section }.map { |recipe| [recipe.name, recipe.id, { "data-difficulty" => recipe.difficulty }] }
-            ]
-          end,
-          selected: 1
-        ),
-        { include_blank: false },
-        class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-        multiple: false,
-        data: { "live-search": "true" }
-      %>
+<div class="row">
+  <div class="col-md-7 col-sm-12">
+    <%= form_with url: get_recipe_path, local: false do |form| %>
+      <div class="input-group mb-3 fortune-field">
+        <%= form.label t('activerecord.models.recipe.one'), class: 'input-group-text' %>
+        <%= form.select :recipe,
+          grouped_options_for_select(
+            @sections.map do |section|
+              [
+                section,
+                @recipes.select { |recipe| recipe.section == section }.map { |recipe| [recipe.name, recipe.id] }
+              ]
+            end,
+            selected: nil
+          ),
+          { include_blank: true },
+          class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+          multiple: false,
+          title: t(".choose_recipe"),
+          data: { "live-search": "true" }
+        %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="col h2">
+    <div class="btn btn-lg btn-outline-success float-end" id="fortune-button">
+      <i class="bi bi-clover-fill"></i>
+      <%= @options["fortune"]["long_name"] %>
     </div>
-  <% end %>
-  <%= @options["difficulty"] %>
+  </div>
 </div>
 
 <div class="row gx-2">
@@ -39,12 +48,13 @@
         <div class="container d-flex flex-row align-items-center flex-wrap">
           <%= form_with url: missions_calculate_path, local: false do |form| %>
             <%= form.submit t('.calculate'), class: "btn btn-primary mb-3", id: "calculate" %>
+            <%= form.hidden_field :fortune %>
 
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.difficulty'), class: 'input-group-text' %>
               <%= form.select :difficulty, (@options["difficulty"].map { |dif| [dif["name"].capitalize, dif["value"]] }.sort_by { |subarray| -subarray[1] }), { selected: 0 }, class: 'form-select' %>
             </div>
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.tokens'), class: 'input-group-text' %>
               <%= form.number_field :tokens, class: 'form-control', value: 0, step: 1, min: 0, max: 12 %>
               <div class="d-flex align-items-center">
@@ -55,10 +65,10 @@
             </div>
             <div class="input-group mb-3">
               <%= form.label t('activerecord.attributes.recipe.factors'), class: 'input-group-text' %>
-              <%= form.hidden_field :factors_plus %>
-              <%= form.hidden_field :factors_double_plus %>
-              <%= form.hidden_field :factors_minus %>
-              <%= form.hidden_field :factors_double_minus %>
+              <%= form.hidden_field :factors_plus, value: "[]" %>
+              <%= form.hidden_field :factors_double_plus, value: "[]" %>
+              <%= form.hidden_field :factors_minus, value: "[]" %>
+              <%= form.hidden_field :factors_double_minus, value: "[]" %>
               <%= form.number_field :factors, class: 'form-control', value: 0, step: 1, min: -99, max: 99 %>
             </div>
             <div class="input-group mb-3 ms-3 d-flex flex-wrap" id ="factors-group" data-bs-toggle="tooltip" data-bs-placement="left" title="<%= t('.factors_tooltip') %>" >
@@ -87,11 +97,11 @@
                 </span>
               </div>
             </div>
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.misc'), class: 'input-group-text' %>
               <%= form.number_field :misc, class: 'form-control', value: 0, step: 1, min: -3, max: 3 %>
             </div>
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.role'), class: 'input-group-text' %>
               <div class="form-check form-switch switch-group fs-2">
                 <%= form.check_box :role, class: 'form-check-input switch-group h-100' %>

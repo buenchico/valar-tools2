@@ -75,7 +75,6 @@ $(document).on('turbolinks:load', function () {
           $element.addClass('active')
         }
         $.fn.addFactorToList();
-
     }
 
     // Long press event
@@ -95,6 +94,18 @@ $(document).on('turbolinks:load', function () {
     $('.tokens-set').click(function () {
       var dataToken = $(this).data('token');
       $('#tokens').val(dataToken)
+    });
+
+    // Fortune button
+    $('#fortune-button').click(function() {
+      $(this).toggleClass('active')
+      $('.fortune-field').toggleClass('d-none')
+      if ($(this).hasClass('active')) {
+        $('#fortune').val(true);
+        $('#recipe').val('').trigger('change');
+      } else {
+        $('#fortune').val(false);
+      }
     });
   }
 });

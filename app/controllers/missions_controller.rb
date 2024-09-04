@@ -9,7 +9,9 @@ class MissionsController < ApplicationController
 
   def get_recipe
     id = params[:recipe]
-    @recipe = Recipe.find(id)
+    if id.present?
+      @recipe = Recipe.find(id)
+    end
     respond_to :js
   end
 
@@ -39,48 +41,69 @@ class MissionsController < ApplicationController
     end
 
     if response.success?
-      roll = response.body['result']['random']['data'].sort
+      dice = response.body['result']['random']['data'].sort
     else
-      roll = Array.new(3) { rand(1..10) }.sort
+      dice = Array.new(3) { rand(1..10) }.sort
     end
+
+    roll = dice[1]
 
     difficulty = params[:difficulty].to_i
     tokens = params[:tokens].to_i
     advantage = params[:advantage].to_i
     misc = params[:misc].to_i
     role = params[:role].to_i
+    fortune = params[:fortune].downcase.in?(['true', 'yes', '1'])
     factors = params[:factors].to_i
+    factors_plus = JSON.parse(params[:factors_plus])
+    factors_double_plus = JSON.parse(params[:factors_double_plus])
+    factors_minus = JSON.parse(params[:factors_minus])
+    factors_double_minus = JSON.parse(params[:factors_double_minus])
+    factors_list = {plus: factors_plus, double_plus: factors_double_plus, minus: factors_minus, double_minus: factors_double_minus}
 
-    if roll[1] == 10
+    if roll == 10
       critic = 5
-    elsif roll[1] == 1
+    elsif roll == 1
       critic = -6
     else
       critic = 0
     end
 
-    if advantage == 0
-      subtotal = difficulty + tokens + advantage + misc + role + factors
+    roll = roll + critic
+
+    if fortune == true
+      subtotal = factors
     else
-      subtotal = advantage
+      subtotal = difficulty + tokens + advantage + misc + role + factors
     end
 
-    total = roll[1].to_i + critic + subtotal
+    total = roll + subtotal
 
-    @options["results"].sort.reverse.each do |range|
-        if range[0].to_i <= total
-          @result = range[1]
-          puts range[1]
-          break
-        end
+    if fortune == true
+      @options["fortune"]["results"].sort.reverse.each do |range|
+          if range[0].to_i <= total
+            @result = range[1]
+            puts range[1]
+            break
+          end
+      end
+    else
+      @options["results"].sort.reverse.each do |range|
+          if range[0].to_i <= total
+            @result = range[1]
+            puts range[1]
+            break
+          end
+      end
     end
 
     @data = {
+      dice: dice,
       roll: roll,
-      critic: critic,
       difficulty: difficulty,
       tokens: tokens,
-      advantage: advantage,
+      factors: factors,
+      factors_list: factors_list,
       misc: misc,
       role: role,
       subtotal: subtotal,

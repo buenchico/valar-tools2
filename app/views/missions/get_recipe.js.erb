@@ -1,75 +1,78 @@
-$('#difficulty').val(<%= @recipe.difficulty %>)
-
 $('.created').remove();
-<% @recipe.factors["double_plus"].each do | factor | %>
-  $('#factors-group').append(
-      `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill created' data-factor='3'>
-      <span class='factor-data'><u>◻️<%= factor.capitalize %></u></span>
-      </div>`
-    )
-<% end %>
-<% @recipe.factors["plus"].each do | factor | %>
-  $('#factors-group').append(
-    `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill created' data-factor='1'>
-    <span class='factor-data'>◻️<%= factor.capitalize %></span>
-    </div>`
-    )
-<% end %>
-<% @recipe.factors["plus_rec"].each do | factor | %>
-  $('#factors-group').append(
-    `<div class='ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill created' data-factor='1'>
+
+<% if @recipe.present? %>
+  $('#difficulty').val(<%= @recipe.difficulty %>)
+
+  <% @recipe.factors["double_plus"]&.each do | factor | %>
+    $('#factors-group').append(
+        `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill created' data-factor='3'>
+        <span class='factor-data'><u>◻️<%= factor.capitalize %></u></span>
+        </div>`
+      )
+  <% end %>
+  <% @recipe.factors["plus"]&.each do | factor | %>
+    $('#factors-group').append(
+      `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill created' data-factor='1'>
       <span class='factor-data'>◻️<%= factor.capitalize %></span>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-        0
-      </span>
-    </div>`
-    )
-<% end %>
-<% @recipe.factors["double_minus"].each do | factor | %>
-  $('#factors-group').append(
-      `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill created' data-factor='3'>
-      <span class='factor-data'><u>◼️<%= factor.capitalize %></u></span>
       </div>`
-    )
-<% end %>
-<% @recipe.factors["minus"].each do | factor | %>
-  $('#factors-group').append(
-      `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill created' data-factor='1'>
-      <span class='factor-data'>◼️<%= factor.capitalize %></span>
+      )
+  <% end %>
+  <% @recipe.factors["plus_rec"]&.each do | factor | %>
+    $('#factors-group').append(
+      `<div class='ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill created' data-factor='1'>
+        <span class='factor-data'>◻️<%= factor.capitalize %></span>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+          0
+        </span>
       </div>`
-    )
+      )
+  <% end %>
+  <% @recipe.factors["double_minus"]&.each do | factor | %>
+    $('#factors-group').append(
+        `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill created' data-factor='3'>
+        <span class='factor-data'><u>◼️<%= factor.capitalize %></u></span>
+        </div>`
+      )
+  <% end %>
+  <% @recipe.factors["minus"]&.each do | factor | %>
+    $('#factors-group').append(
+        `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill created' data-factor='1'>
+        <span class='factor-data'>◼️<%= factor.capitalize %></span>
+        </div>`
+      )
+  <% end %>
+  <% @recipe.factors["minus_rec"]&.each do | factor | %>
+    $('#factors-group').append(
+      `<div class='ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill created' data-factor='-1'>
+        <span class='factor-data'>◻️<%= factor.capitalize %></span>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+          0
+        </span>
+      </div>`
+      )
+  <% end %>
+  $('#factors-group').append("")
+
+  // Long press event
+  $('.factor.created').longpress(function() {
+      $.fn.changeFactor($(this),-1);
+  });
+
+  // Click event
+  $('.factor.created').click(function(event) {
+    if (event.ctrlKey) {
+      $.fn.changeFactor($(this),-1);
+    } else {
+      $.fn.changeFactor($(this),1);
+    }
+  });
+
+  // Toggle
+  $('.factor-toggle').click(function(event) {
+    if ($(this).hasClass('active')) {
+      $.fn.changeFactor($(this),-1,true);
+    } else {
+      $.fn.changeFactor($(this),1);
+    }
+  });
 <% end %>
-<% @recipe.factors["minus_rec"].each do | factor | %>
-  $('#factors-group').append(
-    `<div class='ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill created' data-factor='-1'>
-      <span class='factor-data'>◻️<%= factor.capitalize %></span>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-        0
-      </span>
-    </div>`
-    )
-<% end %>
-$('#factors-group').append("")
-
-// Long press event
-$('.factor.created').longpress(function() {
-    $.fn.changeFactor($(this),-1);
-});
-
-// Click event
-$('.factor.created').click(function(event) {
-  if (event.ctrlKey) {
-    $.fn.changeFactor($(this),-1);
-  } else {
-    $.fn.changeFactor($(this),1);
-  }
-});
-
-// Toggle
-$('.factor-toggle').click(function(event) {
-  if ($(this).hasClass('active')) {
-    $.fn.changeFactor($(this),-1,true);
-  } else {
-    $.fn.changeFactor($(this),1);
-  }
-});
