@@ -4,3 +4,33 @@ $('#result').html('<%= j render partial: "result" %>')
 $('#close_results').click(function() {
   $('#result').html("");
 });
+
+// Activate and clear results buttons
+$('.result').removeClass('disabled')
+$('.result').removeClass('active')
+
+
+
+
+
+
+
+//Copy results
+$('#copy_results').click(function() {
+    let data = ''
+
+    data += '[Link a la misión](https://www.valar.es/t/ejemplo_de_link) \n'
+    data += '\n**Jugador**: \n**Objetivo**: \n\n'
+    data += '#### '
+
+    navigator.clipboard.writeText(data)
+
+    $('#result_card').addClass( "highlight", 250, callback )
+
+    function callback() {
+      setTimeout(function() {
+        $('#result_card').removeClass( "highlight" );
+      }, 250 );
+    }
+
+});

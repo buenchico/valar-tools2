@@ -164,6 +164,10 @@ es:
         factors_double_plus: "<u>◻️ Factor positivo mayor</u>"
         factors_minus: "◼️ Factor negativo menor"
         factors_double_minus: "<u>◼️ Factor negativo mayor</u>"
+        results: "Consecuencias"
+        results_major: "Mayor"
+        results_minor: "Menor"
+        results_improvement: "Mejora"
         misc: "Miscelánea"
         role: "Roleo"
     models:
@@ -225,7 +229,6 @@ es:
               invalid: "Una familia con el mismo nombre y rama existe en la partida."
   missions:
     index:
-      choose_recipe: "Elige una receta"
       factors_tooltip: "Click para incrementar, manten pulsado o ctrl+click para reducir"
       calculate: "Calcular"
   travel:

@@ -21,13 +21,12 @@
                 @recipes.select { |recipe| recipe.section == section }.map { |recipe| [recipe.name, recipe.id] }
               ]
             end,
-            selected: nil
+            selected: @options["default_recipe"]
           ),
-          { include_blank: true },
+          { include_blank: false },
           class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
           multiple: false,
-          title: t(".choose_recipe"),
-          data: { "live-search": "true" }
+          data: { "live-search": "true", "default-recipe-id": @options["default_recipe"] }
         %>
       </div>
     <% end %>
@@ -49,6 +48,7 @@
           <%= form_with url: missions_calculate_path, local: false do |form| %>
             <%= form.submit t('.calculate'), class: "btn btn-primary mb-3", id: "calculate" %>
             <%= form.hidden_field :fortune %>
+            <%= form.hidden_field :recipe_id, value: @options["default_recipe"] %>
 
             <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.difficulty'), class: 'input-group-text' %>
@@ -72,30 +72,67 @@
               <%= form.number_field :factors, class: 'form-control', value: 0, step: 1, min: -99, max: 99 %>
             </div>
             <div class="input-group mb-3 ms-3 d-flex flex-wrap" id ="factors-group" data-bs-toggle="tooltip" data-bs-placement="left" title="<%= t('.factors_tooltip') %>" >
-              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill" data-factor="1">
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill me-2" data-factor="1">
                 <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_plus') %></span>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
                   0
                 </span>
               </div>
-              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill" data-factor="3">
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill me-2" data-factor="3">
                 <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_double_plus').html_safe %></span>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
                   0
                 </span>
               </div>
-              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill" data-factor="-1">
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill me-2" data-factor="-1">
                 <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_minus') %></span>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
                   0
                 </span>
               </div>
-              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill" data-factor="-3">
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill me-2" data-factor="-3">
                 <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_double_minus').html_safe %></span>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
                   0
                 </span>
               </div>
+              <% @default_recipe.factors["double_plus"]&.each do | factor | %>
+                <div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='3'>
+                  <span class='factor-data'><u>◻️<%= factor.capitalize %></u></span>
+                </div>
+              <% end %>
+              <% @default_recipe.factors["plus"]&.each do | factor | %>
+                <div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='1'>
+                  <span class='factor-data'>◻️<%= factor.capitalize %></span>
+                </div>
+              <% end %>
+              <% @default_recipe.factors["plus_rec"]&.each do | factor | %>
+                <div class='ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='1'>
+                  <span class='factor-data'>◻️<%= factor.capitalize %></span>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                    0
+                  </span>
+                </div>
+              <% end %>
+              <% @default_recipe.factors["double_minus"]&.each do | factor | %>
+                <div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-3'>
+                  <span class='factor-data'><u>◼️<%= factor.capitalize %></u></span>
+                </div>
+              <% end %>
+              <% @default_recipe.factors["minus"]&.each do | factor | %>
+                <div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-1'>
+                  <span class='factor-data'>◼️<%= factor.capitalize %></span>
+                </div>
+              <% end %>
+              <% @default_recipe.factors["minus_rec"]&.each do | factor | %>
+                <div class='ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-1'>
+                  <span class='factor-data'>◻️<%= factor.capitalize %></span>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                    0
+                  </span>
+                </div>
+              <% end %>
+
             </div>
             <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.misc'), class: 'input-group-text' %>
@@ -115,6 +152,37 @@
 
   <div class="col-md-6 col-sm-12">
     <div class="card border-success bg-dark" >
+      <div class="card-body">
+        <div class="h2">
+          <strong><span id="title"><%= @default_recipe.name %></span></strong>
+        </div>
+        <div class="ms-2 fortune-field">
+          <strong><span id="dif"><%= @options["difficulty"].find { |item| item["value"] == @default_recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(@default_recipe.difficulty) %>)</span></strong>
+        </div>
+        <div class="ms-2 fortune-field">
+          <strong><span id="speed"><%= @options["speed"].find { |item| item["time"] == @default_recipe.speed }["name"].capitalize %> (<%= @options["speed"].find { |item| item["time"] == @default_recipe.speed }["days"] %>)</span></strong>
+        </div>
+        <div id="desc">
+          <%= @default_recipe.description %>
+        </div>
+        <div id="consequences">
+          <% @default_recipe.results["major"].each_with_index do |result, index| %>
+            <div id="major_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-danger flex-fill disabled">
+              <span class='result-data'>🟰 <%= result %></span>
+            </div>
+          <% end %>
+          <% @default_recipe.results["minor"].each_with_index do |result, index| %>
+            <div id="minor_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-warning flex-fill disabled">
+              <span class='result-data'>➖ <%= result %></span>
+            </div>
+          <% end %>
+          <% @default_recipe.results["improvement"].each_with_index do |result, index| %>
+            <div id="improvement_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-success flex-fill disabled">
+              <span class='result-data'>➕ <%= result %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -77,6 +77,16 @@ $(document).on('turbolinks:load', function () {
         $.fn.addFactorToList();
     }
 
+    // Factors value change
+    $.fn.recalculateFactors = function() {
+      factors = 0
+      factors += (JSON.parse($('#factors_plus').val()).length * 1)
+      factors += (JSON.parse($('#factors_double_plus').val()).length * 3)
+      factors += (JSON.parse($('#factors_minus').val()).length * -1)
+      factors += (JSON.parse($('#factors_double_minus').val()).length * -3)
+      $('#factors').val(factors)
+    }
+
     // Long press event
     $('.factor').longpress(function() {
         $.fn.changeFactor($(this),-1);
@@ -98,13 +108,29 @@ $(document).on('turbolinks:load', function () {
 
     // Fortune button
     $('#fortune-button').click(function() {
+      $('#result').addClass('d-none')
       $(this).toggleClass('active')
       $('.fortune-field').toggleClass('d-none')
       if ($(this).hasClass('active')) {
         $('#fortune').val(true);
-        $('#recipe').val('').trigger('change');
+        $('#recipe').val(0).trigger('change');
       } else {
         $('#fortune').val(false);
+        $('#recipe').val($('#recipe').data('defaultRecipeId')).trigger('change');
+        $('#recipe').selectpicker('refresh');
+      }
+    });
+
+    // Copy Results on click
+    $('.result').click(function() {
+      $(this).toggleClass('active')
+      let resultId = $(this).attr('id');
+      let resultData = $(this).find('.result-data').text().trim()
+      let span = '<span id="result_' + resultId + '" class="m-1 result_data">' + resultData + '</span>'
+      if ($(this).hasClass('active')) {
+        $('#results_list').append(span)
+      } else {
+        $('#result_' + resultId).remove();
       }
     });
   }

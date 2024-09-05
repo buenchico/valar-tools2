@@ -1,18 +1,30 @@
 class MissionsController < ApplicationController
   before_action :set_tool
   before_action :check_master
-  before_action :set_options, only: [:index, :calculate]
+  before_action :set_options, only: [:index, :calculate, :get_recipe]
 
   def index
     @recipes = Recipe.all.order(:section)
+    @default_recipe = Recipe.find(@options["default_recipe"])
   end
 
   def get_recipe
-    id = params[:recipe]
-    if id.present?
-      @recipe = Recipe.find(id)
+    # Check if params[:recipe_id] is present and corresponds to an existing Recipe
+    @recipe = if params[:recipe].present?
+                Recipe.find_by(id: params[:recipe])
+              end
+
+    # If recipe is not found or params[:recipe_id] is empty, initialize a default recipe
+    @recipe ||= Recipe.new(
+      name: @options["fortune"]["long_name"],
+      difficulty: 0,
+      speed: 2,
+      description: @options["fortune"]["desc"]
+    )
+
+    respond_to do |format|
+      format.js
     end
-    respond_to :js
   end
 
   def calculate
@@ -48,6 +60,7 @@ class MissionsController < ApplicationController
 
     roll = dice[1]
 
+    @recipe = Recipe.find(params[:recipe_id].to_i)
     difficulty = params[:difficulty].to_i
     tokens = params[:tokens].to_i
     advantage = params[:advantage].to_i
@@ -91,7 +104,6 @@ class MissionsController < ApplicationController
       @options["results"].sort.reverse.each do |range|
           if range[0].to_i <= total
             @result = range[1]
-            puts range[1]
             break
           end
       end
@@ -109,6 +121,8 @@ class MissionsController < ApplicationController
       subtotal: subtotal,
       total: total
     }
+
+    @fortune = fortune
   end
 
 private
