@@ -1,10 +1,10 @@
 class Recipe < ApplicationRecord
-  # before_validation :set_options
+  before_validation :set_options
 
   validates :name, presence: true
   validates :section, presence: true
   validates :difficulty, inclusion: { in: -6..3 }
-  validates :speed, inclusion: { in: 0..6 }
+  validates :speed, inclusion: { in: -1..4 }
 
   SECTIONS = ["default"]
 

@@ -170,6 +170,7 @@ es:
         results_improvement: "Mejora"
         misc: "Miscelánea"
         role: "Roleo"
+        total: "Total"
     models:
       game: 'Partida'
       tool: 'Herramienta'
@@ -231,6 +232,7 @@ es:
     index:
       factors_tooltip: "Click para incrementar, manten pulsado o ctrl+click para reducir"
       calculate: "Calcular"
+      objective: "Objetivo"
   travel:
     index:
       calculate: 'Calcular'

@@ -121,16 +121,19 @@ $(document).on('turbolinks:load', function () {
       }
     });
 
-    // Copy Results on click
-    $('.result').click(function() {
-      $(this).toggleClass('active')
+    // Event delegation to handle dynamically added .result elements
+    $(document).on('click', '.result', function() {
+      $(this).toggleClass('active');
       let resultId = $(this).attr('id');
-      let resultData = $(this).find('.result-data').text().trim()
-      let span = '<span id="result_' + resultId + '" class="m-1 result_data">' + resultData + '</span>'
+      let resultData = $(this).find('.result-data').text().trim();
+      let span = '<span class="m-1 result_data result_' + resultId + '">' + resultData + '</span>';
+
       if ($(this).hasClass('active')) {
-        $('#results_list').append(span)
+        $('#results_list').append(span);
+        $('#results_plain').append(span);
       } else {
-        $('#result_' + resultId).remove();
+        $('.result_' + resultId).remove();
+        $('.result_' + resultId).remove();
       }
     });
   }

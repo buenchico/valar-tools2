@@ -160,24 +160,24 @@
           <strong><span id="dif"><%= @options["difficulty"].find { |item| item["value"] == @default_recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(@default_recipe.difficulty) %>)</span></strong>
         </div>
         <div class="ms-2 fortune-field">
-          <strong><span id="speed"><%= @options["speed"].find { |item| item["time"] == @default_recipe.speed }["name"].capitalize %> (<%= @options["speed"].find { |item| item["time"] == @default_recipe.speed }["days"] %>)</span></strong>
+          <strong><span id="speed"><%= @options["speed"][@default_recipe.speed]["name"].capitalize %><%= (@default_recipe.speed == -1) ? '' : '(' + options["speed"][@default_recipe.speed]["days"] + ')'%></span></strong>
         </div>
         <div id="desc">
           <%= @default_recipe.description %>
         </div>
         <div id="consequences">
           <% @default_recipe.results["major"].each_with_index do |result, index| %>
-            <div id="major_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-danger flex-fill disabled">
+            <div id="major_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-danger disabled">
               <span class='result-data'>🟰 <%= result %></span>
             </div>
           <% end %>
           <% @default_recipe.results["minor"].each_with_index do |result, index| %>
-            <div id="minor_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-warning flex-fill disabled">
+            <div id="minor_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-warning disabled">
               <span class='result-data'>➖ <%= result %></span>
             </div>
           <% end %>
           <% @default_recipe.results["improvement"].each_with_index do |result, index| %>
-            <div id="improvement_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-success flex-fill disabled">
+            <div id="improvement_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-success disabled">
               <span class='result-data'>➕ <%= result %></span>
             </div>
           <% end %>

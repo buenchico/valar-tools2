@@ -9,28 +9,27 @@ $('#close_results').click(function() {
 $('.result').removeClass('disabled')
 $('.result').removeClass('active')
 
-
-
-
-
-
-
 //Copy results
 $('#copy_results').click(function() {
-    let data = ''
+  // Get the text from the div
+  let rawText = $('#copy_box').text();
 
-    data += '[Link a la misión](https://www.valar.es/t/ejemplo_de_link) \n'
-    data += '\n**Jugador**: \n**Objetivo**: \n\n'
-    data += '#### '
+  // Split the text into lines
+  let lines = rawText.split('\n');
 
-    navigator.clipboard.writeText(data)
+  // Trim leading spaces from each line
+  let trimmedLines = lines.map(line => line.trimStart());
 
-    $('#result_card').addClass( "highlight", 250, callback )
+  // Rejoin the lines into a single string with newline characters
+  let cleanedText = trimmedLines.join('\n');
 
-    function callback() {
-      setTimeout(function() {
-        $('#result_card').removeClass( "highlight" );
-      }, 250 );
-    }
+  navigator.clipboard.writeText(cleanedText)
 
+  $('#result_card').addClass( "highlight", 250, callback )
+
+  function callback() {
+    setTimeout(function() {
+      $('#result_card').removeClass( "highlight" );
+    }, 250 );
+  }
 });

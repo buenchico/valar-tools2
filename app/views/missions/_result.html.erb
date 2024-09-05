@@ -14,27 +14,8 @@
             <div class="h5">
               <%= t('activerecord.attributes.recipe.factors') %>
             </div>
-            <div>
-              <% @data[:factors_list]&.each do |key, factors| %>
-                <% case key.to_s %>
-                <% when "double_plus" %>
-                  <% factors&.each do |factor| %>
-                    <u>◻️<%= factor.capitalize %></u>
-                  <% end %>
-                <% when "plus" %>
-                  <% factors&.each do |factor| %>
-                    ◻️<%= factor.capitalize %>
-                  <% end %>
-                <% when "minus" %>
-                  <% factors&.each do |factor| %>
-                    ◼️<%= factor.capitalize %>
-                  <% end %>
-                <% when "double_minus" %>
-                  <% factors&.each do |factor| %>
-                    <u>◼️<%= factor.capitalize %></u>
-                  <% end %>
-                <% end %>
-              <% end %>
+            <div id="factors_show">
+              <%= factors_to_text(@data[:factors_list],"html") %>
             </div>
           </div>
           <div class="results <%= @fortune ? 'd-none' : nil %>">
@@ -59,16 +40,16 @@
               </div>
             <% end %>
           </div>
-          <div class="mt-2">
+          <div id="result_data" class="mt-2">
             <div class="float-start me-3">
-              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong>Dificultad:</strong></div>
-              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong>Tokens:</strong></div>
-              <div class="row"><strong>Factores:</strong></div>
-              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong>Miscelánea:</strong></div>
-              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong>Roleo:</strong></div>
-              <div class="row"><strong>Total:</strong></div>
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.difficulty') %>:</strong></div>
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.tokens') %>:</strong></div>
+              <div class="row"><strong><%= t('activerecord.attributes.recipe.factors') %>:</strong></div>
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.mic') %>:</strong></div>
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.role') %>:</strong></div>
+              <div class="row"><strong><%= t('activerecord.attributes.recipe.total') %>:</strong></div>
             </div>
-            <div class="cloat-end">
+            <div class="">
               <div class="row <%= @fortune ? 'd-none' : nil %>"><%= number_to_modifier(@data[:difficulty]) %> (<%= @options["difficulty"].find { |item| item["value"] == @data[:difficulty] }["name"].capitalize %>)</div>
               <div class="row <%= @fortune ? 'd-none' : nil %>"><%= number_to_modifier(@data[:tokens]) %></div>
               <div class="row"><%= number_to_modifier(@data[:factors]) %></div>
@@ -78,6 +59,23 @@
             </div>
           </div>
         </div>
+      </div>
+      <div id="copy_box" class="d-none">
+        <p>[Link](https://www.valar.es/t/ejemplo_de_link)</p>
+        <p></p>
+        <p>**<%= t('activerecord.attributes.user.player') %>**: </p>
+        <p>**<%= t('missions.index.objective') %>**: </p>
+        <p></p>
+        <p>#### **<%= @recipe.name %> (<%= @options["speed"][@recipe.speed]["name"].capitalize %>, <%= @recipe.difficulty %>) : <%= @recipe.description %>**</p>
+        <p></p>
+        <p>**<%= t('activerecord.attributes.recipe.difficulty') %>:** <%= number_to_modifier(@data[:difficulty]) %></p>
+        <p>**<%= t('activerecord.attributes.recipe.tokens') %>:** <%= number_to_modifier(@data[:tokens]) %></p>
+        <p>**<%= t('activerecord.attributes.recipe.factors') %>:** <%= number_to_modifier(@data[:factors]) %>, <%= factors_to_text(@data[:factors_list],"markdown") %></p>
+        <p>**<%= t('activerecord.attributes.recipe.misc') %>:** <%= number_to_modifier(@data[:misc]) %></p>
+        <p>**<%= t('activerecord.attributes.recipe.role') %>:** <%= number_to_modifier(@data[:role]) %></p>
+        <p>**<%= t('activerecord.attributes.recipe.dice') %>:** <%= number_to_modifier(@data[:roll]) %></p>
+        <p>**<%= t('activerecord.attributes.recipe.total') %>:** <%= number_to_modifier(@data[:total]) %>, **<%= @result["name"] %>**, <%= @result["result"] %></p>
+        <p>**<%= t('activerecord.attributes.recipe.results') %>:** <span id="results_plain"></span></p>
       </div>
     </div>
   </div>
