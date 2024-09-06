@@ -12,26 +12,44 @@ $('#desc').html("<%= @recipe&.description&.html_safe %>")
 <% ["plus", "minus"].each do |direction| %>
   <% ["simple", "double"].each do |size| %>
     <% ["once", "multiple"].each do |style| %>
-      let message = ""
-      <% open = (size == "double" ? "<u>" : "") %>
-      <% close = (size == "double" ? "</u>" : "") %>
-      <% symbol = (direction == "plus" ? "◻️" : "◼️") %>
-      <% sign = (direction == "plus" ? 1 : -1) %>
-
-      <% @default_recipe.factors[direction + "_" + size + "_" + style]&.each do | factor | %>
-        message += `<div class='ms-1 mb-1 <%= style == "once" ? "factor-toggle" : "factor" %> btn btn-sm btn-outline-<%= direction == "plus" ? "primary" : "danger" %> flex-fill me-2 created' data-factor='<%= size == "simple" ? 1 * sign : 3 * sign %>'>`
-          message += `<span class='factor-data'><%= (open + symbol + factor.capitalize + close).html_safe %></span>`
-          <% if style == "multiple" %>
-            message += `<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-              0
-            </span>`
-          <% end %>
-        message += `</div>`
-        $('#factors-group').append(message)
+      <% @recipe.factors[direction + "_" + size + "_" + style].each do | factor | %>
+        <% open = (size == "double" ? "<u>" : "") %>
+        <% close = (size == "double" ? "</u>" : "") %>
+        <% symbol = (direction == "plus" ? "◻️" : "◼️") %>
+        <% sign = (direction == "plus" ? 1 : -1) %>
+        <% message = ("<div class='ms-1 mb-1 " + (style == "once" ? "factor-toggle" : "factor") + " btn btn-sm btn-outline-" + (direction == "plus" ? "primary" : "danger") + " flex-fill me-2 created' data-factor='" + (size == "simple" ? 1 * sign : 3 * sign).to_s + "''") %>
+        <% message += ("<span class='factor-data'>" + (open + symbol + factor.capitalize + close).html_safe + "</span>") %>
+        <% if style == "multiple" %>
+          <% message += "<span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning'>0</span>"  %>
+        <% end %>
+        <% message += "</div>" %>
+        // the iteration
+        $('#factors-group').append("<%= message.html_safe %>")
       <% end %>
     <% end %>
   <% end %>
 <% end %>
+
+results = ""
+<% if @recipe.id != @options["default_recipe"] %>
+  <% @recipe.results["major"].each_with_index do |result, index| %>
+    results = `<div id="major_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-danger created disabled">
+      <span class='result-data'>🟰 <%= result %></span>
+    </div>`
+  <% end %>
+  <% @recipe.results["minor"].each_with_index do |result, index| %>
+    results += `<div id="minor_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-warning created disabled">
+      <span class='result-data'>➖ <%= result %></span>
+    </div>`
+  <% end %>
+  <% @recipe.results["improvement"].each_with_index do |result, index| %>
+    results += `<div id="improvement_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-success created disabled">
+      <span class='result-data'>➕ <%= result %></span>
+    </div>`
+  <% end %>
+<% end %>
+
+$('#consequences').prepend(results);
 
 // Long press event
 $('.factor.created').longpress(function() {
