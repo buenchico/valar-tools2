@@ -1,0 +1,5 @@
+$('#family_list').find('tbody').append('<tr id="recipe_<%= @recipe.id.to_s %>"></tr>');
+$('#recipe_<%= @recipe.id %>').html('<%= j render "row", recipe: @recipe  %>');
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+$(".modal").modal('hide');

@@ -9,7 +9,6 @@ class RecipesController < ApplicationController
   end
 
   def edit
-    puts @recipe.name
   end
 
   def new
