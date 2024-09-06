@@ -3075,17 +3075,22 @@
 
     arbitraryListener: function () {
       $('#bs-select-' + selectId).on("click", function() {
-        var userInput = $('.bs-arbitrary').val();
+        var userInput = $(this).closest('.dropdown-menu').find('.bs-arbitrary').val();
 
         // Create a new option element with the user's input
         var newOption = '<option>' + userInput + '</option>';
 
-        // Append the new option to the selectpicker
-        $('.selectpicker').append(newOption);
+        // Get the selectpicker element related to this event
+        var $selectpicker = $(this).closest('.bootstrap-select').find('.selectpicker');
+
+        // Append the new option to the specific selectpicker
+        $selectpicker.append(newOption);
 
         // Automatically select the new option
-        $('.selectpicker option:contains(' + userInput + ')').prop('selected', true);
-        $('.selectpicker').selectpicker('refresh');
+        $selectpicker.find('option:contains(' + userInput + ')').prop('selected', true);
+
+        // Refresh the specific selectpicker
+        $selectpicker.selectpicker('refresh');
       });
     },
     // End of extended listeners
