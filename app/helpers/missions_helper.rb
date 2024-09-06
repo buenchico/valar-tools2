@@ -1,9 +1,9 @@
 module MissionsHelper
-  def factors_to_text(factors,style)
-    if style == 'html'
+  def factors_to_text(factors,mode)
+    if mode == 'html'
       open = '<u>'
       close = '</u>'
-    elsif style == 'markdown'
+    elsif mode == 'markdown'
       open = '[u]'
       close = '[/u]'
     else

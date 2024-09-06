@@ -4,7 +4,7 @@ class MissionsController < ApplicationController
 
   def index
     @recipes = Recipe.all.order(:section)
-    @default_recipe = Recipe.find(@options["default_recipe"])
+    @default_recipe = Recipe.find_by(id: @options["default_recipe"])
   end
 
   def get_recipe

@@ -96,44 +96,30 @@
                   0
                 </span>
               </div>
-              <% @default_recipe.factors["plus_double"]&.each do | factor | %>
-                <div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='3'>
-                  <span class='factor-data'><u>◻️<%= factor.capitalize %></u></span>
-                </div>
-              <% end %>
-              <% @default_recipe.factors["plus_simple"]&.each do | factor | %>
-                <div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='1'>
-                  <span class='factor-data'>◻️<%= factor.capitalize %></span>
-                </div>
-              <% end %>
-              <% @default_recipe.factors["plus_multiple"]&.each do | factor | %>
-                <div class='ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='1'>
-                  <span class='factor-data'>◻️<%= factor.capitalize %></span>
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-                    0
-                  </span>
-                </div>
-              <% end %>
-              <% @default_recipe.factors["minus_double"]&.each do | factor | %>
-                <div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-3'>
-                  <span class='factor-data'><u>◼️<%= factor.capitalize %></u></span>
-                </div>
-              <% end %>
-              <% @default_recipe.factors["minus_simple"]&.each do | factor | %>
-                <div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-1'>
-                  <span class='factor-data'>◼️<%= factor.capitalize %></span>
-                </div>
-              <% end %>
-              <% @default_recipe.factors["minus_multiple"]&.each do | factor | %>
-                <div class='ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-1'>
-                  <span class='factor-data'>◻️<%= factor.capitalize %></span>
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-                    0
-                  </span>
-                </div>
-              <% end %>
 
+              <% ["plus", "minus"].each do |direction| %>
+                <% ["simple", "double"].each do |size| %>
+                  <% ["once", "multiple"].each do |style| %>
+                    <% open = (size == "double" ? "<u>" : "") %>
+                    <% close = (size == "double" ? "</u>" : "") %>
+                    <% symbol = (direction == "plus" ? "◻️" : "◼️") %>
+                    <% sign = (direction == "plus" ? 1 : -1) %>
+
+                    <% @default_recipe.factors.fetch(direction + "_" + size + "_" + style, [])&.each do | factor | %>
+                      <div class='ms-1 mb-1 <%= style == "once" ? "factor-toggle" : "factor" %> btn btn-sm btn-outline-<%= direction == "plus" ? "primary" : "danger" %> flex-fill me-2 created' data-factor='<%= size == "simple" ? 1 * sign : 3 * sign %>'>
+                        <span class='factor-data'><%= (open + symbol + factor.capitalize + close).html_safe %></span>
+                        <% if style == "multiple" %>
+                          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                            0
+                          </span>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
             </div>
+
             <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.misc'), class: 'input-group-text' %>
               <%= form.number_field :misc, class: 'form-control', value: 0, step: 1, min: -3, max: 3 %>

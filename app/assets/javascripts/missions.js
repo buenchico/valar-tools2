@@ -101,6 +101,15 @@ $(document).on('turbolinks:load', function () {
       }
     });
 
+    // Toggle
+    $('.factor-toggle').click(function(event) {
+      if ($(this).hasClass('active')) {
+        $.fn.changeFactor($(this),-1,true);
+      } else {
+        $.fn.changeFactor($(this),1);
+      }
+    });    
+
     $('.tokens-set').click(function () {
       var dataToken = $(this).data('token');
       $('#tokens').val(dataToken)

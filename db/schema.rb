@@ -216,7 +216,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_02_191201) do
     t.string "description"
     t.integer "difficulty", default: 0
     t.integer "speed", default: 2
-    t.jsonb "factors", default: {"plus"=>[], "minus"=>[], "double_plus"=>[], "double_minus"=>[]}
+    t.jsonb "factors", default: {"plus_double_once"=>[], "plus_simple_once"=>[], "minus_double_once"=>[], "minus_simple_once"=>[], "plus_double_multiple"=>[], "plus_simple_multiple"=>[], "minus_double_multiple"=>[], "minus_simple_multiple"=>[]}
     t.jsonb "results", default: {"major"=>[], "minor"=>[], "improvement"=>[]}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -9,53 +9,28 @@ $('#recipe_id').val(<%= @recipe&.id %>)
 $('#difficulty').val(<%= @recipe&.difficulty %>)
 $('#desc').html("<%= @recipe&.description&.html_safe %>")
 
-<% @recipe.factors["plus_double"]&.each do | factor | %>
-  $('#factors-group').append(
-      `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='3'>
-      <span class='factor-data'><u>◻️<%= factor.capitalize %></u></span>
-      </div>`
-    )
-<% end %>
-<% @recipe.factors["plus_simple"]&.each do | factor | %>
-  $('#factors-group').append(
-    `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='1'>
-    <span class='factor-data'>◻️<%= factor.capitalize %></span>
-    </div>`
-    )
-<% end %>
-<% @recipe.factors["plus_multiple"]&.each do | factor | %>
-  $('#factors-group').append(
-    `<div class='ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='1'>
-      <span class='factor-data'>◻️<%= factor.capitalize %></span>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-        0
-      </span>
-    </div>`
-    )
-<% end %>
-<% @recipe.factors["minus_double"]&.each do | factor | %>
-  $('#factors-group').append(
-      `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-3'>
-      <span class='factor-data'><u>◼️<%= factor.capitalize %></u></span>
-      </div>`
-    )
-<% end %>
-<% @recipe.factors["minus_simple"]&.each do | factor | %>
-  $('#factors-group').append(
-      `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-1'>
-      <span class='factor-data'>◼️<%= factor.capitalize %></span>
-      </div>`
-    )
-<% end %>
-<% @recipe.factors["minus_multiple"]&.each do | factor | %>
-  $('#factors-group').append(
-    `<div class='ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-1'>
-      <span class='factor-data'>◻️<%= factor.capitalize %></span>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-        0
-      </span>
-    </div>`
-    )
+<% ["plus", "minus"].each do |direction| %>
+  <% ["simple", "double"].each do |size| %>
+    <% ["once", "multiple"].each do |style| %>
+      let message = ""
+      <% open = (size == "double" ? "<u>" : "") %>
+      <% close = (size == "double" ? "</u>" : "") %>
+      <% symbol = (direction == "plus" ? "◻️" : "◼️") %>
+      <% sign = (direction == "plus" ? 1 : -1) %>
+
+      <% @default_recipe.factors[direction + "_" + size + "_" + style]&.each do | factor | %>
+        message += `<div class='ms-1 mb-1 <%= style == "once" ? "factor-toggle" : "factor" %> btn btn-sm btn-outline-<%= direction == "plus" ? "primary" : "danger" %> flex-fill me-2 created' data-factor='<%= size == "simple" ? 1 * sign : 3 * sign %>'>`
+          message += `<span class='factor-data'><%= (open + symbol + factor.capitalize + close).html_safe %></span>`
+          <% if style == "multiple" %>
+            message += `<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+              0
+            </span>`
+          <% end %>
+        message += `</div>`
+        $('#factors-group').append(message)
+      <% end %>
+    <% end %>
+  <% end %>
 <% end %>
 
 // Long press event
