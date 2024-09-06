@@ -165,7 +165,7 @@
         <div id="desc">
           <%= @default_recipe.description %>
         </div>
-        <div id="consequences">
+        <div id="consequences" class="fortune-field">
           <% @default_recipe.results["major"].each_with_index do |result, index| %>
             <div id="major_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-danger disabled">
               <span class='result-data'>🟰 <%= result %></span>

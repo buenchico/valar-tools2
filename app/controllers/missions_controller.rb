@@ -1,6 +1,5 @@
 class MissionsController < ApplicationController
   before_action :set_tool
-  before_action :check_master
   before_action :set_options, only: [:index, :calculate, :get_recipe]
 
   def index
