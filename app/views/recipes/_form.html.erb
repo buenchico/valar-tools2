@@ -36,7 +36,7 @@
                       recipe.factors.fetch(direction + "_" + size + "_" + style, []).map { |factor|
                         [
                           factor,
-                          { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><span class='pill-tags-text'>#{factor}</span></span>".html_safe }
+                          { "data-content": "<span class='badge rounded-pill pill-tags bg-" + (direction == "plus" ? "primary" : "danger") + "'><span class='pill-tags-text'>#{factor}</span></span>".html_safe }
                         ]
                       },
                       recipe.factors.fetch(direction + "_" + size + "_" + style, [])
@@ -52,6 +52,34 @@
                 </div>
               <% end %>
             <% end %>
+          <% end %>
+          <div class="input-group mb-3">
+            <%= form.label :results, class: 'input-group-text w-100' %>
+          </div>
+
+          <% ["major", "minor", "improvement"].each_with_index do |result, index| %>
+            <% color = ["danger","warning","success"] %>
+            <div class="input-group mb-3">
+              <%= form.label t("activerecord.attributes.recipe.results_#{result}"), class: 'input-group-text' %>
+              <%= form.select "results_" + result,
+                options_for_select(
+                  recipe.factors.fetch("results_" + result, []).map { |result|
+                    [
+                      result,
+                      { "data-content": "<span class='badge rounded-pill pill-tags bg-" + color[index] + "'><span class='pill-tags-text'>#{factor}</span></span>".html_safe }
+                    ]
+                  },
+                  recipe.factors.fetch("results_" + result, [])
+                ),
+                { include_blank: false },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color text-dark bg-white',
+                title: t('activerecord.attributes.recipe.no_results'),
+                multiple: true,
+                data: { "arbitrary": "true",
+                        "none-results-text-arbitrary": t('messages.click_to_create').html_safe
+                      }
+              %>
+            </div>
           <% end %>
 
           <%= form.submit nil, class: 'btn btn-primary' %>
