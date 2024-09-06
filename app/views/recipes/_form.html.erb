@@ -13,7 +13,7 @@
           </div>
           <div class="input-group mb-3">
             <%= form.label :section, class: 'input-group-text' %>
-            <%= form.select :section, options_for_select(@options["sections"]), {}, class: 'form-select' %>
+            <%= form.select :section, options_for_select(@options["sections"], @recipe.section), {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :speed, class: 'input-group-text' %>
