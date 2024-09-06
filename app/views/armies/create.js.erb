@@ -7,10 +7,6 @@ if ($('#visible-' + '<%= @army.visible.to_s %>').hasClass('active')) {
       return $.inArray(value, active_factions) !== -1;
   });
 
-  console.log(active_factions)
-  console.log(army_faction_ids)
-  console.log(found)
-
   if (found.length > 0) {
     $('#army_list').find('tbody').append('<tr id="army_<%= @army.id.to_s %>"></tr>');
     $('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
