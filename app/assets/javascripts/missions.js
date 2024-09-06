@@ -7,10 +7,10 @@ $(document).on('turbolinks:load', function () {
     // Define the jQuery plugin
     $.fn.addFactorToList = function () {
         // Initialize arrays to store factors
-        let plus = [];
-        let double_plus = [];
-        let minus = [];
-        let double_minus = [];
+        let plus_simple = [];
+        let plus_double = [];
+        let minus_simple = [];
+        let minus_double = [];
 
         // Iterate over active toggles
         $('.factor.active, .factor-toggle.active').each(function() {
@@ -31,30 +31,30 @@ $(document).on('turbolinks:load', function () {
             switch (dataFactor) {
                 case 1:
                     for (let i = 0; i < badgeNumber; i++) {
-                        plus.push(trimmedData);
+                        plus_simple.push(trimmedData);
                     }
                     break;
                 case 3:
                     for (let i = 0; i < badgeNumber; i++) {
-                        double_plus.push(trimmedData);
+                        plus_double.push(trimmedData);
                     }
                     break;
                 case -1:
                     for (let i = 0; i < badgeNumber; i++) {
-                        minus.push(trimmedData);
+                        minus_simple.push(trimmedData);
                     }
                     break;
                 case -3:
                     for (let i = 0; i < badgeNumber; i++) {
-                        double_minus.push(trimmedData);
+                        minus_double.push(trimmedData);
                     }
             }
         });
 
-      $('#factors_plus').val(JSON.stringify(plus));
-      $('#factors_double_plus').val(JSON.stringify(double_plus));
-      $('#factors_minus').val(JSON.stringify(minus));
-      $('#factors_double_minus').val(JSON.stringify(double_minus));
+      $('#factors_plus_simple').val(JSON.stringify(plus_simple));
+      $('#factors_plus_double').val(JSON.stringify(plus_double));
+      $('#factors_minus_simple').val(JSON.stringify(minus_simple));
+      $('#factors_minus_double').val(JSON.stringify(minus_double));
     };
 
     // Factors value change
@@ -80,10 +80,10 @@ $(document).on('turbolinks:load', function () {
     // Factors value change
     $.fn.recalculateFactors = function() {
       factors = 0
-      factors += (JSON.parse($('#factors_plus').val()).length * 1)
-      factors += (JSON.parse($('#factors_double_plus').val()).length * 3)
-      factors += (JSON.parse($('#factors_minus').val()).length * -1)
-      factors += (JSON.parse($('#factors_double_minus').val()).length * -3)
+      factors += (JSON.parse($('#factors_plus_simple').val()).length * 1)
+      factors += (JSON.parse($('#factors_plus_double').val()).length * 3)
+      factors += (JSON.parse($('#factors_minus_simple').val()).length * -1)
+      factors += (JSON.parse($('#factors_minus_double').val()).length * -3)
       $('#factors').val(factors)
     }
 

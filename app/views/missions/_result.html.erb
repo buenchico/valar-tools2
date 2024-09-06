@@ -15,7 +15,7 @@
               <%= t('activerecord.attributes.recipe.factors') %>
             </div>
             <div id="factors_show">
-              <%= factors_to_text(@data[:factors_list],"html") %>
+              <%= factors_to_text(@data[:factors_list],"html").html_safe %>
             </div>
           </div>
           <div class="results <%= @fortune ? 'd-none' : nil %>">

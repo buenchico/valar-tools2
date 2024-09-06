@@ -158,8 +158,17 @@ es:
       recipe:
         name: 'Nombre'
         difficulty: "Dificultad"
+        speed: "Velocidad"
+        section: "Sección"
         tokens: "Tokens"
         factors: "Factores"
+        plus: "Positivo"
+        minus: "Negativo"
+        simple: "menor"
+        double: "mayor"
+        once: "simple"
+        multiple: "ilimitado"
+        no_factors: "Sin factores"
         factors_plus: "◻️ Factor positivo menor"
         factors_double_plus: "<u>◻️ Factor positivo mayor</u>"
         factors_minus: "◼️ Factor negativo menor"
@@ -322,3 +331,4 @@ es:
         %{succeed}
       nothing: 'Nada que actualizar.'
       validation: 'La palabra de validación es incorrecta'
+    click_to_create: 'Haz click para crear «{tag}»'

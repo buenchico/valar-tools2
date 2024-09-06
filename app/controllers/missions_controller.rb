@@ -67,11 +67,12 @@ class MissionsController < ApplicationController
     role = params[:role].to_i
     fortune = params[:fortune].downcase.in?(['true', 'yes', '1'])
     factors = params[:factors].to_i
-    factors_plus = JSON.parse(params[:factors_plus])
-    factors_double_plus = JSON.parse(params[:factors_double_plus])
-    factors_minus = JSON.parse(params[:factors_minus])
-    factors_double_minus = JSON.parse(params[:factors_double_minus])
-    factors_list = {plus: factors_plus, double_plus: factors_double_plus, minus: factors_minus, double_minus: factors_double_minus}
+    factors_plus_simple = JSON.parse(params[:factors_plus_simple])
+    factors_plus_double = JSON.parse(params[:factors_plus_double])
+    factors_minus_simple = JSON.parse(params[:factors_minus_simple])
+    factors_minus_double = JSON.parse(params[:factors_minus_double])
+
+    factors_list = {plus_simple: simplify_factors(factors_plus_simple), plus_double: simplify_factors(factors_plus_double), minus_simple: simplify_factors(factors_minus_simple), minus_double: simplify_factors(factors_minus_double)}
 
     if roll == 10
       critic = 5
@@ -131,6 +132,14 @@ private
 
     if @options.blank?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la calculadora de misiones'
+    end
+  end
+
+  def simplify_factors(factors)
+    counted_factors = factors.group_by { |factor| factor }.transform_values(&:count)
+
+    counted_factors.map do |element, count|
+      count > 1 ? "#{count}x #{element}" : element
     end
   end
 end

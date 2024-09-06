@@ -9,21 +9,21 @@ $('#recipe_id').val(<%= @recipe&.id %>)
 $('#difficulty').val(<%= @recipe&.difficulty %>)
 $('#desc').html("<%= @recipe&.description&.html_safe %>")
 
-<% @recipe.factors["double_plus"]&.each do | factor | %>
+<% @recipe.factors["plus_double"]&.each do | factor | %>
   $('#factors-group').append(
       `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='3'>
       <span class='factor-data'><u>◻️<%= factor.capitalize %></u></span>
       </div>`
     )
 <% end %>
-<% @recipe.factors["plus"]&.each do | factor | %>
+<% @recipe.factors["plus_simple"]&.each do | factor | %>
   $('#factors-group').append(
     `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='1'>
     <span class='factor-data'>◻️<%= factor.capitalize %></span>
     </div>`
     )
 <% end %>
-<% @recipe.factors["plus_rec"]&.each do | factor | %>
+<% @recipe.factors["plus_multiple"]&.each do | factor | %>
   $('#factors-group').append(
     `<div class='ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill me-2 created' data-factor='1'>
       <span class='factor-data'>◻️<%= factor.capitalize %></span>
@@ -33,21 +33,21 @@ $('#desc').html("<%= @recipe&.description&.html_safe %>")
     </div>`
     )
 <% end %>
-<% @recipe.factors["double_minus"]&.each do | factor | %>
+<% @recipe.factors["minus_double"]&.each do | factor | %>
   $('#factors-group').append(
       `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-3'>
       <span class='factor-data'><u>◼️<%= factor.capitalize %></u></span>
       </div>`
     )
 <% end %>
-<% @recipe.factors["minus"]&.each do | factor | %>
+<% @recipe.factors["minus_simple"]&.each do | factor | %>
   $('#factors-group').append(
       `<div class='ms-1 mb-1 factor-toggle btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-1'>
       <span class='factor-data'>◼️<%= factor.capitalize %></span>
       </div>`
     )
 <% end %>
-<% @recipe.factors["minus_rec"]&.each do | factor | %>
+<% @recipe.factors["minus_multiple"]&.each do | factor | %>
   $('#factors-group').append(
     `<div class='ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill me-2 created' data-factor='-1'>
       <span class='factor-data'>◻️<%= factor.capitalize %></span>

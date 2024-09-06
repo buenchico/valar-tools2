@@ -15,19 +15,19 @@ module MissionsHelper
 
     factors&.each do |key, factors|
       case key.to_s
-      when "double_plus"
+      when "plus_double"
         factors&.each do |factor|
           list.push(open + "◻️" + factor.capitalize + close)
         end
-      when "plus"
+      when "plus_simple"
         factors&.each do |factor|
           list.push("◻️" + factor.capitalize)
         end
-      when "minus"
+      when "minus_simple"
         factors&.each do |factor|
           list.push("◼️" + factor.capitalize)
         end
-      when "double_minus"
+      when "minus_double"
         factors&.each do |factor|
           list.push(open + "◼️" + factor.capitalize + close)
         end
