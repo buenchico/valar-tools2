@@ -4,6 +4,7 @@
     <thead>
       <tr>
         <th scope="col"><%= t('activerecord.attributes.recipe.name') %></th>
+        <th scope="col"><%= t('activerecord.attributes.recipe.section') %></th>
         <th scope="col"><%= t('activerecord.attributes.recipe.speed') %></th>
         <th scope="col"><%= t('activerecord.attributes.recipe.difficulty') %></th>
         <th scope="col" data-sorter="false"><%= t('activerecord.attributes.recipe.description') %></th>
@@ -11,10 +12,12 @@
       </tr>
     </thead>
     <tbody>
-      <% @recipes.each do | recipe | %>
-        <tr id="recipe_<%= recipe.id.to_s %>">
-          <%= render 'row', recipe: recipe %>
-        </tr>
+      <% @sections.each do | section | %>
+        <% @recipes.where(section: section).each do | recipe | %>
+          <tr id="recipe_<%= recipe.id.to_s %>">
+            <%= render 'row', recipe: recipe %>
+          </tr>
+        <% end %>
       <% end %>
     </tbody>
     </table>

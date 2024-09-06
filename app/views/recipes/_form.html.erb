@@ -31,12 +31,12 @@
               <% ["once", "multiple"].each do |style| %>
                 <div class="input-group mb-3">
                   <%= form.label t("activerecord.attributes.recipe.#{direction}") + " " + t("activerecord.attributes.recipe.#{size}") + " " + t("activerecord.attributes.recipe.#{style}"), class: 'input-group-text' %>
-                  <%= form.select "factors_" + direction + "_" + size + "_" + style,
+                  <%= form.select "factors[" + direction + "_" + size + "_" + style + "]",
                     options_for_select(
                       recipe.factors.fetch(direction + "_" + size + "_" + style, []).map { |factor|
                         [
                           factor,
-                          { "data-content": "<span class='badge rounded-pill pill-tags bg-" + (direction == "plus" ? "primary" : "danger") + "'><span class='pill-tags-text'>#{factor}</span></span>".html_safe }
+                          { "data-content": "<span class='badge pill pill-tags bg-" + (direction == "plus" ? "primary" : "danger") + "'><span class='pill-tags-text'>#{factor}</span></span>".html_safe }
                         ]
                       },
                       recipe.factors.fetch(direction + "_" + size + "_" + style, [])
@@ -59,17 +59,18 @@
 
           <% ["major", "minor", "improvement"].each_with_index do |result, index| %>
             <% color = ["danger","warning","success"] %>
+            <%= recipe.factors.fetch("results_" + result, []) %>
             <div class="input-group mb-3">
               <%= form.label t("activerecord.attributes.recipe.results_#{result}"), class: 'input-group-text' %>
-              <%= form.select "results_" + result,
+              <%= form.select "results[" + result + "]",
                 options_for_select(
-                  recipe.factors.fetch("results_" + result, []).map { |result|
+                  recipe.results.fetch(result, []).map { |result|
                     [
                       result,
-                      { "data-content": "<span class='badge rounded-pill pill-tags bg-" + color[index] + "'><span class='pill-tags-text'>#{factor}</span></span>".html_safe }
+                      { "data-content": "<span class='badge pill pill-tags bg-" + color[index] + "'><span class='pill-tags-text'>#{result}</span></span>".html_safe }
                     ]
                   },
-                  recipe.factors.fetch("results_" + result, [])
+                  recipe.results.fetch(result, [])
                 ),
                 { include_blank: false },
                 class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color text-dark bg-white',

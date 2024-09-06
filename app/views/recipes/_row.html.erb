@@ -2,10 +2,13 @@
   <%= link_to recipe.name, edit_recipe_path(recipe), remote: true, class: 'link-unstyled' %>
 </td>
 <td>
-  <% recipe.speed %>
+  <%= recipe.section.capitalize %>
 </td>
 <td>
-  <% recipe.difficulty %>
+  <%= @options["speed"][recipe.speed]["name"].capitalize %>
+</td>
+<td>
+  <%= @options["difficulty"].find { |item| item["value"] == recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(recipe.difficulty)%>)
 </td>
 <td>
   <%= truncate(recipe.description, length: 60, omission: '...') %>
