@@ -1,0 +1,35 @@
+$('#result').removeClass('d-none')
+$('#result').html('<%= j render partial: "result" %>')
+
+$('#close_results').click(function() {
+  $('#result').html("");
+});
+
+// Activate and clear results buttons
+$('.result').removeClass('disabled')
+$('.result').removeClass('active')
+
+//Copy results
+$('#copy_results').click(function() {
+  // Get the text from the div
+  let rawText = $('#copy_box').text();
+
+  // Split the text into lines
+  let lines = rawText.split('\n');
+
+  // Trim leading spaces from each line
+  let trimmedLines = lines.map(line => line.trimStart());
+
+  // Rejoin the lines into a single string with newline characters
+  let cleanedText = trimmedLines.join('\n');
+
+  navigator.clipboard.writeText(cleanedText)
+
+  $('#result_card').addClass( "highlight", 250, callback )
+
+  function callback() {
+    setTimeout(function() {
+      $('#result_card').removeClass( "highlight" );
+    }, 250 );
+  }
+});

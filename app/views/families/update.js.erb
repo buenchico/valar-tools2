@@ -1,10 +1,10 @@
 $('#family_<%= @family.id %>').html('<%= j render "row", family: @family  %>');
 
-$('.family_<%= @family.id %>').addClass( "table-highlight", callback )
+$('#family_<%= @family.id %>').addClass( "table-highlight", callback )
 
 function callback() {
   setTimeout(function() {
-    $('.family_<%= @family.id %>').removeClass( "table-highlight" );
+    $('#family_<%= @family.id %>').removeClass( "table-highlight" );
   }, 500 );
 }
 

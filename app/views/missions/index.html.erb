@@ -1,0 +1,174 @@
+<% provide(:title, @tool.title) %>
+<% provide(:icon, @tool.icon_url) %>
+
+<div class="tool-title">
+    <i class="white <%= yield(:icon) %>"></i>
+    <%= yield(:title) %>
+</div>
+
+<div id="result" class="d-none"></div>
+
+<div class="row">
+  <div class="col-md-7 col-sm-12">
+    <%= form_with url: get_recipe_path, local: false do |form| %>
+      <div class="input-group mb-3 fortune-field">
+        <%= form.label t('activerecord.models.recipe.one'), class: 'input-group-text' %>
+        <%= form.select :recipe,
+          grouped_options_for_select(
+            @sections.map do |section|
+              [
+                section,
+                @recipes.select { |recipe| recipe.section == section }.map { |recipe| [recipe.name, recipe.id] }
+              ]
+            end,
+            selected: @options["default_recipe"]
+          ),
+          { include_blank: false },
+          class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+          multiple: false,
+          data: { "live-search": "true", "default-recipe-id": @options["default_recipe"] }
+        %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="col h2">
+    <div class="btn btn-lg btn-outline-success float-end" id="fortune-button">
+      <i class="bi bi-clover-fill"></i>
+      <%= @options["fortune"]["long_name"] %>
+    </div>
+  </div>
+</div>
+
+<div class="row gx-2">
+  <div class="col-md-6 col-sm-12">
+    <div class="card border-primary bg-dark" >
+      <div class="card-body">
+        <div class="container d-flex flex-row align-items-center flex-wrap">
+          <%= form_with url: missions_calculate_path, local: false do |form| %>
+            <%= form.submit t('.calculate'), class: "btn btn-primary mb-3", id: "calculate" %>
+            <%= form.hidden_field :fortune %>
+            <%= form.hidden_field :recipe_id, value: @options["default_recipe"] %>
+
+            <div class="input-group mb-3 fortune-field">
+              <%= form.label t('activerecord.attributes.recipe.difficulty'), class: 'input-group-text' %>
+              <%= form.select :difficulty, (@options["difficulty"].map { |dif| [dif["name"].capitalize, dif["value"]] }.sort_by { |subarray| -subarray[1] }), { selected: 0 }, class: 'form-select' %>
+            </div>
+            <div class="input-group mb-3 fortune-field">
+              <%= form.label t('activerecord.attributes.recipe.tokens'), class: 'input-group-text' %>
+              <%= form.number_field :tokens, class: 'form-control', value: 0, step: 1, min: 0, max: 12 %>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-sm btn-warning ms-1 tokens-set" data-token="3">+1</div>
+                <div class="btn btn-sm btn-warning ms-1 tokens-set" data-token="5">+2</div>
+                <div class="btn btn-sm btn-warning ms-1 tokens-set" data-token="6">+3</div>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <%= form.label t('activerecord.attributes.recipe.factors'), class: 'input-group-text' %>
+              <%= form.hidden_field :factors_plus_simple, value: "[]" %>
+              <%= form.hidden_field :factors_plus_double, value: "[]" %>
+              <%= form.hidden_field :factors_minus_simple, value: "[]" %>
+              <%= form.hidden_field :factors_minus_double, value: "[]" %>
+              <%= form.number_field :factors, class: 'form-control', value: 0, step: 1, min: -99, max: 99 %>
+            </div>
+            <div class="input-group mb-3 ms-3 d-flex flex-wrap" id ="factors-group" data-bs-toggle="tooltip" data-bs-placement="left" title="<%= t('.factors_tooltip') %>" >
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill me-2" data-factor="1">
+                <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_plus') %></span>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                  0
+                </span>
+              </div>
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill me-2" data-factor="3">
+                <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_double_plus').html_safe %></span>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                  0
+                </span>
+              </div>
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill me-2" data-factor="-1">
+                <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_minus') %></span>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                  0
+                </span>
+              </div>
+              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill me-2" data-factor="-3">
+                <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_double_minus').html_safe %></span>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                  0
+                </span>
+              </div>
+
+              <% ["plus", "minus"].each do |direction| %>
+                <% ["simple", "double"].each do |size| %>
+                  <% ["once", "multiple"].each do |style| %>
+                    <% open = (size == "double" ? "<u>" : "") %>
+                    <% close = (size == "double" ? "</u>" : "") %>
+                    <% symbol = (direction == "plus" ? "◻️" : "◼️") %>
+                    <% sign = (direction == "plus" ? 1 : -1) %>
+
+                    <% @default_recipe.factors.fetch(direction + "_" + size + "_" + style, [])&.each do | factor | %>
+                      <div class='ms-1 mb-1 <%= style == "once" ? "factor-toggle" : "factor" %> btn btn-sm btn-outline-<%= direction == "plus" ? "primary" : "danger" %> flex-fill me-2 created' data-factor='<%= size == "simple" ? 1 * sign : 3 * sign %>'>
+                        <span class='factor-data'><%= (open + symbol + factor.capitalize + close).html_safe %></span>
+                        <% if style == "multiple" %>
+                          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                            0
+                          </span>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+
+            <div class="input-group mb-3 fortune-field">
+              <%= form.label t('activerecord.attributes.recipe.misc'), class: 'input-group-text' %>
+              <%= form.number_field :misc, class: 'form-control', value: 0, step: 1, min: -3, max: 3 %>
+            </div>
+            <div class="input-group mb-3 fortune-field">
+              <%= form.label t('activerecord.attributes.recipe.role'), class: 'input-group-text' %>
+              <div class="form-check form-switch switch-group fs-2">
+                <%= form.check_box :role, class: 'form-check-input switch-group h-100' %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-sm-12">
+    <div class="card border-success bg-dark" >
+      <div class="card-body">
+        <div class="h2">
+          <strong><span id="title"><%= @default_recipe.name %></span></strong>
+        </div>
+        <div class="ms-2 fortune-field">
+          <strong><span id="dif"><%= @options["difficulty"].find { |item| item["value"] == @default_recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(@default_recipe.difficulty) %>)</span></strong>
+        </div>
+        <div class="ms-2 fortune-field">
+          <strong><span id="speed"><%= @options["speed"][@default_recipe.speed]["name"].capitalize %><%= (@default_recipe.speed == -1) ? '' : '(' + options["speed"][@default_recipe.speed]["days"] + ')'%></span></strong>
+        </div>
+        <div id="desc">
+          <%= @default_recipe.description %>
+        </div>
+        <div id="consequences" class="fortune-field">
+          <% @default_recipe.results["major"].each_with_index do |result, index| %>
+            <div id="major_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-danger disabled">
+              <span class='result-data'>🟰 <%= result %></span>
+            </div>
+          <% end %>
+          <% @default_recipe.results["minor"].each_with_index do |result, index| %>
+            <div id="minor_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-warning disabled">
+              <span class='result-data'>➖ <%= result %></span>
+            </div>
+          <% end %>
+          <% @default_recipe.results["improvement"].each_with_index do |result, index| %>
+            <div id="improvement_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-success disabled">
+              <span class='result-data'>➕ <%= result %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

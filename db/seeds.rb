@@ -76,22 +76,65 @@ Tool.create(name: 'families', title: 'Lista de Familias', short_title: 'Familias
 Tool.create(name: 'map', title: 'Mapa', short_title: 'Mapa', icon_url: 'bi-globe-europe-africa', role: 'player',
   options_info: 'Formato JSON con los siguientes valores:
 
-*img*, string. Nombre del archivo de la imagen base
+  *img*, string. Nombre del archivo de la imagen base
 
-*font*, string. Nombre de la "font-family". Debe definirse en el CSS
+  *font*, string. Nombre de la "font-family". Debe definirse en el CSS
 
-*zoom*, array con zoom mínimo y máximo
+  *zoom*, array con zoom mínimo y máximo
 
-*scale*, integer, tamaño de los hexágonos
+  *scale*, integer, tamaño de los hexágonos
 
-*bounds*, array con los límites del mapa. [[x0,y0],[x100,y100]]
+  *bounds*, array con los límites del mapa. [[x0,y0],[x100,y100]]
 
-*layers* cada capa un nuevo item con **key** y valores:
-  * *name*, string
-  * *types*, array. *keys* de los tipos de lugar en esta capa. Provenientes de la lista de lugares.
+  *layers* cada capa un nuevo item con **key** y valores:
+    * *name*, string
+    * *types*, array. *keys* de los tipos de lugar en esta capa. Provenientes de la lista de lugares.
 
-*attribution*, string. Copyright del mapa',
+  *attribution*, string. Copyright del mapa',
   active: true )
+
+Tool.create(name: 'missions', title: 'Calculadora de Misiones', short_title: 'Misiones', icon_url: 'bi-dice-6-fill', role: 'player',
+  options_info: 'Formato JSON con los siguientes valores:
+
+  *speed*, un array de hashes, cada uno con:
+     * *name*, string, el nombre de la velocidad
+     * *days*, string, número de días
+     * *time*: integer, valor de posición del array
+     * una clase con *time* -1 debe incluirse siempre
+
+  *status* con cada estado con su **key** y valores:
+    * *name*, string, el nombre de la clase
+    * *colour*, string, class de bootstrap
+    * *error* debe incluirse siempre como key
+
+  *fortune*, un hash con las tiradas de fortuna:
+     *desc*, html, descripción de las tiradas de fortuna
+     *name*, string, nombre corte
+     *long_name*, string, nombre largo
+     *results*, array of arrays of hashes, en orden ascendente. cada array of hashes tiene:
+        *primer element*, integer, el valor al que se alcanza el resultado
+        *segundo element*, hash con
+           *name*, string nombre del resultado
+           *success", boolean
+     *section*:, string, su sección
+
+  *results*, un array of arrays of hashes, en orden ascendente. cada array of hashes tiene:
+     *primer element*, integer, el valor al que se alcanza el resultado
+     *segundo element*, hash con
+        *name*, string nombre del resultado
+        *result*, string, descipción del resultado
+        *success", boolean
+
+  *sections*, array the strings con los títulos de las secciones
+
+  *difficulty*, array of hashes, con cada elemento
+     *name*, string, nombre de la dificultad
+     *value*, modificador de la dificultad'
+   active: true)
+
+ Tool.create(name: 'recipes', title: 'Lista de Recetas', short_title: 'Recetas', icon_url: 'bi-body-text', role: 'master',
+   options_info: 'No tiene opciones propias, usa las de las misiones.',
+   active: true )
 
 if Rails.env.development?
   User.create([

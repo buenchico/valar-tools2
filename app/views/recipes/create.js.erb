@@ -1,0 +1,16 @@
+$('#recipe_list').find('tbody').append('<tr id="recipe_<%= @recipe.id.to_s %>"></tr>');
+$('#recipe_<%= @recipe.id %>').html('<%= j render "row", recipe: @recipe  %>');
+
+$('#recipe_<%= @recipe.id %>').addClass( "table-highlight", callback )
+
+function callback() {
+  setTimeout(function() {
+    $('#recipe_<%= @recipe.id %>').removeClass( "table-highlight" );
+  }, 500 );
+}
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+
+$("table").trigger("updateAll");
+
+$(".modal").modal('hide');

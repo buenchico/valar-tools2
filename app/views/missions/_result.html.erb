@@ -1,0 +1,82 @@
+<div class="card mb-5 <%= @result["success"] ? "bg-success text-light" : "bg-danger" %> col-10">
+  <div id="result_card" class="card-body">
+    <div class="card-title">
+      <span id="mission-title" class="h3"><%= @result["name"] %> (<%= @data[:total] %>)</span>
+      <button type="button" id="close_results" class="btn-close btn-close-white float-end" aria-label="Close" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar"></button>
+      <button type="button" id="copy_results" class="btn-no-style text-light float-end me-1" aria-label="Copy" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar resultado">
+        <i class="bi bi-clipboard2-fill"></i>
+      </button>
+    </div>
+    <div id="mission-text" class="card-text">
+      <div class="row">
+        <div class="col">
+          <div class="factors <%= @data[:factors_list].values.all?(&:empty?) ? 'd-none' : nil %>">
+            <div class="h5">
+              <%= t('activerecord.attributes.recipe.factors') %>
+            </div>
+            <div id="factors_show">
+              <%= factors_to_text(@data[:factors_list],"html").html_safe %>
+            </div>
+          </div>
+          <div class="results <%= @fortune ? 'd-none' : nil %>">
+            <div class="h5">
+              <%= t('activerecord.attributes.recipe.results') %>
+            </div>
+            <div class="ms-2">
+              <%= @result["result"] %>
+            </div>
+            <div id="results_list">
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row">
+            <% @data[:dice].each_with_index do |number, index| %>
+              <div class="p-0" style="position: relative; width: 80px">
+                <%= image_tag('d10.svg', alt: '10 sided dice', width: 80, height: 80) %>
+                <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); font-size: 24px" class="text-monospace <%= (index == 1) ? 'text-light fw-bolder' : 'text-muted '%>">
+                  <%= number %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <div id="result_data" class="mt-2">
+            <div class="float-start me-3">
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.difficulty') %>:</strong></div>
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.tokens') %>:</strong></div>
+              <div class="row"><strong><%= t('activerecord.attributes.recipe.factors') %>:</strong></div>
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.mic') %>:</strong></div>
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.role') %>:</strong></div>
+              <div class="row"><strong><%= t('activerecord.attributes.recipe.total') %>:</strong></div>
+            </div>
+            <div class="">
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><%= number_to_modifier(@data[:difficulty]) %> (<%= @options["difficulty"].find { |item| item["value"] == @data[:difficulty] }["name"].capitalize %>)</div>
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><%= number_to_modifier(@data[:tokens]) %></div>
+              <div class="row"><%= number_to_modifier(@data[:factors]) %></div>
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><%= number_to_modifier(@data[:misc]) %></div>
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><%= number_to_modifier(@data[:role]) %></div>
+              <div class="row"><%= number_to_modifier(@data[:total]) %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="copy_box" class="d-none">
+        <p>[Link](https://www.valar.es/t/ejemplo_de_link)</p>
+        <p></p>
+        <p>**<%= t('activerecord.attributes.user.player') %>**: </p>
+        <p>**<%= t('missions.index.objective') %>**: </p>
+        <p></p>
+        <p>#### **<%= @recipe.name %> (<%= @options["speed"][@recipe.speed]["name"].capitalize %>, <%= @recipe.difficulty %>) : <%= @recipe.description %>**</p>
+        <p></p>
+        <p>**<%= t('activerecord.attributes.recipe.difficulty') %>:** <%= number_to_modifier(@data[:difficulty]) %></p>
+        <p>**<%= t('activerecord.attributes.recipe.tokens') %>:** <%= number_to_modifier(@data[:tokens]) %></p>
+        <p>**<%= t('activerecord.attributes.recipe.factors') %>:** <%= number_to_modifier(@data[:factors]) %>, <%= factors_to_text(@data[:factors_list],"markdown") %></p>
+        <p>**<%= t('activerecord.attributes.recipe.misc') %>:** <%= number_to_modifier(@data[:misc]) %></p>
+        <p>**<%= t('activerecord.attributes.recipe.role') %>:** <%= number_to_modifier(@data[:role]) %></p>
+        <p>**<%= t('activerecord.attributes.recipe.dice') %>:** <%= number_to_modifier(@data[:roll]) %></p>
+        <p>**<%= t('activerecord.attributes.recipe.total') %>:** <%= number_to_modifier(@data[:total]) %>, **<%= @result["name"] %>**, <%= @result["result"] %></p>
+        <p>**<%= t('activerecord.attributes.recipe.results') %>:** <span id="results_plain"></span></p>
+      </div>
+    </div>
+  </div>
+</div>

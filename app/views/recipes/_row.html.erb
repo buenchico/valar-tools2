@@ -1,0 +1,21 @@
+<td>
+  <%= link_to recipe.name, edit_recipe_path(recipe), remote: true, class: 'link-unstyled' %>
+</td>
+<td>
+  <%= recipe.section.capitalize %>
+</td>
+<td>
+  <%= @options["speed"][recipe.speed]["name"].capitalize %>
+</td>
+<td>
+  <%= @options["difficulty"].find { |item| item["value"] == recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(recipe.difficulty)%>)
+</td>
+<td>
+  <%= truncate(recipe.description, length: 60, omission: '...') %>
+</td>
+<td><%= link_to '', send("edit_recipe_path", recipe.id), remote: true, class: 'bi bi-pencil-square text-white' %></td>
+<td>
+  <%= link_to send("recipe_path", recipe.id), method: :delete, data: { confirm: "Estás seguro de eliminar el objeto #{recipe.name}?" }, remote: true do %>
+    <i class="bi bi-trash text-white"></i>
+  <% end %>
+</td>

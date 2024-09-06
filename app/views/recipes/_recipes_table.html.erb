@@ -1,0 +1,24 @@
+<div class="table-responsive">
+  <table id="recipe_list" class="table table-dark table-striped table-borderless table-hover table-sm align-middle sortable">
+    <caption><%= @tool.title %></caption>
+    <thead>
+      <tr>
+        <th scope="col"><%= t('activerecord.attributes.recipe.name') %></th>
+        <th scope="col"><%= t('activerecord.attributes.recipe.section') %></th>
+        <th scope="col"><%= t('activerecord.attributes.recipe.speed') %></th>
+        <th scope="col"><%= t('activerecord.attributes.recipe.difficulty') %></th>
+        <th scope="col" data-sorter="false"><%= t('activerecord.attributes.recipe.description') %></th>
+        <th scope="col" colspan="2" data-sorter="false"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sections.each do | section | %>
+        <% @recipes.where(section: section).each do | recipe | %>
+          <tr id="recipe_<%= recipe.id.to_s %>">
+            <%= render 'row', recipe: recipe %>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+    </table>
+  </div>

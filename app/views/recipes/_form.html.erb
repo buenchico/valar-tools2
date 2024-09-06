@@ -1,0 +1,90 @@
+<div class="modal fade" id="recipeModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark">
+      <%= form_with model: recipe, local: false do |form| %>
+        <div class="modal-header">
+          <h5 class="modal-title" id="Title"><%= recipe&.name %></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <%= form.label :name, class: 'input-group-text' %>
+            <%= form.text_field :name, class: 'form-control' %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :section, class: 'input-group-text' %>
+            <%= form.select :section, options_for_select(@options["sections"]), {}, class: 'form-select' %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :speed, class: 'input-group-text' %>
+            <%= form.select :speed, options_for_select(@options["speed"].map { |value| [value["name"].capitalize, value["time"]] }, recipe.speed), {}, class: 'form-select' %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :difficulty, class: 'input-group-text' %>
+            <%= form.select :difficulty, options_for_select(@options["difficulty"].map { |value| [value["name"].capitalize + " (" + number_to_modifier(value["value"]) + ")", value["value"]] }, recipe.difficulty), {}, class: 'form-select' %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :factors, class: 'input-group-text w-100' %>
+          </div>
+          <% ["plus", "minus"].each do |direction| %>
+            <% ["simple", "double"].each do |size| %>
+              <% ["once", "multiple"].each do |style| %>
+                <div class="input-group mb-3">
+                  <%= form.label t("activerecord.attributes.recipe.#{direction}") + " " + t("activerecord.attributes.recipe.#{size}") + " " + t("activerecord.attributes.recipe.#{style}"), class: 'input-group-text' %>
+                  <%= form.select "factors[" + direction + "_" + size + "_" + style + "]",
+                    options_for_select(
+                      recipe.factors.fetch(direction + "_" + size + "_" + style, []).map { |factor|
+                        [
+                          factor,
+                          { "data-content": "<span class='badge pill pill-tags bg-" + (direction == "plus" ? "primary" : "danger") + "'><span class='pill-tags-text'>#{factor}</span></span>".html_safe }
+                        ]
+                      },
+                      recipe.factors.fetch(direction + "_" + size + "_" + style, [])
+                    ),
+                    { include_blank: false },
+                    class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                    title: t('activerecord.attributes.recipe.no_factors'),
+                    multiple: true,
+                    data: { "arbitrary": "true",
+                            "none-results-text-arbitrary": t('messages.click_to_create').html_safe
+                          }
+                  %>
+                </div>
+              <% end %>
+            <% end %>
+          <% end %>
+          <div class="input-group mb-3">
+            <%= form.label :results, class: 'input-group-text w-100' %>
+          </div>
+
+          <% ["major", "minor", "improvement"].each_with_index do |result, index| %>
+            <% color = ["danger","warning","success"] %>
+            <%= recipe.factors.fetch("results_" + result, []) %>
+            <div class="input-group mb-3">
+              <%= form.label t("activerecord.attributes.recipe.results_#{result}"), class: 'input-group-text' %>
+              <%= form.select "results[" + result + "]",
+                options_for_select(
+                  recipe.results.fetch(result, []).map { |result|
+                    [
+                      result,
+                      { "data-content": "<span class='badge pill pill-tags bg-" + color[index] + "'><span class='pill-tags-text'>#{result}</span></span>".html_safe }
+                    ]
+                  },
+                  recipe.results.fetch(result, [])
+                ),
+                { include_blank: false },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color text-dark bg-white',
+                title: t('activerecord.attributes.recipe.no_results'),
+                multiple: true,
+                data: { "arbitrary": "true",
+                        "none-results-text-arbitrary": t('messages.click_to_create').html_safe
+                      }
+              %>
+            </div>
+          <% end %>
+
+          <%= form.submit nil, class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+  </div>
+</div>

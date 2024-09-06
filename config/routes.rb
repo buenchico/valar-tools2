@@ -81,5 +81,11 @@ Rails.application.routes.draw do
   put 'clocks/destroy_multiple', to: 'clocks#destroy_multiple', as: 'destroy_multiple_clocks'
   resources :clocks
 
+  get 'missions', to: 'missions#index'
+  post 'missions/recipe', to: 'missions#get_recipe', as: 'get_recipe'
+  post 'missions/calculate', to: 'missions#calculate'
+
+  resources :recipes, only: [:index, :new, :edit, :create, :update, :destroy ]
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

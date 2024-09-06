@@ -1,5 +1,16 @@
 $('#family_list').find('tbody').append('<tr id="family_<%= @family.id.to_s %>"></tr>');
 $('#family_<%= @family.id %>').html('<%= j render "row", family: @family  %>');
 
+$('#family_<%= @family.id %>').addClass( "table-highlight", callback )
+
+function callback() {
+  setTimeout(function() {
+    $('#family_<%= @family.id %>').removeClass( "table-highlight" );
+  }, 500 );
+}
+
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
+
+$("table").trigger("updateAll");
+
 $(".modal").modal('hide');
