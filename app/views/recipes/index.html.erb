@@ -1,0 +1,23 @@
+<!-- Scaffold for basic tools -->
+
+<% provide(:title, @tool.title) %>
+<% provide(:icon, @tool.icon_url) %>
+
+<%= @options %>
+
+<div class="tool-title">
+    <i class="white <%= yield(:icon) %>"></i>
+    <%= yield(:title) %>
+</div>
+
+<div class="row my-3">
+  <div class="col">
+    <% if @current_user&.is_master? %>
+      <%= link_to new_recipe_path, class: "btn btn-primary", remote: true do %>
+        <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= render "recipes_table" %>
