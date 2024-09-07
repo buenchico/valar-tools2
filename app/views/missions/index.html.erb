@@ -149,7 +149,7 @@
           <strong><span id="speed"><%= @options["speed"][@default_recipe.speed]["name"].capitalize %><%= (@default_recipe.speed == -1) ? '' : '(' + @options["speed"][@default_recipe.speed]["days"] + ')'%></span></strong>
         </div>
         <div id="desc">
-          <%= @default_recipe.description %>
+          <%= Kramdown::Document.new(truncate(@default_recipe.description, length: 60, omission: '...')  || "").to_html.html_safe %>
         </div>
         <div id="consequences" class="fortune-field">
           <% @default_recipe.results["major"].each_with_index do |result, index| %>
