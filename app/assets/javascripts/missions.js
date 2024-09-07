@@ -77,39 +77,6 @@ $(document).on('turbolinks:load', function () {
         $.fn.addFactorToList();
     }
 
-    // Factors value change
-    $.fn.recalculateFactors = function() {
-      factors = 0
-      factors += (JSON.parse($('#factors_plus_simple').val()).length * 1)
-      factors += (JSON.parse($('#factors_plus_double').val()).length * 3)
-      factors += (JSON.parse($('#factors_minus_simple').val()).length * -1)
-      factors += (JSON.parse($('#factors_minus_double').val()).length * -3)
-      $('#factors').val(factors)
-    }
-
-    // Long press event
-    $('.factor').longpress(function() {
-        $.fn.changeFactor($(this),-1);
-    });
-
-    // Click event
-    $('.factor').click(function(event) {
-      if (event.ctrlKey) {
-        $.fn.changeFactor($(this),-1);
-      } else {
-        $.fn.changeFactor($(this),1);
-      }
-    });
-
-    // Toggle
-    $('.factor-toggle').click(function(event) {
-      if ($(this).hasClass('active')) {
-        $.fn.changeFactor($(this),-1,true);
-      } else {
-        $.fn.changeFactor($(this),1);
-      }
-    });    
-
     $('.tokens-set').click(function () {
       var dataToken = $(this).data('token');
       $('#tokens').val(dataToken)
@@ -129,6 +96,38 @@ $(document).on('turbolinks:load', function () {
         $('#recipe').selectpicker('refresh');
       }
     });
+
+    // Event delegation for factors
+    $('#factors-group').on('click', '.factor-toggle', function() {
+      if ($(this).hasClass('active')) {
+        $.fn.changeFactor($(this),-1,true);
+      } else {
+        $.fn.changeFactor($(this),1);
+      }
+    });
+
+    $('#factors-group').on('click', '.factor', function() {
+      if (event.ctrlKey) {
+        $.fn.changeFactor($(this),-1);
+      } else {
+        $.fn.changeFactor($(this),1);
+      }
+    });
+
+    // Long press event
+    $('.factor').longpress(function() {
+        $.fn.changeFactor($(this),-1);
+    });
+
+    // Factors value change
+    $.fn.recalculateFactors = function() {
+      factors = 0
+      factors += (JSON.parse($('#factors_plus_simple').val()).length * 1)
+      factors += (JSON.parse($('#factors_plus_double').val()).length * 3)
+      factors += (JSON.parse($('#factors_minus_simple').val()).length * -1)
+      factors += (JSON.parse($('#factors_minus_double').val()).length * -3)
+      $('#factors').val(factors)
+    }    
 
     // Event delegation to handle dynamically added .result elements
     $(document).on('click', '.result', function() {

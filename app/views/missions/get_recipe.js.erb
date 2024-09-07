@@ -55,21 +55,3 @@ $('#consequences').prepend(results);
 $('.factor.created').longpress(function() {
     $.fn.changeFactor($(this),-1);
 });
-
-// Click event
-$('.factor.created').click(function(event) {
-  if (event.ctrlKey) {
-    $.fn.changeFactor($(this),-1);
-  } else {
-    $.fn.changeFactor($(this),1);
-  }
-});
-
-// Toggle
-$('.factor-toggle').click(function(event) {
-  if ($(this).hasClass('active')) {
-    $.fn.changeFactor($(this),-1,true);
-  } else {
-    $.fn.changeFactor($(this),1);
-  }
-});

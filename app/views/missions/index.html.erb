@@ -71,7 +71,7 @@
               <%= form.hidden_field :factors_minus_double, value: "[]" %>
               <%= form.number_field :factors, class: 'form-control', value: 0, step: 1, min: -99, max: 99 %>
             </div>
-            <div class="input-group mb-3 ms-3 d-flex flex-wrap" id ="factors-group" data-bs-toggle="tooltip" data-bs-placement="left" title="<%= t('.factors_tooltip') %>" >
+            <div class="input-group mb-3 ms-3 d-flex flex-wrap" id="factors-group" data-bs-toggle="tooltip" data-bs-placement="left" title="<%= t('.factors_tooltip') %>" >
               <div class="ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill me-2" data-factor="1">
                 <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_plus') %></span>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
