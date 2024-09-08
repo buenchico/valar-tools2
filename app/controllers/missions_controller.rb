@@ -3,7 +3,7 @@ class MissionsController < ApplicationController
   before_action :set_options, only: [:index, :calculate, :get_recipe]
 
   def index
-    @recipes = Recipe.all.order(:section)
+    @recipes = Recipe.all.order(:section, :id)
     @default_recipe = Recipe.find_by(id: @options["default_recipe"])
   end
 
