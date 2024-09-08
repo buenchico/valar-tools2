@@ -85,7 +85,7 @@
                     <% sign = (direction == "plus" ? 1 : -1) %>
 
                     <% @default_recipe.factors.fetch(direction + "_" + size + "_" + style, [])&.each do | factor | %>
-                      <div class='ms-1 mb-1 <%= style == "once" ? "factor-toggle" : "factor" %> btn btn-sm btn-outline-<%= direction == "plus" ? "primary" : "danger" %> flex-fill me-2 created' data-factor='<%= size == "simple" ? 1 * sign : 3 * sign %>'>
+                      <div class='ms-1 mb-1 <%= style == "once" ? "factor-toggle" : "factor" %> btn btn-sm btn-outline-<%= direction == "plus" ? "primary" : "danger" %> flex-fill me-2' data-factor='<%= size == "simple" ? 1 * sign : 3 * sign %>'>
                         <span class='factor-data'><%= (open + symbol + factor.capitalize + close).html_safe %></span>
                         <% if style == "multiple" %>
                           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
