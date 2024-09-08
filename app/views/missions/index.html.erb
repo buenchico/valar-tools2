@@ -4,6 +4,8 @@
 <div class="tool-title">
     <i class="white <%= yield(:icon) %>"></i>
     <%= yield(:title) %>
+
+    <i class="bi bi-question-circle float-end" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-html="true" title="<%= Kramdown::Document.new(@options["rules"] || '').to_html.html_safe %>"></i>
 </div>
 
 <div id="result" class="d-none"></div>

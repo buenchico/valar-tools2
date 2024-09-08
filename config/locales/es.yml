@@ -36,6 +36,7 @@ es:
       edit: 'Editar %{thing}'
       delete: 'Borrar %{thing}'
       confirm: '¿Estás seguro de eliminar %{thing}?'
+      goto: 'Abrir %{thing}'
     submit:
       submit: 'Enviar %{model}'
       create: 'Crear %{model}'
@@ -60,6 +61,7 @@ es:
       toggle_display_table: "Mostrar tabla"
       toggle_visibility_visible: "Mostrar invisibles"
       toggle_visibility_invisible: "Ocultar invisibles"
+      rules_post: 'Mensaje de reglas'
     placeholder:
       sum: "Aditivo"
       change: "Reemplazo"
