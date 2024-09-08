@@ -72,31 +72,6 @@
               <%= form.number_field :factors, class: 'form-control', value: 0, step: 1, min: -99, max: 99 %>
             </div>
             <div class="input-group mb-3 ms-3 d-flex flex-wrap" id="factors-group" data-bs-toggle="tooltip" data-bs-placement="left" title="<%= t('.factors_tooltip') %>" >
-              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill me-2" data-factor="1">
-                <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_plus') %></span>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-                  0
-                </span>
-              </div>
-              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-primary flex-fill me-2" data-factor="3">
-                <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_double_plus').html_safe %></span>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-                  0
-                </span>
-              </div>
-              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill me-2" data-factor="-1">
-                <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_minus') %></span>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-                  0
-                </span>
-              </div>
-              <div class="ms-1 mb-1 factor btn btn-sm btn-outline-danger flex-fill me-2" data-factor="-3">
-                <span class='factor-data'><%= t('activerecord.attributes.recipe.factors_double_minus').html_safe %></span>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-                  0
-                </span>
-              </div>
-
               <% ["plus", "minus"].each do |direction| %>
                 <% ["simple", "double"].each do |size| %>
                   <% ["once", "multiple"].each do |style| %>
@@ -146,7 +121,7 @@
           <strong><span id="dif"><%= @options["difficulty"].find { |item| item["value"] == @default_recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(@default_recipe.difficulty) %>)</span></strong>
         </div>
         <div class="ms-2 fortune-field">
-          <strong><span id="speed"><%= @options["speed"][@default_recipe.speed]["name"].capitalize %><%= (@default_recipe.speed == -1) ? '' : '(' + @options["speed"][@default_recipe.speed]["days"] + ')'%></span></strong>
+          <strong><span id="speed"><%= @options["speed"][@default_recipe.speed]["name"].capitalize %><%= (@default_recipe.speed == -1) ? '' : ' (' + @options["speed"][@default_recipe.speed]["days"].to_s + ')'%></span></strong>
         </div>
         <div id="desc">
           <%= Kramdown::Document.new(truncate(@default_recipe.description, length: 60, omission: '...')  || "").to_html.html_safe %>

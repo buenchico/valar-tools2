@@ -50,6 +50,8 @@ results = ""
 <% end %>
 
 $('#consequences').prepend(results);
+$('.result').removeClass('active');
+$('.result').addClass('disabled');
 
 // Long press event
 $('.factor.created').longpress(function() {
