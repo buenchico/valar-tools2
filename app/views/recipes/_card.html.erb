@@ -1,0 +1,48 @@
+<div class="card bg-dark border-primary recipe_<%= recipe.id %>">
+  <div class="card-body">
+    <h5 class="card-title text-center"><%= recipe.name %></h5>
+    <div class="position-absolute top-0 end-0 mt-2 me-2">
+      <a class="link-unstyled" href="#" role="button" id="dropdownMenuCard_<%= recipe.id.to_s %>" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-three-dots"></i>
+      </a>
+
+      <% if @current_user&.is_master? %>
+        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
+          <li>
+            <%= link_to edit_recipe_path(recipe), remote: true, class: 'dropdown-item' do %>
+              <i class="bi bi-pencil-square text-white"></i>
+              <%= t('helpers.action.edit', thing: nil) %>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to recipe_path(recipe), method: :delete, data: { confirm: t('helpers.action.confirm', thing: recipe.name) }, remote: true, class: 'dropdown-item' do %>
+              <i class="bi bi-trash text-white"></i>
+              <%= t('helpers.action.delete', thing: nil) %>
+            <% end %>
+          </li>
+        </ul>
+      <% end %>
+    </div>
+    <div class="text-center"><%= recipe.section %>, <strong><%= @options["speed"][recipe.speed]["name"].capitalize %> (<%= @options["speed"][recipe.speed]["days"] %>), <%= @options["difficulty"].find { |item| item["value"] == recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(recipe.difficulty)%>)</strong></div>
+    <hr class="border border-primary opacity-100 w-100">
+    <div><%= Kramdown::Document.new(truncate(recipe.description, length: 60, omission: '...')  || "").to_html.html_safe %></div>
+    <hr class="border border-primary opacity-100 w-100">
+    <% previous_prefix = nil %>
+    <% recipe.factors.sort_by { |key, _| key }.reverse.to_h.each do |key, value| %>
+      <% current_prefix = key.split('_').first %>
+      <%= (previous_prefix == 'plus' && current_prefix == 'minus') ? "</br>".html_safe : "" %>
+      <% value.each do | factor | %>
+        <%= factor_to_text(factor, key, "html").html_safe %>
+      <% end %>
+      <% previous_prefix = current_prefix %>
+    <% end %>
+    <hr class="border border-primary opacity-100 w-100">
+    <div>
+      <% ["major", "minor", "improvement"].each do | result_type | %>
+        <% recipe.results.fetch(result_type, []).each do | result | %>
+          <div><%= result_to_text(result, result_type).html_safe %></div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

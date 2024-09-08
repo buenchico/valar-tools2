@@ -1,0 +1,21 @@
+// Change from land to sea
+$(document).on('turbolinks:load', function () {
+  if ($(".recipes").length !== 0 ) {
+
+    $('#change_view').click(function() {
+      console.log("test")
+      var dataView = $(this).data('view');
+      var date = new Date();
+      date.setTime(date.getTime() + (365 * 100 * 24 * 60 * 60 * 1000)); // 100 years
+      var expires = "; expires=" + date.toUTCString();
+      if (dataView == "cards") {
+        document.cookie =  "recipe_view" + "=" + "table" + expires + "; path=/";
+        $(this).data('view', 'table');
+      } else if (dataView == "table") {
+        document.cookie =  "recipe_view" + "=" + "cards" + expires + "; path=/";
+        $(this).data('view', 'cards');
+      }
+      $('.view').toggleClass('d-none')
+    });
+  }
+});

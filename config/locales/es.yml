@@ -56,6 +56,8 @@ es:
       speed: "Velocidad"
       hex: "Hex"
       obstacle: "Obstáculo"
+      toggle_display_cards: "Mostrar cartas"
+      toggle_display_table: "Mostrar tabla"
       toggle_visibility_visible: "Mostrar invisibles"
       toggle_visibility_invisible: "Ocultar invisibles"
     placeholder:

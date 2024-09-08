@@ -6,6 +6,8 @@ class RecipesController < ApplicationController
 
   def index
     @recipes = Recipe.all
+    @view = (cookies[:recipe_view] || "cards")
+    @not_view = (@view == "cards" ? "table" : "cards")
   end
 
   def edit

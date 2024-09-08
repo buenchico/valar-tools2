@@ -14,7 +14,7 @@
     <tbody>
       <% @sections.each do | section | %>
         <% @recipes.where(section: section).each do | recipe | %>
-          <tr id="recipe_<%= recipe.id.to_s %>">
+          <tr id="recipe_row_<%= recipe.id.to_s %>" class="recipe_<%= recipe.id %>">
             <%= render 'row', recipe: recipe %>
           </tr>
         <% end %>

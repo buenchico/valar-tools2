@@ -14,8 +14,15 @@
       <%= link_to new_recipe_path, class: "btn btn-primary", remote: true do %>
         <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
       <% end %>
+
+      <%= button_tag t('helpers.label.toggle_display_' + @not_view), type: "button", class: "btn btn-primary float-end", id: "change_view", data: { view: @view } %>
     <% end %>
   </div>
 </div>
 
-<%= render "recipes_table" %>
+<div class="view <%= @view == 'cards' ? '' : 'd-none' %>">
+  <%= render "recipes_board" %>
+</div>
+<div class="view <%= @view == 'table' ? '' : 'd-none' %>">
+  <%= render "recipes_table" %>
+</div>
