@@ -10,14 +10,16 @@
 
 <div id="player-tools">
   <% player_tools&.each do | tool | %>
-    <div class="tool-box text-white">
-      <div class="tool-box-icon">
-        <%= link_to tool.path do %>
-          <i class="<%= tool.icon_url %> text-white"></i>
-        <% end %>
+    <% if @current_user.present? || tool.role == 'guest' %>
+      <div class="tool-box text-white">
+        <div class="tool-box-icon">
+          <%= link_to tool.path do %>
+            <i class="<%= tool.icon_url %> text-white"></i>
+          <% end %>
+        </div>
+        <div class="tool-box-title"><%= tool.short_title.capitalize %></div>
       </div>
-      <div class="tool-box-title"><%= tool.short_title.capitalize %></div>
-    </div>
+    <% end %>
   <% end %>
 </div>
 
