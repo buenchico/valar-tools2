@@ -23,13 +23,13 @@ $('#copy_results').click(function() {
   // Rejoin the lines into a single string with newline characters
   let cleanedText = trimmedLines.join('\n');
 
-  navigator.clipboard.writeText(cleanedText)
-
   $('#result_card').addClass( "highlight", 250, callback )
 
   function callback() {
     setTimeout(function() {
       $('#result_card').removeClass( "highlight" );
     }, 250 );
-  }
+  }  
+
+  navigator.clipboard.writeText(cleanedText)
 });
