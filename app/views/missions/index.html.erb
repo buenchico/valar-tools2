@@ -69,11 +69,11 @@
             </div>
             <div class="input-group mb-3">
               <%= form.label t('activerecord.attributes.recipe.factors'), class: 'input-group-text' %>
-              <%= form.text_field :factors_plus_simple, value: "[]" %>
-              <%= form.text_field :factors_plus_double, value: "[]" %>
-              <%= form.text_field :factors_minus_simple, value: "[]" %>
-              <%= form.text_field :factors_minus_double, value: "[]" %>
-              <%= form.text_field :factors, class: 'form-control', value: 0, step: 1, min: -99, max: 99 %>
+              <%= form.hidden_field :factors_plus_simple, value: "[]" %>
+              <%= form.hidden_field :factors_plus_double, value: "[]" %>
+              <%= form.hidden_field :factors_minus_simple, value: "[]" %>
+              <%= form.hidden_field :factors_minus_double, value: "[]" %>
+              <%= form.number_field :factors, class: 'form-control', value: 0, step: 1, min: -99, max: 99 %>
             </div>
             <div class="input-group mb-3 ms-3 d-flex flex-wrap" id="factors-group" data-bs-toggle="tooltip" data-bs-placement="left" title="<%= t('.factors_tooltip') %>" >
               <% ["plus", "minus"].each do |direction| %>
