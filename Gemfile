@@ -20,7 +20,7 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
 # Use Bootstrap framework for CSS
-gem 'bootstrap', '~> 5.1', '>= 5.1.3'
+gem 'bootstrap', '~> 5.3', '>= 5.3.3'
 # support for API calls
 gem 'faraday'
 gem 'faraday-net_http_persistent'
