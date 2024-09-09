@@ -1,7 +1,7 @@
 <div class="row gx-2 gy-3" id="recipe_board">
   <% @sections.each do | section | %>
     <% @recipes.where(section: section).each do | recipe | %>
-      <div id="recipe_card_<%= recipe.id.to_s %>" class="col-md-4 col-12">
+      <div id="recipe_card_<%= recipe.id.to_s %>" class="col-md-6 col-12">
         <%= render 'card', recipe: recipe %>
       </div>
     <% end %>
