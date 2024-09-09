@@ -34,7 +34,7 @@
             <% @data[:dice].each_with_index do |number, index| %>
               <div class="p-0" style="position: relative; width: 80px">
                 <%= image_tag('d10.svg', alt: '10 sided dice', width: 80, height: 80) %>
-                <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); font-size: 24px" class="text-monospace <%= (index == 1) ? 'text-light fw-bolder' : 'text-muted '%>">
+                <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); font-size: 24px" class="text-monospace <%= (index == 1) ? 'text-white fw-bolder' : 'text-text-white-50 '%>">
                   <%= number %>
                 </div>
               </div>
