@@ -20,7 +20,7 @@
       <% end %>
     <% end %>
 
-    <%= button_tag t('helpers.label.toggle_display_' + @not_view), type: "button", class: "btn btn-primary float-end", id: "change_view", data: { view: @view } %>
+    <%= button_tag t('helpers.label.toggle_display_' + @not_view), type: "button", class: "btn btn-primary float-end", id: "change_view", data: { view: @view, view_name: t('helpers.label.toggle_display_' + @view)} %>
   </div>
 </div>
 

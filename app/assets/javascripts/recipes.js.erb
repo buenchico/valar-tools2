@@ -3,8 +3,13 @@ $(document).on('turbolinks:load', function () {
   if ($(".recipes").length !== 0 ) {
 
     $('#change_view').click(function() {
-      console.log("test")
+      console.log($(this).html())
       var dataView = $(this).data('view');
+      var dataViewName = $(this).data('view-name');
+      console.log("name " + dataViewName)
+      var dataOldName = $(this).html();
+      console.log("old " + dataOldName)
+
       var date = new Date();
       date.setTime(date.getTime() + (365 * 100 * 24 * 60 * 60 * 1000)); // 100 years
       var expires = "; expires=" + date.toUTCString();
@@ -15,6 +20,8 @@ $(document).on('turbolinks:load', function () {
         document.cookie =  "recipe_view" + "=" + "cards" + expires + "; path=/";
         $(this).data('view', 'cards');
       }
+      $(this).html(dataViewName)
+      $(this).data('view-name', dataOldName)
       $('.view').toggleClass('d-none')
     });
   }
