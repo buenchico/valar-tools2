@@ -45,7 +45,7 @@
               <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.difficulty') %>:</strong></div>
               <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.tokens') %>:</strong></div>
               <div class="row"><strong><%= t('activerecord.attributes.recipe.factors') %>:</strong></div>
-              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.mic') %>:</strong></div>
+              <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.misc') %>:</strong></div>
               <div class="row <%= @fortune ? 'd-none' : nil %>"><strong><%= t('activerecord.attributes.recipe.role') %>:</strong></div>
               <div class="row"><strong><%= t('activerecord.attributes.recipe.total') %>:</strong></div>
             </div>
@@ -66,7 +66,7 @@
         <p>**<%= t('activerecord.attributes.user.player') %>**: </p>
         <p>**<%= t('missions.index.objective') %>**: </p>
         <p></p>
-        <p>#### **<%= @recipe.name %> (<%= @options["speed"][@recipe.speed]["name"].capitalize %>, <%= @recipe.difficulty %>) : <%= @recipe.description %>**</p>
+        <p>#### **<%= @recipe.name %> (<%= @options["speed"][@data[:speed]]["name"].capitalize %>, <%= @options["difficulty"].find { |item| item["value"] == @data[:difficulty] }["name"].capitalize %> <%= number_to_modifier(@data[:difficulty])%>) : <%= @recipe.description %>**</p>
         <p></p>
         <p>**<%= t('activerecord.attributes.recipe.difficulty') %>:** <%= number_to_modifier(@data[:difficulty]) %></p>
         <p>**<%= t('activerecord.attributes.recipe.tokens') %>:** <%= number_to_modifier(@data[:tokens]) %></p>

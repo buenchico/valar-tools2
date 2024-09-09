@@ -60,6 +60,7 @@ class MissionsController < ApplicationController
     roll = dice[1]
 
     @recipe = Recipe.find(params[:recipe_id].to_i)
+    speed = params[:speed].to_i
     difficulty = params[:difficulty].to_i
     tokens = params[:tokens].to_i
     advantage = params[:advantage].to_i
@@ -119,7 +120,8 @@ class MissionsController < ApplicationController
       misc: misc,
       role: role,
       subtotal: subtotal,
-      total: total
+      total: total,
+      speed: speed
     }
 
     @fortune = fortune

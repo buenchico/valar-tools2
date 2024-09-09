@@ -181,6 +181,7 @@ es:
         misc: "Miscelánea"
         role: "Roleo"
         total: "Total"
+        dice: "Tirada"
     models:
       game: 'Partida'
       tool: 'Herramienta'
