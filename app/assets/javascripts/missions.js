@@ -127,7 +127,7 @@ $(document).on('turbolinks:load', function () {
       factors += (JSON.parse($('#factors_minus_simple').val()).length * -1)
       factors += (JSON.parse($('#factors_minus_double').val()).length * -3)
       $('#factors').val(factors)
-    }    
+    }
 
     // Event delegation to handle dynamically added .result elements
     $(document).on('click', '.result', function() {
