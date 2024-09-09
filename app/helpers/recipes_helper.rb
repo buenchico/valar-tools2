@@ -13,16 +13,13 @@ module RecipesHelper
 
     case type
     when "plus_simple_once", "plus_simple_multiple"
-      factor = "◻️" + factor.capitalize
+      factor = "◻️" + factor.downcase
     when "plus_double_once", "plus_double_multiple"
-      factor = open + "◻️" + factor.capitalize + close
+      factor = open + "◻️" + factor.downcase + close
     when "minus_simple_once", "minus_simple_multiple"
-      factor = "◼️" + factor.capitalize
+      factor = "◼️" + factor.downcase
     when "minus_double_once", "minus_double_multiple"
-      factor = open + "◼️" + factor.capitalize + close
-    else
-      # Handle unknown type gracefully if needed
-      factor = factor.capitalize
+      factor = open + "◼️" + factor.downcase + close
     end
 
     return factor

@@ -27,15 +27,18 @@
     <hr class="border border-primary opacity-100 w-100">
     <div><%= Kramdown::Document.new(recipe.description  || "").to_html.html_safe %></div>
     <hr class="border border-primary opacity-100 w-100">
-    <% previous_prefix = nil %>
+    <% factors = { "plus" => [], "minus" => [] } %>
     <% recipe.factors.sort_by { |key, _| key }.reverse.to_h.each do |key, value| %>
       <% current_prefix = key.split('_').first %>
-      <%= (previous_prefix == 'plus' && current_prefix == 'minus') ? "</br>".html_safe : "" %>
-      <% value.each do | factor | %>
-        <%= factor_to_text(factor, key, "html").html_safe %>
+
+      <% value.each do |factor| %>
+        <% factors[current_prefix].push(factor_to_text(factor, key, "html")) if factors[current_prefix] %>
       <% end %>
-      <% previous_prefix = current_prefix %>
     <% end %>
+
+    <p><%= factors["plus"].sort_by { |item| item.gsub(/<\/?[^>]*>/, '') }.join(", ").html_safe %></p?
+    <p><%= factors["minus"].sort_by { |item| item.gsub(/<\/?[^>]*>/, '') }.join(", ").html_safe %></p>
+
     <hr class="border border-primary opacity-100 w-100">
     <div>
       <% ["major", "minor", "improvement"].each do | result_type | %>

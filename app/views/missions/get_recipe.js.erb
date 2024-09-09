@@ -22,11 +22,9 @@ $('#desc').html("<%= j(Kramdown::Document.new(@recipe&.description || '')&.to_ht
           <% symbol = (direction == "plus" ? "◻️" : "◼️") %>
           <% sign = (direction == "plus" ? 1 : -1) %>
 
-          <!-- Build the message string -->
           <% message = "<div class='ms-1 mb-1 #{style == 'once' ? 'factor-toggle' : 'factor'} btn btn-sm btn-outline-#{direction == 'plus' ? 'primary' : 'danger'} flex-fill me-2 created' data-factor='#{size == 'simple' ? 1 * sign : 3 * sign}'>" %>
           <% message += "<span class='factor-data'>#{open}#{symbol}#{factor.capitalize}#{close}</span>" %>
 
-          <!-- Add badge if style is 'multiple' -->
           <% if style == "multiple" %>
             <% message += "<span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning'>0</span>" %>
           <% end %>
@@ -39,11 +37,12 @@ $('#desc').html("<%= j(Kramdown::Document.new(@recipe&.description || '')&.to_ht
       <% end %>
     <% end %>
   <% end %>
-  
-  <!-- Sort the messages alphabetically -->
-  <% sorted_messages = messages.sort_by { |msg| msg.downcase } %>
 
-  <!-- Append the sorted messages -->
+  <% sorted_messages = messages.sort_by do |msg| %>
+    <% content = msg.match(/<span class='factor-data'>(.*?)<\/span>/)[1] rescue '' %>
+    <% content.gsub(/<\/?[^>]*>/, '') %>
+  <% end %>
+
   <% sorted_messages.each do |sorted_message| %>
     $('#factors-group').append("<%= j sorted_message %>");
   <% end %>

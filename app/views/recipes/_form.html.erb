@@ -37,7 +37,7 @@
                   <%= form.label t("activerecord.attributes.recipe.#{direction}") + " " + t("activerecord.attributes.recipe.#{size}") + " " + t("activerecord.attributes.recipe.#{style}"), class: 'input-group-text' %>
                   <%= form.select "factors[" + direction + "_" + size + "_" + style + "]",
                     options_for_select(
-                      recipe.factors.fetch(direction + "_" + size + "_" + style, []).map { |factor|
+                      recipe.factors.fetch(direction + "_" + size + "_" + style, []).sort.map { |factor|
                         [
                           factor,
                           { "data-content": "<span class='badge pill pill-tags bg-" + (direction == "plus" ? "primary" : "danger") + "'><span class='pill-tags-text'>#{factor}</span></span>".html_safe }
