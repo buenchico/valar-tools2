@@ -3,7 +3,7 @@
     <% date = DateTime.parse(mission[:topic_timer][:time].to_s) %>
 
     <div class="row my-2 py-2 <%=( mission[:topic_timer][:type] == 'bump' || mission[:topic_timer][:type] == nil) ? 'row-striped' : 'bg-warning' %>">
-      <div class="col-2 text-center">
+      <div class="col-md-2 col-3 text-center">
         <% if date.year == 2000 %>
           <h2 class="display-5 bg-warning m-0 text-dark"><%= t('missions.index.no_date') %></h2>
         <% else %>
@@ -11,7 +11,7 @@
           <h2 class="bg-white text-dark"><%= date.strftime("%b").upcase %></h2>
         <% end %>
       </div>
-      <div class="col-10">
+      <div class="col-md-10 col-9">
         <h3 class="text-uppercase"><strong><%= link_to mission[:title], 'https://www.valar.es/t/' + id.to_s, class: 'link-unstyled', target: '_blank' %></strong></h3>
         <ul class="list-inline">
           <li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i><%= t('missions.index.master') %>: <%= mission[:assigned_to] %></li>
