@@ -72,6 +72,67 @@ module DiscourseApi
 
       return groups
     end
+
+    def self.get_missions_by_tag(tag)
+      if Rails.env.development?
+        @verify = false
+      else
+        @verify = true
+      end
+
+      # Create a new Faraday connection
+      connection= Faraday.new(
+        ssl: {verify: @verify}, # Disabling verify for development
+        headers: {'api-username': 'valar', 'api-key': ENV['DISCOURSE_API'], 'content-type': 'multipart/form-data'},
+        url: 'https://www.valar.es'
+        )
+
+        missions = [] # To store all the missions
+
+        page = 0
+
+        loop do
+          response = connection.get('/tag/' + tag + '.json', period: 'all', page: page)
+          json_response = JSON.parse(response.body)
+
+          # Append the current page's groups to the 'groups' array
+          missions.concat(json_response['topic_list']['topics'])
+
+          # Check if there are more pages to fetch
+          break if json_response['topic_list']['topics'].blank?
+
+          # Move to the next page
+          page += 1
+        end
+
+        return missions
+    end
+
+    def self.get_missions_by_id(topic_ids)
+      if Rails.env.development?
+        @verify = false
+      else
+        @verify = true
+      end
+
+      # Create a new Faraday connection
+      connection= Faraday.new(
+        ssl: {verify: @verify}, # Disabling verify for development
+        headers: {'api-username': 'valar', 'api-key': ENV['DISCOURSE_API'], 'content-type': 'multipart/form-data'},
+        url: 'https://www.valar.es'
+        )
+
+        missions = {}
+
+        topic_ids.each do | id |
+          response = connection.get('/t/' + id.to_s + '.json', period: 'all', page: 0)
+          parsed_response = JSON.parse(response.body)
+
+          missions[id] = parsed_response
+        end    
+
+        return missions
+    end
   end
 
   class DiscoursePostData

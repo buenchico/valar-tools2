@@ -1,6 +1,7 @@
 class MissionsController < ApplicationController
   before_action :set_tool
   before_action :set_options, only: [:index, :calculate, :get_recipe]
+  before_action :check_master, only: [:list]
 
   def index
     @recipes = Recipe.all.order(:section)
@@ -123,6 +124,37 @@ class MissionsController < ApplicationController
     }
 
     @fortune = fortune
+  end
+
+  def list
+    factions = Faction.all
+
+    default_date = DateTime.new(2000, 1, 1, 0, 0, 0)
+
+    missions_by_tag = DiscourseApi::DiscourseGetData.get_missions_by_tag('abierta')
+
+    topic_ids = missions_by_tag.map { |topic| topic["id"] }
+
+    @missions = {}
+
+    missions_by_id = DiscourseApi::DiscourseGetData.get_missions_by_id(topic_ids)
+    missions_by_id.each do | id, topic |
+      if topic["topic_timer"].nil?
+        topic_timer = {"time": default_date, "type": nil}
+      else
+        topic_timer = {"time": topic["topic_timer"]["execute_at"], "type": topic["topic_timer"]["status_type"]}
+      end
+
+      post = topic["post_stream"]["posts"][0]["cooked"]
+      match_data = post.match(/Objetivo<\/h2>(.*?)<h2>/m)
+      target = match_data ? match_data[1].strip : t('missions.index.no_target')
+
+      category = (factions.find_by(category_id: topic["category_id"])&.long_name || t('activerecord.attributes.faction.no_category'))
+
+      @missions[id] = { title: topic["fancy_title"], category: category, assigned_to: topic.fetch("assigned_to_user", {})&.fetch("username", t('missions.index.no_assigned')), topic_timer: topic_timer, target: target }
+    end
+
+    @missions
   end
 
 private

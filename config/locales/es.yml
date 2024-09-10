@@ -99,6 +99,8 @@ es:
         long_name: "Nombre completo"
         title: "Título"
         discourse_id: "Discourse_id"
+        category_id: "Category_id"
+        no_category: "Sin categoría"
         flair_url: "Flair URL"
         reputation: "Reputación"
         tokens: "Tokens"
@@ -242,7 +244,12 @@ es:
     index:
       factors_tooltip: "Click para incrementar, manten pulsado o ctrl+click para reducir"
       calculate: "Calcular"
-      objective: "Objetivo"
+      target: "Objetivo"
+      no_target: "Sin objetivo"
+      no_bump: "La fecha de la misión no es del tipo reflotar"
+      no_date: "Sin fecha"
+      assigned_to: "Master"
+      no_assigned: "sing asignar"
   travel:
     index:
       calculate: 'Calcular'

@@ -82,6 +82,7 @@ Rails.application.routes.draw do
   resources :clocks
 
   get 'missions', to: 'missions#index'
+  get 'missions/list', to: 'missions#list'
   post 'missions/recipe', to: 'missions#get_recipe', as: 'get_recipe'
   post 'missions/calculate', to: 'missions#calculate'
 

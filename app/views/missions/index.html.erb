@@ -146,7 +146,7 @@
           <strong><span id="dif"><%= @options["difficulty"].find { |item| item["value"] == @default_recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(@default_recipe.difficulty) %>)</span></strong>
         </div>
         <div class="ms-2 fortune-field">
-          <strong><span id="speed"><%= @options["speed"][@default_recipe.speed]["name"].capitalize %><%= (@default_recipe.speed == -1) ? '' : '(' + options["speed"][@default_recipe.speed]["days"] + ')'%></span></strong>
+          <strong><span id="speed"><%= @options["speed"][@default_recipe.speed]["name"].capitalize %><%= (@default_recipe.speed == -1) ? '' : '(' + @options["speed"][@default_recipe.speed]["days"] + ')'%></span></strong>
         </div>
         <div id="desc">
           <%= @default_recipe.description %>

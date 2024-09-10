@@ -1,0 +1,27 @@
+<div class="container">
+  <% @missions.sort_by { |_, mission| mission[:topic_timer][:time] }.each do | id, mission | %>
+    <% date = DateTime.parse(mission[:topic_timer][:time].to_s) %>
+
+    <div class="row my-2 py-2 <%=( mission[:topic_timer][:type] == 'bump' || mission[:topic_timer][:type] == nil) ? 'row-striped' : 'bg-warning' %>">
+      <div class="col-2 text-center">
+        <% if date.year == 2000 %>
+          <h2 class="display-5 bg-warning m-0 text-dark"><%= t('missions.index.no_date') %></h2>
+        <% else %>
+          <h1 class="display-4 bg-danger m-0"><span class="badge"><%= date.day %></span></h1>
+          <h2 class="bg-white text-dark"><%= date.strftime("%b").upcase %></h2>
+        <% end %>
+      </div>
+      <div class="col-10">
+        <h3 class="text-uppercase"><strong><%= link_to mission[:title], 'https://www.valar.es/t/' + id.to_s, class: 'link-unstyled', target: '_blank' %></strong></h3>
+        <ul class="list-inline">
+          <li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i><%= t('missions.index.master') %>: <%= mission[:assigned_to] %></li>
+          <li class="list-inline-item"><i class="fa fa-clock-o" aria-hidden="true"></i><%= t('activerecord.attributes.user.faction') %>: <%= mission[:category] %></li>
+        </ul>
+        <%= mission[:target].html_safe %>
+        <% if ( mission[:topic_timer][:type] != 'bump' || mission[:topic_timer][:type] != nil) %>
+          <h2><%= mission[:topic_timer][:type] == 'bump' ? '' :  t('missions.index.no_bump') %></h2>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
