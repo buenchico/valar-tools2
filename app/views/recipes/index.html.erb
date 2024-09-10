@@ -6,6 +6,10 @@
 <div class="tool-title">
     <i class="white <%= yield(:icon) %>"></i>
     <%= yield(:title) %>
+
+    <% if @options["rules"].present? %>
+      <i class="bi bi-question-circle float-end" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-html="true" title="<%= Kramdown::Document.new(@options["rules"] || '').to_html.html_safe %>"></i>
+    <% end %>
 </div>
 
 <div class="row my-3">
@@ -15,7 +19,14 @@
         <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
       <% end %>
     <% end %>
+
+    <%= button_tag t('helpers.label.toggle_display_' + @not_view), type: "button", class: "btn btn-primary float-end", id: "change_view", data: { view: @view, view_name: t('helpers.label.toggle_display_' + @view)} %>
   </div>
 </div>
 
-<%= render "recipes_table" %>
+<div class="view <%= @view == 'cards' ? '' : 'd-none' %>">
+  <%= render "recipes_board" %>
+</div>
+<div class="view <%= @view == 'table' ? '' : 'd-none' %>">
+  <%= render "recipes_table" %>
+</div>

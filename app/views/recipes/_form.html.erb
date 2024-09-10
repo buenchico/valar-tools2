@@ -13,7 +13,7 @@
           </div>
           <div class="input-group mb-3">
             <%= form.label :section, class: 'input-group-text' %>
-            <%= form.select :section, options_for_select(@options["sections"]), {}, class: 'form-select' %>
+            <%= form.select :section, options_for_select(@options["sections"], @recipe.section), {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :speed, class: 'input-group-text' %>
@@ -22,6 +22,10 @@
           <div class="input-group mb-3">
             <%= form.label :difficulty, class: 'input-group-text' %>
             <%= form.select :difficulty, options_for_select(@options["difficulty"].map { |value| [value["name"].capitalize + " (" + number_to_modifier(value["value"]) + ")", value["value"]] }, recipe.difficulty), {}, class: 'form-select' %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :description, class: 'input-group-text' %>
+            <%= form.text_area :description, class: 'form-control', rows: 5 %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :factors, class: 'input-group-text w-100' %>
@@ -33,7 +37,7 @@
                   <%= form.label t("activerecord.attributes.recipe.#{direction}") + " " + t("activerecord.attributes.recipe.#{size}") + " " + t("activerecord.attributes.recipe.#{style}"), class: 'input-group-text' %>
                   <%= form.select "factors[" + direction + "_" + size + "_" + style + "]",
                     options_for_select(
-                      recipe.factors.fetch(direction + "_" + size + "_" + style, []).map { |factor|
+                      recipe.factors.fetch(direction + "_" + size + "_" + style, []).sort.map { |factor|
                         [
                           factor,
                           { "data-content": "<span class='badge pill pill-tags bg-" + (direction == "plus" ? "primary" : "danger") + "'><span class='pill-tags-text'>#{factor}</span></span>".html_safe }
@@ -59,7 +63,6 @@
 
           <% ["major", "minor", "improvement"].each_with_index do |result, index| %>
             <% color = ["danger","warning","success"] %>
-            <%= recipe.factors.fetch("results_" + result, []) %>
             <div class="input-group mb-3">
               <%= form.label t("activerecord.attributes.recipe.results_#{result}"), class: 'input-group-text' %>
               <%= form.select "results[" + result + "]",

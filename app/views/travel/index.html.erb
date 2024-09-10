@@ -4,6 +4,12 @@
 <div class="tool-title d-none d-sm-block">
   <i class="white <%= yield(:icon) %>"></i>
   <%= yield(:title) %>
+
+  <% if @options["rules_post"].present? %>
+    <%= link_to @options["rules_post"], class: 'float-end link-unstyled', target: '_blank', data: { bs_toggle: 'tooltip', bs_placement: 'left' }, title: t('helpers.action.goto', thing: t('helpers.label.rules_post').downcase).html_safe do %>
+      <i class="bi bi-question-circle float-end"></i>
+    <% end %>
+  <% end %>
 </div>
 
 <div id="result" class="d-none"></div>

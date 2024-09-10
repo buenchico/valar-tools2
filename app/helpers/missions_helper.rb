@@ -11,30 +11,31 @@ module MissionsHelper
       close = ''
     end
 
-    list = []
+    list_plus = []
+    list_minus = []
 
     factors&.each do |key, factors|
       case key.to_s
       when "plus_double"
         factors&.each do |factor|
-          list.push(open + "◻️" + factor.capitalize + close)
+          list_plus.push(open + "◻️" + factor.capitalize + close)
         end
       when "plus_simple"
         factors&.each do |factor|
-          list.push("◻️" + factor.capitalize)
+          list_plus.push("◻️" + factor.capitalize)
         end
       when "minus_simple"
         factors&.each do |factor|
-          list.push("◼️" + factor.capitalize)
+          list_minus.push("◼️" + factor.capitalize)
         end
       when "minus_double"
         factors&.each do |factor|
-          list.push(open + "◼️" + factor.capitalize + close)
+          list_minus.push(open + "◼️" + factor.capitalize + close)
         end
       end
     end
 
-    list = list.join(", ")
+    list = list_plus.sort_by { |item| item.gsub(/<\/?[^>]*>|\[\/?[^\]]*\]/, '') }.join(", ") + ", " + list_minus.sort_by { |item| item.gsub(/<\/?[^>]*>|\[\/?[^\]]*\]/, '') }.join(", ")
 
     return list
   end

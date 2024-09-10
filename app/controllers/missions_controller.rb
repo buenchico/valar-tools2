@@ -4,7 +4,7 @@ class MissionsController < ApplicationController
   before_action :check_master, only: [:list]
 
   def index
-    @recipes = Recipe.all.order(:section)
+    @recipes = Recipe.all.order(:section, :id)
     @default_recipe = Recipe.find_by(id: @options["default_recipe"])
   end
 
@@ -61,6 +61,7 @@ class MissionsController < ApplicationController
     roll = dice[1]
 
     @recipe = Recipe.find(params[:recipe_id].to_i)
+    speed = params[:speed].to_i
     difficulty = params[:difficulty].to_i
     tokens = params[:tokens].to_i
     advantage = params[:advantage].to_i
@@ -120,7 +121,8 @@ class MissionsController < ApplicationController
       misc: misc,
       role: role,
       subtotal: subtotal,
-      total: total
+      total: total,
+      speed: speed
     }
 
     @fortune = fortune

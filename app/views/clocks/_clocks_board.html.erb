@@ -1,6 +1,6 @@
-<div class="row">
+<div class="row gx-2 gy-3">
   <% @clocks_open.each do |clock| %>
-    <div id="clock_<%= clock.id.to_s %>" class="col m-1">
+    <div id="clock_<%= clock.id.to_s %>" class="col">
       <%= render 'card', clock: clock %>
     </div>
   <% end %>
@@ -12,9 +12,9 @@
   </div>
 <% end %>
 
-<div class="row mt-2">
+<div class="row mt-2 gx-2 gy-3">
   <% @clocks_close.each do |clock| %>
-    <div id="clock_<%= clock.id.to_s %>" class="col m-1">
+    <div id="clock_<%= clock.id.to_s %>" class="col">
       <%= render 'card', clock: clock %>
     </div>
   <% end %>

@@ -1,0 +1,7 @@
+$("html, body").animate({ scrollTop: 0 }, "slow");
+
+$('#recipe_card_<%= @recipe.id %>').remove();
+$('#recipe_row_<%= @recipe.id %>').remove();
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+$(".modal").modal('hide');

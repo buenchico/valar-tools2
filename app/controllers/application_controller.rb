@@ -71,9 +71,9 @@ class ApplicationController < ActionController::Base
 
   def player_tools
     if @current_user&.is_master?
-      player_tools = Tool.where(active: true).where(role:'player')
+      player_tools = Tool.where(active: true).where(role: ['player', 'guest'])
     else
-      player_tools = active_game&.tools&.where(active: true)&.where(role:'player')
+      player_tools = active_game&.tools&.where(active: true)&.where(role:['player', 'guest'])
     end
   end
 
@@ -108,5 +108,5 @@ class ApplicationController < ActionController::Base
     random_hex = SecureRandom.hex(4) # You can adjust the length of the random part as needed.
     pseudorandom_id = "#{timestamp}_#{random_hex}"
     return pseudorandom_id
-  end  
+  end
 end

@@ -1,4 +1,4 @@
-USER_ROLES = ['player', 'master', 'admin']
+USER_ROLES = ['guest', 'player', 'master', 'admin']
 
 ARMY_GROUPS = {
   "red": {"name": "rojo", "icon": "suit-diamond", "color": "OrangeRed"},

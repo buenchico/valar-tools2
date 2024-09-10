@@ -1,11 +1,14 @@
-$('#recipe_list').find('tbody').append('<tr id="recipe_<%= @recipe.id.to_s %>"></tr>');
-$('#recipe_<%= @recipe.id %>').html('<%= j render "row", recipe: @recipe  %>');
+$('#recipe_list').find('tbody').append('<tr id="recipe_row_<%= @recipe.id.to_s %>" class="recipe_<%= @recipe.id %>"></tr>');
+$('#recipe_board').append('<div id="recipe_card_<%= @recipe.id.to_s %>" class="col-md-6 col-12">');
 
-$('#recipe_<%= @recipe.id %>').addClass( "table-highlight", callback )
+$('#recipe_row_<%= @recipe.id %>').html('<%= j render "row", recipe: @recipe  %>');
+$('#recipe_card_<%= @recipe.id %>').html('<%= j render "card", recipe: @recipe  %>');
+
+$('.recipe_<%= @recipe.id %>').addClass( "table-highlight highlight", callback )
 
 function callback() {
   setTimeout(function() {
-    $('#recipe_<%= @recipe.id %>').removeClass( "table-highlight" );
+    $('.recipe_<%= @recipe.id %>').removeClass( "table-highlight highlight" );
   }, 500 );
 }
 

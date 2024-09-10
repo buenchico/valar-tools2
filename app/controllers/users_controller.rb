@@ -38,7 +38,7 @@ class UsersController < ApplicationController
           player: user["username"],
           discourse_id: user["id"],
           faction: @inactive_faction,
-          avatar_url: "http://www.valar.es/" + user["avatar_template"].gsub('{size}', '144')
+          avatar_url: "https://www.valar.es/" + user["avatar_template"].gsub('{size}', '144')
         )
 
         if @user.save

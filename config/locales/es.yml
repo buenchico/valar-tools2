@@ -36,6 +36,7 @@ es:
       edit: 'Editar %{thing}'
       delete: 'Borrar %{thing}'
       confirm: '¿Estás seguro de eliminar %{thing}?'
+      goto: 'Abrir %{thing}'
     submit:
       submit: 'Enviar %{model}'
       create: 'Crear %{model}'
@@ -56,8 +57,11 @@ es:
       speed: "Velocidad"
       hex: "Hex"
       obstacle: "Obstáculo"
+      toggle_display_cards: "Mostrar cartas"
+      toggle_display_table: "Mostrar tabla"
       toggle_visibility_visible: "Mostrar invisibles"
       toggle_visibility_invisible: "Ocultar invisibles"
+      rules_post: 'Mensaje de reglas'
     placeholder:
       sum: "Aditivo"
       change: "Reemplazo"
@@ -171,10 +175,6 @@ es:
         once: "simple"
         multiple: "ilimitado"
         no_factors: "Sin factores"
-        factors_plus: "◻️ Factor positivo menor"
-        factors_double_plus: "<u>◻️ Factor positivo mayor</u>"
-        factors_minus: "◼️ Factor negativo menor"
-        factors_double_minus: "<u>◼️ Factor negativo mayor</u>"
         results: "Consecuencias"
         results_major: "🟰 Mayor"
         results_minor: "➖ Menor"
@@ -183,6 +183,7 @@ es:
         misc: "Miscelánea"
         role: "Roleo"
         total: "Total"
+        dice: "Tirada"
     models:
       game: 'Partida'
       tool: 'Herramienta'

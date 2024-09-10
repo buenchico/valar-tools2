@@ -11,7 +11,7 @@
   <%= @options["difficulty"].find { |item| item["value"] == recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(recipe.difficulty)%>)
 </td>
 <td>
-  <%= truncate(recipe.description, length: 60, omission: '...') %>
+  <%= Kramdown::Document.new(truncate(recipe.description, length: 60, omission: '...')  || "").to_html.html_safe %>
 </td>
 <td><%= link_to '', send("edit_recipe_path", recipe.id), remote: true, class: 'bi bi-pencil-square text-white' %></td>
 <td>

@@ -1,7 +1,7 @@
 class Tool < ApplicationRecord
   validates :name, :title, :short_title, :icon_url, presence: true
   validates :name, :short_title, format: { without: /\s/ }
-  validates :role, inclusion: { in: ['player', 'master', 'admin']}
+  validates :role, inclusion: { in: USER_ROLES}
   validates_uniqueness_of :name
 
   has_many :game_tools, :dependent => :destroy
