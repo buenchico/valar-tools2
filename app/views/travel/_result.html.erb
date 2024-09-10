@@ -1,4 +1,4 @@
-<div class="card mb-5 <%= @time.zero? ? "bg-danger" : "border-primary bg-dark text-white" %> text-light col-6">
+<div class="card mb-5 <%= @time.zero? ? "bg-danger" : "border-primary bg-dark text-white" %> text-light col-md-6 col-12">
   <div class="card-body">
     <div class="card-title">
       <span id="travel-title" class="h5"><%= @time.zero? ? "ERROR" : "Desde #{@from} hasta #{@to}" %></span>
@@ -10,7 +10,7 @@
     <div id="travel-text" class="card-text">
 
       <% count = [@size, 1].min %>
-      <% @html = "<p>Un #{Army.model_name.human(:count => count).downcase} " %>
+      <% @html = "<p>Un #{Army.model_name.human(:count => count).downcase}" %>
       <% @html += ((@size == 0) ? "" : " de tamaño #{@size}") %>
       <% @html += " necesita <span class='badge fs-6 bg-success'>#{@travel_time}</span> para ir desde #{@from} hasta #{@to}</p>" %>
       <% @steps.each do | step | %>
