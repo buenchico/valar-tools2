@@ -10,12 +10,22 @@
         <% end %>
       </div>
       <div class="col-md-10 col-9">
-        <h3 class="text-uppercase"><strong><%= link_to mission[:title], 'https://www.valar.es/t/' + id.to_s, class: 'link-unstyled', target: '_blank' %></strong></h3>
+        <h3 class="text-uppercase">
+          <strong><%= link_to mission[:title], 'https://www.valar.es/t/' + id.to_s, class: 'link-unstyled', target: '_blank' %></strong>
+        </h3>
         <ul class="list-inline">
-          <li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i><%= t('missions.index.master') %>: <%= mission[:assigned_to] %></li>
-          <li class="list-inline-item"><i class="fa fa-clock-o" aria-hidden="true"></i><%= t('activerecord.attributes.user.faction') %>: <%= mission[:category] %></li>
+          <li class="list-inline-item">
+            <%= t('missions.index.master') %>:
+            <span class="badge fs-6 bg-success"><%= mission[:assigned_to] %></span>
+          </li>
+          <li class="list-inline-item">
+            <%= t('activerecord.attributes.user.faction') %>:
+            <span class="badge fs-6 bg-primary"><%= mission[:category] %></span>
+          </li>
         </ul>
-        <%= mission[:target].html_safe %>
+        <div class="fw-light">
+          <%= mission[:target].html_safe %>
+        </div>
         <% if mission[:message].present? %>
           <h2><%= mission[:message] %></h2>
         <% end %>
