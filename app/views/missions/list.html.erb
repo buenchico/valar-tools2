@@ -1,14 +1,12 @@
 <div class="container">
-  <% @missions.sort_by { |_, mission| mission[:topic_timer][:time] }.each do | id, mission | %>
-    <% date = DateTime.parse(mission[:topic_timer][:time].to_s) %>
-
-    <div class="row my-2 py-2 <%=( mission[:topic_timer][:type] == 'bump' || mission[:topic_timer][:type] == nil) ? 'row-striped' : 'bg-warning' %>">
+  <% @missions.sort_by { |_, mission| mission[:date] }.each do | id, mission | %>
+    <div class="row my-2 py-2 <%= mission[:color] %> <%= mission[:today] %>">
       <div class="col-md-2 col-3 text-center">
-        <% if date.year == 2000 %>
+        <% if mission[:date].year == 2000 %>
           <h2 class="display-5 bg-warning m-0 text-dark"><%= t('missions.index.no_date') %></h2>
         <% else %>
-          <h1 class="display-4 bg-danger m-0"><span class="badge"><%= date.day %></span></h1>
-          <h2 class="bg-white text-dark"><%= date.strftime("%b").upcase %></h2>
+          <h1 class="display-4 bg-danger m-0"><span class="badge"><%= mission[:date].day %></span></h1>
+          <h2 class="bg-white text-dark"><%= mission[:date].strftime("%b").upcase %></h2>
         <% end %>
       </div>
       <div class="col-md-10 col-9">
@@ -18,8 +16,8 @@
           <li class="list-inline-item"><i class="fa fa-clock-o" aria-hidden="true"></i><%= t('activerecord.attributes.user.faction') %>: <%= mission[:category] %></li>
         </ul>
         <%= mission[:target].html_safe %>
-        <% if ( mission[:topic_timer][:type] != 'bump' || mission[:topic_timer][:type] != nil) %>
-          <h2><%= mission[:topic_timer][:type] == 'bump' ? '' :  t('missions.index.no_bump') %></h2>
+        <% if mission[:message].present? %>
+          <h2><%= mission[:message] %></h2>
         <% end %>
       </div>
     </div>

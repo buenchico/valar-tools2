@@ -437,8 +437,14 @@ body {
 /* calendar */
 .row-striped:nth-of-type(odd){
   background-color: var(--bs-dark);
+  border-left: 10px var(--bs-dark) solid;
 }
 
 .row-striped:nth-of-type(even){
   background-color: var(--bs-gray-700);
+  border-left: 10px var(--bs-gray-700) solid;
+}
+
+.calendar-accent {
+  border-left: 10px var(--bs-danger) solid !important;
 }

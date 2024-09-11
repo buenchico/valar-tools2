@@ -130,8 +130,11 @@ class MissionsController < ApplicationController
 
   def list
     factions = Faction.all
+    masters_ids = User.where(faction: Faction.find_by(name: 'master')).pluck(:discourse_id)
 
-    default_date = DateTime.new(2000, 1, 1, 0, 0, 0)
+    date_past = Date.new(2000, 1, 1)
+    date_today = Date.today
+    date_future = Date.new(3000, 1, 1)
 
     missions_by_tag = DiscourseApi::DiscourseGetData.get_missions_by_tag('abierta')
 
@@ -141,10 +144,32 @@ class MissionsController < ApplicationController
 
     missions_by_id = DiscourseApi::DiscourseGetData.get_missions_by_id(topic_ids)
     missions_by_id.each do | id, topic |
-      if topic["topic_timer"].nil?
-        topic_timer = {"time": default_date, "type": nil}
+
+      color = "row-striped"
+      today = nil
+      if topic["topic_timer"].present?
+        # Timer is present
+        date = Date.parse(topic["topic_timer"]["execute_at"])
+        # Timer is of incorrect type
+        if topic["topic_timer"]["status_type"] != "bump"
+          message = t('missions.index.no_bump')
+          color = "bg-warning"
+        end
       else
-        topic_timer = {"time": topic["topic_timer"]["execute_at"], "type": topic["topic_timer"]["status_type"]}
+        # Timer is not present
+        if topic["post_stream"]["posts"].last["action_code"] == "autobumped"
+          # Topic has been bumped today
+          date = date_today
+          today = 'calendar-accent'
+        elsif masters_ids.include?(topic["post_stream"]["posts"].last["user_id"]) && topic["post_type"] == 1
+          # Last message is a normal message by master
+          date = date_future
+          message = t('missions.index.awaiting_player')
+        else
+          # All other cases
+          date = date_past
+          message = t('missions.index.no_date_long')
+        end
       end
 
       post = topic["post_stream"]["posts"][0]["cooked"]
@@ -153,7 +178,16 @@ class MissionsController < ApplicationController
 
       category = (factions.find_by(category_id: topic["category_id"])&.long_name || t('activerecord.attributes.faction.no_category'))
 
-      @missions[id] = { title: topic["fancy_title"], category: category, assigned_to: topic.fetch("assigned_to_user", {})&.fetch("username", t('missions.index.no_assigned')), topic_timer: topic_timer, target: target }
+      @missions[id] = {
+        title: topic["fancy_title"],
+        category: category,
+        assigned_to: topic.fetch("assigned_to_user", {})&.fetch("username", t('missions.index.no_assigned')),
+        date: date,
+        target: target,
+        message: message,
+        color: color,
+        today: today
+      }
     end
 
     @missions
