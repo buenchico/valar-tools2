@@ -58,7 +58,7 @@
           <%= clock.right %>
         </div>
       <% end %>
-      <div class="mt-3 text-center">
+      <div class="text-center">
         <%= clock.family.blank? ? '&nbsp;'.html_safe : link_to(clock.family.title, family_path(clock.family.id), remote: true, class: 'text-white') %>
       </div>
     </div>
