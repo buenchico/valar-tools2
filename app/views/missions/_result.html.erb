@@ -27,7 +27,7 @@
             <div id="result_main" class="ms-2">
               <%= @result["result"] %>
             </div>
-            <div id="results_list">
+            <div id="results_list" class="mb-5">
             </div>
           </div>
         </div>
@@ -73,7 +73,7 @@
         <p>**<%= t('missions.index.target') %>**: </p>
         <p></p>
         <p>#### **<%= @recipe.name %> (<%= @options["speed"][@data[:speed]]["name"].capitalize %>, <%= @options["difficulty"].find { |item| item["value"] == @data[:difficulty] }["name"].capitalize %> <%= number_to_modifier(@data[:difficulty])%>) : <%= @recipe.description %>**</p>
-        <p><span class="position"><%= t('missions.position_neutral ')%></span> <span class="effect"><%= t('missions.effect_neutral ')%></span></p>
+        <p><span class="position"><%= t('missions.index.position_neutral') %></span> <span class="effect"><%= t('missions.index.effect_neutral') %></span></p>
         <p></p>
         <p>**<%= t('activerecord.attributes.recipe.difficulty') %>:** <%= number_to_modifier(@data[:difficulty]) %></p>
         <p>**<%= t('activerecord.attributes.recipe.tokens') %>:** <%= number_to_modifier(@data[:tokens]) %></p>
