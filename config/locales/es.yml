@@ -251,6 +251,15 @@ es:
       no_date: "Sin fecha"
       assigned_to: "Master"
       no_assigned: "sing asignar"
+      effect: "Efecto"
+      effect_bad: "Efecto menor"
+      effect_good: "Efecto mayor"
+      effect_neutral: "Efecto simle"
+      position: "Posición"
+      position_bad: "Desesperada"
+      position_neutral: "Arriesgada"
+      position_good: "Controlada"
+
   travel:
     index:
       calculate: 'Calcular'
