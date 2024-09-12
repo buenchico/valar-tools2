@@ -36,7 +36,7 @@
           <div class="input-group mb-3">
             <%= form.label :visible, class: 'input-group-text' %>
             <div class="form-check form-switch switch-group fs-2">
-              <%= form.check_box :visible, class: 'form-check-input switch-group h-100' %>
+              <%= form.check_box :visible, class: 'form-check-input switch-group h-100', checked: @clock.visible %>
             </div>
           </div>
           <div class="input-group mb-3">
