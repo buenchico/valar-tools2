@@ -1,3 +1,5 @@
+<% provide(:title, @options["list"]["name"]) %>
+
 <div class="container">
   <% @missions.sort_by { |_, mission| mission[:date] }.each do | id, mission | %>
     <div class="row my-2 py-2 <%= mission[:color] %> <%= mission[:today] %>">

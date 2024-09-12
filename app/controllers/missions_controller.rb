@@ -1,6 +1,6 @@
 class MissionsController < ApplicationController
   before_action :set_tool
-  before_action :set_options, only: [:index, :calculate, :get_recipe]
+  before_action :set_options, only: [:index, :calculate, :get_recipe, :list]
   before_action :check_master, only: [:list]
 
   def index
@@ -157,7 +157,7 @@ class MissionsController < ApplicationController
         end
       else
         # Timer is not present
-        if topic["post_stream"]["posts"].last["action_code"] == "autobumped"
+        if topic["post_stream"]["posts"].select { |post| post['post_type'] == 3 }.last["action_code"] == "autobumped"
           # Topic has been bumped today
           date = date_today
           today = 'calendar-accent'
