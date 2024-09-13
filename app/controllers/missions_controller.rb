@@ -157,7 +157,7 @@ class MissionsController < ApplicationController
         end
       else
         # Timer is not present
-        if topic["post_stream"]["posts"].select { |post| post['post_type'] == 3 }.last["action_code"] == "autobumped"
+        if topic["post_stream"]["posts"].select { |post| post['action_code'] == 'autobumped' }.last
           # Topic has been bumped today
           date = date_today
           today = 'calendar-accent'
