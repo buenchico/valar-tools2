@@ -256,7 +256,7 @@ es:
       effect: "Efecto"
       effect_bad: "Efecto menor"
       effect_good: "Efecto mayor"
-      effect_neutral: "Efecto simle"
+      effect_neutral: "Efecto simple"
       position: "Posición"
       position_bad: "Desesperada"
       position_neutral: "Arriesgada"
