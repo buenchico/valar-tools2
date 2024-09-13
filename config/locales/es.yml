@@ -245,6 +245,7 @@ es:
     index:
       factors_tooltip: "Click para incrementar, manten pulsado o ctrl+click para reducir"
       calculate: "Calcular"
+      list: "Misiones abiertas"
       target: "Objetivo"
       no_target: "Sin objetivo"
       no_bump: "La fecha de la misión no es del tipo reflotar"
@@ -261,7 +262,6 @@ es:
       position_bad: "Desesperada"
       position_neutral: "Arriesgada"
       position_good: "Controlada"
-
   travel:
     index:
       calculate: 'Calcular'

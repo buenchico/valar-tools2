@@ -2,12 +2,19 @@
 <% provide(:icon, @tool.icon_url) %>
 
 <div class="tool-title">
-    <i class="white <%= yield(:icon) %>"></i>
-    <%= yield(:title) %>
+  <i class="white <%= yield(:icon) %>"></i>
+  <%= yield(:title) %>
 
-    <% if @options["rules"].present? %>
-      <i class="bi bi-question-circle float-end" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-html="true" title="<%= Kramdown::Document.new(@options["rules"] || '').to_html.html_safe %>"></i>
+  <div class="float-end"%>
+    <% if @current_user.is_master? %>
+      <%= link_to missions_list_url, class: 'link-unstyled mx-2' do %>
+        <i class="bi bi-card-list" data-bs-toggle="tooltip" title="<%= t('missions.index.list') %>"></i>
+      <% end %>
     <% end %>
+    <% if @options["rules"].present? %>
+      <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-html="true" title="<%= Kramdown::Document.new(@options["rules"] || '').to_html.html_safe %>"></i>
+    <% end %>
+    </div>
 </div>
 
 <div id="result" class="d-none"></div>
