@@ -139,9 +139,16 @@ $(document).on('turbolinks:load', function () {
       if ($(this).hasClass('active')) {
         $('#results_list').append(span);
         $('#results_plain').append(span);
+        $('.result_' + resultId).addClass( "highlight", 250, callback )
       } else {
         $('.result_' + resultId).remove();
         $('.result_' + resultId).remove();
+      }
+
+      function callback() {
+        setTimeout(function() {
+          $('.result_' + resultId).removeClass( "highlight" );
+        }, 250 );
       }
     });
   }

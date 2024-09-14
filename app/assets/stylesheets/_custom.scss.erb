@@ -448,3 +448,29 @@ body {
 .calendar-accent {
   border-left: 10px var(--bs-danger) solid !important;
 }
+
+/* Missions dice */
+
+.dice-container {
+  position: relative;
+  width: 50px !important;
+}
+
+.dice-image {
+  width: 100%;
+  height: auto;
+}
+
+.dice-text {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px
+}
+
+@media (min-width: 768px) {
+  .dice-container {
+    width: 80px !important;
+  }
+}

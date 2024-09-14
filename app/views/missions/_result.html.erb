@@ -1,4 +1,4 @@
-<div class="card mb-5 <%= @result["success"] ? "bg-success text-light" : "bg-danger" %> text-light col-10">
+<div class="card mb-5 <%= @result["success"] ? "bg-success text-light" : "bg-danger" %> text-light col-md-10 col-12">
   <div id="result_card" class="card-body">
     <div class="card-title">
       <span id="mission-title" class="h3"><%= @result["name"] %> (<%= @data[:total] %>)</span>
@@ -22,21 +22,21 @@
           </div>
           <div class="results <%= @fortune ? 'd-none' : nil %>">
             <div class="h5">
-              <%= t('activerecord.attributes.recipe.results') %>
+              <%= t('activerecord.attributes.recipe.results').html_safe %>
             </div>
-            <div id="result_main" class="ms-2">
+            <div id="result_main" class="ms-2 fw-lighter">
               <%= @result["result"] %>
             </div>
             <div id="results_list" class="mb-5">
             </div>
           </div>
         </div>
-        <div class="col">
+        <div class="col mb-5 mb-md-0">
           <div class="row">
             <% @data[:dice].each_with_index do |number, index| %>
-              <div class="p-0" style="position: relative; width: 80px">
-                <%= image_tag('d10.svg', alt: '10 sided dice', width: 80, height: 80) %>
-                <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); font-size: 24px" class="text-monospace <%= (index == 1) ? 'text-white fw-bolder' : 'text-text-white-50 '%>">
+              <div class="p-0 dice-container">
+                <%= image_tag('d10.svg', alt: '10 sided dice', class: "dice-image") %>
+                <div class="dice-text text-monospace <%= (index == 1) ? 'text-white fw-bolder' : 'text-text-white-50 '%>">
                   <%= number %>
                 </div>
               </div>
@@ -61,11 +61,11 @@
             </div>
           </div>
         </div>
-        <div class="position-absolute my-3 bottom-0 left-0">
-          <div col-6>
+        <div class="position-absolute my-3 bottom-0 left-0 row">
+          <div class="col-auto">
             <div class="btn btn-primary btn-results" data-results="decrease_position"><i class="bi bi-arrow-down-square-fill"></i></div><div class="btn btn-outline-primary btn-no-click bg-dark"><i class="bi bi-compass"></i> <%= t('missions.index.position') %></div><div class="btn btn-primary btn-results" data-results="increase_position"><i class="bi bi-arrow-up-square-fill"></i></div>
           </div>
-          <div class="col-6">
+          <div class="col-auto">
             <div class="btn btn-primary btn-results" data-results="decrease_effect"><i class="bi bi-arrow-down-square-fill"></i></div><div class="btn btn-outline-primary btn-no-click bg-dark"><i class="bi bi-speedometer"></i> <%= t('missions.index.effect') %></div><div class="btn btn-primary btn-results" data-results="increase_effect"><i class="bi bi-arrow-up-square-fill"></i></div>
           </div>
         </div>
