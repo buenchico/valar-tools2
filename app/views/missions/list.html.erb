@@ -1,4 +1,16 @@
 <% provide(:title, @options["list"]["name"]) %>
+<% provide(:icon, @tool.icon_url) %>
+
+<div class="tool-title">
+  <i class="white <%= yield(:icon) %>"></i>
+  <span class="d-none d-md-inline-block"><%= yield(:title) %></span>
+  <span class="d-md-none d-inline-block"><%= @options["list"]["short_name"] %></span>
+  <span class="float-end" data-bs-toggle="tooltip" title="<%= t('helpers.action.return', thing: @tool.short_title.downcase) %>">
+    <%= link_to missions_url, class: 'link-unstyled mx-2' do %>
+      <i class="bi bi-arrow-return-left"></i>
+    <% end %>
+  </span>
+</div>
 
 <div class="container">
   <% @missions.sort_by { |_, mission| mission[:date] }.each do | id, mission | %>

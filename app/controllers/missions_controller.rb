@@ -1,6 +1,6 @@
 class MissionsController < ApplicationController
   before_action :set_tool
-  before_action :set_options, only: [:index, :calculate, :get_recipe, :list]
+  before_action :set_options, only: [:index, :calculate, :get_recipe, :list, :stats]
   before_action :check_master, only: [:list]
 
   def index
@@ -191,6 +191,44 @@ class MissionsController < ApplicationController
     end
 
     @missions
+  end
+
+  def stats
+    if Rails.env.development?
+      @verify = false
+    else
+      @verify = true
+    end
+
+    # Create a new Faraday connection
+    connection= Faraday.new(
+      ssl: {verify: @verify}, # Disabling verify for development
+      headers: {'api-username': 'valar', 'api-key': ENV['DISCOURSE_API'], 'content-type': 'multipart/form-data'},
+      url: 'https://www.valar.es'
+      )
+
+      missions = [] # To store all the missions
+
+      page = 0
+
+      loop do
+        response = connection.get('/search.json', period: 'all', q: 'tags:cerrada,abierta,stand-by ' + @options["stats"]["game_category"] + ' order:latest', page: page)
+        json_response = JSON.parse(response.body)
+
+        if json_response.fetch('topics', {}).present?
+          missions.concat(json_response['topics'])
+        else
+          break
+        end
+
+        # Move to the next page
+        page += 1
+      end
+
+      @total = missions.length
+      @faction_totals = missions.group_by { |item| item["category_id"] }
+                            .transform_keys { |category_id| "#{category_id}" }
+                            .transform_values(&:count)
   end
 
 private

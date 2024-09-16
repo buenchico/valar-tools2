@@ -1,0 +1,39 @@
+<% provide(:title, @options["stats"]["name"]) %>
+<% provide(:icon, @tool.icon_url) %>
+
+<div class="tool-title">
+  <i class="white <%= yield(:icon) %>"></i>
+  <span class="d-none d-md-inline-block"><%= yield(:title) %></span>
+  <span class="d-md-none d-inline-block"><%= @options["stats"]["short_name"] %></span>
+  <span class="float-end" data-bs-toggle="tooltip" title="<%= t('helpers.action.return', thing: @tool.short_title.downcase) %>">
+    <%= link_to missions_url, class: 'link-unstyled mx-2' do %>
+      <i class="bi bi-arrow-return-left"></i>
+    <% end %>
+  </span>  
+</div>
+
+<div class="col-md-4">
+  <table class="table table-dark table-striped table-borderless table-hover table-sm sortable">
+    <caption><%= yield(:title) %></caption>
+    <thead>
+      <tr id="table_title">
+        <th scope="col"><%= t('.faction') %></th>
+        <th scope="col"><%= t('.missions') %></th>
+      </tr>
+      <tbody id="table_body">
+        <% @faction_totals.each do | id, count | %>
+          <tr>
+            <td><%= Faction.find_by(category_id: id)&.title %></td>
+            <td><%= count %></td>
+          </tr>
+        <% end %>
+        <tfoot>
+          <tr>
+            <td><strong><%= t('.total') %></strong></td>
+            <td><%= @total %></td>
+          </tr>
+        </tfoot>
+      </tbody>
+    </thead>
+  </table>
+</div>

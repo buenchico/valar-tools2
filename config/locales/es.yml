@@ -37,6 +37,7 @@ es:
       delete: 'Borrar %{thing}'
       confirm: '¿Estás seguro de eliminar %{thing}?'
       goto: 'Abrir %{thing}'
+      return: 'Volver a %{thing}'
     submit:
       submit: 'Enviar %{model}'
       create: 'Crear %{model}'
@@ -247,7 +248,6 @@ es:
     index:
       factors_tooltip: "Click para incrementar, manten pulsado o ctrl+click para reducir"
       calculate: "Calcular"
-      list: "Misiones abiertas"
       target: "Objetivo"
       no_target: "Sin objetivo"
       no_bump: "La fecha de la misión no es del tipo reflotar"
@@ -264,6 +264,10 @@ es:
       position_bad: "Desesperada"
       position_neutral: "Arriesgada"
       position_good: "Controlada"
+    stats:
+      faction: "Facción"
+      missions: "Misiones"
+      total: "Total"
   travel:
     index:
       calculate: 'Calcular'

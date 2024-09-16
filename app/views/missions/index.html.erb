@@ -3,12 +3,15 @@
 
 <div class="tool-title">
   <i class="white <%= yield(:icon) %>"></i>
-  <%= yield(:title) %>
+  <span class="d-none d-md-inline-block"><%= yield(:title) %></span>
 
   <div class="float-end"%>
+    <%= link_to missions_stats_url, class: 'link-unstyled mx-2' do %>
+      <i class="bi <%= @options['stats']['icon'] %>" data-bs-toggle="tooltip" title="<%= @options["stats"]["name"] %>"></i>
+    <% end %>
     <% if @current_user&.is_master? %>
       <%= link_to missions_list_url, class: 'link-unstyled mx-2' do %>
-        <i class="bi bi-card-list" data-bs-toggle="tooltip" title="<%= t('missions.index.list') %>"></i>
+        <i class="bi <%= @options['list']['icon'] %>" data-bs-toggle="tooltip" title="<%= @options["list"]["name"] %>"></i>
       <% end %>
     <% end %>
     <% if @options["rules"].present? %>
