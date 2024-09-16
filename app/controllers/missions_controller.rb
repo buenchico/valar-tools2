@@ -225,6 +225,8 @@ class MissionsController < ApplicationController
         page += 1
       end
 
+      missions= missions.uniq
+
       @total = missions.length
       @faction_totals = missions.group_by { |item| item["category_id"] }
                             .transform_keys { |category_id| "#{category_id}" }

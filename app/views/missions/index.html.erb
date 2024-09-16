@@ -6,7 +6,7 @@
   <span class="d-none d-md-inline-block"><%= yield(:title) %></span>
 
   <div class="float-end"%>
-    <%= link_to missions_stats_url, class: 'link-unstyled mx-2 d-none' do %>
+    <%= link_to missions_stats_url, class: 'link-unstyled mx-2' do %>
       <i class="bi <%= @options['stats']['icon'] %>" data-bs-toggle="tooltip" title="<%= @options["stats"]["name"] %>"></i>
     <% end %>
     <% if @current_user&.is_master? %>

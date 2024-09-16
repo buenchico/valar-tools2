@@ -9,7 +9,7 @@
     <%= link_to missions_url, class: 'link-unstyled mx-2' do %>
       <i class="bi bi-arrow-return-left"></i>
     <% end %>
-  </span>  
+  </span>
 </div>
 
 <div class="col-md-4">
@@ -23,7 +23,7 @@
       <tbody id="table_body">
         <% @faction_totals.each do | id, count | %>
           <tr>
-            <td><%= Faction.find_by(category_id: id)&.title %></td>
+            <td><%= Faction.find_by(category_id: id)&.id %></td>
             <td><%= count %></td>
           </tr>
         <% end %>
