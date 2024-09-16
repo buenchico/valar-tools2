@@ -23,7 +23,7 @@
       <tbody id="table_body">
         <% @faction_totals.each do | id, count | %>
           <tr>
-            <td><%= Faction.find_by(category_id: id)&.id %></td>
+            <td><%= Faction.find_by(category_id: id)&.title %></td>
             <td><%= count %></td>
           </tr>
         <% end %>
