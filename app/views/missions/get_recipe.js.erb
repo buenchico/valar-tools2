@@ -4,8 +4,6 @@ $.fn.recalculateFactors();
 
 $('#result').addClass('d-none')
 
-console.log("<%= @recipe.speed %>")
-
 $('#title').html("<%= @recipe.name %>")
 $('#speed').val("<%= @recipe.speed %>")
 $('#recipe_id').val(<%= @recipe&.id %>)

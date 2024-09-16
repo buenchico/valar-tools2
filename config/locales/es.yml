@@ -175,6 +175,7 @@ es:
         once: "simple"
         multiple: "ilimitado"
         no_factors: "Sin factores"
+        resolution: "Resultado"
         results: "Consecuencias"
         results_major: "🟰 Mayor"
         results_minor: "➖ Menor"
@@ -193,6 +194,7 @@ es:
         other: 'Ejércitos'
       family: 'Familia'
       user: 'Jugador'
+      faction: 'Facción'
       location:
         one: 'Lugar'
         other: 'Lugares'

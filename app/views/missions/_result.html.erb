@@ -73,7 +73,7 @@
       <div id="copy_box" class="d-none">
         <p>[Link](https://www.valar.es/t/ejemplo_de_link)</p>
         <p></p>
-        <p>**<%= t('activerecord.attributes.user.player') %>**: </p>
+        <p>**<%= t('activerecord.models.faction') %>**: </p>
         <p>**<%= t('missions.index.target') %>**: </p>
         <p></p>
         <p>#### **<%= @recipe.name %> (<%= @options["speed"][@data[:speed]]["name"].capitalize %>, <%= @options["difficulty"].find { |item| item["value"] == @data[:difficulty] }["name"].capitalize %> <%= number_to_modifier(@data[:difficulty])%>) : <%= @recipe.description %>**</p>
@@ -85,8 +85,11 @@
         <p>**<%= t('activerecord.attributes.recipe.misc') %>:** <%= number_to_modifier(@data[:misc]) %></p>
         <p>**<%= t('activerecord.attributes.recipe.role') %>:** <%= number_to_modifier(@data[:role]) %></p>
         <p>**<%= t('activerecord.attributes.recipe.dice') %>:** <%= number_to_modifier(@data[:roll]) %></p>
-        <p>**<%= t('activerecord.attributes.recipe.total') %>:** <%= number_to_modifier(@data[:total]) %>, **<%= @result["name"] %>**, <%= @result["result"] %></p>
-        <p>**<%= t('activerecord.attributes.recipe.results') %>:** <span id="results_plain"></span></p>
+        <p>**<%= t('activerecord.attributes.recipe.total') %>:** <%= number_to_modifier(@data[:total]) %></p>
+        <p>> **<%= @result["name"] %>**, <%= @result["result"] %></p>
+        <p>> **<%= t('activerecord.attributes.recipe.results') %>:** <span id="results_plain"></span></p>
+        <p></p>
+        <p>> **<%= t('activerecord.attributes.recipe.resolution') %>**: </p>
       </div>
     </div>
   </div>
