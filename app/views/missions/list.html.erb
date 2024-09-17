@@ -25,7 +25,7 @@
       </div>
       <div class="col-md-10 col-9">
         <h3 class="text-uppercase">
-          <strong><%= link_to mission[:title], 'https://www.valar.es/t/' + id.to_s, class: 'link-unstyled', target: '_blank' %></strong>
+          <strong><%= link_to mission[:title].html_safe, 'https://www.valar.es/t/' + id.to_s, class: 'link-unstyled', target: '_blank' %></strong>
         </h3>
         <ul class="list-inline">
           <li class="list-inline-item">
