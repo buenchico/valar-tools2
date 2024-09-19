@@ -251,7 +251,6 @@ es:
       calculate: "Calcular"
       target: "Objetivo"
       awaiting_player: "Esperando respuesta del jugador"
-      assigned_to: "Master"
       effect: "Efecto"
       effect_bad: "Efecto menor"
       effect_good: "Efecto mayor"
@@ -270,6 +269,7 @@ es:
       no_bump: "La fecha de la misión no es del tipo reflotar"
       no_date: "Sin fecha"
       no_assigned: "sin asignar"
+      assigned_to: "Master"
   travel:
     index:
       calculate: 'Calcular'
