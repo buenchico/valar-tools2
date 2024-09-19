@@ -152,7 +152,7 @@ class MissionsController < ApplicationController
         date = Date.parse(topic["topic_timer"]["execute_at"])
         # Timer is of incorrect type
         if topic["topic_timer"]["status_type"] != "bump"
-          message = t('missions.index.no_bump')
+          message = t('.no_bump')
           color = "bg-warning"
         end
       else
@@ -164,24 +164,24 @@ class MissionsController < ApplicationController
         elsif masters_ids.include?(topic["post_stream"]["posts"].last["user_id"]) && topic["post_type"] == 1
           # Last message is a normal message by master
           date = date_future
-          message = t('missions.index.awaiting_player')
+          message = t('.awaiting_player')
         else
           # All other cases
           date = date_past
-          message = t('missions.index.no_date_long')
+          message = t('.no_date_long')
         end
       end
 
       post = topic["post_stream"]["posts"][0]["cooked"]
       match_data = post.match(/Objetivo<\/h2>(.*?)<h2>/m)
-      target = match_data ? match_data[1].strip : t('missions.index.no_target')
+      target = match_data ? match_data[1].strip : t('.no_target')
 
       category = (factions.find_by(category_id: topic["category_id"])&.long_name || t('activerecord.attributes.faction.no_category'))
 
       @missions[id] = {
         title: topic["fancy_title"],
         category: category,
-        assigned_to: topic.fetch("assigned_to_user", {})&.fetch("username", t('missions.index.no_assigned')),
+        assigned_to: topic.fetch("assigned_to_user", {})&.fetch("username", t('.no_assigned')),
         date: date,
         target: target,
         message: message,
@@ -191,6 +191,7 @@ class MissionsController < ApplicationController
     end
 
     @missions
+    @speed = @options['speed'].pluck("days").map { |item| item.to_s[/\d+/]&.to_i }.reject { |item| item == 0 || item.nil? }
   end
 
   def stats
@@ -231,6 +232,33 @@ class MissionsController < ApplicationController
       @faction_totals = missions.group_by { |item| item["category_id"] }
                             .transform_keys { |category_id| "#{category_id}" }
                             .transform_values(&:count)
+  end
+
+  def set_mission_timer
+    @topic_id = params[:topic_id].to_i
+    days_to_add = params[:days].to_i
+
+    today = Date.today
+    target_date = today + days_to_add
+
+    if target_date.saturday? || target_date.sunday?
+      target_date = target_date + 2
+    end
+
+    timer = {
+	     "time": target_date.to_time.change({ hour: 8, min: 30 }),
+	      "status_type": "bump"
+      }
+
+    response = DiscourseApi::DiscoursePostData.set_topic_timer(@topic_id, timer)
+    @toast = t('.set_bump_date', date: DateTime.parse(JSON.parse(response.body)["execute_at"]).strftime("%d %b %Y"))
+    @mission = { date: target_date}
+
+    respond_to do |format|
+      if response.success?
+        format.js
+      end
+    end
   end
 
 private

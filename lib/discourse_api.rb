@@ -129,7 +129,7 @@ module DiscourseApi
           parsed_response = JSON.parse(response.body)
 
           missions[id] = parsed_response
-        end    
+        end
 
         return missions
     end
@@ -202,6 +202,24 @@ module DiscourseApi
           # Handle the error
           puts "Error creating reply: #{response.status}: #{response.body}"
         end
+    end
+
+    def self.set_topic_timer(topic_id, timer)
+      if Rails.env.development?
+        @verify = false
+      else
+        @verify = true
+      end
+
+      # Create a new Faraday connection
+      connection= Faraday.new(
+        ssl: {verify: @verify}, # Disabling verify for development
+        headers: {'api-username': 'valar', 'api-key': ENV['DISCOURSE_API'], 'content-type': 'application/json'},
+        url: 'https://www.valar.es'
+        )
+
+      # Send the POST request to create the reply
+      response = connection.post("/t/#{topic_id.to_s}/timer", timer.to_json)
     end
   end
 end

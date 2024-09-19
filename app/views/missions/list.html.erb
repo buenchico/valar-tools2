@@ -14,6 +14,31 @@
 
 <div class="container">
   <% @missions.sort_by { |_, mission| mission[:date] }.each do | id, mission | %>
-    <%= render 'mission', id: id, mission: mission %>
+    <div class="row my-2 py-2 <%= mission[:color] %> <%= mission[:today] %>">
+      <div id="mission_date_<%= id %>" class="col-md-2 col-3 text-center">
+        <%= render 'mission_date', id: id, mission: mission %>
+      </div>
+      <div class="col-md-10 col-9">
+        <h3 class="text-uppercase">
+          <strong><%= link_to mission[:title].html_safe, 'https://www.valar.es/t/' + id.to_s, class: 'link-unstyled', target: '_blank' %></strong>
+        </h3>
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            <%= t('.assigned_to') %>:
+            <span class="badge fs-6 bg-success"><%= mission[:assigned_to] %></span>
+          </li>
+          <li class="list-inline-item">
+            <%= t('missions.stats.faction') %>:
+            <span class="badge fs-6 bg-primary"><%= mission[:category] %></span>
+          </li>
+        </ul>
+        <div class="fw-light">
+          <%= mission[:target].html_safe %>
+        </div>
+        <% if mission[:message].present? %>
+          <h2><%= mission[:message] %></h2>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 </div>

@@ -84,6 +84,7 @@ Rails.application.routes.draw do
   get 'missions', to: 'missions#index'
   get 'missions/list', to: 'missions#list'
   get 'missions/stats', to: 'missions#stats'
+  post 'missions/lists/set_mission_timer', to: 'missions#set_mission_timer', as: 'set_mission_timer'
   post 'missions/recipe', to: 'missions#get_recipe', as: 'get_recipe'
   post 'missions/calculate', to: 'missions#calculate'
 

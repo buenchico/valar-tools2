@@ -1,0 +1,13 @@
+<% if mission[:date].year == 2000 %>
+  <h2 class="display-5 bg-warning m-0 text-dark"><%= t('missions.list.no_date') %></h2>
+  <%= form_with url: set_mission_timer_path, local: false do |form| %>
+    <% @speed.each do |speed| %>
+      <%= form.hidden_field :days, value: speed %>
+      <%= button_tag number_to_modifier(speed), class: 'btn btn-sm btn-primary p-1', name: 'days', value: speed %>
+    <% end %>
+    <%= form.hidden_field :topic_id, value: id %>
+  <% end %>
+<% else %>
+  <h1 class="display-4 bg-danger m-0"><span class="badge"><%= mission[:date].day %></span></h1>
+  <h2 class="bg-white text-dark"><%= mission[:date].strftime("%b").upcase %></h2>
+<% end %>

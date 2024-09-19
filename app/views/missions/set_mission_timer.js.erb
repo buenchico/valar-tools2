@@ -1,0 +1,4 @@
+$('#toast-title').html('<%= @toast %>');
+var toast = new bootstrap.Toast($('#liveToast'))
+toast.show();
+$('#mission_date_<%= @topic_id.to_s %>').html('<%= j render "mission_date", id: @topic_id, mission: @mission %>')
