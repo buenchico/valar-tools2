@@ -3,26 +3,6 @@ class Clock < ApplicationRecord
 
   belongs_to :family, optional: true
 
-  scope :closed, -> {
-    where("(style = 'clock' AND status = size) OR (style = 'scale' AND ABS(status) = (size / 2)) OR (style = 'memory')")
-  }
-
-  scope :open, -> {
-    where.not("(style = 'clock' AND status = size) OR (style = 'scale' AND ABS(status) = (size / 2)) OR (style = 'memory')")
-  }
-
-  # Instance method to check if the clock is closed
-  def closed?
-    (style == 'clock' && status == size) ||
-    (style == 'scale' && status.abs == (size / 2)) ||
-    (style == 'memory')
-  end
-
-  # Instance method to check if the clock is open
-  def open?
-    !closed?
-  end
-
   validate :validate_status_for_clock_style
   validate :validate_status_for_balance_style
 
@@ -81,7 +61,7 @@ private
 
   def validate_status_for_balance_style
     if style == 'scale'
-      unless status >= -(size/2) && status <= (size/2)
+      unless status >= -(size.to_i/2) && status <= (size.to_i/2)
         errors.add(:status, I18n.t('errors.messages.status_balance_style'))
       end
     end

@@ -12,6 +12,12 @@
             <%= form.text_field :name, class: 'form-control' %>
           </div>
           <div class="input-group mb-3">
+            <%= form.label :open, class: 'input-group-text' %>
+            <div class="form-check form-switch switch-group fs-2">
+              <%= form.check_box :open, class: 'form-check-input switch-group h-100', checked: @clock.open %>
+            </div>
+          </div>
+          <div class="input-group mb-3">
             <%= form.label :style, class: 'input-group-text' %>
             <%= form.select :style, options_for_select(@styles.map { |key, value| [value["name"],key] }, @clock.style), { include_blank: '' }, class: 'form-select' %>
           </div>

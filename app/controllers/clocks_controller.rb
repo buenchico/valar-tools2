@@ -10,8 +10,8 @@ class ClocksController < ApplicationController
     else
       clocks = Clock.where(visible: true)
     end
-    @clocks_open = clocks.open
-    @clocks_close = clocks.closed
+    @clocks_open = clocks.where(open: true)
+    @clocks_close = clocks.where(open: false)
   end
 
   def new
@@ -99,6 +99,6 @@ private
   end
 
   def clock_params
-    params.require(:clock).permit(:name, :size, :status, :description, :family_id, :outcome, :visible, :style, :left, :right)
+    params.require(:clock).permit(:name, :size, :status, :description, :family_id, :outcome, :visible, :style, :left, :right, :open)
   end
 end
