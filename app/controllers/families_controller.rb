@@ -12,7 +12,7 @@ class FamiliesController < ApplicationController
 
   def show
     @vassals = Family.where(lord_id: @family.id)
-    @locations = Location.where(family_id: @family.id)
+    @locations = Location.where(family_id: @family.id).where(game: @family.game).where(visible: true)
     @relations = Family.where("LOWER(members) LIKE ?", "%#{@family.name.downcase}%").where(visible: true).where(game: @family.game).where.not(id: @family.id)
     @army_options = Tool.find_by(name: 'armies').game_tools.find_by(game_id: active_game&.id)&.options
     respond_to do | format |
