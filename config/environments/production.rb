@@ -28,7 +28,10 @@ Rails.application.configure do
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress CSS using a preprocessor.
-  # config.assets.css_compressor = :sass
+  config.assets.css_compressor = :sass
+
+# Compress JS using a compressor
+  config.assets.js_compressor = Uglifier.new(harmony: true) # Enables ES6+ support
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false

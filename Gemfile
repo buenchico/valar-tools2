@@ -15,6 +15,8 @@ gem 'sassc-rails', '>= 2.1.2'
 # Use jquery
 gem 'jquery-rails', '>= 4.4.0'
 gem 'jquery-ui-rails', '>= 6.0.1'
+# Use uglifier to compress js
+gem 'uglifier', '~> 2.7', '>= 2.7.2'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
