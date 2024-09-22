@@ -36,8 +36,8 @@
       <% end %>
     <% end %>
 
-    <p><%= factors["plus"].sort_by { |item| item.gsub(/<\/?[^>]*>/, '') }.join(", ").html_safe %></p?
-    <p><%= factors["minus"].sort_by { |item| item.gsub(/<\/?[^>]*>/, '') }.join(", ").html_safe %></p>
+    <p><%= factors["plus"].sort_by { |item| natural_sort_key(item) }.join(", ").html_safe %></p?
+    <p><%= factors["minus"].sort_by { |item| natural_sort_key(item) }.join(", ").html_safe %></p>
 
     <hr class="border border-primary opacity-100 w-100">
     <div>

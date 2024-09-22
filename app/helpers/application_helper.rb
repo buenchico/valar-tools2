@@ -53,4 +53,19 @@ module ApplicationHelper
       return 'masculine' # Default to masculine when the locale is not 'es'
     end
   end
+
+  def natural_sort_key(item)
+    # Remove any HTML tags
+    cleaned_item = item.gsub(/<\/?[^>]*>/, '')
+
+    # Split the string into parts and extract numbers
+    cleaned_item.split(', ').map do |part|
+      # Match text and number separately
+      if part.match(/(\D*)(\d+)/)
+        [part.match(/(\D*)(\d+)/)[1].strip, part.match(/(\d+)/)[0].to_i]
+      else
+        [part.strip, 0] # Handle case with no number
+      end
+    end
+  end
 end
