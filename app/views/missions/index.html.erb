@@ -136,13 +136,13 @@
           <strong><span id="title"><%= @default_recipe.name %></span></strong>
         </div>
         <div class="ms-2 fortune-field">
-          <strong><span id="dif"><%= @options["difficulty"].find { |item| item["value"] == @default_recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(@default_recipe.difficulty) %>)</span></strong>
+          <strong><span id="speed_text"><%= @options["speed"][@default_recipe.speed]["name"].capitalize %><%= (@default_recipe.speed == -1) ? '' : ' (' + @options["speed"][@default_recipe.speed]["days"].to_s + ')'%></span></strong>
         </div>
         <div class="ms-2 fortune-field">
-          <strong><span id="speed"><%= @options["speed"][@default_recipe.speed]["name"].capitalize %><%= (@default_recipe.speed == -1) ? '' : ' (' + @options["speed"][@default_recipe.speed]["days"].to_s + ')'%></span></strong>
+          <strong><span id="difficulty_text"><%= @options["difficulty"].find { |item| item["value"] == @default_recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(@default_recipe.difficulty) %>)</span></strong>
         </div>
         <div id="desc">
-          <%= Kramdown::Document.new(truncate(@default_recipe.description, length: 60, omission: '...')  || "").to_html.html_safe %>
+          <%= Kramdown::Document.new(replace_traits(@default_recipe.description)  || "").to_html.html_safe %>
         </div>
         <div id="consequences" class="fortune-field">
           <% @default_recipe.results["major"].each_with_index do |result, index| %>

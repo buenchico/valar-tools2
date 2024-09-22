@@ -6,9 +6,11 @@ $('#result').addClass('d-none')
 
 $('#title').html("<%= @recipe.name %>")
 $('#speed').val("<%= @recipe.speed %>")
+$('#speed_text').html("<%= @options['speed'][@recipe.speed]['name'].capitalize %><%= (@recipe.speed == -1) ? '' : ' (' + @options['speed'][@recipe.speed]['days'].to_s + ')' %>")
 $('#recipe_id').val(<%= @recipe&.id %>)
 $('#difficulty').val(<%= @recipe&.difficulty %>)
-$('#desc').html("<%= j(Kramdown::Document.new(@recipe&.description || '')&.to_html).html_safe %>")
+$('#difficulty_text').html("<%= @options['difficulty'].find { |item| item['value'] == @recipe.difficulty }['name'].capitalize %> (<%= number_to_modifier(@recipe.difficulty) %>)")
+$('#desc').html("<%= j(Kramdown::Document.new(replace_traits(@recipe&.description) || '')&.to_html).html_safe %>")
 
 <% if @recipe.id != @options["default_recipe"] %>
   <% messages = [] %> <!-- Initialize the messages array -->

@@ -4,6 +4,8 @@ class RecipesController < ApplicationController
   before_action :set_recipe, only: [:edit, :update, :destroy, :show]
   before_action :set_options
 
+  include RecipesHelper
+
   def index
     @recipes = Recipe.all
     @view = (cookies[:recipe_view] || "cards")
