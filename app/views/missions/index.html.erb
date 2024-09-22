@@ -65,13 +65,13 @@
             <%= form.hidden_field :recipe_id, value: @options["default_recipe"] %>
 
             <div class="input-group mb-3 fortune-field">
-              <%= form.label t('activerecord.attributes.recipe.difficulty'), class: 'input-group-text' %>
-              <%= form.select :difficulty, (@options["difficulty"].map { |dif| [dif["name"].capitalize + " (" + number_to_modifier(dif["value"]) + ")", dif["value"]] }.sort_by { |subarray| -subarray[1] }), { selected: @default_recipe.difficulty }, class: 'form-select' %>
-            </div>
-            <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.speed'), class: 'input-group-text' %>
               <%= form.select :speed, (@options["speed"].map { |speed| [speed["name"].capitalize + (speed["days"].present? ? (" (" + speed["days"].to_s + ")") : ""), speed["time"]]}), { selected: @default_recipe.speed }, class: 'form-select' %>
             </div>
+            <div class="input-group mb-3 fortune-field">
+              <%= form.label t('activerecord.attributes.recipe.difficulty'), class: 'input-group-text' %>
+              <%= form.select :difficulty, (@options["difficulty"].map { |dif| [dif["name"].capitalize + " (" + number_to_modifier(dif["value"]) + ")", dif["value"]] }.sort_by { |subarray| -subarray[1] }), { selected: @default_recipe.difficulty }, class: 'form-select' %>
+            </div>            
             <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.tokens'), class: 'input-group-text' %>
               <%= form.number_field :tokens, class: 'form-control', value: 0, step: 1, min: 0, max: 12 %>
