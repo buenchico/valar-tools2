@@ -1,4 +1,4 @@
-<td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable" %></td>
+<td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable option-input" %></td>
 <td class="strenght" width = "30px" >
   <%= render 'army_str', army: army %>
   <%= army.strength %>
