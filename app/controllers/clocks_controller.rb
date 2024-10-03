@@ -16,12 +16,14 @@ class ClocksController < ApplicationController
 
   def new
     @clock = Clock.new
+    @families = Family.where(game: active_game).where(visible: true).order(name: :asc)
   end
 
   def show
   end
 
   def edit
+    @families = Family.where(game: active_game).where(visible: true).order(name: :asc)
   end
 
   def edit_multiple
