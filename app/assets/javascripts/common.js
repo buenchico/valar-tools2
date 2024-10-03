@@ -138,7 +138,9 @@ $(document).on('turbolinks:load', function() {
 
 $.fn.checkbox_listeners = function() {
   $('.checkbox_selectable').change(function() {
-    if ($(this).prop('checked') == false) {
+    if ($(".checkbox_selectable:visible:checked").length == $(".checkbox_selectable:visible").length ) {
+      $(".checkbox_select_all").prop('checked', true);
+    } else {
       $(".checkbox_select_all").prop('checked', false);
     }
     $.fn.mass_edit_buttons();

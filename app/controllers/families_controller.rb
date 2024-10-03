@@ -2,7 +2,7 @@ class FamiliesController < ApplicationController
   before_action :set_tool
   before_action :check_master, except: [:index, :show]
   before_action :set_family, only: [:edit, :update, :destroy, :show]
-  before_action :set_families_list, only: [:index, :export]
+  before_action :set_families_list, only: [:index]
   before_action :set_options, only: [:index, :new, :edit, :update, :new, :show, :create, :export]
   before_action :set_filters, only: [:index, :show]
   before_action :check_visble, only: [:show]
@@ -83,6 +83,7 @@ class FamiliesController < ApplicationController
   end
 
   def export
+    families = Family.where(id: (cookies[:families_select].present? ? JSON.parse(cookies[:families_select]) : []))
     respond_to do |format|
       format.csv do
         headers['Content-Disposition'] = "attachment; filename=\"families.csv\""
@@ -97,7 +98,7 @@ class FamiliesController < ApplicationController
         csv_data = CSV.generate(col_sep: ";", headers: true) do |csv|
           csv << header_row # Adjust the attributes as needed
 
-          @families.each do |family|
+          families.each do |family|
             data_row = [family.id, family.name, family.branch, family.tags.join(","), family.visible, family&.faction&.id, family&.faction&.name, family&.lord&.id, family&.lord&.title, family.description, family.members, family.tier]
             @options["loyalties"].each_with_index do | value, index |
               data_row << family["loyalty_#{index}"]
