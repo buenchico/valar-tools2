@@ -16,5 +16,14 @@ $(document).on('turbolinks:load', function () {
     $("#filtertext").on("keyup", function() {
         $.fn.familyFilters()
     });
+
+    $('.checkbox_cookie').on('change', function () {
+      var selectedFamilies = [];
+      var checkboxes = $('.checkbox_cookie:checked');
+      checkboxes.each(function () {
+                selectedFamilies.push($(this).val());
+            });
+      setCookie('families_select', selectedFamilies, 36500); // Store cookie for 24 hours (1 day)
+    });
   }
 });

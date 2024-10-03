@@ -25,6 +25,14 @@ $(document).on('shown.bs.modal', function (event) {
   initAutocomplete();
 });
 
+// cookies management
+function setCookie(name, value, days) {
+    var date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // 24 hours * 60 minutes * 60 seconds * 1000 ms
+    var expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + JSON.stringify(value) + ";" + expires + ";path=/";
+}
+
 // Initializing popovers & tooltips
 function initPopovers() {
   var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))

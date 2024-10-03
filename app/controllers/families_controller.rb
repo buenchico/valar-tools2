@@ -8,6 +8,7 @@ class FamiliesController < ApplicationController
   before_action :check_visble, only: [:show]
 
   def index
+    @selected_families = cookies[:families_select].present? ? JSON.parse(cookies[:families_select]) : []
   end
 
   def show
