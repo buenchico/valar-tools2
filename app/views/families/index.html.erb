@@ -19,7 +19,7 @@
         <% end %>
       <% end %>
 
-      <%= button_to t('helpers.submit.export'), export_families_path(format: :csv), class: 'btn btn-danger btn-sm mass_edit_button', method: :get, form: { class: 'd-inline' }, disabled: @selected_families.empty? %>
+      <%= button_to t('helpers.submit.export_selected'), export_families_path(format: :csv), class: 'btn btn-danger btn-sm mass_edit_button', method: :get, form: { class: 'd-inline' }, disabled: @selected_families.empty? %>
       <button id="toggle_visibility_visible" class="btn btn-warning btn-sm toggle-visibility"> <%= t('helpers.label.toggle_visibility_visible') %></button>
       <button id="toggle_visibility_invisible" class="btn btn-warning btn-sm d-none toggle-visibility"><%= t('helpers.label.toggle_visibility_invisible') %></button>
     <% end %>

@@ -33,7 +33,7 @@
         <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm", value: "import") do %>
           Importar
         <% end %>
-        <%= link_to 'Exportar', export_armies_path(format: :csv), class: 'btn btn-danger btn-sm' %>
+        <%= link_to t('helpers.submit.export'), export_armies_path(format: :csv), class: 'btn btn-danger btn-sm' %>
       <% end %>
     <% end %>
   </div>

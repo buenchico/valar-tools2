@@ -101,7 +101,7 @@ class FamiliesController < ApplicationController
           families.each do |family|
             data_row = [family.id, family.name, family.branch, family.tags.join(","), family.visible, family&.faction&.id, family&.faction&.name, family&.lord&.id, family&.lord&.title, family.description, family.members, family.tier]
             @options["loyalties"].each_with_index do | value, index |
-              data_row << family["loyalty_#{index}"]
+              data_row << family["loyalty_#{index + 1}"]
             end
             data_row += [family&.game&.id, family&.game&.name, family.hp("raised"), family.hp("inactive"), family.hp_start(["conscript","garrison","retinue"]), family.locations.count, family.locations.map { |l| [l.name, l.location_type] }]
             csv << data_row

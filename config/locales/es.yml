@@ -47,6 +47,8 @@ es:
       delete_multiple: 'Borrar %{model}'
       import: 'Importar'
       export: 'Exportar'
+      export_all: 'Exportar todos'
+      export_selected: 'Exportar seleccionados'
     label:
       title: "Título"
       description: "Descripcción"
