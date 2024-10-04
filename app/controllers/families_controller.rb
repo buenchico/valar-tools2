@@ -5,10 +5,10 @@ class FamiliesController < ApplicationController
   before_action :set_families_list, only: [:index]
   before_action :set_options, only: [:index, :new, :edit, :update, :new, :show, :create, :export]
   before_action :set_filters, only: [:index, :show]
+  before_action :set_selected_families, onlly: [:index, :update]
   before_action :check_visble, only: [:show]
 
   def index
-    @selected_families = cookies[:families_select].present? ? JSON.parse(cookies[:families_select]) : []
   end
 
   def show
@@ -126,6 +126,10 @@ private
     else
       @families = Family.where(visible: true).where(game_id: active_game.id).order(:name)
     end
+  end
+
+  def set_selected_families
+    @selected_families = cookies[:families_select].present? ? JSON.parse(cookies[:families_select]) : []
   end
 
   def set_options
