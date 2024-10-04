@@ -14,7 +14,7 @@
       <tbody>
         <% @games.each do |game| %>
           <tr class="<%= game.active == true ? "" : "active" %>" >
-            <td><%= image_tag(game.icon_url, :alt => game.name, id: game.name, class: 'icon-table') %></td>
+            <td><%= safe_image_tag(game.icon_url, :alt => game.name, id: game.name, class: 'icon-table') %></td>
             <td><%= game.title %></td>
             <td><%= game.prefix %></td>
             <td><%= game.active_tools.pluck(:title).join(", ") %></td>

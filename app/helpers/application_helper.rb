@@ -1,4 +1,16 @@
 module ApplicationHelper
+  def safe_image_tag(source, options = {})
+    if source.present?
+      begin
+        image_tag(source, options)
+      rescue => e
+        Rails.logger.error("Image loading failed: #{e.message}")
+        image_tag('tools-circle.webp', options)
+      end
+    else
+      image_tag('tools-circle.webp', options)
+    end
+  end
   def calculate_mod(value)
     if value == nil
       0
