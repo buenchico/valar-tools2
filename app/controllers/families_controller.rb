@@ -153,9 +153,9 @@ private
 
   def set_filters
     if @current_user&.is_master?
-      @filter = ["Nombre","Etiquetas","Señor","Facción","Descripcción","Partida"]
+      @filter = [t('activerecord.attributes.family.selected'),t('activerecord.attributes.family.name'),t('activerecord.attributes.family.tags'),t('activerecord.attributes.family.lord_id'),t('activerecord.attributes.family.faction_id'),t('activerecord.attributes.family.description'),t('activerecord.attributes.family.game_id')]
     else
-      @filter = ["Nombre","Etiquetas","Señor","Facción","Descripcción"]
+      @filter = [t('activerecord.attributes.family.name'),t('activerecord.attributes.family.tags'),t('activerecord.attributes.family.lord_id'),t('activerecord.attributes.family.faction_id'),t('activerecord.attributes.family.description')]
     end
   end
 

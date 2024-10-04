@@ -26,7 +26,7 @@
   </div>
   <div class="col">
     <div class="d-flex align-items-center justify-content-end">
-      <%= select_tag "filter", options_for_select(@filter), id: "filterselect", class: "form-select form-select-sm me-2" %>
+      <%= select_tag "filter", options_for_select(@filter, t('activerecord.attributes.family.name')), id: "filterselect", class: "form-select form-select-sm me-2" %>
       <input id="filtertext" class="form-control form-control-sm" type="text" placeholder="Filtrar...">
     </div>
   </div>

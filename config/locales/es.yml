@@ -129,6 +129,9 @@ es:
         lord_id: "Señor"
         game_id: "Partida"
         faction_id: "Facción"
+        description: "Descripción"
+        loyalty: "Lealtad"
+        selected: "Seleccionado"
       location:
         name: "Nombre"
         name_es: "Nombre (ES)"
