@@ -101,6 +101,8 @@ es:
         hp: "Salud"
         board: "Embarcar"
         army_type: "Tipo"
+        selected: "Seleccionado"
+        traits: "Rasgos"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"
@@ -131,7 +133,7 @@ es:
         faction_id: "Facción"
         description: "Descripción"
         loyalty: "Lealtad"
-        selected: "Seleccionado"
+        selected: "Seleccionada"
       location:
         name: "Nombre"
         name_es: "Nombre (ES)"

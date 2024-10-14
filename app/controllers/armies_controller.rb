@@ -612,10 +612,9 @@ private
   end
 
   def set_filters
+    @filter = [ t('activerecord.attributes.army.selected'), t('activerecord.attributes.army.name'), t('activerecord.attributes.army.status'), t('activerecord.attributes.army.traits'), t('activerecord.attributes.army.position'), t('activerecord.attributes.army.group') ]
     if @current_user&.is_master?
-      @filter = [ "Ejército", "Estado", "Rasgos", "Posición", "Grupo", "Visibilidad" ]
-    else
-      @filter = [ "Ejército", "Rasgos", "Posición", "Grupo" ]
+        @filter << t('activerecord.attributes.army.visible')
     end
   end
 
