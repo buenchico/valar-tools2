@@ -109,8 +109,11 @@ class Army < ApplicationRecord
     return men
   end
 
-  def strength_calc
+  def strength_calc(terrain = nil)
     set_options if @option_armies.nil?
+
+    # If terrain is not provided, determine terrain based on self.board
+    terrain ||= self.board.nil? ? "str" : "board"
 
     army_type = @option_armies.fetch("army_type", {}).fetch(self.army_type, {})
 
@@ -121,21 +124,11 @@ class Army < ApplicationRecord
 
     hp = (self.hp * 0.01).to_f
 
-    if self.board.nil?
-      men = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["str"] }
-    else
-      men = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["board"] || value["str"] }
-    end
+    men = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value[terrain] || value["str"] }
 
     men_str = []
     men.each_with_index do | value, index |
       men_str << (self.send("men#{index}").to_f * value)
-    end
-
-    if self.board.nil?
-      terrain = "str"
-    else
-      terrain = "board"
     end
 
     tags_str = []
@@ -156,17 +149,17 @@ class Army < ApplicationRecord
       attr_str = attr_str * (100 + value) * 0.01
     end
 
-    if self.board.nil?
-      fleet_str = 0
-    else
+    if terrain == "board"
       fleet_str = @option_armies.fetch("fleets", {})&.fetch(self.board, {})&.fetch("str", 0)
+    else
+      fleet_str = 0
     end
 
     subtotal = [(base_str + men_str.sum + tags_str.sum + fleet_str), 0].max
 
     str_total = ( subtotal * attr_str * hp).round(2)
 
-    str = { "total": str_total, "subtotal": subtotal, "type": base_str, "men": men_str, "tags": tags_str, "attributes": attr_mod, "fleet": fleet_str, "hp": hp}
+    str = { "total": str_total, "subtotal": subtotal, "type": base_str, "men": men_str, "tags": tags_str, "attributes": attr_mod, "fleet": fleet_str, "hp": hp, "terrain": terrain}
 
     return str
   end

@@ -1,5 +1,5 @@
 <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-custom-class="army-str-data" title="
-    <% army_str = army.strength_calc %>
+    <% army_str = army.strength_calc(terrain) %>
     <div class='row'>
       <div class='fst-italic text-start col-8'>
         <i class='bi bi-<%= @options["army_type"][army.army_type]["icon"] %>'></i> <%= @options["army_type"][army.army_type]["name"].capitalize %>
@@ -71,6 +71,8 @@
     <hr>
     <div class='row'>
       <div class='text-start fw-bold col-8'>Total:</div>
-      <div class='text-end col-4'><%= army.strength %></div>
+      <div class='text-end col-4'><%= army.strength_calc(terrain)[:total] %></div>
     </div>
   ">
+  <%= army.strength_calc(terrain)[:total] %>
+</span>

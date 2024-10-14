@@ -1,11 +1,10 @@
 <td><%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable option-input" %></td>
 <td class="strenght" width = "30px" >
-  <%= render 'army_str', army: army %>
-  <%= army.strength %>
+  <%= render 'army_str', army: army, terrain: nil %>
 </td>
 <td width = "300px">
   <%= link_to army.name, edit_army_path(army), remote: true, class: 'link-unstyled' %>
-  <span class="army-data d-none">
+  <span class="army-data">
     <%= render 'army_plain_txt', army: army %>
   </span>
 </td>

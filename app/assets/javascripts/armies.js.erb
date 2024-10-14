@@ -1,27 +1,19 @@
 $(document).on('turbolinks:load', function () {
   if ($(".armies").length !== 0 ) {
-    // Copy selected to clipboard
-    $(function () {
-        //Assign Click event to Button.
-        $(".mass-copy").click(function () {
-            var message = "";
+    $.fn.copyArmies = function(){
+      let message = "";
 
-            //Loop through all checked CheckBoxes in GridView.
-            $("input[type=checkbox]:visible:checked").each(function () {
-                var row = $(this).closest("tr");
-                if (row.hasClass("tablesorter-headerRow") == false) {
-                  message += "> * " + row.find('.army-data').text().replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
-                  message += "\n";
-                }
-            });
+      //Loop through all checked CheckBoxes in GridView.
+      $("input[type=checkbox]:visible:checked").each(function () {
+          let row = $(this).closest("tr");
+          if (row.hasClass("tablesorter-headerRow") == false) {
+            message += "> * " + row.find('.army-data .visible').text().replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
+            message += "\n";
+          }
+      });
 
-            var textarea = $('<textarea>').val(message).appendTo('.container').select();
-            // Execute the "copy" command
-            textarea.select(); //SET FOCUS on the TEXTFIELD
-            document.execCommand('copy');
-            textarea.remove();
-        });
-    });
+      navigator.clipboard.writeText(message)
+    }
 
     // Recalculate stats
     $.fn.recalculateStats = function(){
@@ -138,6 +130,24 @@ $(document).on('turbolinks:load', function () {
       // Submit the form
       form.submit();
     });
+
+    // Change strength str_display
+    $('.btn.str_display').click(function () {
+      $('.str_display').toggleClass('d-none visible')
+    })
+
+
+    $(".mass-copy").click(function () {
+      $.fn.copyArmies();
+    });
+
+    $(".mass-copy-land").click(function () {
+      $('.str_display').toggleClass('visible')
+      $.fn.copyArmies();
+      $('.str_display').toggleClass('visible')
+    });
+
+
 
     // Trigger functions on load
     $.fn.recalculateStats();
