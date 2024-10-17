@@ -62,18 +62,21 @@ $(document).on('turbolinks:load', function () {
         var form = $('#edit_multiple');
         var armyId = $(this).val();
 
+        var hiddenInput = $('#army_ids_field');
+        var selectedIds = hiddenInput.val().split(',').filter(Boolean); // Splits by comma and removes empty values
+
         if ($(this).is(':checked')) {
-          // If the checkbox is checked, add the army_id to the form parameters
-          $('<input>').attr({
-            type: 'hidden',
-            name: 'army_ids[]',
-            id: 'hidden_' + armyId,
-            value: armyId
-          }).appendTo(form);
+          // Add armyId if it's checked and not already in the list
+          if (!selectedIds.includes(armyId)) {
+            selectedIds.push(armyId);
+          }
         } else {
-          // If the checkbox is unchecked, remove the corresponding input element from the form
-          form.find('input[value="' + armyId + '"]').remove();
+          // Remove armyId if it's unchecked
+          selectedIds = selectedIds.filter(id => id !== armyId);
         }
+
+        // Update the hidden input field with the new list of ids, joined by commas
+        hiddenInput.val(selectedIds.join(','));
       });
     }
 

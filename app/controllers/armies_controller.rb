@@ -103,7 +103,8 @@ class ArmiesController < ApplicationController
   end
 
   def edit_multiple
-    @armies = Army.where(id: params[:army_ids]).order(:name)
+    army_ids = params[:army_ids].split(',')
+    @armies = Army.where(id: army_ids).order(:name)
     @action = params[:button]
   end
 
