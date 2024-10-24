@@ -39,10 +39,8 @@ class ArmiesController < ApplicationController
 
     if stats
       if active_factions.length == 1
-        puts 1111
         @stats_faction = Faction.find_by(id: active_factions[0])
       else
-        puts 2222
         @stats_faction = @master
       end
     end
@@ -109,6 +107,7 @@ class ArmiesController < ApplicationController
   end
 
   def update
+    puts army_params
     if army_params[:tags].present?
       army_params[:tags] = army_params[:tags].compact.reject(&:empty?).sort.compact.reject(&:empty?).sort
     end
@@ -120,13 +119,17 @@ class ArmiesController < ApplicationController
         end
     end
 
-    @inline = params[:inline]
+    @inline = inline_param # Set the inline variable based on the parameter
     original_title =  @army.name
 
     respond_to do |format|
       @army.faction_ids_was = @army.faction_ids
       if @army.update(army_params.reject! { |x| keys_to_remove&.include?(x) })
-        flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        if @inline == true
+          @toast = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        else
+          flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        end
         format.js
       else
         flash.now[:danger] = @army.errors.to_hash
@@ -656,7 +659,12 @@ private
       :visible, :hp, :army_type, :men1, :men2, :men3, :men4, :men5, :men6, :men7, :men8, :men9, :attr0, :attr1, :attr2, :attr3, :attr4, :attr5, :attr6, :attr7, :attr8, :attr9, :notes, :board, faction_ids: [], tags: []
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
-      whitelisted[:board] = nil if whitelisted[:board].blank?
+      whitelisted[:board] = nil if whitelisted.key?(:board) && whitelisted[:board].blank?
     end
+  end
+
+  # Use a separate method to handle the `inline` parameter for logic purposes
+  def inline_param
+    params[:army][:inline] == "true" if params[:army][:inline].present?
   end
 end

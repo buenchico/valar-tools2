@@ -10,7 +10,13 @@ if ($(".armies").length !== 0 ) {
     }, 500 );
   }
 
-  $("#flash").html('<%= j render partial: "layouts/alert" %>');
+  if (<%= @inline %> == true) {
+    $('#toast-title').html('<%= @toast %>');
+    var toast = new bootstrap.Toast($('#liveToast'))
+    toast.show();
+  } else {
+    $("#flash").html('<%= j render partial: "layouts/alert" %>');
+  }
 
   $('.selectpicker').selectpicker();
   $.fn.recalculateStats();
