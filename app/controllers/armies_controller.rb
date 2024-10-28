@@ -665,6 +665,6 @@ private
 
   # Use a separate method to handle the `inline` parameter for logic purposes
   def inline_param
-    params[:army][:inline] == "true" if params[:army][:inline].present?
+    params.dig(:army, :inline) == "true"
   end
 end
