@@ -1,4 +1,7 @@
 class Family < ApplicationRecord
+  include PgSearch::Model
+  multisearchable against: [:name, :branch, :members]
+
   belongs_to :game
   belongs_to :faction, optional: true
   has_many :locations

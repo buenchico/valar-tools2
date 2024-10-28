@@ -1,4 +1,7 @@
 class Location < ApplicationRecord
+  include PgSearch::Model
+  multisearchable against: [:name_es, :name_en, :description]
+
   belongs_to :game
   belongs_to :family, optional: true
   belongs_to :region, class_name: "Location", optional: true, foreign_key: "region_id"
