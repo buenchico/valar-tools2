@@ -3,6 +3,12 @@
     <div class="container">
       <%= link_to image_tag("tools-circle.webp", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand d-block d-sm-none" %>
       <%= link_to image_tag("tools.webp", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand d-none d-sm-block" %>
+      <%= form_with url: travel_calculate_path, local: false do |form| %>
+        <div class="input-group">
+          <%= form.label :search, class: 'input-group-text' %>
+          <%= form.text_field :search, class: 'form-control' %>
+        </div>
+      <% end %>
 
         <ul class="navbar-nav ml-auto">
           <% if @current_user %>
