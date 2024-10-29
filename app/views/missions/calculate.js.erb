@@ -55,12 +55,20 @@ $('.btn-results').click(function() {
 
   let level = Math.max(-1, Math.min(1, (parseInt($('#' + type).data("level")) + change)));
   $('#' + type).data("level", level)
+
+  $('.' + type + '_switch').addClass('d-none')
   if (level == -1) {
     $('.' + type).html(results[type + '_bad'])
+    $('#' + type + '_negative').removeClass('d-none')
+    $('#results_copy').html($('#' + type + '_negative').text())
   } else if (level == 0) {
     $('.' + type).html(results[type + '_neutral'])
+    $('#' + type + '_main').removeClass('d-none')
+    $('#results_copy').html($('#' + type + '_main').text())
   } else if (level == 1) {
     $('.' + type).html(results[type + '_good'])
+    $('#' + type + '_positive').removeClass('d-none')
+    $('#results_copy').html($('#' + type + '_positive').text())
   }
 
   $('.' + type).addClass( "highlight", 250, callback )

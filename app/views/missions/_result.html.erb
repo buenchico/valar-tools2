@@ -24,8 +24,31 @@
             <div class="h5">
               <%= t('activerecord.attributes.recipe.results').html_safe %>
             </div>
-            <div id="result_main" class="ms-2 fw-lighter">
-              <%= @result["result"] %>
+            <div id="position_main" class="ms-2 fw-lighter position_switch">
+              <% @result["result"][0].each_with_index do |result, index| %>
+                  <span class="text-light border border-info p-2 my-1 d-inline-block small"><%= result.html_safe %></span>
+                  <% if index < @result["result"][0].size - 1 %>
+                    <span class="fw-bold">o</span>
+                  <% end %>
+              <% end %>
+            </div>
+            <div id="position_negative" class="ms-2 fw-lighter position_switch d-none">
+              <% @result["result"][-1].each_with_index do |result, index| %>
+                  <span class="text-light border border-info p-2 my-1 d-inline-block small"><%= result.html_safe %></span>
+                  <% if index < @result["result"][-1].size - 1 %>
+                    <span class="fw-bold">o</span>
+                  <% end %>
+              <% end %>
+            </div>
+            <div id="position_positive" class="ms-2 fw-lighter position_switch d-none">
+              <% @result["result"][1].each_with_index do |result, index| %>
+                  <span class="text-light border border-info p-2 my-1 d-inline-block small"><%= result.html_safe %></span>
+                  <% if index < @result["result"][1].size - 1 %>
+                    <span class="fw-bold">o</span>
+                  <% end %>
+              <% end %>
+            </div>
+            <div id="result_effect" class="ms-2 fw-lighter">
             </div>
             <div id="results_list" class="mb-5">
             </div>
@@ -86,7 +109,7 @@
         <p>**<%= t('activerecord.attributes.recipe.role') %>:** <%= number_to_modifier(@data[:role]) %></p>
         <p>**<%= t('activerecord.attributes.recipe.dice') %>:** <%= number_to_modifier(@data[:roll]) %></p>
         <p>**<%= t('activerecord.attributes.recipe.total') %>:** <%= number_to_modifier(@data[:total]) %></p>
-        <p>> **<%= @result["name"] %>**, <%= @result["result"] %></p>
+        <p>> **<%= @result["name"] %>**, <span id="results_copy"><%= @result["result"][0].join(" o ").html_safe %></span></p>
         <p>> **<%= t('activerecord.attributes.recipe.results') %>:** <span id="results_plain"></span></p>
         <p></p>
         <p>> **<%= t('activerecord.attributes.recipe.resolution') %>**: </p>
