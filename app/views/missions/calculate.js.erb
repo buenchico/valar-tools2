@@ -59,16 +59,69 @@ $('.btn-results').click(function() {
   $('.' + type + '_switch').addClass('d-none')
   if (level == -1) {
     $('.' + type).html(results[type + '_bad'])
-    $('#' + type + '_negative').removeClass('d-none')
-    $('#results_copy').html($('#' + type + '_negative').text())
+
+    if (type == 'effect') {
+      $('#' + type + '_extra').addClass('d-none')
+      $('.improvement').addClass('text-decoration-line-through')
+      $("#results_copy .improvement").each(function() {
+          // Get the current text content
+          var currentText = $(this).text();
+
+          // Update the content with ~~ at the beginning and end
+          $(this).text(`~~${currentText}~~ `);
+      });
+    }
+
+    if (type == 'position') {
+      $('#' + type + '_negative').removeClass('d-none')
+      $('#results_copy').html($('#' + type + '_negative').text())
+    }
+
   } else if (level == 0) {
     $('.' + type).html(results[type + '_neutral'])
-    $('#' + type + '_main').removeClass('d-none')
-    $('#results_copy').html($('#' + type + '_main').text())
+
+    if (type == 'effect') {
+      $('#' + type + '_extra').addClass('d-none')
+      $('.improvement').removeClass('text-decoration-line-through')
+      $("#results_copy .improvement").each(function() {
+          // Get the current text content
+          var currentText = $(this).text();
+
+          // Remove leading and trailing ~~ using a regular expression
+          var updatedText = currentText.replace(/^~~|~~ $/g, '');
+
+          // Update the text content without the ~~ symbols
+          $(this).text(updatedText);
+      });
+    }
+
+    if (type == 'position') {
+      $('#' + type + '_main').removeClass('d-none')
+      $('#results_copy').html($('#' + type + '_main').text())
+    }
+
   } else if (level == 1) {
     $('.' + type).html(results[type + '_good'])
-    $('#' + type + '_positive').removeClass('d-none')
-    $('#results_copy').html($('#' + type + '_positive').text())
+
+    if (type == 'effect') {
+      $('#' + type + '_extra').removeClass('d-none')
+      $('.improvement').removeClass('text-decoration-line-through')
+      $("#results_copy .improvement").each(function() {
+          // Get the current text content
+          var currentText = $(this).text();
+
+          // Remove leading and trailing ~~ using a regular expression
+          var updatedText = currentText.replace(/^~~|~~ $/g, '');
+
+          // Update the text content without the ~~ symbols
+          $(this).text(updatedText);
+      });
+    }
+
+    if (type == 'position') {
+      $('#' + type + '_positive').removeClass('d-none')
+      $('#results_copy').html($('#' + type + '_positive').text())
+    }
   }
 
   $('.' + type).addClass( "highlight", 250, callback )
