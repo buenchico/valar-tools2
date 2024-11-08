@@ -1,5 +1,6 @@
 class Army < ApplicationRecord
   before_validation :set_options
+  before_validation :clean_tags # New callback to clean empty elements in :tags
 
   has_and_belongs_to_many :factions
   belongs_to :family, class_name: 'Family', foreign_key: 'family_id', optional: true
@@ -18,6 +19,10 @@ class Army < ApplicationRecord
   FLEET_TYPES = [nil, "longship", "galley", "transport"]
 
   before_save :log_changes
+
+  def clean_tags
+    self.tags = self.tags.reject(&:blank?) if self.tags.is_a?(Array)
+  end  
 
   def set_options
     active_game = Game.find_by(active: true)

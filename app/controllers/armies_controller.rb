@@ -555,27 +555,27 @@ class ArmiesController < ApplicationController
         armies_text << ", " + army.position
       end
       armies_text << " grupo " + ARMY_GROUPS[army.group.to_sym][:name].upcase
-      tags = []
-      if army.hp != 100
-        tags << @options["hp"]["name"].capitalize + " " + number_to_modifier(((army.hp - 100) / @options["hp"]["step"]))
+      traits = []
+      ((100 - army.hp) / @hp["step"])&.nonzero? ? traits << (@hp["name"].capitalize + " " + number_to_modifier(((army.hp - 100) / @hp["step"]))).html_safe : nil
+      traits << @army_types.fetch(army.army_type, {}).fetch("name", army.army_type).capitalize
+      @men.each do | key, value |
+        if value["sort"] != 0
+          (army["men#{value['sort']}"]&.nonzero? ? traits << (value["name"].capitalize + " " + number_to_modifier(army["men#{value['sort']}"])).html_safe : nil )
+        end
       end
       @attributes.each do | key, value |
-        if army["col#{value['sort']}"]&.nonzero?
-          tags << value["name"].capitalize + " " + number_to_modifier(army["col#{value['sort']}"])
-        end
+        (army["attr#{value['sort']}"]&.nonzero? ? traits << (value["name"].capitalize + " " + number_to_modifier(army["attr#{value['sort']}"])).html_safe : nil )
       end
       if army.tags.present?
         army.tags.each do | tag |
           if @tags[tag]
-            tags << @tags[tag]["name"].capitalize
+            traits << @tags[tag]["name"].capitalize
           else
-            tags << tag.capitalize
+            traits << tag.capitalize
           end
         end
       end
-      if tags.present?
-        armies_text << " [" + tags.join(", ") + "]"
-      end
+      armies_text << " [" + traits.join(", ") + "] "
       armies_text << " FUE: " + army.strength.to_s + "\n"
     end
 
