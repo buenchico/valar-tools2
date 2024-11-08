@@ -24,34 +24,12 @@
             <div class="h5">
               <%= t('activerecord.attributes.recipe.results').html_safe %>
             </div>
-            <div id="position_main" class="ms-2 fw-lighter position_switch">
-              <% @result["result"][0].each_with_index do |result, index| %>
-                  <span class="text-light border border-info p-2 my-1 d-inline-block small"><%= result.html_safe %></span>
-                  <% if index < @result["result"][0].size - 1 %>
-                    <span class="fw-bold">o</span>
-                  <% end %>
-              <% end %>
-            </div>
-            <div id="position_negative" class="ms-2 fw-lighter position_switch d-none">
-              <% @result["result"][-1].each_with_index do |result, index| %>
-                  <span class="text-light border border-info p-2 my-1 d-inline-block small"><%= result.html_safe %></span>
-                  <% if index < @result["result"][-1].size - 1 %>
-                    <span class="fw-bold">o</span>
-                  <% end %>
-              <% end %>
-            </div>
-            <div id="position_positive" class="ms-2 fw-lighter position_switch d-none">
-              <% @result["result"][1].each_with_index do |result, index| %>
-                  <span class="text-light border border-info p-2 my-1 d-inline-block small"><%= result.html_safe %></span>
-                  <% if index < @result["result"][1].size - 1 %>
-                    <span class="fw-bold">o</span>
-                  <% end %>
-              <% end %>
-            </div>
-            <div id="effect_extra" class="ms-2 fw-lighter d-none">
+            <div class="ms-2 fw-lighter consequences">
               <span class="text-light border border-info p-2 my-1 d-inline-block small">
-                <%= @options["effect_major"].html_safe %>
+                <%= @result["result"][0].join('</span><span class="fw-bold"> o </span><span class="text-light border border-info p-2 my-1 d-inline-block small">'.html_safe).html_safe %>
               </span>
+            </div>
+            <div class="ms-2 fw-lighter effect_results">
             </div>
             <div id="results_list" class="mb-5">
             </div>
@@ -89,14 +67,14 @@
         </div>
         <div class="position-absolute my-3 bottom-0 left-0 row">
           <div class="col-auto">
-            <div class="btn btn-primary btn-results" data-results="decrease_position"><i class="bi bi-arrow-down-square-fill"></i></div><div class="btn btn-outline-primary btn-no-click bg-dark"><i class="bi bi-compass"></i> <%= t('missions.index.position') %></div><div class="btn btn-primary btn-results" data-results="increase_position"><i class="bi bi-arrow-up-square-fill"></i></div>
+            <div class="btn btn-primary btn-results" data-type="position" data-value="-1"><i class="bi bi-arrow-down-square-fill"></i></div><div class="btn btn-outline-primary btn-no-click bg-dark"><i class="bi bi-compass"></i> <%= t('missions.index.position') %></div><div class="btn btn-primary btn-results" data-type="position" data-value="1"><i class="bi bi-arrow-up-square-fill"></i></div>
           </div>
           <div class="col-auto">
-            <div class="btn btn-primary btn-results" data-results="decrease_effect"><i class="bi bi-arrow-down-square-fill"></i></div><div class="btn btn-outline-primary btn-no-click bg-dark"><i class="bi bi-speedometer"></i> <%= t('missions.index.effect') %></div><div class="btn btn-primary btn-results" data-results="increase_effect"><i class="bi bi-arrow-up-square-fill"></i></div>
+            <div class="btn btn-primary btn-results" data-type="effect" data-value="-1"><i class="bi bi-arrow-down-square-fill"></i></div><div class="btn btn-outline-primary btn-no-click bg-dark"><i class="bi bi-speedometer"></i> <%= t('missions.index.effect') %></div><div class="btn btn-primary btn-results" data-type="effect" data-value="1"><i class="bi bi-arrow-up-square-fill"></i></div>
           </div>
         </div>
       </div>
-      <div id="copy_box" class="d-non">
+      <div id="copy_box" class="d-none">
         <p>[Link](https://www.valar.es/t/ejemplo_de_link)</p>
         <p></p>
         <p>**<%= t('activerecord.models.faction') %>**: </p>
@@ -112,7 +90,7 @@
         <p>**<%= t('activerecord.attributes.recipe.role') %>:** <%= number_to_modifier(@data[:role]) %></p>
         <p>**<%= t('activerecord.attributes.recipe.dice') %>:** <%= number_to_modifier(@data[:roll]) %></p>
         <p>**<%= t('activerecord.attributes.recipe.total') %>:** <%= number_to_modifier(@data[:total]) %></p>
-        <p>> **<%= @result["name"] %>**, <span id="results_copy"><%= @result["result"][0].join(" o ").html_safe %></span></p>
+        <p>> **<%= @result["name"] %>**, <span class="consequences"><%= @result["result"][0].join(" o ").html_safe %>. </span><span class="effect_results"></span></p>
         <p>> **<%= t('activerecord.attributes.recipe.results') %>:** <span id="results_plain"></span></p>
         <p></p>
         <p>> **<%= t('activerecord.attributes.recipe.resolution') %>**: </p>

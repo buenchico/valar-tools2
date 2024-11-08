@@ -35,94 +35,51 @@ $('#copy_results').click(function() {
 });
 
 $('.btn-results').click(function() {
-  let data = $(this).data('results').split("_");
-  let direction = data[0]
-  let type = data[1]
-  if (direction == "increase") {
-    change = 1
-  } else {
-    change = -1
+  let value = $(this).data('value')
+  let type = $(this).data('type')
+
+  let effects_names_array = [
+    "<%= t('missions.index.effect_neutral') %>",
+    "<%= t('missions.index.effect_good') %>",
+    "<%= t('missions.index.effect_bad') %>"
+  ]
+
+  let position_names_array = [
+    "<%= t('missions.index.position_neutral') %>",
+    "<%= t('missions.index.position_good') %>",
+    "<%= t('missions.index.position_bad') %>"
+  ]
+
+  let position_results = [
+    `<%= @result["result"][0].join('</span><span class="fw-bold"> o </span><span class="text-light border border-info p-2 my-1 d-inline-block small">'.html_safe).html_safe %>`,
+    `<%= @result["result"][1].join('</span><span class="fw-bold"> o </span><span class="text-light border border-info p-2 my-1 d-inline-block small">'.html_safe).html_safe %>`,
+    `<%= @result["result"][-1].join('</span><span class="fw-bold"> o </span><span class="text-light border border-info p-2 my-1 d-inline-block small">'.html_safe).html_safe %>`
+  ]
+
+  let effect_results = [
+    "",
+    `<span class="text-light border border-info p-2 my-1 d-inline-block small"><%= @effect_major %></span>`,
+    `<span class="text-light border border-info p-2 my-1 d-inline-block small"><%= @effect_minor %></span>`,
+  ]
+
+  let level = Math.max(-1, Math.min(1, (parseInt($('#' + type).data("level")) + value)));
+
+  let position_results_text = `<span class="text-light border border-info p-2 my-1 d-inline-block small">` + position_results.at(level) + `</span>`
+  let effect_results_text = effect_results.at(level)
+
+  // Select the correct array based on type and get the corresponding text
+  let selected_text;
+  if (type === 'position') {
+    selected_text = position_names_array.at(level);
+    $('.consequences').html(position_results_text)
+  } else if (type === 'effect') {
+    selected_text = effects_names_array.at(level);
+    $('.effect_results').html(effect_results_text)
   }
 
-  let results = {
-      effect_good: "<%= t('missions.index.effect_good') %>",
-      effect_bad: "<%= t('missions.index.effect_bad') %>",
-      effect_neutral: "<%= t('missions.index.effect_neutral') %>",
-      position_good: "<%= t('missions.index.position_good') %>",
-      position_bad: "<%= t('missions.index.position_bad') %>",
-      position_neutral: "<%= t('missions.index.position_neutral') %>"
-  };
+  $('.' + type).html(selected_text)
 
-  let level = Math.max(-1, Math.min(1, (parseInt($('#' + type).data("level")) + change)));
   $('#' + type).data("level", level)
-
-  $('.' + type + '_switch').addClass('d-none')
-  if (level == -1) {
-    $('.' + type).html(results[type + '_bad'])
-
-    if (type == 'effect') {
-      $('#' + type + '_extra').addClass('d-none')
-      $('.improvement').addClass('text-decoration-line-through')
-      $("#results_copy .improvement").each(function() {
-          // Get the current text content
-          var currentText = $(this).text();
-
-          // Update the content with ~~ at the beginning and end
-          $(this).text(`~~${currentText}~~ `);
-      });
-    }
-
-    if (type == 'position') {
-      $('#' + type + '_negative').removeClass('d-none')
-      $('#results_copy').html($('#' + type + '_negative').text())
-    }
-
-  } else if (level == 0) {
-    $('.' + type).html(results[type + '_neutral'])
-
-    if (type == 'effect') {
-      $('#' + type + '_extra').addClass('d-none')
-      $('.improvement').removeClass('text-decoration-line-through')
-      $("#results_copy .improvement").each(function() {
-          // Get the current text content
-          var currentText = $(this).text();
-
-          // Remove leading and trailing ~~ using a regular expression
-          var updatedText = currentText.replace(/^~~|~~ $/g, '');
-
-          // Update the text content without the ~~ symbols
-          $(this).text(updatedText);
-      });
-    }
-
-    if (type == 'position') {
-      $('#' + type + '_main').removeClass('d-none')
-      $('#results_copy').html($('#' + type + '_main').text())
-    }
-
-  } else if (level == 1) {
-    $('.' + type).html(results[type + '_good'])
-
-    if (type == 'effect') {
-      $('#' + type + '_extra').removeClass('d-none')
-      $('.improvement').removeClass('text-decoration-line-through')
-      $("#results_copy .improvement").each(function() {
-          // Get the current text content
-          var currentText = $(this).text();
-
-          // Remove leading and trailing ~~ using a regular expression
-          var updatedText = currentText.replace(/^~~|~~ $/g, '');
-
-          // Update the text content without the ~~ symbols
-          $(this).text(updatedText);
-      });
-    }
-
-    if (type == 'position') {
-      $('#' + type + '_positive').removeClass('d-none')
-      $('#results_copy').html($('#' + type + '_positive').text())
-    }
-  }
 
   $('.' + type).addClass( "highlight", 250, callback )
 
