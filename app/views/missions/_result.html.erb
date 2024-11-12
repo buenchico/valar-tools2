@@ -2,10 +2,12 @@
   <div id="result_card" class="card-body">
     <div class="card-title">
       <span id="mission-title" class="h3"><%= @result["name"] %> (<%= @data[:total] %>)</span>
-      <i class="bi bi-compass"></i> <span id="position" class="position" data-level="0"><%= t('missions.index.position_neutral') %></span>
-      <i class="bi bi-speedometer"></i> <span id="effect" class="effect" data-level="0"><%= t('missions.index.effect_neutral') %></span>
-      <button type="button" id="close_results" class="btn-close btn-close-white float-end" aria-label="Close" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar"></button>
-      <button type="button" id="copy_results" class="btn-no-style text-light float-end me-1" aria-label="Copy" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar resultado">
+        <% if @fortune == false %>
+          <i class="bi bi-compass"></i> <span id="position" class="position" data-level="0"><%= t('missions.index.position_neutral') %></span>
+          <i class="bi bi-speedometer"></i> <span id="effect" class="effect" data-level="0"><%= t('missions.index.effect_neutral') %></span>
+        <% end %>
+        <button type="button" id="close_results" class="btn-close btn-close-white float-end" aria-label="Close" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar"></button>
+        <button type="button" id="copy_results" class="btn-no-style text-light float-end me-1" aria-label="Copy" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar resultado">
         <i class="bi bi-clipboard2-fill"></i>
       </button>
     </div>
@@ -26,7 +28,7 @@
             </div>
             <div class="ms-2 fw-lighter consequences">
               <span class="text-light border border-info p-2 my-1 d-inline-block small">
-                <%= @result["result"][0].join('</span><span class="fw-bold"> o </span><span class="text-light border border-info p-2 my-1 d-inline-block small">'.html_safe).html_safe %>
+                <%= @result.fetch("result", [[]])[0].join('</span><span class="fw-bold"> o </span><span class="text-light border border-info p-2 my-1 d-inline-block small">'.html_safe).html_safe %>
               </span>
             </div>
             <div class="ms-2 fw-lighter effect_results">
@@ -65,14 +67,16 @@
             </div>
           </div>
         </div>
-        <div class="position-absolute my-3 bottom-0 left-0 row">
-          <div class="col-auto">
-            <div class="btn btn-primary btn-results" data-type="position" data-value="-1"><i class="bi bi-arrow-down-square-fill"></i></div><div class="btn btn-outline-primary btn-no-click bg-dark"><i class="bi bi-compass"></i> <%= t('missions.index.position') %></div><div class="btn btn-primary btn-results" data-type="position" data-value="1"><i class="bi bi-arrow-up-square-fill"></i></div>
+        <% if @fortune == false %>
+          <div class="position-absolute my-3 bottom-0 left-0 row">
+            <div class="col-auto">
+              <div class="btn btn-primary btn-results" data-type="position" data-value="-1"><i class="bi bi-arrow-down-square-fill"></i></div><div class="btn btn-outline-primary btn-no-click bg-dark"><i class="bi bi-compass"></i> <%= t('missions.index.position') %></div><div class="btn btn-primary btn-results" data-type="position" data-value="1"><i class="bi bi-arrow-up-square-fill"></i></div>
+            </div>
+            <div class="col-auto">
+              <div class="btn btn-primary btn-results" data-type="effect" data-value="-1"><i class="bi bi-arrow-down-square-fill"></i></div><div class="btn btn-outline-primary btn-no-click bg-dark"><i class="bi bi-speedometer"></i> <%= t('missions.index.effect') %></div><div class="btn btn-primary btn-results" data-type="effect" data-value="1"><i class="bi bi-arrow-up-square-fill"></i></div>
+            </div>
           </div>
-          <div class="col-auto">
-            <div class="btn btn-primary btn-results" data-type="effect" data-value="-1"><i class="bi bi-arrow-down-square-fill"></i></div><div class="btn btn-outline-primary btn-no-click bg-dark"><i class="bi bi-speedometer"></i> <%= t('missions.index.effect') %></div><div class="btn btn-primary btn-results" data-type="effect" data-value="1"><i class="bi bi-arrow-up-square-fill"></i></div>
-          </div>
-        </div>
+        <% end %>
       </div>
       <div id="copy_box" class="d-none">
         <p>[Link](https://www.valar.es/t/ejemplo_de_link)</p>
@@ -90,10 +94,10 @@
         <p>**<%= t('activerecord.attributes.recipe.role') %>:** <%= number_to_modifier(@data[:role]) %></p>
         <p>**<%= t('activerecord.attributes.recipe.dice') %>:** <%= number_to_modifier(@data[:roll]) %></p>
         <p>**<%= t('activerecord.attributes.recipe.total') %>:** <%= number_to_modifier(@data[:total]) %></p>
-        <p>> **<%= @result["name"] %>**, <span class="consequences"><%= @result["result"][0].join(" o ").html_safe %>. </span><span class="effect_results"></span></p>
-        <p>> **<%= t('activerecord.attributes.recipe.results') %>:** <span id="results_plain"></span></p>
+        <p> **<%= @result["name"] %>**, <span class="consequences"><%= @result.fetch("result", [[]])[0].join(" o ").html_safe %>. </span><span class="effect_results"></span></p>
+        <p> **<%= t('activerecord.attributes.recipe.results') %>:** <span id="results_plain"></span></p>
         <p></p>
-        <p>> **<%= t('activerecord.attributes.recipe.resolution') %>**: </p>
+        <p> **<%= t('activerecord.attributes.recipe.resolution') %>**: </p>
       </div>
     </div>
   </div>
