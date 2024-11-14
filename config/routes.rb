@@ -19,6 +19,9 @@ Rails.application.routes.draw do
     post 'login_admin', to: 'sessions#create_master', as: 'login_admin'
   end
 
+  # search
+  post 'search', to:'search#search', as: 'search'
+
   # Games and Tools
   get 'settings', to: 'settings#index'
 
