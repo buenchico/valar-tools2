@@ -30,6 +30,13 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 es:
+  errors:
+    internal_server:
+      title: '500 Internal Server Error'
+      text: 'El servidor ha encontrado un error inesperado, quizás son los caminantes blancos amenazando los Siete Reinos.'
+    not_found:
+      title: '404 Page Not Found'
+      text: 'La página que buscas se ha perdido más allá del Muro.'
   helpers:
     action:
       view: 'Ver %{thing}'

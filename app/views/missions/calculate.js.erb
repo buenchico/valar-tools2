@@ -34,40 +34,60 @@ $('#copy_results').click(function() {
   navigator.clipboard.writeText(cleanedText)
 });
 
-$('.btn-results').click(function() {
-  let data = $(this).data('results').split("_");
-  let direction = data[0]
-  let type = data[1]
-  if (direction == "increase") {
-    change = 1
-  } else {
-    change = -1
-  }
+<% if @fortune == false %>
+  $('.btn-results').click(function() {
+    let value = $(this).data('value')
+    let type = $(this).data('type')
 
-  let results = {
-      effect_good: "<%= t('missions.index.effect_good') %>",
-      effect_bad: "<%= t('missions.index.effect_bad') %>",
-      effect_neutral: "<%= t('missions.index.effect_neutral') %>",
-      position_good: "<%= t('missions.index.position_good') %>",
-      position_bad: "<%= t('missions.index.position_bad') %>",
-      position_neutral: "<%= t('missions.index.position_neutral') %>"
-  };
+    let effects_names_array = [
+      "<%= t('missions.index.effect_neutral') %>",
+      "<%= t('missions.index.effect_good') %>",
+      "<%= t('missions.index.effect_bad') %>"
+    ]
 
-  let level = Math.max(-1, Math.min(1, (parseInt($('#' + type).data("level")) + change)));
-  $('#' + type).data("level", level)
-  if (level == -1) {
-    $('.' + type).html(results[type + '_bad'])
-  } else if (level == 0) {
-    $('.' + type).html(results[type + '_neutral'])
-  } else if (level == 1) {
-    $('.' + type).html(results[type + '_good'])
-  }
+    let position_names_array = [
+      "<%= t('missions.index.position_neutral') %>",
+      "<%= t('missions.index.position_good') %>",
+      "<%= t('missions.index.position_bad') %>"
+    ]
 
-  $('.' + type).addClass( "highlight", 250, callback )
+    let position_results = [
+      `<%= @result["result"][0].join('</span><span class="fw-bold"> o </span><span class="text-light border border-info p-2 my-1 d-inline-block small">'.html_safe).html_safe %>`,
+      `<%= @result["result"][1].join('</span><span class="fw-bold"> o </span><span class="text-light border border-info p-2 my-1 d-inline-block small">'.html_safe).html_safe %>`,
+      `<%= @result["result"][-1].join('</span><span class="fw-bold"> o </span><span class="text-light border border-info p-2 my-1 d-inline-block small">'.html_safe).html_safe %>`
+    ]
 
-  function callback() {
-    setTimeout(function() {
-      $('.' + type).removeClass( "highlight" );
-    }, 250 );
-  }
-});
+    let effect_results = [
+      "",
+      `<span class="text-light border border-info p-2 my-1 d-inline-block small"><%= @effect_major %></span>`,
+      `<span class="text-light border border-info p-2 my-1 d-inline-block small"><%= @effect_minor %></span>`,
+    ]
+
+    let level = Math.max(-1, Math.min(1, (parseInt($('#' + type).data("level")) + value)));
+
+    let position_results_text = `<span class="text-light border border-info p-2 my-1 d-inline-block small">` + position_results.at(level) + `</span>`
+    let effect_results_text = effect_results.at(level)
+
+    // Select the correct array based on type and get the corresponding text
+    let selected_text;
+    if (type === 'position') {
+      selected_text = position_names_array.at(level);
+      $('.consequences').html(position_results_text)
+    } else if (type === 'effect') {
+      selected_text = effects_names_array.at(level);
+      $('.effect_results').html(effect_results_text)
+    }
+
+    $('.' + type).html(selected_text)
+
+    $('#' + type).data("level", level)
+
+    $('.' + type).addClass( "highlight", 250, callback )
+
+    function callback() {
+      setTimeout(function() {
+        $('.' + type).removeClass( "highlight" );
+      }, 250 );
+    }
+  });
+<% end %>

@@ -19,6 +19,7 @@
 body {
   background-color: var(--bs-dark);
   color: var(--bs-light);
+  padding-top: 46px; /* Adjust based on navbar height */
 }
 
 .container {
@@ -171,6 +172,7 @@ body {
 
 #navbar-custom {
   height: 60px;
+  z-index: 1;
 }
 
 #nav-logo {
@@ -374,8 +376,15 @@ body {
 }
 
 .btn-no-click {
+  display: inline-block; /* Ensures inline-block display */
   cursor: default; /* Prevents hand cursor */
   pointer-events: none; /* Disables any click behavior */
+}
+
+/* Text buttons */
+
+.btn-text {
+  display: inline-block; /* Ensures inline-block display */
 }
 
 /* Copy action button position */

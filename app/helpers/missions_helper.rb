@@ -35,7 +35,8 @@ module MissionsHelper
       end
     end
 
-    list = list_plus.sort_by { |item| item.gsub(/<\/?[^>]*>|\[\/?[^\]]*\]/, '') }.join(", ") + ", " + list_minus.sort_by { |item| item.gsub(/<\/?[^>]*>|\[\/?[^\]]*\]/, '') }.join(", ")
+    list = (list_plus.sort_by { |item| item.gsub(/<\/?[^>]*>|\[\/?[^\]]*\]/, '') } + list_minus.sort_by { |item| item.gsub(/<\/?[^>]*>|\[\/?[^\]]*\]/, '') }).join(", ")
+
 
     return list
   end

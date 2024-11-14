@@ -3,7 +3,7 @@
 
 <% flash.each do |message_type, message| %>
   <% if message.class == Hash %>
-    <div class="container mx-auto text-center alert alert-danger">
+    <div class="container mt-3 mx-auto text-center alert alert-danger">
       <h2><%= t("messages.error.#{method}", thing: thing) %></h2>
       <ul class="list-unstyled text-left">
       <% message.values.each do |msg| %>
@@ -14,7 +14,7 @@
       </ul>
     </div>
   <% else %>
-    <div class="container mx-auto text-center alert alert-<%= message_type %>" style="">
+    <div class="container mt-3 mx-auto text-center alert alert-<%= message_type %>" style="">
       <%= message.html_safe %>
     </div>
   <% end %>

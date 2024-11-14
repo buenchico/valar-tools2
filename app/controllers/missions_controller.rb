@@ -125,6 +125,9 @@ class MissionsController < ApplicationController
       speed: speed
     }
 
+    @effect_major = @options["effect_major"]
+    @effect_minor = @options["effect_minor"]
+
     @fortune = fortune
   end
 
