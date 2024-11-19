@@ -288,6 +288,9 @@ es:
     index:
       calculate: 'Calcular'
       add_step: 'Añadir etapa'
+  search:
+    title: 'Resultados para'
+    submit: 'Buscar'
   battles:
     edit:
       goto: 'Ir a %{step}'

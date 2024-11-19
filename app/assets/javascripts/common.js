@@ -1,3 +1,19 @@
+// Trigger searchbox
+$(document).on('turbolinks:load', function() {
+  $('#navbarSearch').on('click', function(event) {
+    event.preventDefault(); // Prevent the default link behavior
+    $('#searchbox').dropdown('show'); // Trigger the dropdown show method
+    $('#searchbox-toggle-container').addClass('bg-dark');
+  });
+  // Close the dropdown if clicking outside the searchbox or the button
+  $(document).on('click', function(event) {
+    if (!$(event.target).closest('#navbarSearch, #searchbox').length) {
+      $('#searchbox').dropdown('hide');
+      $('#searchbox-toggle-container').removeClass('bg-dark');
+    }
+  });
+});
+
 // Toggle visibility
 $(document).on('turbolinks:load', function() {
   $('.toggle-visibility').on('click', function() {

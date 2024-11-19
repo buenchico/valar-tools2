@@ -1,35 +1,16 @@
-<script>
-  $(document).on('turbolinks:load', function() {
-    // Focus event
-    $('.searchbox .form-control').on('focus', function() {
-      $(this).closest('.searchbox').addClass('expanded');
-    });
-
-    // Blur event
-    $('.searchbox .form-control').on('blur', function() {
-      $(this).closest('.searchbox').removeClass('expanded');
-    });
-  });
-</script>
-
 <header id="header" class="bg-black fixed-top z-1">
   <nav class="navbar navbar-expand navbar-dark">
-    <div class="container">
-      <%= link_to image_tag("tools-circle.webp", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand d-block d-sm-none" %>
-      <%= link_to image_tag("tools.webp", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand d-none d-sm-block" %>
-
-      <div class="searchbox">
+    <div class="container position-relative">
+      <div id="searchbox" class="dropdown-menu dropdown-menu-end dropdown-menu-dark searchbox-container">
         <%= form_with url: search_path, local: false do |form| %>
-          <div class="input-group">
-            <%= form.text_field :search, class: 'form-control' %>
-            <div class="input-group-append textarea-submit">
-              <%= form.button nil, class: "btn btn-secondary" do %>
-                <i class="bi bi-search"></i>
-              <% end %>
-            </div>
+          <div class="input-group px-3 py-1">
+            <%= form.text_field :search, class: 'form-control', placeholder: (t('search.submit') + ' ...') %>
           </div>
         <% end %>
       </div>
+
+      <%= link_to image_tag("tools-circle.webp", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand d-block d-sm-none" %>
+      <%= link_to image_tag("tools.webp", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand d-none d-sm-block" %>
 
       <ul class="navbar-nav ml-auto">
         <% if @current_user %>
@@ -48,9 +29,13 @@
           <%= link_to image_tag("valar-circle.webp", :alt => "Valar", class: "nav-icon"), "https://www.valar.es", class: "nav-link" %>
         </li>
 
+        <li id="searchbox-toggle-container" class="nav-item dropdown">
+          <%= link_to "", "#", id: "navbarSearch", class: "nav-link dropdown-toggle nav-text-icon bi bi-search", "role": "button" %>
+        </li>
+
         <li class="nav-item dropdown">
           <%= link_to "", "#", id: "navbarHamburger", class: "nav-link dropdown-toggle nav-text-icon bi bi-list", "role": "button", "data-bs-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" %>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarHamburger">
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="navbarHamburger">
             <% player_tools&.each do | tool | %>
               <li>
                 <%= link_to tool.path, class: 'dropdown-item' do %>
@@ -59,7 +44,6 @@
                 <% end %>
               </li>
             <% end %>
-
 
             <% if @current_user&.is_master? %>
               <% master_tools.each do | tool | %>
@@ -96,7 +80,7 @@
         </li>
 
         <% if @current_user %>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown dropdown-menu-dark">
             <%= link_to image_tag(@current_user.avatar_url, class: "nav-icon avatar"), "#", id: "navbarAvatar", class: "nav-link", "role": "button", "data-bs-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" %>
               <div class="dropdown-menu dropdown-menu-end" style="z-index: 2000" aria-labelledby="navbarAvatar">
                 <a href="https://www.valar.es/u/<%= @current_user.player %>" class="dropdown-item"><i class="fas fa-user"></i> <%= @current_user.player + ' — ' + @current_user.faction.long_name %>  </a>
