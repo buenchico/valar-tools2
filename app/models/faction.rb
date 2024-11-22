@@ -1,4 +1,7 @@
 class Faction < ApplicationRecord
+  include PgSearch::Model
+  multisearchable against: [:name, :long_name, :title, :description, :tokens, :pov]
+
   has_many :users
   has_and_belongs_to_many :armies
   has_and_belongs_to_many :games

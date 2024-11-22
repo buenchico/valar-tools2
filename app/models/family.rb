@@ -1,6 +1,6 @@
 class Family < ApplicationRecord
   include PgSearch::Model
-  multisearchable against: [:name, :branch, :members] 
+  multisearchable against: [:name, :branch, :members, :search]
 
   belongs_to :game
   belongs_to :faction, optional: true
@@ -12,12 +12,18 @@ class Family < ApplicationRecord
 
   validates :name, presence: true
 
+  after_save :update_associated_locations
+
   def title
     if (self.branch.nil? || self.branch.empty?)
       self.name
     else
       self.name + " (" + self.branch + ")"
     end
+  end
+
+  def search
+    self.locations&.pluck(:name_es, :name_en).join(", ")
   end
 
   attr_accessor :hp_step
@@ -40,5 +46,10 @@ class Family < ApplicationRecord
     else
       (self.armies.where(army_type: type).sum(:hp_start) / self.hp_step)
     end
+  end
+
+private
+  def update_associated_locations
+    locations.find_each(&:update_pg_search_document)
   end
 end

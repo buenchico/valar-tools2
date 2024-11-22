@@ -1,3 +1,2 @@
-$(".modal").modal('hide');
-$("#content").html("<%= j render 'results', result: @results %>");
-$("#searchModal").modal('show');
+$('#searching').addClass('d-none')
+$("#searchbox_results").html("<%= j render 'results', result: @results %>");

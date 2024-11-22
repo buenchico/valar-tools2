@@ -2,11 +2,14 @@
   <nav class="navbar navbar-expand navbar-dark">
     <div class="container position-relative">
       <div id="searchbox" class="dropdown-menu dropdown-menu-end dropdown-menu-dark searchbox-container">
-        <%= form_with url: search_path, local: false do |form| %>
+        <%= form_with url: search_path, html: { id: 'search-form' }, local: false do |form| %>
           <div class="input-group px-3 py-1">
             <%= form.text_field :search, class: 'form-control', placeholder: (t('search.submit') + ' ...') %>
           </div>
         <% end %>
+        <div class="loader mx-auto d-none" id="searching"></div>
+        <div id="searchbox_results">
+        </div>
       </div>
 
       <%= link_to image_tag("tools-circle.webp", :alt => "Valar Tools", id: "nav-logo"), root_path, class: "navbar-brand d-block d-sm-none" %>

@@ -1,4 +1,7 @@
 class Clock < ApplicationRecord
+  include PgSearch::Model
+  multisearchable against: [:name, :description, :left, :right, :search]
+
   before_validation :set_options
 
   belongs_to :family, optional: true
@@ -18,6 +21,10 @@ class Clock < ApplicationRecord
   validates :right, length: { maximum: 10 }
 
   before_save :log_changes
+
+  def search
+    self.family&.name
+  end
 
 private
   def log_changes

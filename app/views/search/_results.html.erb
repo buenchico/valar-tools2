@@ -1,13 +1,7 @@
-<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content bg-dark">
-      <div class="modal-header">
-        <h5 class="modal-title" id="Title"><%= t('.results') %> <%= @search %></h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ssss
-      </div>
-    </div>
-  </div>
+<div class="p-3 ms-1">
+  <ul>
+    <% @results.each do | item | %>
+      <li><%= item.name %>, <%= item.id %>, <%= item.class %></li>
+    <% end %>
+  </ul>
 </div>

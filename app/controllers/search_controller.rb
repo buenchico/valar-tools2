@@ -3,18 +3,54 @@ class SearchController < ApplicationController
     @search = params[:search]
     if @search.present?
       # Use PgSearch to search across multiple models and fields
-      @results = PgSearch.multisearch(@search)
+      search = PgSearch.multisearch(@search)
     else
-      @results = []
+      search = []
     end
 
-    # search_result = @results.first  # Assuming the id is 12, as in your example
+    results = []
+    search.each do | item |
+      record = item.searchable_type.constantize.find(item.searchable_id)
+      keep_record = false
+      puts item.searchable_type
+      case item.searchable_type
+      when 'Family', 'Location'
+        if @current_user.is_admin?
+          keep_record = true
+        elsif (@current_user.is_master? && record.game == active_game)
+          keep_record = true
+        elsif (record.visible == true && record.game == active_game)
+          keep_record = true
+        end
+      when 'Clock'
+        if @current_user.is_master?
+          keep_record = true
+        elsif record.visible
+          keep_record = true
+        end
+      when 'Faction'
+        if @current_user.is_admin?
+          keep_record = true
+        elsif (@current_user.is_master? && record.games.include?(active_game))
+          keep_record = true
+        elsif (record.active == true && record.games.include?(active_game))
+          keep_record = true
+        end
+      when 'Army'
+        if @current_user.is_master?
+          keep_record = true
+        elsif (@current_user && record.factions.include?(@current_user.faction))
+          keep_record = true
+        end
+      else
+        keep_record = true
+      end
 
-    # Get the model type and ID
-    #model_type = search_result.searchable_type
-    #model_id = search_result.searchable_id
+      if keep_record == true
+        results << record
+      end
+    end
 
-    # Find the corresponding model instance (e.g., a Family)
-    #original_item = @results.first.searchable_type.constantize.find(@results.first.searchable_id).name
+    @results = results.uniq.first(10)
   end
 end

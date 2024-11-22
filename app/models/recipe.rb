@@ -1,4 +1,7 @@
 class Recipe < ApplicationRecord
+  include PgSearch::Model
+  multisearchable against: [:name, :section, :description, :factors, :results]
+
   before_validation :set_options
 
   validates :name, presence: true

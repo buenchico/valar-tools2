@@ -1,6 +1,6 @@
 class Location < ApplicationRecord
   include PgSearch::Model
-  multisearchable against: [:name_es, :name_en, :description]
+  multisearchable against: [:name_es, :name_en, :description, :search]
 
   belongs_to :game
   belongs_to :family, optional: true
@@ -18,6 +18,10 @@ class Location < ApplicationRecord
     else
       self.name_es
     end
+  end
+
+  def search
+    self.family&.name
   end
 
   def render

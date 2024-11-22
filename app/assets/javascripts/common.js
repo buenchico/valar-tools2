@@ -4,6 +4,11 @@ $(document).on('turbolinks:load', function() {
     event.preventDefault(); // Prevent the default link behavior
     $('#searchbox').dropdown('show'); // Trigger the dropdown show method
     $('#searchbox-toggle-container').addClass('bg-dark');
+    $('#search').focus();
+  });
+
+  $('#search-form').on('ajax:beforeSend', function() {
+    $('#searching').removeClass('d-none')
   });
   // Close the dropdown if clicking outside the searchbox or the button
   $(document).on('click', function(event) {
