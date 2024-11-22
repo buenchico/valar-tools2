@@ -5,6 +5,11 @@
         <%= form_with url: search_path, html: { id: 'search-form' }, local: false do |form| %>
           <div class="input-group px-3 py-1">
             <%= form.text_field :search, class: 'form-control', placeholder: (t('search.submit') + ' ...') %>
+            <div class="input-group-append">
+              <div class="input-group-text form-control-clearable bg-transparent border-0">
+                <i class="bi bi-x-lg text-secondary invisible"></i>
+              </div>
+            </div>
           </div>
         <% end %>
         <div class="m-3 loader mx-auto d-none" id="searching"></div>

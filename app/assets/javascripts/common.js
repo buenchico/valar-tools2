@@ -22,6 +22,26 @@ $(document).on('turbolinks:load', function() {
   });
 });
 
+// Form control clearable icon
+$(document).on('ready', function () {
+    $(function() {
+      $('.form-control-clearable').on('click', function() {
+        var $input = $(this).closest(".input-group").find(".form-control");
+        $input.val("").trigger("input");
+        $(this).find("i").addClass("invisible");
+      });
+    });
+
+    $("input").on("input", function() {
+      var clearButton = $(this).closest(".input-group").find(".form-control-clearable");
+      if ($(this).val() !== "") {
+        clearButton.find("i").removeClass("invisible");
+      } else {
+        clearButton.find("i").addClass("invisible");
+      }
+    });
+});
+
 // Toggle visibility
 $(document).on('turbolinks:load', function() {
   $('.toggle-visibility').on('click', function() {
