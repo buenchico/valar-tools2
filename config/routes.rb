@@ -56,7 +56,7 @@ Rails.application.routes.draw do
   get 'armies/get_armies', to: 'armies#get_armies', as: 'get_armies'
   get 'armies/get_discourse_armies/:faction_id/:group', to: 'armies#get_discourse_armies'
   post 'armies/post_discourse_armies', to: 'armies#post_discourse_armies'
-  resources :armies, :except => [:show]
+  resources :armies
 
   resources :locations
   get '/lists/locations', to: 'locations#list', as: 'locations_list'
@@ -91,7 +91,7 @@ Rails.application.routes.draw do
   post 'missions/recipe', to: 'missions#get_recipe', as: 'get_recipe'
   post 'missions/calculate', to: 'missions#calculate'
 
-  resources :recipes, only: [:index, :new, :edit, :create, :update, :destroy ]
+  resources :recipes
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

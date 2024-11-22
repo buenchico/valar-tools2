@@ -1,7 +1,18 @@
 <div class="p-3 ms-1">
-  <ul>
-    <% @results.each do | item | %>
-      <li><%= item.name %>, <%= item.id %>, <%= item.class %></li>
-    <% end %>
-  </ul>
+  <% @results.each do | item | %>
+    <div class="border border-primary mb-3 ps-2 p-1">
+      <div class="d-flex align-items-center">
+        <h4 class="me-3">
+          <%= puts item.class %>
+          <%= link_to item.title, polymorphic_path(item), remote: true, class: "link-unstyled" %>
+        </h4>
+        <span class="badge rounded-pill pill-tags pill-tags-text bg-brass">
+          <i class="bi <%= Tool.find_by(name: item.class.to_s.downcase.pluralize)&.icon_url %>"></i>
+          <%= t('activerecord.models.' + item.class.to_s.downcase, count: 1) %>
+        </span>
+      </div>
+      <div></div>
+      <div><%= render item.class.to_s.downcase, item: item %></div>
+    </div>
+  <% end %>
 </div>

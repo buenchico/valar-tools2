@@ -23,6 +23,10 @@ class Army < ApplicationRecord
 
   before_save :log_changes
 
+  def title
+    self.name
+  end
+
   def search
     self.family&.name
   end

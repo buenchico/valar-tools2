@@ -19,4 +19,8 @@ class Recipe < ApplicationRecord
   end
 
   validates :section, inclusion: { in: ->(recipe) { recipe.instance_variable_get(:@sections) || SECTIONS } }
+
+  def title
+    self.name
+  end  
 end

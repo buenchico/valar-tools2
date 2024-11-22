@@ -1,6 +1,6 @@
 class ArmiesController < ApplicationController
   before_action :set_tool
-  before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
+  before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show]
   before_action :set_options
   before_action :set_factions, only: [:index, :edit, :edit_multiple, :new, :stats]
   before_action :army_stats, only: [:index, :get_armies]
@@ -24,6 +24,9 @@ class ArmiesController < ApplicationController
       @faction = @current_user.faction
       @armies = @faction.armies.where(visible: true).order(:id)
     end
+  end
+
+  def show
   end
 
   def get_armies

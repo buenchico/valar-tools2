@@ -10,11 +10,14 @@ $(document).on('turbolinks:load', function() {
   $('#search-form').on('ajax:beforeSend', function() {
     $('#searching').removeClass('d-none')
   });
-  // Close the dropdown if clicking outside the searchbox or the button
+
+  // Close the dropdown if clicking outside the searchbox, button, or elements with the class 'btn-close'
   $(document).on('click', function(event) {
-    if (!$(event.target).closest('#navbarSearch, #searchbox').length) {
+    // Check if the clicked element has the class 'btn-close'
+    if (!$(event.target).closest('#navbarSearch, #searchbox').length && !$(event.target).hasClass('btn-close')) {
       $('#searchbox').dropdown('hide');
       $('#searchbox-toggle-container').removeClass('bg-dark');
+      $('#searching').addClass('d-none');
     }
   });
 });

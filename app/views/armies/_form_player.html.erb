@@ -3,7 +3,12 @@
     <div class="modal-content bg-dark">
       <%= form_with model: army, local: false do |form| %>
         <div class="modal-header">
-          <h5 class="modal-title" id="Title"><%= army&.name %></h5>
+          <h5 class="modal-title w-100" id="Title"><%= army&.name %></h5>
+          <% if army.id %>
+            <div class="w-100">
+              <%= link_to '', send("army_path", army.id), remote: true, class: 'btn-Close bi bi-eye-fill text-white float-end' %>
+            </div>
+          <% end %>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

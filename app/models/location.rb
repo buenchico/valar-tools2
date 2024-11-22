@@ -20,6 +20,10 @@ class Location < ApplicationRecord
     end
   end
 
+  def title
+    self.name
+  end
+
   def search
     self.family&.name
   end

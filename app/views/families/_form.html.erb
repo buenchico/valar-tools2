@@ -4,6 +4,11 @@
       <%= form_with model: family, local: false do |form| %>
         <div class="modal-header">
           <h5 class="modal-title" id="Title"><%= family&.title %></h5>
+          <% if family.id %>
+            <div class="w-100">
+              <%= link_to '', send("family_path", family.id), remote: true, class: 'btn-Close bi bi-eye-fill text-white float-end' %>
+            </div>
+          <% end %>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -60,7 +65,7 @@
           <div class="input-group mb-3">
             <%= form.label :tier, class: 'input-group-text' %>
             <%= form.text_field :tier, class: 'form-control' %>
-          </div>          
+          </div>
           <div class="input-group mb-3">
             <%= form.label :visible, class: 'input-group-text' %>
             <div class="form-check form-switch switch-group fs-2">

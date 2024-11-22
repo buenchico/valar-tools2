@@ -4,6 +4,11 @@
       <%= form_with model: clock, local: false do |form| %>
         <div class="modal-header">
           <h5 class="modal-title" id="Title"><%= clock&.name %></h5>
+          <% if clock.id %>
+            <div class="w-100">
+              <%= link_to '', send("clock_path", clock.id), remote: true, class: 'btn-Close bi bi-eye-fill text-white float-end' %>
+            </div>
+          <% end %>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

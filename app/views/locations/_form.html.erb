@@ -4,6 +4,11 @@
       <%= form_with model: location, local: false do |form| %>
         <div class="modal-header">
           <h5 class="modal-title" id="Title"><%= location&.name %></h5>
+          <% if location.id %>
+            <div class="w-100">
+              <%= link_to '', send("location_path", location.id), remote: true, class: 'btn-Close bi bi-eye-fill text-white float-end' %>
+            </div>
+          <% end %>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -52,7 +57,7 @@
             <%= form.label :line, class: 'input-group-text ms-1' %>
             <%= form.text_field :line, class: 'form-control' %>
             <%= form.label :polygon, class: 'input-group-text ms-1' %>
-            <%= form.text_field :polygon, class: 'form-control' %>            
+            <%= form.text_field :polygon, class: 'form-control' %>
             <%= form.label :priority, class: 'input-group-text ms-1' %>
             <%= form.text_field :priority, class: 'form-control' %>
           </div>
