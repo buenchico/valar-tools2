@@ -20,7 +20,8 @@ Rails.application.routes.draw do
   end
 
   # search
-  post 'search', to:'search#search', as: 'search'
+  resources :search, only: [:index]
+  post 'search', to: 'search#search', as: 'search'
 
   # Games and Tools
   get 'settings', to: 'settings#index'

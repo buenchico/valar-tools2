@@ -290,7 +290,8 @@ es:
       add_step: 'Añadir etapa'
   search:
     title: 'Resultados para'
-    submit: 'Buscar'
+    submit: 'Buscar ...'
+    more: 'Más ... (%{count})'
   battles:
     edit:
       goto: 'Ir a %{step}'

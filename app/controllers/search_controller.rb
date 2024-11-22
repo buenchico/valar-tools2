@@ -1,9 +1,19 @@
 class SearchController < ApplicationController
+
+  def index
+    @query = params[:query]
+    multisearch(@query)
+  end
+
   def search
-    @search = params[:search]
-    if @search.present?
+    @query = params[:search]
+    multisearch(@query)
+  end
+
+  def multisearch(query)
+    if query.present?
       # Use PgSearch to search across multiple models and fields
-      search = PgSearch.multisearch(@search)
+      search = PgSearch.multisearch(query)
     else
       search = []
     end
@@ -12,7 +22,6 @@ class SearchController < ApplicationController
     search.each do | item |
       record = item.searchable_type.constantize.find(item.searchable_id)
       keep_record = false
-      puts item.searchable_type
       case item.searchable_type
       when 'Family', 'Location'
         if @current_user.is_admin?
@@ -51,6 +60,6 @@ class SearchController < ApplicationController
       end
     end
 
-    @results = results.uniq.first(10)
+    @results = results.uniq
   end
 end
