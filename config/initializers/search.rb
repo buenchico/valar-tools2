@@ -4,6 +4,8 @@ PgSearch.multisearch_options = {
       prefix: true,
       any_word: true,
     },
-    trigram: {}
+    trigram: {
+      threshold: 0.5
+    }
   }
 }
