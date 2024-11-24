@@ -14,7 +14,7 @@ $(document).on('turbolinks:load', function() {
   // Close the dropdown if clicking outside the searchbox, button, or elements with the class 'btn-close'
   $(document).on('click', function(event) {
     // Check if the clicked element has the class 'btn-close'
-    if (!$(event.target).closest('#navbarSearch, #searchbox').length && !$(event.target).hasClass('btn-close')) {
+    if (!$(event.target).closest('#navbarSearch, #searchbox').length && !$(event.target).closest('.modal').length) {
       $('#searchbox').dropdown('hide');
       $('#searchbox-toggle-container').removeClass('bg-dark');
       $('#searching').addClass('d-none');
