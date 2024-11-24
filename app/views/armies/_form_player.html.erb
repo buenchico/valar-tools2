@@ -24,7 +24,7 @@
             <%= form.select :status, @army_status.map { |k,v| [v["name"], k]}, {}, class: 'form-select', disabled: (army.status == 'dead') %>
           </div>
 
-          <% if (!@current_user.faction.fleets.nil? || @current_user.is_master?) && !@options["fleets"].nil? %>
+          <% if (!@current_user.faction.fleets.nil? || @current_user.is_master?) && !@options_armies["fleets"].nil? %>
             <div class="input-group mb-3">
               <%= form.label :board, t('activerecord.attributes.army.board'), class: 'input-group-text' %>
               <%= form.select :board,
@@ -32,7 +32,7 @@
                 @current_user.faction.fleets.map { |key, value|
                   [
                     key,
-                    { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><i class='bi bi-#{@options["fleets"][key]["icon"]}'></i> <span class='pill-tags-text'>#{@options["fleets"][key]["name"]}</span></span>".html_safe
+                    { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><i class='bi bi-#{@options_armies["fleets"][key]["icon"]}'></i> <span class='pill-tags-text'>#{@options_armies["fleets"][key]["name"]}</span></span>".html_safe
                     }
                   ]
                 },

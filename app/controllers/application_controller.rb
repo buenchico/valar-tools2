@@ -109,4 +109,18 @@ class ApplicationController < ActionController::Base
     pseudorandom_id = "#{timestamp}_#{random_hex}"
     return pseudorandom_id
   end
+
+  def get_options(tool)
+    tool.game_tools.find_by(game_id: active_game&.id)&.options
+  end
+
+  def set_options_armies
+    @attributes = @options_armies["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
+    @men = @options_armies["men"]&.sort_by { |_, v| v["sort"] }.to_h
+    @tags = @options_armies["tags"]&.sort_by { |key, _value| key }.to_h
+    @army_status = @options_armies["status"]
+    @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
+    @hp = @options_armies["hp"]
+    @fleets = @options_armies["fleets"]
+  end
 end

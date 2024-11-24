@@ -596,17 +596,11 @@ class ArmiesController < ApplicationController
 
 private
   def set_options
-    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
-    if @options.blank?
+    @options_armies = get_options(@tool)
+    if @options_armies.blank?
       redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de ejércitos'
     else
-      @attributes = @options["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
-      @men = @options["men"]&.sort_by { |_, v| v["sort"] }.to_h
-      @tags = @options["tags"]&.sort_by { |key, _value| key }.to_h
-      @army_status = @options["status"]
-      @army_types = @options["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
-      @hp = @options["hp"]
-      @fleets = @options["fleets"]
+      set_options_armies
     end
   end
 

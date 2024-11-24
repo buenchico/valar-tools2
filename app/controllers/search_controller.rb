@@ -1,4 +1,5 @@
 class SearchController < ApplicationController
+  before_action :set_options
 
   def index
     @query = params[:query]
@@ -61,5 +62,10 @@ class SearchController < ApplicationController
     end
 
     @results = results.uniq
+  end
+private
+  def set_options
+    @options_armies = get_options(Tool&.find_by(name: "armies"))
+    set_options_armies
   end
 end

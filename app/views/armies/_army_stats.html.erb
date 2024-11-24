@@ -8,7 +8,7 @@
     <p class="card-text">Hay <span id="count">X ejércitos</span> visibles con un total de <span id="men">X</span> hombres y una fuerza de <span id="str">X ejércitos</span>.</p>
   </div>
 </div>
-<% if !faction.fleets.nil? && !@options["fleets"].nil? %>
+<% if !faction.fleets.nil? && !@options_armies["fleets"].nil? %>
   <div class="col-md-4 col-sm-12 card bg-dark border border-success text-white mb-3 faction-name">
     <div class="card-body">
       <div class="float-end">
@@ -17,9 +17,9 @@
       <p class="fs-3"><strong><i class="bi bi-anchor"></i> Flotas</strong></p>
       <% faction.fleets.each do | fleet, number | %>
         <% board = @armies.where(board: fleet).length %>
-        <p>Dispones de <%= number.to_s + " " + I18n.t("fleet", count: number).downcase %> de <%= @options["fleets"][fleet]["name"] %>. <%= board.to_s + " " + I18n.t("verbs.estar", count: board) %> en uso.</p>
+        <p>Dispones de <%= number.to_s + " " + I18n.t("fleet", count: number).downcase %> de <%= @options_armies["fleets"][fleet]["name"] %>. <%= board.to_s + " " + I18n.t("verbs.estar", count: board) %> en uso.</p>
         <% if board > number %>
-          <p class="bg-danger">Estás usando más <%= @options["fleets"][fleet]["name"].downcase %> de los que dispones, por favor, desembarca algunas tropas.</p>
+          <p class="bg-danger">Estás usando más <%= @options_armies["fleets"][fleet]["name"].downcase %> de los que dispones, por favor, desembarca algunas tropas.</p>
         <% end %>
       <% end %>
     </div>
