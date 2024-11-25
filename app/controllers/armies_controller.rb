@@ -598,7 +598,7 @@ private
   def set_options
     @options_armies = get_options(@tool)
     if @options_armies.blank?
-      redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de ejércitos'
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
       set_options_armies
     end

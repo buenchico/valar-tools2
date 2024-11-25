@@ -123,4 +123,10 @@ class ApplicationController < ActionController::Base
     @hp = @options_armies["hp"]
     @fleets = @options_armies["fleets"]
   end
+
+  def set_options_clocks
+    @sizes = @options_clocks["sizes"]
+    @outcomes = @options_clocks["outcomes"]
+    @styles = @options_clocks["styles"]
+  end
 end
