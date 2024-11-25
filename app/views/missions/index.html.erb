@@ -38,9 +38,9 @@
             selected: @options["default_recipe"]
           ),
           { include_blank: false },
-          class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white z-10000',
+          class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
           multiple: false,
-          data: { "live-search": "true", "default-recipe-id": @options["default_recipe"] }
+          data: { "live-search": "true", "default-recipe-id": @options["default_recipe"], "dropup-auto": "false" }
         %>
       </div>
     <% end %>
