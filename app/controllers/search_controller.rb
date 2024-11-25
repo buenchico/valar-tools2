@@ -12,57 +12,65 @@ class SearchController < ApplicationController
   end
 
   def multisearch(query)
-    if query.present?
-      # Use PgSearch to search across multiple models and fields
-      search = PgSearch.multisearch(query)
-    else
-      search = []
-    end
+    return [] unless query.present?
+
+    # Use pagination on PgSearch results
+    search = PgSearch.multisearch(query)
+
+    # Group results by searchable_type
+    grouped_results = search.group_by(&:searchable_type)
 
     results = []
-    search.each do | item |
-      record = item.searchable_type.constantize.find(item.searchable_id)
-      keep_record = false
-      case item.searchable_type
+
+    grouped_results.each do |type, items|
+      ids = items.map(&:searchable_id)
+
+      # Fetch all records of this type in one query
+      records = type.constantize.where(id: ids).to_a
+
+      # Filter records based on conditions
+      filtered_records = filter_records_by_type(type, records)
+      results.concat(filtered_records)
+    end
+
+    # Paginate the array of results
+    @results = Kaminari.paginate_array(results.uniq).page(params[:page]).per(10)
+    @count = @results.total_count
+  end
+
+  def filter_records_by_type(type, records)
+    records.select do |record|
+      case type
       when 'Family', 'Location'
         if @current_user.is_admin?
-          keep_record = true
-        elsif (@current_user.is_master? && record.game == active_game)
-          keep_record = true
-        elsif (record.visible == true && record.game == active_game)
-          keep_record = true
+          true
+        elsif @current_user.is_master? && record.game == active_game
+          true
+        elsif record.visible && record.game == active_game
+          true
         end
       when 'Clock'
-        if @current_user.is_master?
-          keep_record = true
-        elsif record.visible
-          keep_record = true
-        end
+        @current_user.is_master? || record.visible
       when 'Faction'
         if @current_user.is_admin?
-          keep_record = true
-        elsif (@current_user.is_master? && record.games.include?(active_game))
-          keep_record = true
-        elsif (record.active == true && record.games.include?(active_game))
-          keep_record = true
+          true
+        elsif @current_user.is_master? && record.games.include?(active_game)
+          true
+        elsif record.active && record.games.include?(active_game)
+          true
         end
       when 'Army'
         if @current_user.is_master?
-          keep_record = true
-        elsif (@current_user && record.factions.include?(@current_user.faction))
-          keep_record = true
+          true
+        elsif @current_user && record.factions.include?(@current_user.faction)
+          true
         end
       else
-        keep_record = true
-      end
-
-      if keep_record == true
-        results << record
+        true
       end
     end
-
-    @results = results.uniq
   end
+
 private
   def set_options
     @options_armies = get_options(Tool&.find_by(name: "armies"))

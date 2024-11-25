@@ -21,7 +21,9 @@
       <div><%= render item.class.to_s.downcase, item: item %></div>
     </div>
   <% end %>
-  <% if (@results.length > 6 && action_name == 'search') %>
-    <%= link_to t('search.more', count: (@results.length - 6)), search_path(query: @query) %>
+  <% if (@count > 6 && action_name == 'search') %>
+    <%= link_to t('search.more', count: (@count - 6)), search_path(query: @query) %>
   <% end %>
 </div>
+
+<%= paginate @results, theme: 'bootstrap-5', pagination_class: "pagination-sm flex-wrap justify-content-center", nav_class: "ps-3 ms-1 d-inline-block" %>
