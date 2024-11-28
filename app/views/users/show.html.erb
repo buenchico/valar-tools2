@@ -1,0 +1,10 @@
+<%= render template: 'users/index' %>
+
+<script type="text/javascript">
+  $(document).on('turbolinks:load.show', function() {
+    <%= render template: 'users/show', formats: [:js] %>
+  });
+  $(document).on('turbolinks:before-render', function() {
+    $(document).off('turbolinks:load.show');
+  });
+</script>

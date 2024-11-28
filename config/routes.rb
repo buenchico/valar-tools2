@@ -34,7 +34,7 @@ Rails.application.routes.draw do
 
   resources :tools, only: [:new, :edit, :create, :update, :destroy ]
 
-  resources :users, only: [:index, :edit, :update ]
+  resources :users, only: [:index, :edit, :update, :show ]
   post 'users/sync_users', to: 'users#sync_users', as: 'sync_users'
 
   resources :factions

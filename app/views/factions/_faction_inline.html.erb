@@ -6,7 +6,7 @@
     <p class="mb-0">
       <% if faction.users.present? %>
         <% players = faction.users %>
-        <%= t('activerecord.attributes.user.player', count: players.count) %>: <%= players.pluck(:player).join(", ") %>
+        <%= t('activerecord.attributes.user.player', count: players.count) %>: <%= players.map { |player| link_to(player.player, user_path(player), class: 'text-white', remote: true) }.join(", ").html_safe %>
       <% end %>
     </p>
     <p class="mb-0">
