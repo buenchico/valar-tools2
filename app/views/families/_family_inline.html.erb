@@ -1,0 +1,15 @@
+<% if family.locations.present? %>
+  <p>
+    <%= t('activerecord.models.location', count: family.locations.count) %>:
+    <%= family.locations.map { |location| link_to(location.name, location_path(location), class: 'text-white', remote: true) }.join(", ").html_safe %>
+  </p>
+<% end %>
+
+<% if @current_user.is_master? %>
+  <p>
+    lealtades
+  </p>
+  <p>
+    armies
+  </p>
+<% end %>
