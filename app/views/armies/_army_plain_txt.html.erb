@@ -28,5 +28,4 @@
   <%= traits.blank? ? nil : " [" + traits.join(", ") + "] " %>
   FUE:
 </span>
-<span class="visible str_display"><%= army.send("strength") %></span>
 <span class="str_display"><%= army.strength_calc("str")[:total] %></span>
