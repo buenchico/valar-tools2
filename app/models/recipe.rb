@@ -22,5 +22,9 @@ class Recipe < ApplicationRecord
 
   def title
     self.name
-  end  
+  end
+
+  def visible
+    true
+  end
 end

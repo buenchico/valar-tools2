@@ -9,4 +9,8 @@ class Faction < ApplicationRecord
   validates :name, presence: true, uniqueness: true, format: { without: /\s/ }
   validates :long_name, presence: true, uniqueness: true
   accepts_nested_attributes_for :games
+
+  def visible
+    self.active
+  end
 end

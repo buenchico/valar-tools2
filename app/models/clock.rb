@@ -30,6 +30,16 @@ class Clock < ApplicationRecord
     self.family&.name
   end
 
+  def size_h
+    if self.style == 'memory'
+      nil
+    elsif self.style == 'clock'
+      self.size
+    elsif self.style == 'scale'
+      (self.size / 2)
+    end
+  end
+
 private
   def log_changes
     if self.persisted? && self.changes.keys != ['logs'] # Check if the record already exists (for updates) and if the only changes are not of the logs

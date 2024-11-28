@@ -5,8 +5,12 @@
     <% items = @results.first(6) %>
   <% end %>
 
+  <% if items.length == 0 %>
+    <%= t('search.none') %> <%= @query %>
+  <% end %>
+
   <% items.each do | item | %>
-    <div class="border border-primary mb-3 ps-2 p-1">
+    <div class="border border-primary mb-3 ps-2 p-1 <%= item.visible ? '' : 'inactive' %>">
       <div class="d-flex align-items-center">
         <h4 class="me-3">
           <%= puts item.class %>
@@ -17,13 +21,14 @@
           <%= t('activerecord.models.' + item.class.to_s.downcase, count: 1) %>
         </span>
       </div>
-      <div></div>
-      <div><%= render item.class.to_s.downcase, item: item %></div>
+      <div>
+        <%= render item.class.to_s.downcase, item: item %>
+      </div>
     </div>
   <% end %>
   <% if (@count > 6 && action_name == 'search') %>
     <%= link_to t('search.more', count: (@count - 6)), search_path(query: @query) %>
+  <% else %>
+    <%= paginate @results, theme: 'bootstrap-5', pagination_class: "pagination-sm flex-wrap justify-content-center", nav_class: "d-inline-block" %>
   <% end %>
 </div>
-
-<%= paginate @results, theme: 'bootstrap-5', pagination_class: "pagination-sm flex-wrap justify-content-center", nav_class: "ps-3 ms-1 d-inline-block" %>

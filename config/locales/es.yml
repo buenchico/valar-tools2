@@ -135,7 +135,9 @@ es:
         fleets: "Flotas"
         fleets_notes: "Posición de las flotas"
       user:
-        player: "Jugador"
+        player:
+          one: "Jugador"
+          other: "Jugadores"
         discourse_id: "Discourse_id"
         avatar_url: "Avatar URL"
         faction: "Facción"
@@ -301,6 +303,7 @@ es:
     title: 'Resultados para'
     submit: 'Buscar ...'
     more: 'Más ... (%{count})'
+    none: 'Ningun resultado para'
   battles:
     edit:
       goto: 'Ir a %{step}'

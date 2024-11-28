@@ -91,7 +91,7 @@ private
 
   def set_options
     @options_clocks = get_options(@tool)
-    if @options.blank?
+    if @options_clocks.blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
       set_options_clocks
