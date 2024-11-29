@@ -36,6 +36,11 @@ gem 'kramdown', '~> 2.4'
 gem 'leaflet-rails'
 gem 'leaflet-draw-rails'
 gem 'csv'
+# Use pg_search for native searches
+gem 'pg_search', '~> 2.3', '>= 2.3.7'
+# Use pagination
+gem 'kaminari', '~> 1.2', '>= 1.2.2'
+gem 'bootstrap5-kaminari-views', '~> 0.0.1'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
@@ -52,6 +57,8 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'faker'
+
+  gem 'wdm', '>= 0.1.0' if Gem.win_platform?
 end
 
 group :development do

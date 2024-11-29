@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_19_095739) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_22_112923) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
+
+  create_table "pg_search_documents", id: :serial, force: :cascade do |t|
+    t.text "content"
+    t.text "app_name", default: "valar"
+    t.string "searchable_type", limit: 255
+    t.integer "searchable_id"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
+  end
 
   create_table "armies", force: :cascade do |t|
     t.string "name"

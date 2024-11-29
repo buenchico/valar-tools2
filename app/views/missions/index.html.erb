@@ -7,15 +7,15 @@
 
   <div class="float-end"%>
     <%= link_to missions_stats_url, class: 'link-unstyled mx-2' do %>
-      <i class="bi <%= @options['stats']['icon'] %>" data-bs-toggle="tooltip" title="<%= @options["stats"]["name"] %>"></i>
+      <i class="bi <%= @options_missions['stats']['icon'] %>" data-bs-toggle="tooltip" title="<%= @options_missions["stats"]["name"] %>"></i>
     <% end %>
     <% if @current_user&.is_master? %>
       <%= link_to missions_list_url, class: 'link-unstyled mx-2' do %>
-        <i class="bi <%= @options['list']['icon'] %>" data-bs-toggle="tooltip" title="<%= @options["list"]["name"] %>"></i>
+        <i class="bi <%= @options_missions['list']['icon'] %>" data-bs-toggle="tooltip" title="<%= @options_missions["list"]["name"] %>"></i>
       <% end %>
     <% end %>
-    <% if @options["rules"].present? %>
-      <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-html="true" title="<%= Kramdown::Document.new(@options["rules"] || '').to_html.html_safe %>"></i>
+    <% if @options_missions["rules"].present? %>
+      <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-html="true" title="<%= Kramdown::Document.new(@options_missions["rules"] || '').to_html.html_safe %>"></i>
     <% end %>
     </div>
 </div>
@@ -35,12 +35,12 @@
                 @recipes.select { |recipe| recipe.section == section }.map { |recipe| [recipe.name, recipe.id] }
               ]
             end,
-            selected: @options["default_recipe"]
+            selected: @options_missions["default_recipe"]
           ),
           { include_blank: false },
           class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
           multiple: false,
-          data: { "live-search": "true", "default-recipe-id": @options["default_recipe"] }
+          data: { "live-search": "true", "default-recipe-id": @options_missions["default_recipe"], "dropup-auto": "false" }
         %>
       </div>
     <% end %>
@@ -49,7 +49,7 @@
   <div class="col h2">
     <div class="btn btn-lg btn-outline-success float-end" id="fortune-button">
       <i class="bi bi-clover-fill"></i>
-      <%= @options["fortune"]["long_name"] %>
+      <%= @options_missions["fortune"]["long_name"] %>
     </div>
   </div>
 </div>
@@ -62,16 +62,16 @@
           <%= form_with url: missions_calculate_path, local: false do |form| %>
             <%= form.submit t('.calculate'), class: "btn btn-primary mb-3", id: "calculate" %>
             <%= form.hidden_field :fortune %>
-            <%= form.hidden_field :recipe_id, value: @options["default_recipe"] %>
+            <%= form.hidden_field :recipe_id, value: @options_missions["default_recipe"] %>
 
             <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.speed'), class: 'input-group-text' %>
-              <%= form.select :speed, (@options["speed"].map { |speed| [speed["name"].capitalize + (speed["days"].present? ? (" (" + speed["days"].to_s + ")") : ""), speed["time"]]}), { selected: @default_recipe.speed }, class: 'form-select' %>
+              <%= form.select :speed, (@options_missions["speed"].map { |speed| [speed["name"].capitalize + (speed["days"].present? ? (" (" + speed["days"].to_s + ")") : ""), speed["time"]]}), { selected: @default_recipe.speed }, class: 'form-select' %>
             </div>
             <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.difficulty'), class: 'input-group-text' %>
-              <%= form.select :difficulty, (@options["difficulty"].map { |dif| [dif["name"].capitalize + " (" + number_to_modifier(dif["value"]) + ")", dif["value"]] }.sort_by { |subarray| -subarray[1] }), { selected: @default_recipe.difficulty }, class: 'form-select' %>
-            </div>            
+              <%= form.select :difficulty, (@options_missions["difficulty"].map { |dif| [dif["name"].capitalize + " (" + number_to_modifier(dif["value"]) + ")", dif["value"]] }.sort_by { |subarray| -subarray[1] }), { selected: @default_recipe.difficulty }, class: 'form-select' %>
+            </div>
             <div class="input-group mb-3 fortune-field">
               <%= form.label t('activerecord.attributes.recipe.tokens'), class: 'input-group-text' %>
               <%= form.number_field :tokens, class: 'form-control', value: 0, step: 1, min: 0, max: 12 %>
@@ -136,10 +136,10 @@
           <strong><span id="title"><%= @default_recipe.name %></span></strong>
         </div>
         <div class="ms-2 fortune-field">
-          <strong><span id="speed_text"><%= @options["speed"][@default_recipe.speed]["name"].capitalize %><%= (@default_recipe.speed == -1) ? '' : ' (' + @options["speed"][@default_recipe.speed]["days"].to_s + ')'%></span></strong>
+          <strong><span id="speed_text"><%= @options_missions["speed"][@default_recipe.speed]["name"].capitalize %><%= (@default_recipe.speed == -1) ? '' : ' (' + @options_missions["speed"][@default_recipe.speed]["days"].to_s + ')'%></span></strong>
         </div>
         <div class="ms-2 fortune-field">
-          <strong><span id="difficulty_text"><%= @options["difficulty"].find { |item| item["value"] == @default_recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(@default_recipe.difficulty) %>)</span></strong>
+          <strong><span id="difficulty_text"><%= @options_missions["difficulty"].find { |item| item["value"] == @default_recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(@default_recipe.difficulty) %>)</span></strong>
         </div>
         <div id="desc">
           <%= Kramdown::Document.new(replace_traits(@default_recipe.description)  || "").to_html.html_safe %>

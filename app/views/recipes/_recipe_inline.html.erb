@@ -1,0 +1,14 @@
+<div class="mb-1">
+  <%= t('activerecord.attributes.recipe.section') %>:
+  <%= recipe.section.capitalize %>
+</div>
+
+<div class="mb-1">
+  <%= t('activerecord.attributes.recipe.speed') %>:
+  <%= @options_missions["speed"][recipe.speed]["name"].capitalize %>
+</div>
+
+<div class="mb-1">
+  <%= t('activerecord.attributes.recipe.difficulty') %>:
+  <%= @options_missions["difficulty"].find { |item| item["value"] == recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(recipe.difficulty)%>)
+</div>

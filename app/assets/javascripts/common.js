@@ -1,3 +1,47 @@
+// Trigger searchbox
+$(document).on('turbolinks:load', function() {
+  $('#navbarSearch').on('click', function(event) {
+    event.preventDefault(); // Prevent the default link behavior
+    $('#searchbox').dropdown('show'); // Trigger the dropdown show method
+    $('#searchbox-toggle-container').addClass('bg-dark');
+    $('#search').focus();
+  });
+
+  $('#search-form').on('ajax:beforeSend', function() {
+    $('#searching').removeClass('d-none')
+  });
+
+  // Close the dropdown if clicking outside the searchbox, button, or elements with the class 'btn-close'
+  $(document).on('click', function(event) {
+    // Check if the clicked element has the class 'btn-close'
+    if (!$(event.target).closest('#navbarSearch, #searchbox').length && !$(event.target).closest('.modal').length) {
+      $('#searchbox').dropdown('hide');
+      $('#searchbox-toggle-container').removeClass('bg-dark');
+      $('#searching').addClass('d-none');
+    }
+  });
+});
+
+// Form control clearable icon
+$(document).on('ready', function () {
+    $(function() {
+      $('.form-control-clearable').on('click', function() {
+        var $input = $(this).closest(".input-group").find(".form-control");
+        $input.val("").trigger("input");
+        $(this).find("i").addClass("invisible");
+      });
+    });
+
+    $("input").on("input", function() {
+      var clearButton = $(this).closest(".input-group").find(".form-control-clearable");
+      if ($(this).val() !== "") {
+        clearButton.find("i").removeClass("invisible");
+      } else {
+        clearButton.find("i").addClass("invisible");
+      }
+    });
+});
+
 // Toggle visibility
 $(document).on('turbolinks:load', function() {
   $('.toggle-visibility').on('click', function() {

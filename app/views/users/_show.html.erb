@@ -1,0 +1,16 @@
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title">
+          <%= image_tag(user.avatar_url, :alt => user.player, id: user.player, class: 'icon-table avatar') if user.avatar_url.present? %>
+          <%= user.player %>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-success">Facción: <%= user.faction.title %></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,7 @@
 class Army < ApplicationRecord
+  include PgSearch::Model
+  multisearchable against: [:name, :group, :position, :notes, :search]
+
   before_validation :set_options
   before_validation :clean_tags # New callback to clean empty elements in :tags
 
@@ -20,9 +23,17 @@ class Army < ApplicationRecord
 
   before_save :log_changes
 
+  def title
+    self.name
+  end
+
+  def search
+    self.family&.name
+  end
+
   def clean_tags
     self.tags = self.tags.reject(&:blank?) if self.tags.is_a?(Array)
-  end  
+  end
 
   def set_options
     active_game = Game.find_by(active: true)

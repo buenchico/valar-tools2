@@ -1,0 +1,9 @@
+<% provide(:title, "#{t('search.title')} \"#{@query}\"") %>
+<% provide(:icon, 'bi-search') %>
+
+<div class="tool-title">
+  <i class="white <%= yield(:icon) %>"></i>
+  <%= yield(:title) %>
+</div>
+
+<%= render 'results', result: @results %>

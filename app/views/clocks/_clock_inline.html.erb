@@ -1,0 +1,28 @@
+<div class="d-flex align-items-center">
+  <div class="bg-<%= @outcomes[clock.outcome.to_s]['color'] %> clock-inline d-flex justify-content-center align-items-center">
+    <% if clock.style == 'memory' %>
+      <i class="bi bi-chat-dots w-100 h-100"></i>
+    <% else %>
+      <%= image_tag(clock.style + "_" + clock.size.to_s + "-" + clock.status.to_s + ".svg", class: clock.style + "-svg w-100", id: "clock-svg_" + clock.id.to_s) %>
+    <% end %>
+  </div>
+
+  <div class="ms-2 d-flex flex-column align-self-start">
+    <p class="mb-0"><%= @styles[clock.style]["name"] %></p>
+    <% if clock.size_h %>
+      <p class="mb-0"><%= t('activerecord.attributes.clock.size') + ": " + clock.status.to_s + "/" + clock.size_h.to_s %></p>
+      <% if clock.style == 'scale' %>
+        <p class="mb-0"><%= clock.left %> vs. <%= clock.right %></p>
+      <% end %>
+    <% end %>
+    <% if clock.family %>
+      <p class="mb-0"><%= link_to clock.family.title, clock.family, remote: true, class: "text-white" %></p>
+    <% end %>
+  </div>
+</div>
+
+<% if clock.description %>
+  <div>
+    <%= clock.description %>
+  </div>
+<% end %>

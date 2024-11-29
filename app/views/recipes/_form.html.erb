@@ -3,7 +3,12 @@
     <div class="modal-content bg-dark">
       <%= form_with model: recipe, local: false do |form| %>
         <div class="modal-header">
-          <h5 class="modal-title" id="Title"><%= recipe&.name %></h5>
+          <h5 class="modal-title w-100" id="Title"><%= recipe&.name %></h5>
+          <% if recipe.id %>
+            <div class="w-100">
+              <%= link_to '', send("recipe_path", recipe.id), remote: true, class: 'btn-Close bi bi-eye-fill text-white float-end' %>
+            </div>
+          <% end %>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -13,15 +18,15 @@
           </div>
           <div class="input-group mb-3">
             <%= form.label :section, class: 'input-group-text' %>
-            <%= form.select :section, options_for_select(@options["sections"], @recipe.section), {}, class: 'form-select' %>
+            <%= form.select :section, options_for_select(@options_missions["sections"], @recipe.section), {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :speed, class: 'input-group-text' %>
-            <%= form.select :speed, options_for_select(@options["speed"].map { |value| [value["name"].capitalize, value["time"]] }, recipe.speed), {}, class: 'form-select' %>
+            <%= form.select :speed, options_for_select(@options_missions["speed"].map { |value| [value["name"].capitalize, value["time"]] }, recipe.speed), {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :difficulty, class: 'input-group-text' %>
-            <%= form.select :difficulty, options_for_select(@options["difficulty"].map { |value| [value["name"].capitalize + " (" + number_to_modifier(value["value"]) + ")", value["value"]] }, recipe.difficulty), {}, class: 'form-select' %>
+            <%= form.select :difficulty, options_for_select(@options_missions["difficulty"].map { |value| [value["name"].capitalize + " (" + number_to_modifier(value["value"]) + ")", value["value"]] }, recipe.difficulty), {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :description, class: 'input-group-text' %>

@@ -12,7 +12,7 @@
         <th scope="col"><%= t('activerecord.attributes.family.faction_id') %></th>
         <th scope="col" data-sorter="false"><%= t('activerecord.attributes.family.description') %></th>
         <% if @current_user&.is_master? %>
-          <% @options["loyalties"].each do |value| %>
+          <% @options_families["loyalties"].each do |value| %>
             <th scope="col"><%= t('activerecord.attributes.family.loyalty') %> <%= value %></th>
           <% end %>
           <th scope="col" colspan="3" data-bs-toggle="tooltip" data-bs-placement="left" title="HP alzados de HP totales leva (sangrado). HP muertos">Ejércitos</th>

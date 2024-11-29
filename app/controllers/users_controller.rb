@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :check_master, except: [:index]
   before_action :set_tool
-  before_action :set_user, only: [:edit, :update]
+  before_action :set_user, only: [:edit, :update, :show]
 
   def index
     inactive_faction_id = Faction.find_by(name: 'player')&.id

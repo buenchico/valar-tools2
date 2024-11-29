@@ -4,6 +4,11 @@
       <%= form_with model: location, local: false do |form| %>
         <div class="modal-header">
           <h5 class="modal-title" id="Title"><%= location&.name %></h5>
+          <% if location.id %>
+            <div class="w-100">
+              <%= link_to '', send("location_path", location.id), remote: true, class: 'btn-Close bi bi-eye-fill text-white float-end' %>
+            </div>
+          <% end %>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -19,12 +24,12 @@
             <%= form.label :description, class: 'input-group-text' %>
             <%= form.text_area :description, class: 'form-control' %>
           </div>
-          <% if @options["tags"] != "false" %>
+          <% if @options_locations["tags"] != "false" %>
             <div class="input-group mb-3">
               <%= form.label :tags, class: 'input-group-text' %>
               <%= form.select :tags,
                 options_for_select(
-                  @options["tags"].map { | tag |
+                  @options_locations["tags"].map { | tag |
                     [
                       tag,
                       { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><span class='pill-tags-text'>#{tag}</span></span>".html_safe
@@ -52,14 +57,14 @@
             <%= form.label :line, class: 'input-group-text ms-1' %>
             <%= form.text_field :line, class: 'form-control' %>
             <%= form.label :polygon, class: 'input-group-text ms-1' %>
-            <%= form.text_field :polygon, class: 'form-control' %>            
+            <%= form.text_field :polygon, class: 'form-control' %>
             <%= form.label :priority, class: 'input-group-text ms-1' %>
             <%= form.text_field :priority, class: 'form-control' %>
           </div>
 
           <div class="input-group mb-3">
             <%= form.label :location_type, class: 'input-group-text' %>
-            <%= form.select :location_type, @options["types"].map { |key, value| [value["name"],key] }, {}, class: 'form-select' %>
+            <%= form.select :location_type, @options_locations["types"].map { |key, value| [value["name"],key] }, {}, class: 'form-select' %>
           </div>
 
           <div class="input-group mb-3">

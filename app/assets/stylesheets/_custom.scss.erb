@@ -62,6 +62,11 @@ body {
   border-radius: 0 !important;
 }
 
+.form-control:focus {
+	border-color: #0f82af; /* Use #0f82af for the border */
+	box-shadow: 0 0 0 0.25rem rgba(15, 130, 175, 0.5); /* Shadow with a soft #0f82af tint */
+}
+
 :disabled {
   cursor: not-allowed !important;
 }
@@ -86,7 +91,7 @@ body {
   border-radius: 0 !important;
 }
 
-/* Text area submit */
+/* Text area s-ubmit */
 
 .textarea-submit {
   position: absolute;
@@ -170,11 +175,6 @@ body {
 
 /* header */
 
-#navbar-custom {
-  height: 60px;
-  z-index: 1;
-}
-
 #nav-logo {
   height: 40px;
 }
@@ -197,11 +197,41 @@ body {
 }
 
 .nav-item:hover {
-  background-color: #313131;
+  background-color: var(--bs-dark);
+}
+
+.nav-item.dropdown:has(.dropdown-toggle.show) {
+  background-color: var(--bs-dark);
 }
 
 .dropdown-toggle::after {
   content: none !important;
+}
+
+.searchbox-container {
+  position: absolute;
+  width: 90%;
+  max-width: 640px;
+  max-height: 70vh;
+  overflow-y: auto; /* Enables vertical scrolling */
+}
+
+/* Kaminari */
+
+.page-link {
+  border-radius: 0 !important;
+	position: relative;
+	display: block;
+	padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+	font-size: var(--bs-pagination-font-size);
+	color: var(--bs-light);
+	text-decoration: none;
+	background-color: var( --bs-dark);
+	border: var(--bs-pagination-border-width) solid var(--bs-primary);
+}
+
+.page-link.disabled {
+  background-color: var( --bs-dark);
 }
 
 /* tools  */
@@ -271,6 +301,14 @@ body {
 }
 
 /* Forms */
+
+/* Form clear button */
+.form-control-clearable {
+  position: relative !important;
+  margin-left: -35px;
+  z-index: 100 !important;
+}
+
 /* Switches with input group */
 .switch-group {
   margin-top: 0 !important;
@@ -425,6 +463,18 @@ body {
   width: 250px;
   height: 300px;
 }
+
+.clock-inline {
+  width: 60px;
+  height: 60px;
+  font-size: 60px; /* Ensure the icon scales properly */
+}
+
+.clock-inline .bi {
+  display: block;
+  margin-top: -38px;
+}
+
 
 /* map */
 

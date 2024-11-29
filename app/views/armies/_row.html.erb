@@ -12,9 +12,9 @@
   <%= @army_status[army.status]["name"] %>
   <% if !army.board.blank? %>
     <span class='badge rounded-pill pill-tags bg-success'>
-      <i class='bi bi-<%= @options["fleets"].fetch(army.board, {"icon" => ''})["icon"] %>'></i>
+      <i class='bi bi-<%= @options_armies["fleets"].fetch(army.board, {"icon" => ''})["icon"] %>'></i>
       <span class='pill-tags-text'>
-        <%= @options["fleets"].fetch(army.board, {"name" => army.board})["name"] %>
+        <%= @options_armies["fleets"].fetch(army.board, {"name" => army.board})["name"] %>
       </span>
     </span>
   <% end %>

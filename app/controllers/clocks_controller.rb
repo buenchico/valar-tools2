@@ -90,13 +90,11 @@ private
   end
 
   def set_options
-    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
-    if @options.blank?
+    @options_clocks = get_options(@tool)
+    if @options_clocks.blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      @sizes = @options["sizes"]
-      @outcomes = @options["outcomes"]
-      @styles = @options["styles"]
+      set_options_clocks
     end
   end
 

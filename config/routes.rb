@@ -19,6 +19,10 @@ Rails.application.routes.draw do
     post 'login_admin', to: 'sessions#create_master', as: 'login_admin'
   end
 
+  # search
+  resources :search, only: [:index]
+  post 'search', to: 'search#search', as: 'search'
+
   # Games and Tools
   get 'settings', to: 'settings#index'
 
@@ -30,7 +34,7 @@ Rails.application.routes.draw do
 
   resources :tools, only: [:new, :edit, :create, :update, :destroy ]
 
-  resources :users, only: [:index, :edit, :update ]
+  resources :users, only: [:index, :edit, :update, :show ]
   post 'users/sync_users', to: 'users#sync_users', as: 'sync_users'
 
   resources :factions
@@ -53,7 +57,7 @@ Rails.application.routes.draw do
   get 'armies/get_armies', to: 'armies#get_armies', as: 'get_armies'
   get 'armies/get_discourse_armies/:faction_id/:group', to: 'armies#get_discourse_armies'
   post 'armies/post_discourse_armies', to: 'armies#post_discourse_armies'
-  resources :armies, :except => [:show]
+  resources :armies
 
   resources :locations
   get '/lists/locations', to: 'locations#list', as: 'locations_list'
@@ -88,7 +92,7 @@ Rails.application.routes.draw do
   post 'missions/recipe', to: 'missions#get_recipe', as: 'get_recipe'
   post 'missions/calculate', to: 'missions#calculate'
 
-  resources :recipes, only: [:index, :new, :edit, :create, :update, :destroy ]
+  resources :recipes
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

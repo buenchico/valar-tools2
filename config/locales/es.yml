@@ -38,6 +38,15 @@ es:
       title: '404 Page Not Found'
       text: 'La página que buscas se ha perdido más allá del Muro.'
   helpers:
+    # kaminari
+    page_entries_info:
+      more_pages:
+        display_entries: Mostrando <b>%{first}&nbsp;-&nbsp;%{last}</b> %{entry_name} de <b>%{total}</b> en total
+      one_page:
+        display_entries:
+          one: Mostrando <b>%{count}</b> %{entry_name}
+          other: Mostrando <b>un total de %{count}</b> %{entry_name}
+          zero: No se han encontrado %{entry_name}
     action:
       view: 'Ver %{thing}'
       edit: 'Editar %{thing}'
@@ -126,7 +135,9 @@ es:
         fleets: "Flotas"
         fleets_notes: "Posición de las flotas"
       user:
-        player: "Jugador"
+        player:
+          one: "Jugador"
+          other: "Jugadores"
         discourse_id: "Discourse_id"
         avatar_url: "Avatar URL"
         faction: "Facción"
@@ -136,6 +147,7 @@ es:
         branch: "Rama"
         visible: "Visible"
         lord_id: "Señor"
+        vassals: "Vasallos"
         game_id: "Partida"
         faction_id: "Facción"
         description: "Descripción"
@@ -284,10 +296,17 @@ es:
       no_date: "Sin fecha"
       no_assigned: "sin asignar"
       assigned_to: "Master"
+  map:
+    flyto: "Ver en mapa"
   travel:
     index:
       calculate: 'Calcular'
       add_step: 'Añadir etapa'
+  search:
+    title: 'Resultados para'
+    submit: 'Buscar ...'
+    more: 'Más ... (%{count})'
+    none: 'Ningun resultado para'
   battles:
     edit:
       goto: 'Ir a %{step}'
@@ -374,3 +393,11 @@ es:
       nothing: 'Nada que actualizar.'
       validation: 'La palabra de validación es incorrecta'
     click_to_create: 'Haz click para crear «{tag}»'
+  views:
+    # kaminari
+    pagination:
+      first: "&laquo; Primera"
+      last: "Última &raquo;"
+      next: Siguiente &rsaquo;
+      previous: "&lsaquo; Anterior"
+      truncate: "&hellip;"

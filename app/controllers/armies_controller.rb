@@ -1,6 +1,6 @@
 class ArmiesController < ApplicationController
   before_action :set_tool
-  before_action :set_army, only: [:edit, :edit_notes, :update, :destroy]
+  before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show]
   before_action :set_options
   before_action :set_factions, only: [:index, :edit, :edit_multiple, :new, :stats]
   before_action :army_stats, only: [:index, :get_armies]
@@ -24,6 +24,9 @@ class ArmiesController < ApplicationController
       @faction = @current_user.faction
       @armies = @faction.armies.where(visible: true).order(:id)
     end
+  end
+
+  def show
   end
 
   def get_armies
@@ -593,17 +596,11 @@ class ArmiesController < ApplicationController
 
 private
   def set_options
-    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
-    if @options.blank?
-      redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de ejércitos'
+    @options_armies = get_options(@tool)
+    if @options_armies.blank?
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      @attributes = @options["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
-      @men = @options["men"]&.sort_by { |_, v| v["sort"] }.to_h
-      @tags = @options["tags"]&.sort_by { |key, _value| key }.to_h
-      @army_status = @options["status"]
-      @army_types = @options["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
-      @hp = @options["hp"]
-      @fleets = @options["fleets"]
+      set_options_armies
     end
   end
 

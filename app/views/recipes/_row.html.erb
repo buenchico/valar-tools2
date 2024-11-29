@@ -5,10 +5,10 @@
   <%= recipe.section.capitalize %>
 </td>
 <td>
-  <%= @options["speed"][recipe.speed]["name"].capitalize %>
+  <%= @options_missions["speed"][recipe.speed]["name"].capitalize %>
 </td>
 <td>
-  <%= @options["difficulty"].find { |item| item["value"] == recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(recipe.difficulty)%>)
+  <%= @options_missions["difficulty"].find { |item| item["value"] == recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(recipe.difficulty)%>)
 </td>
 <td>
   <%= Kramdown::Document.new(replace_traits(truncate(recipe.description, length: 60, omission: '...')  || "")).to_html.html_safe %>

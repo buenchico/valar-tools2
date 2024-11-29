@@ -1,4 +1,7 @@
 class Location < ApplicationRecord
+  include PgSearch::Model
+  multisearchable against: [:name_es, :name_en, :description, :search]
+
   belongs_to :game
   belongs_to :family, optional: true
   belongs_to :region, class_name: "Location", optional: true, foreign_key: "region_id"
@@ -14,6 +17,38 @@ class Location < ApplicationRecord
       self.name_en
     else
       self.name_es
+    end
+  end
+
+  def title
+    self.name
+  end
+
+  def search
+    self.family&.name
+  end
+
+  def middle_point
+    if self.render == "point"
+      middle_point = [self.x, self.y]
+    elsif self.render == "multipoint"
+      middle_point = [self.x[0], self.y[0]]
+    elsif self.render == "polyline"
+      points = JSON.parse(self.line).flatten
+      length = (points.length / 2)
+
+      mid_x = (points.each_index.select { |i| i.odd? }.sum { |i| points[i] } / length)
+      mid_y = (points.each_index.select { |i| i.even? }.sum { |i| points[i] } / length)
+
+      middle_point = [mid_x, mid_y]
+    elsif self.render == "polygon"
+      points = JSON.parse(self.polygon).flatten
+      length = (points.length / 2)
+
+      mid_x = (points.each_index.select { |i| i.odd? }.sum { |i| points[i] } / length)
+      mid_y = (points.each_index.select { |i| i.even? }.sum { |i| points[i] } / length)
+
+      middle_point = [mid_x, mid_y]
     end
   end
 

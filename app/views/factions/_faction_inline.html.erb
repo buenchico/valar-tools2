@@ -1,0 +1,22 @@
+<div class="d-flex align-items-center">
+  <div class="d-flex justify-content-center align-items-center">
+    <%= image_tag(faction.flair_url, :alt => faction.long_name, id: faction.name, class: 'icon-table') if faction.flair_url.present? %>
+  </div>
+  <div class="ms-2 d-flex flex-column align-self-start">
+    <p class="mb-0">
+      <% if faction.users.present? %>
+        <% players = faction.users %>
+        <%= t('activerecord.attributes.user.player', count: players.count) %>: <%= players.map { |player| link_to(player.player, user_path(player), class: 'text-white', remote: true) }.join(", ").html_safe %>
+      <% end %>
+    </p>
+    <p class="mb-0">
+      <%= t('activerecord.attributes.faction.reputation') %>: <%= number_to_modifier(calculate_mod(faction.reputation)) %>
+    </p>
+  </div>
+</div>
+
+<% if faction.description %>
+  <div>
+    <%= truncate(faction.description, length: 500, omission: "...") %>
+  </div>
+<% end %>

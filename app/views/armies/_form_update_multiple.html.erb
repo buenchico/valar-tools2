@@ -15,12 +15,12 @@
               <% armies.each do | army | %>
                 <%= render 'army_p', army: army %>
               <% end %>
-              <% if (!@current_user.faction.fleets.nil? || @current_user.is_master?) && !@options["fleets"].nil? %>
+              <% if (!@current_user.faction.fleets.nil? || @current_user.is_master?) && !@options_armies["fleets"].nil? %>
                 <div class="input-group mt-3">
                   <%= form.label :board, t('activerecord.attributes.army.board'), class: 'input-group-text' %>
                   <%= form.select :board,
                     options_for_select(
-                    @options["fleets"].map { |key, value|
+                    @options_armies["fleets"].map { |key, value|
                       [
                         key,
                         { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe
@@ -64,8 +64,8 @@
               </div>
               <div class="input-group mt-3">
                 <%= form.label :hp, t('activerecord.attributes.army.hp'),class: 'input-group-text' %>
-                <%= form.number_field :hp_sum, class: 'form-control form-exclusive', step: @options["hp"]["step"], placeholder: t('helpers.placeholder.sum'), min: -200, max: 200 %>
-                <%= form.number_field :hp_change, class: 'form-control form-exclusive', step: @options["hp"]["step"], placeholder: t('helpers.placeholder.change'), min: 0, max: 200 %>
+                <%= form.number_field :hp_sum, class: 'form-control form-exclusive', step: @options_armies["hp"]["step"], placeholder: t('helpers.placeholder.sum'), min: -200, max: 200 %>
+                <%= form.number_field :hp_change, class: 'form-control form-exclusive', step: @options_armies["hp"]["step"], placeholder: t('helpers.placeholder.change'), min: 0, max: 200 %>
               </div>
               <div class="input-group mt-3">
                 <%= form.label :army_type, t('activerecord.attributes.army.army_type'), class: 'input-group-text' %>
