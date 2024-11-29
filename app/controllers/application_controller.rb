@@ -133,4 +133,8 @@ class ApplicationController < ActionController::Base
   def set_options_families
     # No per attribute options
   end
+
+  def set_options_locations
+    @location_types = @options_locations["types"]
+  end
 end

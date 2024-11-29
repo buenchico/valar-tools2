@@ -62,7 +62,7 @@ class SearchController < ApplicationController
       when 'Army'
         if @current_user.is_master?
           true
-        elsif @current_user && record.factions.include?(@current_user.faction)
+        elsif @current_user && record.factions.include?(@current_user.faction) && record.visible
           true
         end
       else
@@ -78,5 +78,8 @@ private
     @options_clocks = get_options(Tool&.find_by(name: "clocks"))
     set_options_clocks
     @options_families = get_options(Tool&.find_by(name: "families"))
+    # set_options_families
+    @options_locations = get_options(Tool&.find_by(name: "locations"))
+    set_options_locations
   end
 end

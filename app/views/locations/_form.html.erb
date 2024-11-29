@@ -24,12 +24,12 @@
             <%= form.label :description, class: 'input-group-text' %>
             <%= form.text_area :description, class: 'form-control' %>
           </div>
-          <% if @options["tags"] != "false" %>
+          <% if @options_locations["tags"] != "false" %>
             <div class="input-group mb-3">
               <%= form.label :tags, class: 'input-group-text' %>
               <%= form.select :tags,
                 options_for_select(
-                  @options["tags"].map { | tag |
+                  @options_locations["tags"].map { | tag |
                     [
                       tag,
                       { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><span class='pill-tags-text'>#{tag}</span></span>".html_safe
@@ -64,7 +64,7 @@
 
           <div class="input-group mb-3">
             <%= form.label :location_type, class: 'input-group-text' %>
-            <%= form.select :location_type, @options["types"].map { |key, value| [value["name"],key] }, {}, class: 'form-select' %>
+            <%= form.select :location_type, @options_locations["types"].map { |key, value| [value["name"],key] }, {}, class: 'form-select' %>
           </div>
 
           <div class="input-group mb-3">

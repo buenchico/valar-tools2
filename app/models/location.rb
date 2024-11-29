@@ -28,6 +28,30 @@ class Location < ApplicationRecord
     self.family&.name
   end
 
+  def middle_point
+    if self.render == "point"
+      middle_point = [self.x, self.y]
+    elsif self.render == "multipoint"
+      middle_point = [self.x[0], self.y[0]]
+    elsif self.render == "polyline"
+      points = JSON.parse(self.line).flatten
+      length = (points.length / 2)
+
+      mid_x = (points.each_index.select { |i| i.odd? }.sum { |i| points[i] } / length)
+      mid_y = (points.each_index.select { |i| i.even? }.sum { |i| points[i] } / length)
+
+      middle_point = [mid_x, mid_y]
+    elsif self.render == "polygon"
+      points = JSON.parse(self.polygon).flatten
+      length = (points.length / 2)
+
+      mid_x = (points.each_index.select { |i| i.odd? }.sum { |i| points[i] } / length)
+      mid_y = (points.each_index.select { |i| i.even? }.sum { |i| points[i] } / length)
+
+      middle_point = [mid_x, mid_y]
+    end
+  end
+
   def render
     render = nil
 

@@ -82,11 +82,11 @@ private
   end
 
   def set_options
-    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
-    if @options.blank?
-      redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de lugares'
+    @options_locations = get_options(@tool)
+    if @options_locations.blank?
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      @location_types = @options["types"]
+      set_options_locations
     end
   end
 

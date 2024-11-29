@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content bg-dark">
       <div class="modal-header">
-        <h5 class="modal-title" id="Title"><%= location&.name %> (<%= @location_types[location&.location_type]["name"] %>)</h5>
+        <h5 class="modal-title w-100" id="Title"><%= location&.name %> (<%= @location_types[location&.location_type]["name"] %>)</h5>
         <div class="w-100">
           <% if @current_user.is_master? %>
             <%= link_to '', send("edit_location_path", location.id), remote: true, class: 'btn-Close bi bi-pencil-square text-white float-end' %>

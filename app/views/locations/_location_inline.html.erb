@@ -1,0 +1,16 @@
+<% if location.middle_point %>
+  <div class="mb-1">
+    <%= link_to(t('map.flyto'), Tool.find_by(name: 'map').name + "" + "?x=#{location.middle_point[0]}&y=#{location.middle_point[1]}", class: 'text-white') %>
+  </div>
+<% end %>
+
+<% if location.family %>
+  <div class="mb-1">
+    <%= t('activerecord.models.family') %>:
+    <%= link_to(location.family.title, family_path(location.family), class: 'text-white', remote: true) %>
+  </div>
+<% end %>
+
+<div class="mb-1">
+  <%= location.name %> es <%= I18n.t('articles.indefinite.' + word_gender(@location_types[location&.location_type]["name"].singularize), count: 1) %> <strong><%= @location_types[location&.location_type]["name"].downcase %></strong>.</p>
+</div>

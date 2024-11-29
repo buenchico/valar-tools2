@@ -296,6 +296,8 @@ es:
       no_date: "Sin fecha"
       no_assigned: "sin asignar"
       assigned_to: "Master"
+  map:
+    flyto: "Ver en mapa"
   travel:
     index:
       calculate: 'Calcular'
