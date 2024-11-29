@@ -67,11 +67,12 @@ private
 
   def set_options
     # Getting missions options
-    @options = Tool.find_by(name: "missions").game_tools.find_by(game_id: active_game&.id)&.options
-    @sections = @options["sections"]
-
-    if @options.blank?
-      redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de recetas'
+    @tool = Tool.find_by(name: "missions")
+    @options_missions = get_options(@tool)
+    if @options_missions.blank?
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
+    else
+      set_options_missions
     end
   end
 

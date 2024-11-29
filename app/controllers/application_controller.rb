@@ -137,4 +137,8 @@ class ApplicationController < ActionController::Base
   def set_options_locations
     @location_types = @options_locations["types"]
   end
+
+  def set_options_missions
+    @sections = @options_missions["sections"]
+  end
 end

@@ -4,7 +4,7 @@
       <div class="modal-header">
         <h5 class="modal-title w-100" id="Title"><%= location&.name %> (<%= @location_types[location&.location_type]["name"] %>)</h5>
         <div class="w-100">
-          <% if @current_user.is_master? %>
+          <% if @current_user&.is_master? %>
             <%= link_to '', send("edit_location_path", location.id), remote: true, class: 'btn-Close bi bi-pencil-square text-white float-end' %>
           <% end %>
         </div>

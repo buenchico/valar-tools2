@@ -41,7 +41,7 @@ module RecipesHelper
   end
 
   def replace_traits(text)
-    @options["traits"].each do |trait, title|
+    @options_missions["traits"].each do |trait, title|
       # Escaping asterisks in the regex and interpolating the trait
       text.gsub!(/\*\*(#{trait})\*\*/i) do |match|
         # Capitalize only the first letter of the matched trait

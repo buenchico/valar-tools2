@@ -42,25 +42,25 @@ class SearchController < ApplicationController
     records.select do |record|
       case type
       when 'Family', 'Location'
-        if @current_user.is_admin?
+        if @current_user&.is_admin?
           true
-        elsif @current_user.is_master? && record.game == active_game
+        elsif @current_user&.is_master? && record.game == active_game
           true
         elsif record.visible && record.game == active_game
           true
         end
       when 'Clock'
-        @current_user.is_master? || record.visible
+        @current_user&.is_master? || record.visible
       when 'Faction'
-        if @current_user.is_admin?
+        if @current_user&.is_admin?
           true
-        elsif @current_user.is_master? && record.games.include?(active_game)
+        elsif @current_user&.is_master? && record.games.include?(active_game)
           true
         elsif record.active && record.games.include?(active_game)
           true
         end
       when 'Army'
-        if @current_user.is_master?
+        if @current_user&.is_master?
           true
         elsif @current_user && record.factions.include?(@current_user.faction) && record.visible
           true
@@ -81,5 +81,7 @@ private
     # set_options_families
     @options_locations = get_options(Tool&.find_by(name: "locations"))
     set_options_locations
+    @options_missions = get_options(Tool&.find_by(name: "missions"))
+    set_options_missions
   end
 end

@@ -5,7 +5,7 @@ class MissionsController < ApplicationController
 
   def index
     @recipes = Recipe.all.order(:section, :id)
-    @default_recipe = Recipe.find_by(id: @options["default_recipe"])
+    @default_recipe = Recipe.find_by(id: @options_missions["default_recipe"])
   end
 
   def get_recipe
@@ -16,10 +16,10 @@ class MissionsController < ApplicationController
 
     # If recipe is not found or params[:recipe_id] is empty, initialize a default recipe
     @recipe ||= Recipe.new(
-      name: @options["fortune"]["long_name"],
+      name: @options_missions["fortune"]["long_name"],
       difficulty: 0,
       speed: 2,
-      description: @options["fortune"]["desc"]
+      description: @options_missions["fortune"]["desc"]
     )
 
     respond_to do |format|
@@ -95,7 +95,7 @@ class MissionsController < ApplicationController
     total = roll + subtotal
 
     if fortune == true
-      @options["fortune"]["results"].sort.reverse.each do |range|
+      @options_missions["fortune"]["results"].sort.reverse.each do |range|
           if range[0].to_i <= total
             @result = range[1]
             puts range[1]
@@ -103,7 +103,7 @@ class MissionsController < ApplicationController
           end
       end
     else
-      @options["results"].sort.reverse.each do |range|
+      @options_missions["results"].sort.reverse.each do |range|
           if range[0].to_i <= total
             @result = range[1]
             break
@@ -125,8 +125,8 @@ class MissionsController < ApplicationController
       speed: speed
     }
 
-    @effect_major = @options["effect_major"]
-    @effect_minor = @options["effect_minor"]
+    @effect_major = @options_missions["effect_major"]
+    @effect_minor = @options_missions["effect_minor"]
 
     @fortune = fortune
   end
@@ -194,7 +194,7 @@ class MissionsController < ApplicationController
     end
 
     @missions
-    @speed = @options['speed'].pluck("days").map { |item| item.to_s[/\d+/]&.to_i }.reject { |item| item == 0 || item.nil? }
+    @speed = @options_missions['speed'].pluck("days").map { |item| item.to_s[/\d+/]&.to_i }.reject { |item| item == 0 || item.nil? }
   end
 
   def stats
@@ -216,7 +216,7 @@ class MissionsController < ApplicationController
       page = 0
 
       loop do
-        response = connection.get('/search.json', period: 'all', q: 'tags:cerrada,abierta,stand-by ' + @options["stats"]["game_category"] + ' order:latest', page: page)
+        response = connection.get('/search.json', period: 'all', q: 'tags:cerrada,abierta,stand-by ' + @options_missions["stats"]["game_category"] + ' order:latest', page: page)
         json_response = JSON.parse(response.body)
 
         if json_response.fetch('topics', {}).present?
@@ -266,11 +266,11 @@ class MissionsController < ApplicationController
 
 private
   def set_options
-    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
-    @sections = @options["sections"]
-
-    if @options.blank?
-      redirect_to settings_url, warning: 'Prepara una partida antes de usar la calculadora de misiones'
+    @options_missions = get_options(@tool)
+    if @options_missions.blank?
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
+    else
+      set_options_missions
     end
   end
 
