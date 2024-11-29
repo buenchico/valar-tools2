@@ -87,7 +87,7 @@
         <% end %>
         <% if @current_user&.is_master? %>
           <div class="h4"><%= t('activerecord.attributes.family.loyalty') %></div>
-          <% @options["loyalties"].each_with_index do |value, index| %>
+          <% @options_families["loyalties"].each_with_index do |value, index| %>
             <div class="row ms-1">
               <%= value %>: <%= number_to_modifier(family["loyalty_#{index + 1}"]) %>
             </div>

@@ -129,4 +129,8 @@ class ApplicationController < ActionController::Base
     @outcomes = @options_clocks["outcomes"]
     @styles = @options_clocks["styles"]
   end
+
+  def set_options_families
+    # No per attribute options
+  end
 end

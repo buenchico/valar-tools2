@@ -1,15 +1,45 @@
+<% if family.lord %>
+  <div class="mb-1">
+    <%= t('activerecord.attributes.family.lord_id') %>:
+    <%= link_to(family.lord.title, family_path(family.lord), class: 'text-white', remote: true) %>
+  </div>
+<% end %>
+
+<% if family.lord %>
+  <div class="mb-1">
+    <%= t('activerecord.attributes.family.lord_id') %>:
+    <%= link_to(family.lord.title, family_path(family.lord), class: 'text-white', remote: true) %>
+  </div>
+<% end %>
+
+<% vassals = Family.where(lord_id: family.id).where(game: family.game).where(visible: true) %>
+<% if vassals.present? %>
+  <div class="mb-1">
+    <%= t('activerecord.attributes.family.vassals') %>:
+    <%= vassals.map { |vassal| link_to(vassal.title, family_path(vassal), class: 'text-white', remote: true) }.join(", ").html_safe %>
+  </div>
+<% end %>
+
 <% if family.locations.present? %>
-  <p>
+  <div class="mb-1">
     <%= t('activerecord.models.location', count: family.locations.count) %>:
     <%= family.locations.map { |location| link_to(location.name, location_path(location), class: 'text-white', remote: true) }.join(", ").html_safe %>
-  </p>
+  </div>
 <% end %>
 
 <% if @current_user.is_master? %>
-  <p>
-    lealtades
-  </p>
-  <p>
-    armies
-  </p>
+  <div class="mb-1">
+    <%= t('activerecord.attributes.family.loyalty') %>:
+    <% @options_families["loyalties"].each_with_index do |value, index| %>
+      <span class="ms-1">
+        <%= value %>: <%= number_to_modifier(family["loyalty_#{index + 1}"]) %>
+      </span>
+    <% end %>
+  </div>
+  <% if family.armies.present? %>
+    <div class="mb-1">
+      <%= t('activerecord.models.army', count: family.armies.length) %> (<%= family.armies.length %>):
+      <%= family.armies.map { |army| link_to(army.name, army_path(army), class: 'text-white', remote: true) }.join(", ").html_safe %>
+    </div>
+  <% end %>
 <% end %>

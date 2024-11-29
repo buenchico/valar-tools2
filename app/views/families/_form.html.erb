@@ -16,12 +16,12 @@
             <%= form.label :name, class: 'input-group-text' %>
             <%= form.text_field :name, class: 'form-control' %>
           </div>
-          <% if @options["tags"] != "false" %>
+          <% if @options_families["tags"] != "false" %>
             <div class="input-group mb-3">
               <%= form.label :tags, class: 'input-group-text' %>
               <%= form.select :tags,
                 options_for_select(
-                  @options["tags"].map { | tag |
+                  @options_families["tags"].map { | tag |
                     [
                       tag,
                       { "data-content": "<span class='badge rounded-pill pill-tags bg-success'><span class='pill-tags-text'>#{tag}</span></span>".html_safe
@@ -44,7 +44,7 @@
             <%= form.label :branch, class: 'input-group-text' %>
             <%= form.text_field :branch, class: 'form-control' %>
           </div>
-          <% @options["loyalties"].each_with_index do |value, index| %>
+          <% @options_families["loyalties"].each_with_index do |value, index| %>
             <div class="input-group mb-3">
               <%= form.label "Lealtad " + value.capitalize , class: 'input-group-text' %>
               <%= form.number_field  "loyalty_#{(index + 1)}", class: 'form-control', step: 1 %>

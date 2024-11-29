@@ -11,7 +11,7 @@
 <td><%= family.faction&.long_name.nil? ? ' ' : link_to(family.faction.long_name, send("faction_path", family.faction.id), remote: true, class: 'text-white') %></td>
 <td><%= truncate(family.description, length: 100, omission: '...') %></td>
 <% if @current_user&.is_master? %>
-  <% @options["loyalties"].each_with_index do |value, index| %>
+  <% @options_families["loyalties"].each_with_index do |value, index| %>
     <td><%= number_to_modifier(family["loyalty_#{index + 1}"]) %></td>
   <% end %>
   <td class="no-wrap-column"><%= family.hp("raised") %> de</td>

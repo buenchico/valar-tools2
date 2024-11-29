@@ -77,5 +77,6 @@ private
     set_options_armies
     @options_clocks = get_options(Tool&.find_by(name: "clocks"))
     set_options_clocks
+    @options_families = get_options(Tool&.find_by(name: "families"))
   end
 end

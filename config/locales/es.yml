@@ -147,6 +147,7 @@ es:
         branch: "Rama"
         visible: "Visible"
         lord_id: "Señor"
+        vassals: "Vasallos"
         game_id: "Partida"
         faction_id: "Facción"
         description: "Descripción"

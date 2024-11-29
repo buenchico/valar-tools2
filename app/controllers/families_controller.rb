@@ -12,7 +12,7 @@ class FamiliesController < ApplicationController
   end
 
   def show
-    @vassals = Family.where(lord_id: @family.id)
+    @vassals = Family.where(lord_id: @family.id).where(game: @family.game).where(visible: true)
     @locations = Location.where(family_id: @family.id).where(game: @family.game).where(visible: true)
     @relations = Family.where("LOWER(members) LIKE ?", "%#{@family.name.downcase}%").where(visible: true).where(game: @family.game).where.not(id: @family.id)
     @army_options = Tool.find_by(name: 'armies').game_tools.find_by(game_id: active_game&.id)&.options
@@ -90,7 +90,7 @@ class FamiliesController < ApplicationController
         headers['Content-Type'] ||= 'text/csv'
 
         header_row = ["id", "name", "branch", "tags", "visible", "faction_id", "faction", "lord_id", "lord", "description", "members", "tier"]
-        @options["loyalties"].each do | value |
+        @options_families["loyalties"].each do | value |
           header_row << value
         end
         header_row += ["game_id", "game", "armies_hp_raised", "armies_hp_inactive", "armies_hp_start", "location_total", "location_names"]
@@ -100,7 +100,7 @@ class FamiliesController < ApplicationController
 
           families.each do |family|
             data_row = [family.id, family.name, family.branch, family.tags.join(","), family.visible, family&.faction&.id, family&.faction&.name, family&.lord&.id, family&.lord&.title, family.description, family.members, family.tier]
-            @options["loyalties"].each_with_index do | value, index |
+            @options_families["loyalties"].each_with_index do | value, index |
               data_row << family["loyalty_#{index + 1}"]
             end
             data_row += [family&.game&.id, family&.game&.name, family.hp("raised"), family.hp("inactive"), family.hp_start(["conscript","garrison","retinue"]), family.locations.count, family.locations.map { |l| [l.name, l.location_type] }]
@@ -133,9 +133,9 @@ private
   end
 
   def set_options
-    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
-    if @options.blank?
-      redirect_to settings_url, warning: 'Prepara una partida antes de usar la lista de familias'
+    @options_families = get_options(@tool)
+    if @options_families.blank?
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     end
   end
 
@@ -163,13 +163,13 @@ private
     params.require(:family).permit(:name, :branch, :visible, :lord_id, :game_id, :faction_id, :tier, :members, :description, :loyalty_1, :loyalty_2, :loyalty_3, :loyalty_4, :loyalty_5, tags: []).tap do |whitelisted|
       whitelisted[:tags] = params[:family][:tags].reject(&:empty?)
 
-      if @options["tags"] != "false"
+      if @options_families["tags"] != "false"
         whitelisted[:tags].each do |tag|
-          if !@options["tags"].include?(tag)
-            @options["tags"] << tag
+          if !@options_families["tags"].include?(tag)
+            @options_families["tags"] << tag
           end
-          @options["tags"] = @options["tags"].sort
-          @tool.game_tools.find_by(game_id: active_game&.id).update(options: @options)
+          @options_families["tags"] = @options_families["tags"].sort
+          @tool.game_tools.find_by(game_id: active_game&.id).update(options: @options_families)
         end
       end
     end
