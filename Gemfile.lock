@@ -272,7 +272,6 @@ GEM
     tzinfo-data (1.2024.2)
       tzinfo (>= 1.0.0)
     uri (1.0.2)
-    wdm (0.2.0)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -326,7 +325,6 @@ DEPENDENCIES
   terser (~> 1.2, >= 1.2.3)
   turbolinks (~> 5)
   tzinfo-data
-  wdm (>= 0.1.0)
   web-console (>= 4.1.0)
   webdrivers
 
