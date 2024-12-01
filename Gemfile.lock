@@ -325,7 +325,6 @@ DEPENDENCIES
   terser (~> 1.2, >= 1.2.3)
   turbolinks (~> 5)
   tzinfo-data
-  wdm (>= 0.1.0)
   web-console (>= 4.1.0)
   webdrivers
 
