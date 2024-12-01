@@ -82,3 +82,6 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data'
+
+# To prevent heroku failing, remove once fix is in place
+gem "ffi", "< 1.17.0"
