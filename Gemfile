@@ -58,7 +58,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'faker'
 
-  gem 'wdm', '>= 0.1.0' if Gem.win_platform?
+  gem 'wdm', '>= 0.1.0', platforms: :mswin 
 end
 
 group :development do
