@@ -58,7 +58,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'faker'
 
-  gem 'wdm', '>= 0.1.0', platforms: :mswin
+  gem 'wdm', '>= 0.1.0', platforms: [:mswin, :mingw, :x64_mingw]
 end
 
 group :development do
@@ -77,7 +77,7 @@ group :test do
   gem 'capybara', '>= 3.26'
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
+  gem 'webdrivers', "= 5.3.0"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
