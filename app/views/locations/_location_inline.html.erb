@@ -1,6 +1,6 @@
 <% if location.middle_point %>
   <div class="mb-1">
-    <%= link_to(t('map.flyto'), Tool.find_by(name: 'map').name + "" + "?x=#{location.middle_point[0]}&y=#{location.middle_point[1]}", class: 'text-white') %>
+    <%= link_to((t('map.flyto') + ' ' + '<i class="bi bi-crosshair"></i>').html_safe, Tool.find_by(name: 'map').name + "" + "?x=#{location.middle_point[0]}&y=#{location.middle_point[1]}", class: 'text-white') %>
   </div>
 <% end %>
 
