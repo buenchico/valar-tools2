@@ -67,10 +67,10 @@ private
 
   def set_options
     # Getting missions options
-    @tool = Tool.find_by(name: "missions")
-    @options_missions = get_options(@tool)
+    tool = Tool.find_by(name: "missions")
+    @options_missions = get_options(tool)
     if @options_missions.blank?
-      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: tool.title)
     else
       set_options_missions
     end
