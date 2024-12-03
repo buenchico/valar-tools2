@@ -132,6 +132,10 @@ class MissionsController < ApplicationController
   end
 
   def list
+
+    open_tag = @options_missions["tags"]["open"]
+    long_tag = @options_missions["tags"]["long"]
+
     factions = Faction.all
     masters_ids = User.where(faction: Faction.find_by(name: 'master')).pluck(:discourse_id)
 
@@ -139,7 +143,7 @@ class MissionsController < ApplicationController
     date_today = Date.today
     date_future = Date.new(3000, 1, 1)
 
-    missions_by_tag = DiscourseApi::DiscourseGetData.get_missions_by_tag('abierta')
+    missions_by_tag = DiscourseApi::DiscourseGetData.get_missions_by_tag(open_tag)
 
     topic_ids = missions_by_tag.map { |topic| topic["id"] }
 
@@ -149,7 +153,6 @@ class MissionsController < ApplicationController
     missions_by_id.each do | id, topic |
 
       color = "row-striped"
-      today = nil
       if topic["topic_timer"].present?
         # Timer is present
         date = Date.parse(topic["topic_timer"]["execute_at"])
@@ -163,7 +166,6 @@ class MissionsController < ApplicationController
         if topic["post_stream"]["posts"].select { |post| post['action_code'] == 'autobumped' }.last
           # Topic has been bumped today
           date = date_today
-          today = 'calendar-accent'
         elsif masters_ids.include?(topic["post_stream"]["posts"].last["user_id"]) && topic["post_type"] == 1
           # Last message is a normal message by master
           date = date_future
@@ -175,11 +177,23 @@ class MissionsController < ApplicationController
         end
       end
 
+      tags = topic["tags"]
+
+      long = nil
+      if tags.include?(long_tag)
+        long = true
+        date = date_past + 1
+      end
+
       post = topic["post_stream"]["posts"][0]["cooked"]
       match_data = post.match(/Objetivo<\/h2>(.*?)<h2>/m)
       target = match_data ? match_data[1].strip : t('.no_target')
 
       category = (factions.find_by(category_id: topic["category_id"])&.long_name || t('activerecord.attributes.faction.no_category'))
+
+      if date == date_today
+        today = true
+      end
 
       @missions[id] = {
         title: topic["fancy_title"],
@@ -189,7 +203,8 @@ class MissionsController < ApplicationController
         target: target,
         message: message,
         color: color,
-        today: today
+        today: today,
+        long: long
       }
     end
 

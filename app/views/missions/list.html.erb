@@ -14,7 +14,7 @@
 
 <div class="container">
   <% @missions.sort_by { |_, mission| mission[:date] }.each do | id, mission | %>
-    <div class="row my-2 py-2 <%= mission[:color] %> <%= mission[:today] %>">
+    <div class="row my-2 py-2 <%= mission[:color] %> <%= mission[:today] ? 'calendar-accent' : nil %>">
       <div id="mission_date_<%= id %>" class="col-md-2 col-3 text-center">
         <%= render 'mission_date', id: id, mission: mission %>
       </div>
