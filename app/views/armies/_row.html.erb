@@ -4,7 +4,7 @@
 </td>
 <td width = "300px">
   <%= link_to army.name, edit_army_path(army), remote: true, class: 'link-unstyled' %>
-  <span class="army-data">
+  <span class="army-data d-none">
     <%= render 'army_plain_txt', army: army %>
   </span>
 </td>
