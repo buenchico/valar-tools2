@@ -185,6 +185,12 @@ class MissionsController < ApplicationController
         date = date_past + 1
       end
 
+      # Filter posts where post_type == 1
+      normal_posts = topic["post_stream"]["posts"].select { |post| post['post_type'] == 1 }
+
+      # Get the last normal post
+      last_normal_post = normal_posts.last
+
       post = topic["post_stream"]["posts"][0]["cooked"]
       match_data = post.match(/Objetivo<\/h2>(.*?)<h2>/m)
       target = match_data ? match_data[1].strip : t('.no_target')
@@ -204,7 +210,8 @@ class MissionsController < ApplicationController
         message: message,
         color: color,
         today: today,
-        long: long
+        long: long,
+        last_normal_post: last_normal_post["post_number"]
       }
     end
 
