@@ -10,6 +10,7 @@ class Army < ApplicationRecord
   belongs_to :location, class_name: 'Location', foreign_key: 'location_id', optional: true
 
   validates :name, presence: true
+  validates :hp, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates_uniqueness_of :name
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
 
@@ -120,7 +121,7 @@ class Army < ApplicationRecord
 
     base = @option_armies.fetch("soldiers", 1000)
 
-    men = (self.composition.sum * self.hp * base * 0.01 * 0.01).to_i
+    men = (self.composition.sum * (self.hp || 0) * base * 0.01 * 0.01).to_i
 
     return men
   end
