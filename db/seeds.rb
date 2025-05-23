@@ -16,9 +16,9 @@ player: "valar", faction: Faction.find(1), discourse_id: 2, avatar_url: "https:/
 }
 ])
 
-Game.create(name: 'valar', prefix: 'va', title: 'Valar Dohaeris', icon_url: 'va-icon.png')
-Game.create(name: 'warvalar', prefix: 'wh', title: 'WarValar', icon_url: 'wh-icon.png')
-Game.create(name: 'heggon', prefix: 'hg', title: 'Los Planos de Heggon', icon_url: 'hg-icon.png')
+Game.create(name: 'valar', prefix: 'va', title: 'Valar Dohaeris', icon_url: 'va-icon.webp')
+Game.create(name: 'warvalar', prefix: 'wh', title: 'WarValar', icon_url: 'wh-icon.webp')
+Game.create(name: 'heggon', prefix: 'hg', title: 'Los Planos de Heggon', icon_url: 'hg-icon.webp')
 
 Tool.create(name: 'settings', title: 'Configuración de la partida', short_title: 'configuración', icon_url: 'bi bi-gear-fill', role: 'admin', active: true ).save(validate: false)
 Tool.create(name: 'armies', title: 'Lista de ejércitos', short_title: 'ejércitos', icon_url: 'bi-shield-shaded', role: 'player',
