@@ -129,7 +129,7 @@ Tool.create(name: 'missions', title: 'Calculadora de Misiones', short_title: 'Mi
 
   *difficulty*, array of hashes, con cada elemento
      *name*, string, nombre de la dificultad
-     *value*, modificador de la dificultad'
+     *value*, modificador de la dificultad',
    active: true)
 
  Tool.create(name: 'recipes', title: 'Lista de Recetas', short_title: 'Recetas', icon_url: 'bi-body-text', role: 'master',
