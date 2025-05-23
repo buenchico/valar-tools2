@@ -6,9 +6,9 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-Faction.new(name: 'admin', long_name: 'Admin').save(validate: false)
-Faction.new(name: 'master', long_name: 'Master').save(validate: false)
-Faction.new(name: 'player', long_name: 'Inactivo').save(validate: false)
+Faction.new(name: 'admin', long_name: 'Admin', title: 'Admin').save(validate: false)
+Faction.new(name: 'master', long_name: 'Master', title: 'Master').save(validate: false)
+Faction.new(name: 'player', long_name: 'Inactivo', title: 'Inactivo').save(validate: false)
 
 User.create([
 {
