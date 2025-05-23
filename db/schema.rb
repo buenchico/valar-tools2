@@ -180,7 +180,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_112923) do
     t.boolean "active", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "category_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -203,23 +202,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_112923) do
     t.index ["family_id"], name: "index_valar_locations_on_family_id"
     t.index ["game_id"], name: "index_valar_locations_on_game_id"
     t.index ["region_id"], name: "index_valar_locations_on_region_id"
-  end
-
-  create_table "missions", force: :cascade do |t|
-    t.string "name"
-    t.integer "discourse_id"
-    t.string "status"
-    t.string "notes"
-    t.date "started"
-    t.date "resolved"
-    t.bigint "game_id", null: false
-    t.bigint "faction_id", null: false
-    t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["faction_id"], name: "index_valar_missions_on_faction_id"
-    t.index ["game_id"], name: "index_valar_missions_on_game_id"
-    t.index ["user_id"], name: "index_valar_missions_on_user_id"
   end
 
   create_table "recipes", force: :cascade do |t|
@@ -266,7 +248,4 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_112923) do
   add_foreign_key "factions_games", "games"
   add_foreign_key "families", "families", column: "lord_id"
   add_foreign_key "locations", "locations", column: "region_id"
-  add_foreign_key "missions", "factions"
-  add_foreign_key "missions", "games"
-  add_foreign_key "missions", "users"
 end
