@@ -15,8 +15,8 @@
             @games.pluck(:id, :title, :icon_url).map { | id, title, icon_url |
               [
                 id,
-                {
-                  "data-content": image_tag(icon_url, :alt => title, id: title, class: 'icon-table bg-dark') + " " + title
+                { 
+                  "data-content": safe_image_tag(icon_url, :alt => title, id: title, class: 'icon-table bg-dark') + " " + title
                 }
               ]
             },
