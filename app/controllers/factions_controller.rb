@@ -73,7 +73,7 @@ class FactionsController < ApplicationController
             title: group["title"],
             discourse_id: group["id"],
             game_ids: Game.find_by(prefix: group["name"].split("-")[0]).id,
-            flair_url: group["flair_url"].nil? ? '' : "http://valar.es" + group["flair_url"]
+            flair_url: group["flair_url"].nil? ? '' : "https://valar.es" + group["flair_url"]
           )
             @count += 1
           else
