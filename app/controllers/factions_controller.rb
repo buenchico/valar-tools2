@@ -55,7 +55,7 @@ class FactionsController < ApplicationController
             long_name: group["full_name"],
             title: group["title"],
             discourse_id: group["id"],
-            game_ids: Game.find_by(prefix: group["name"].split("-")[0]).id,
+            game_ids: Game.where(prefix: group["name"].split("-")[0]).ids,
             flair_url: group["flair_url"].nil? ? '' : "https://www.valar.es" + group["flair_url"],
             active: false
           )
@@ -72,7 +72,7 @@ class FactionsController < ApplicationController
             long_name: group["full_name"],
             title: group["title"],
             discourse_id: group["id"],
-            game_ids: Game.find_by(prefix: group["name"].split("-")[0]).id,
+            game_ids: Game.where(prefix: group["name"].split("-")[0]).ids,
             flair_url: group["flair_url"].nil? ? '' : "https://www.valar.es" + group["flair_url"]
           )
             @count += 1
