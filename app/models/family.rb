@@ -30,7 +30,9 @@ class Family < ApplicationRecord
 
   def set_army_options
     active_game = Game.find_by(active: true)
-    self.hp_step = (Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options.dig("hp", "step") || 10)
+    if Tool.find_by(name: "armies").is_active?
+      self.hp_step = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options.dig("hp", "step")
+    end
   end
 
   def hp(status)
