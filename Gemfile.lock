@@ -248,7 +248,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    spring (4.2.1)
+    spring (3.1.1)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -320,7 +320,7 @@ DEPENDENCIES
   rails_12factor
   sassc-rails (>= 2.1.2)
   selenium-webdriver
-  spring
+  spring (~> 3.0)
   terser (~> 1.2, >= 1.2.3)
   turbolinks (~> 5)
   tzinfo-data
