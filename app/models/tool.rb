@@ -19,6 +19,14 @@ class Tool < ApplicationRecord
     games.where((self.table_name_prefix + 'game_tools').to_sym => { active: true })
   end
 
+  def is_active?
+    if self.active && self.game_tools.find_by(game_id: Game.find_by(active: true)&.id).active && self.games.ids.include?(Game.find_by(active: true).id)
+      true
+    else
+      false
+    end
+  end
+
   private
     def add_all_games
       self.games = Game.all unless games.present?
