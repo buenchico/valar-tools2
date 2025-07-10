@@ -8,31 +8,31 @@
       <div class="modal-body">
         <ul class="nav nav-pills mb-3" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
-            <button class="nav-link active disabled" id="factions-tab" data-bs-toggle="tab" data-bs-target="#factions" type="button" role="tab" aria-controls="factions" aria-selected="true">Facciones</button>
+            <button class="nav-link active disabled text-secondary" id="factions-tab" data-bs-toggle="tab" data-bs-target="#factions" type="button" role="tab" aria-controls="factions" aria-selected="true">Facciones</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link disabled">
+            <button class="nav-link disabled text-secondary">
               <i class="bi bi-chevron-double-right"></i>
             </button>
           </li>
           <li class="nav-item">
-            <button class="nav-link disabled" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="true">Jugadores</button>
+            <button class="nav-link disabled text-secondary" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="true">Jugadores</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link disabled">
+            <button class="nav-link disabled text-secondary">
               <i class="bi bi-chevron-double-right"></i>
             </button>
           </li>
           <li class="nav-item">
-            <button class="nav-link disabled" id="tools-tab" data-bs-toggle="tab" data-bs-target="#tools" type="button" role="tab" aria-controls="tools" aria-selected="true">Herramientas</button>
+            <button class="nav-link disabled text-secondary" id="tools-tab" data-bs-toggle="tab" data-bs-target="#tools" type="button" role="tab" aria-controls="tools" aria-selected="true">Herramientas</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link disabled">
+            <button class="nav-link disabled text-secondary">
               <i class="bi bi-chevron-double-right"></i>
             </button>
           </li>
           <li class="nav-item">
-            <button class="nav-link disabled" id="complete-tab" data-bs-toggle="tab" data-bs-target="#complete" type="button" role="tab" aria-controls="complete" aria-selected="true">Inicializar</button>
+            <button class="nav-link disabled text-secondary" id="complete-tab" data-bs-toggle="tab" data-bs-target="#complete" type="button" role="tab" aria-controls="complete" aria-selected="true">Inicializar</button>
           </li>
         </ul>
         <%= form_with model: game, url: setup_game_complete_url do |form| %>
