@@ -141,6 +141,7 @@ private
 
     @options_families["subtools"]["tags"] = true if @options_families["tags"].present?
     @options_families["subtools"]["loyalties"] = true if @options_families["loyalties"].present?
+    @options_families["subtools"]["tiers"] = true if @options_families["tiers"].present?
     @options_families["subtools"]["armies"] = true if Tool.find_by(name: "armies").is_active?
   end
 
