@@ -18,7 +18,7 @@
   <% end %>
   <% if @options_families["subtools"]["armies"] %>
     <td class="no-wrap-column"><%= family.hp("raised") %> de</td>
-    <td class="no-wrap-column ps-0"><%= (family.hp_start("conscript") + family.hp_start("garrison"))%> (<%= family.hp_start("all") %>)</td>
+    <td class="no-wrap-column ps-0"><%= (family.hp_start("conscript").to_i + family.hp_start("garrison").to_i)%> (<%= family.hp_start("all").to_i %>)</td>
     <td class="no-wrap-column"><i class="bi bi-skull-solid"></i><%= family.hp("inactive") %></td>
   <% end %>
   <% if @options_families["subtools"]["tiers"] %>

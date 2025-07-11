@@ -118,16 +118,6 @@ private
     @family = Family.find(params[:id])
   end
 
-  def set_families_list
-    if @current_user&.is_admin?
-      @families = Family.all.order(:name)
-    elsif @current_user&.is_master?
-      @families = Family.where(game_id: active_game.id).order(:name)
-    else
-      @families = Family.where(visible: true).where(game_id: active_game.id).order(:name)
-    end
-  end
-
   def set_selected_families
     @selected_families = cookies[:families_select].present? ? JSON.parse(cookies[:families_select]) : []
   end
@@ -137,7 +127,9 @@ private
     if @options_families.blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
+      @options_armies = get_options(Tool&.find_by(name: "armies"))
       set_options_armies
+      set_options_families
     end
   end
 

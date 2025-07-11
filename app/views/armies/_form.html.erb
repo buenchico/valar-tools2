@@ -12,16 +12,127 @@
       </div>
       <div class="modal-body">
         <%= form_with model: army, local: false do |form| %>
+          <% if @current_user.is_master? %>
+            <div class="input-group mb-3">
+              <%= form.label :name, class: 'input-group-text' %>
+              <%= form.text_field :name, class: 'form-control' %>
+            </div>
+
+            <div class="input-group mb-3">
+              <%= form.label :status, class: 'input-group-text' %>
+              <%= form.select :status, @army_status.map { |k,v| [v["name"], k]}, {}, class: 'form-select' %>
+            </div>
+
+            <% if @tags.present? %>
+              <div class="input-group mb-3">
+                <%= form.label :tags, class: 'input-group-text' %>
+                <%= form.select :tags,
+                  options_for_select(
+                    @tags.map { | tag |
+                      [
+                        tag[0],
+                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                      }
+                      ]
+                    },
+                    selected: army.tags
+                  ),
+                  { include_blank: false },
+                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  title: 'Sin rasgos',
+                  multiple: true,
+                  data: { }
+                %>
+              </div>
+            <% end %>
+          <% end %>
+
           <div class="input-group mb-3">
-            <%= form.label :name, class: 'input-group-text' %>
-            <%= form.text_field :name, class: 'form-control' %>
+            <%= form.label :position, class: 'input-group-text' %>
+            <%= form.text_field :position, class: 'form-control' %>
           </div>
 
           <div class="input-group mb-3">
-            <%= form.label :status, class: 'input-group-text' %>
-            <%= form.select :status, @army_status.map { |k,v| [v["name"], k]}, {}, class: 'form-select' %>
+            <%= form.label :group, class: 'input-group-text' %>
+            <%= form.select :group,
+              options_for_select(
+                ARMY_GROUPS.map { | key, value |
+                  [
+                    key,
+                    { "data-content": "<span class='badge rounded-pill pill-tags pill-#{key}'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe
+                  }
+                  ]
+                },
+                selected: army.group
+              ),
+              { include_blank: true },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              data: { noneselectedtext: 'Sin agrupar'}
+            %>
           </div>
-        </div>
+
+          <div class="input-group mb-3">
+            <%= form.label :location_id, class: 'input-group-text' %>
+            <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
+          </div>
+
+          <div class="input-group mb-3">
+            <%= form.label :family_id, class: 'input-group-text' %>
+            <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+          </div>
+
+          <div class="input-group mb-3">
+            <%= form.label :visible, class: 'input-group-text' %>
+            <div class="form-check form-switch switch-group fs-2">
+              <%= form.check_box :visible, class: 'form-check-input switch-group h-100' %>
+            </div>
+          </div>
+
+          <div class="input-group mb-3">
+            <%= form.label :notes, class: 'input-group-text' %>
+            <%= form.text_area :notes, class: 'form-control' %>
+          </div>
+
+          <div class="input-group mb-3">
+            <%= form.label :factions, class: 'input-group-text' %>
+            <%= form.select :faction_ids,
+              options_for_select(
+                @factions.pluck(:long_name, :id).map { |name, id|
+                  [
+                    id,
+                    { "data-content": name
+                  }
+                  ]
+                },
+                selected: army.factions.pluck(:id)
+              ),
+              { include_blank: false },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              title: 'Sin facción',
+              multiple: true,
+              data: { }
+            %>
+          </div>
+
+          <%= form.submit nil, class: 'btn btn-primary' %>
+
+          <% if army.logs&.empty? == false %>
+            <div class="input-group mt-3">
+              <%= form.label :changelog, class: 'input-group-text w-100' %>
+              <% army.logs.reverse.each do | log | %>
+                <% log = JSON.parse(log) %>
+                <div class="ms-3 mt-1 w-100 fw-bolder">
+                  <%= DateTime.parse(log["timestamp"]).strftime("%d/%m/%Y @ %H:%M") + ", by " + log["username"] %>
+                  <% log["changes"].each do |change| %>
+                    <div class="ms-3 mt-1 w-100 fw-lighter">
+                      <%= change %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>          
+        <% end %>
       </div>
     </div>
   </div>

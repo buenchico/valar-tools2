@@ -2,6 +2,9 @@ class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show]
   before_action :set_options
+  before_action :set_regions, only: [:new, :edit, :edit_multiple]
+  before_action :set_factions, only: [:index, :edit, :edit_multiple, :new]
+
 
   def index
   end
@@ -22,5 +25,9 @@ private
 
   def set_army
     @army = Army.find(params[:id])
+  end
+
+  def set_factions
+    @factions = Faction.where.not(name: ['admin','player']).where(active: true).order(:id)
   end
 end

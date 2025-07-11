@@ -69,6 +69,16 @@ class ApplicationController < ActionController::Base
     @regions = Location.where(location_type: "region").where(game_id: active_game.id).order('name_es')
   end
 
+  def set_families_list
+    if @current_user&.is_admin?
+      @families = Family.all.order(:name)
+    elsif @current_user&.is_master?
+      @families = Family.where(game_id: active_game.id).order(:name)
+    else
+      @families = Family.where(visible: true).where(game_id: active_game.id).order(:name)
+    end
+  end
+
   def player_tools
     if @current_user&.is_master?
       player_tools = Tool.where(active: true).where(role: ['player', 'guest'])
@@ -117,11 +127,11 @@ class ApplicationController < ActionController::Base
   def set_options_armies
     # @attributes = @options_armies["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
     # @men = @options_armies["men"]&.sort_by { |_, v| v["sort"] }.to_h
-    # @tags = @options_armies["tags"]&.sort_by { |key, _value| key }.to_h
     # @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     # @hp = @options_armies["hp"]
     # @fleets = @options_armies["fleets"]
     @army_status = @options_armies["status"]
+    @tags = @options_armies["tags"]&.sort_by { |key, _value| key }.to_h
   end
 
   def set_options_clocks
