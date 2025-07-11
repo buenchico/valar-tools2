@@ -9,6 +9,8 @@ class Army < ApplicationRecord
   belongs_to :family, class_name: 'Family', foreign_key: 'family_id', optional: true
   belongs_to :location, class_name: 'Location', foreign_key: 'location_id', optional: true
 
+  has_many :units, dependent: :destroy
+
   validates :name, presence: true
   validates :hp, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates_uniqueness_of :name

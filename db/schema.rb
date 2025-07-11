@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_22_112923) do
+ActiveRecord::Schema[7.0].define(version: 2025_07_11_131921) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -33,33 +33,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_112923) do
     t.text "notes"
     t.boolean "visible"
     t.text "tags", default: [], array: true
-    t.integer "hp", default: 100
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "location_id"
     t.bigint "family_id"
     t.string "board"
     t.text "logs", default: [], array: true
-    t.integer "hp_start", default: 100
-    t.integer "men1", default: 0
-    t.integer "men2", default: 0
-    t.integer "men3", default: 0
-    t.integer "men4", default: 0
-    t.integer "men5", default: 0
-    t.integer "men6", default: 0
-    t.integer "men7", default: 0
-    t.integer "men8", default: 0
-    t.integer "men9", default: 0
-    t.integer "attr0", default: 0
-    t.integer "attr1", default: 0
-    t.integer "attr2", default: 0
-    t.integer "attr3", default: 0
-    t.integer "attr4", default: 0
-    t.integer "attr5", default: 0
-    t.integer "attr6", default: 0
-    t.integer "attr7", default: 0
-    t.integer "attr8", default: 0
-    t.integer "attr9", default: 0
     t.string "army_type", default: "conscript"
     t.index ["family_id"], name: "index_valar_armies_on_family_id"
     t.index ["location_id"], name: "index_valar_armies_on_location_id"
@@ -229,6 +208,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_112923) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "units", force: :cascade do |t|
+    t.bigint "army_id", null: false
+    t.string "unit_type"
+    t.integer "men_start"
+    t.integer "men_actual"
+    t.float "unit_strength"
+    t.float "armour"
+    t.integer "hp"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["army_id"], name: "index_valar_units_on_army_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "player"
     t.string "faction"
@@ -248,4 +240,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_112923) do
   add_foreign_key "factions_games", "games"
   add_foreign_key "families", "families", column: "lord_id"
   add_foreign_key "locations", "locations", column: "region_id"
+  add_foreign_key "units", "armies"
 end
