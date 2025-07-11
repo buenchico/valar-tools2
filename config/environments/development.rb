@@ -17,6 +17,8 @@ Rails.application.configure do
   config.consider_all_requests_local = true
 
   # Enable/disable caching. By default caching is disabled.
+
+
   # Run rails dev:cache to toggle caching.
   if Rails.root.join('tmp', 'caching-dev.txt').exist?
     config.action_controller.perform_caching = true
@@ -71,7 +73,13 @@ Rails.application.configure do
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
-  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+  if File.read("/proc/version").include?("microsoft")
+    puts "WINDOWS"
+    config.file_watcher = ActiveSupport::FileUpdateChecker
+  else
+    puts "LINUX"
+    config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+  end
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
