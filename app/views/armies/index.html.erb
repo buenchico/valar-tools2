@@ -1,13 +1,12 @@
 <% provide(:title, @tool.title) %>
 <% provide(:icon, @tool.icon_url) %>
 
+<%= @options_armies %>
+
 <div class="tool-title">
   <i class="white <%= yield(:icon) %>"></i>
   <%= yield(:title) %>
 </div>
-
-<div class="d-none" id="men_per_army"><%= @options_armies["soldiers"].to_i %></div>
-<div class="d-none" id="men_per_step"><%= ((@options_armies["hp"]["step"].to_f / 100) * @options_armies["soldiers"].to_i).to_i %></div>
 
 <% if @current_user&.is_master? %>
   <div class="col">
@@ -16,68 +15,3 @@
     <% end %>
   </div>
 <% end %>
-
-<div class="row my-3">
-  <div class="col">
-    <%= form_tag(edit_multiple_armies_path, method: :get, id: 'edit_multiple', remote: true) do %>
-      <%= hidden_field_tag 'army_ids', '', id: 'army_ids_field' %>
-      <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button mass-copy", disabled: true) do %>
-        <i class="bi bi-clipboard"></i> Copiar
-      <% end %>
-      <% if @current_user&.is_master? %>
-        <%= button_tag(type: 'button', class: "btn btn-secondary btn-sm mass_edit_button mass-copy-land", disabled: true) do %>
-          <i class="bi bi-clipboard"></i> Copiar fuerza terrestre
-        <% end %>
-      <% end %>
-      <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "update") do %>
-        <i class="bi bi-pencil-square"></i> Editar en masa
-      <% end %>
-      <% if @current_user&.is_master? %>
-        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "destroy") do %>
-          <i class="bi bi-trash"></i> Borrar en masa
-        <% end %>
-        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm", value: "import") do %>
-          Importar
-        <% end %>
-        <%= link_to t('helpers.submit.export'), export_armies_path(format: :csv), class: 'btn btn-danger btn-sm' %>
-      <% end %>
-    <% end %>
-  </div>
-
-  <div class="col">
-    <div class="d-flex align-items-center">
-      <%= select_tag "filter", options_for_select(@filter, t('activerecord.attributes.army.name')), id: "filterselect", class: "form-select form-select-sm me-2" %>
-      <input id="filtertext" class="form-control form-control-sm" type="text" placeholder="Filtrar...">
-    </div>
-  </div>
-</div>
-
-<% if @current_user&.is_master? %>
-  <%= form_with url: get_armies_path, method: :get, local: false do |form| %>
-    <ul class="nav nav-pills mb-3">
-      <li class="me-1">Facciones:</li>
-      <% @factions.each do |faction| %>
-        <li>
-          <%= form.button faction.long_name, type: 'button', id: 'tab-' + faction.id.to_s, value: faction.id, class: 'nav-link nav-links-sm text-white armies-tab armies-load' %>
-        </li>
-      <% end %>
-    </ul>
-    <ul class="nav nav-pills mb-3">
-      <li class="me-1">Visibilidad:</li>
-      <li><%= form.button 'Visible', name: 'visibility', type: 'button', id: 'visible-true', value: 'true', class: 'nav-link nav-links-sm text-white visible-tab armies-load active' %></li>
-      <li><%= form.button 'Invisible', name: 'visibility', type: 'button', id: 'visible-false', value: 'false', class: 'nav-link nav-links-sm text-white visible-tab armies-load' %></li>
-    </ul>
-    <%= form.hidden_field :active_factions, value: @faction.nil? ? '' : @faction.id %>
-    <%= form.hidden_field :faction_id %>
-    <%= form.hidden_field :active_visibility, value: true %>
-    <%= form.hidden_field :visible %>
-    <%= form.hidden_field :stats, value: true %>
-  <% end %>
-<% end %>
-
-<div class="row" id="army_stats">
-  <%= render 'army_stats', faction: @faction %>
-</div>
-<div id="army_table">
-  <%= render 'armies_table' %>
-</div>

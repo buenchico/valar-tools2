@@ -39,7 +39,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_11_131921) do
     t.bigint "family_id"
     t.string "board"
     t.text "logs", default: [], array: true
-    t.string "army_type", default: "conscript"
     t.index ["family_id"], name: "index_valar_armies_on_family_id"
     t.index ["location_id"], name: "index_valar_armies_on_location_id"
   end

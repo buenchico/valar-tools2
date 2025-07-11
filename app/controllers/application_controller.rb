@@ -115,13 +115,13 @@ class ApplicationController < ActionController::Base
   end
 
   def set_options_armies
-    @attributes = @options_armies["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
-    @men = @options_armies["men"]&.sort_by { |_, v| v["sort"] }.to_h
-    @tags = @options_armies["tags"]&.sort_by { |key, _value| key }.to_h
+    # @attributes = @options_armies["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
+    # @men = @options_armies["men"]&.sort_by { |_, v| v["sort"] }.to_h
+    # @tags = @options_armies["tags"]&.sort_by { |key, _value| key }.to_h
+    # @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
+    # @hp = @options_armies["hp"]
+    # @fleets = @options_armies["fleets"]
     @army_status = @options_armies["status"]
-    @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
-    @hp = @options_armies["hp"]
-    @fleets = @options_armies["fleets"]
   end
 
   def set_options_clocks
@@ -131,7 +131,12 @@ class ApplicationController < ActionController::Base
   end
 
   def set_options_families
-    # No per attribute options
+    @options_families["subtools"] ||= {}
+
+    @options_families["subtools"]["tags"] = true if @options_families["tags"].present?
+    @options_families["subtools"]["loyalties"] = true if @options_families["loyalties"].present?
+    @options_families["subtools"]["tiers"] = true if @options_families["tiers"].present?
+    @options_families["subtools"]["armies"] = true if Tool.find_by(name: "armies").is_active?
   end
 
   def set_options_locations

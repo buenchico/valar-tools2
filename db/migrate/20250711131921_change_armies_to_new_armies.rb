@@ -9,9 +9,7 @@ class ChangeArmiesToNewArmies < ActiveRecord::Migration[7.0]
     # Remove hp and hp_start — you were missing the table name!
     remove_column :armies, :hp, :integer
     remove_column :armies, :hp_start, :integer
-
-    # Ensure army_type has a default
-    change_column_default :armies, :army_type, from: nil, to: "conscript"
+    remove_column :armies, :army_type, :string
 
     create_table :units do |t|
       t.references :army, null: false, foreign_key: true
