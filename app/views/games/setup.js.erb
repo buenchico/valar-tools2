@@ -29,13 +29,13 @@ $('#step-complete').click(function() {
   $("#complete-tab").tab("show");
 });
 $('input[type="checkbox"]').change(function() {
+  var id = $(this).attr('id').split("-")[1]
   if ($(this).prop('checked')) {
-    var id = $(this).attr('id').split("-")[1]
     $('#' + id).removeClass("inactive")
     $('#users_' + id.split("_")[1] + '_faction').prop('disabled', false)
     $('#users_' + id.split("_")[1] + '_faction').selectpicker('refresh')
   } else {
-    $('#' + $(this).attr('id').split("-")[1]).addClass("inactive")
+    $('#' + id).addClass("inactive")
     $('#users_' + id.split("_")[1] + '_faction').prop('disabled', true)
     $('#users_' + id.split("_")[1] + '_faction').selectpicker('refresh')
   }

@@ -212,6 +212,12 @@ $(document).on('turbolinks:load', function() {
   $.fn.mass_edit_buttons();
 });
 
+// Select all checkboxes to work in modals
+$(document).on('shown.bs.modal', function (event) {
+  $.fn.checkbox_listeners();
+  $.fn.mass_edit_buttons();
+});
+
 
 // Change collpase icon
 function changeCollapseIcon(event) {

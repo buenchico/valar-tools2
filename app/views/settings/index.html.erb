@@ -6,7 +6,7 @@
     <%= yield(:title) %>
 </div>
 
-<div class="card bg-dark mb-3">
+<div class="card bg-dark text-light mb-3">
   <div class="card-body">
     <% if @active_game.nil?%>
       <%= form_with url: setup_game_url, local: false do |form| %>
@@ -15,7 +15,7 @@
             @games.pluck(:id, :title, :icon_url).map { | id, title, icon_url |
               [
                 id,
-                { 
+                {
                   "data-content": safe_image_tag(icon_url, :alt => title, id: title, class: 'icon-table bg-dark') + " " + title
                 }
               ]
@@ -33,10 +33,13 @@
       <% end %>
     <% else %>
       <%= form_with url: unset_active_game_url, remote: true do |form| %>
-        <%= safe_image_tag(@active_game.icon_url, :alt => @active_game.title, id: @active_game.title, class: 'icon-table bg-dark') + " " + @active_game.title %>
-        <%= form.submit "Terminar partida", class: "btn btn-danger" %>
-        <% end %>
+        <div class="d-flex align-items-center gap-3">
+          <%= safe_image_tag(@active_game.icon_url, alt: @active_game.title, id: @active_game.title, class: 'icon-table bg-dark') %>
+          <span class="fs-2"><%= @active_game.title %></span>
+          <%= form.submit "Terminar partida", class: "btn btn-danger" %>
+        </div>
       <% end %>
+    <% end %>
   </div>
 </div>
 

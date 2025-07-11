@@ -44,7 +44,7 @@
                 <table class="table table-dark table-striped table-borderless table-hover table-sm table-responsive align-middle sortable">
                   <thead>
                     <tr>
-                      <th scope="col"></th>
+                      <th data-filter="checkbox" scope="col"><input type="checkbox" id="check-faction_all" class="checkbox_select_all option-input" /></th>
                       <th scope="col" style="width: 25px"></th>
                       <th scope="col">Nombre</th>
                       <th scope="col">Miembros</th>
@@ -53,7 +53,7 @@
                   <tbody>
                     <% @factions.offset(3).each do |faction| %>
                       <tr id="faction_<%= faction.id.to_s %>" class="<%= faction.games.pluck(:id).include?(@game.id) ? "" : "inactive" %>" >
-                        <td><%= check_box_tag "faction_ids[]", faction.id, false, class: "checkbox_selectable checkbox_faction", checked: faction.games.pluck(:id).include?(@game.id), id: "check-faction_" + faction.id.to_s %></td>
+                        <td><%= check_box_tag "faction_ids[]", faction.id, false, id: 'check-faction_' + faction.id.to_s, class: "checkbox_selectable option-input", checked: faction.games.pluck(:id).include?(@game.id) %></td>
                         <td><%= image_tag(faction.flair_url, :alt => faction.name, id: faction.name, class: 'icon-table') if faction.flair_url.present? %></td>
                         <td>
                           <blockquote class="blockquote">
@@ -77,7 +77,7 @@
                 <table class="table table-dark table-striped table-borderless table-hover table-sm table-responsive align-middle sortable">
                   <thead>
                     <tr>
-                      <th scope="col"></th>
+                      <th data-filter="checkbox" scope="col"><input type="checkbox" id="check-users_all" class="checkbox_select_all option-input" /></th>
                       <th scope="col" style="width: 25px"></th>
                       <th scope="col">Nombre</th>
                       <th scope="col">Miembros</th>
@@ -86,7 +86,7 @@
                   <tbody>
                     <% @users.each do |user| %>
                       <tr id="user_<%= user.id.to_s %>" class="inactive">
-                        <td><%= check_box_tag "users[][id]", user.id, false, class: "checkbox_selectable", id: "check-user_" + user.id.to_s %></td>
+                        <td><%= check_box_tag "users[][id]", user.id, false, id: 'check-user_' + user.id.to_s, class: "checkbox_selectable option-input" %></td>
                         <td><%= image_tag(user.avatar_url, :alt => user.player, id: user.player, class: 'icon-table') if user.avatar_url.present? %></td>
                         <td><%= user.player %></td>
                         <td>
