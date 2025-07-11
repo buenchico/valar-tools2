@@ -11,6 +11,21 @@ class ArmiesController < ApplicationController
 
   def new
     @army = Army.new
+    @army.units.build # builds one unit field by default
+  end
+
+  def create
+    @army = Army.new(army_params)
+
+    respond_to do |format|
+      if @army.save
+        flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        format.js
+      else
+        flash.now[:danger] = @army.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: 'el ejército', method: 'create' } }
+      end
+    end
   end
 
 private
@@ -29,5 +44,16 @@ private
 
   def set_factions
     @factions = Faction.where.not(name: ['admin','player']).where(active: true).order(:id)
+  end
+
+  def army_params
+    params.require(:army).permit(
+      :name, :status, :position, :group, :location_id, :family_id, :confirm,
+      :visible, :notes, :board, faction_ids: [], tags: [],
+      units_attributes: [:id, :unit_type, :men, :unit_strength, :armour, :hp]
+    ).tap do |whitelisted|
+      whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
+      whitelisted[:board] = nil if whitelisted.key?(:board) && whitelisted[:board].blank?
+    end
   end
 end

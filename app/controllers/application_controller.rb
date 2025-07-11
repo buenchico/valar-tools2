@@ -109,10 +109,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def army_size_mod(number)
-    ((-1 + Math.sqrt(1 + 8 * number)) / 2).floor
-  end
-
   def generate_pseudorandom_id
     timestamp = Time.now.to_i
     random_hex = SecureRandom.hex(4) # You can adjust the length of the random part as needed.
@@ -131,7 +127,8 @@ class ApplicationController < ActionController::Base
     # @hp = @options_armies["hp"]
     # @fleets = @options_armies["fleets"]
     @army_status = @options_armies["status"]
-    @tags = @options_armies["tags"]&.sort_by { |key, _value| key }.to_h
+    @army_tags = @options_armies["tags"]&.sort_by { |key, _value| key }.to_h
+    @unit_types = @options_armies["units"]&.sort_by { |_, v| v["sort"] }.to_h
   end
 
   def set_options_clocks

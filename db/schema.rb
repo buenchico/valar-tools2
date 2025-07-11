@@ -211,10 +211,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_11_131921) do
     t.bigint "army_id", null: false
     t.string "unit_type"
     t.integer "men_start"
-    t.integer "men_actual"
+    t.integer "men"
     t.float "unit_strength"
     t.float "armour"
-    t.integer "hp"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["army_id"], name: "index_valar_units_on_army_id"

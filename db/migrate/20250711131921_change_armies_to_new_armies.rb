@@ -15,10 +15,9 @@ class ChangeArmiesToNewArmies < ActiveRecord::Migration[7.0]
       t.references :army, null: false, foreign_key: true
       t.string :unit_type
       t.integer :men_start
-      t.integer :men_actual
+      t.integer :men
       t.float :unit_strength
       t.float :armour
-      t.integer :hp
 
       t.timestamps
     end
