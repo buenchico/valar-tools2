@@ -1,0 +1,10 @@
+<div class="container">
+  <div class="row row-cols-4 g-1">
+    <% BOOTSTRAP_ICON_LIST.each do |name| %>
+      <div class="col text-center">
+        <i class="bi bi-<%= name %> fs-4"></i><br>
+        <small><%= name %></small>
+      </div>
+    <% end %>
+  </div>
+</div>
