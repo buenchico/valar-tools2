@@ -37,16 +37,20 @@ class Family < ApplicationRecord
 
   def hp(status)
     set_army_options if self.hp_step.nil?
-    (self.armies.where(status: status).sum(:hp) / self.hp_step)
+    if Tool.find_by(name: "armies").is_active?
+      (self.armies.where(status: status).sum(:hp) / self.hp_step)
+    end
   end
 
   def hp_start(type)
     set_army_options if self.hp_step.nil?
 
-    if type == 'all'
-      (self.armies.sum(:hp_start) / self.hp_step)
-    else
-      (self.armies.where(army_type: type).sum(:hp_start) / self.hp_step)
+    if Tool.find_by(name: "armies").is_active?
+      if type == 'all'
+        (self.armies.sum(:hp_start) / self.hp_step)
+      else
+        (self.armies.where(army_type: type).sum(:hp_start) / self.hp_step)
+      end
     end
   end
 
