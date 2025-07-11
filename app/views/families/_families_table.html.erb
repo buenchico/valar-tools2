@@ -7,7 +7,7 @@
           <th data-sorter="false" data-filter="checkbox" scope="col"><input type="checkbox" class="checkbox_select_all option-input" /><span class="d-none"><%= t('activerecord.attributes.family.selected') %></span></th>
         <% end %>
         <th scope="col"><%= t('activerecord.attributes.family.name') %></th>
-        <% if @options_families["tags"].present? %>
+        <% if @options_families["subtools"]["tags"] %>
           <th scope="col"><%= t('activerecord.attributes.family.tags') %></th>
         <% end %>
         <th scope="col"><%= t('activerecord.attributes.family.lord_id') %></th>
@@ -17,7 +17,7 @@
           <% @options_families["loyalties"].each do |value| %>
             <th scope="col"><%= t('activerecord.attributes.family.loyalty') %> <%= value %></th>
           <% end %>
-          <% if Tool.find_by(name: "armies").is_active? %>
+          <% if @options_families["subtools"]["armies"] %>
             <th scope="col" colspan="3" data-bs-toggle="tooltip" data-bs-placement="left" title="HP alzados de HP totales leva (sangrado). HP muertos">Ejércitos</th>
           <% end %>
           <th scope="col" class="text-center sorter-bootstrap-icons">Visible</th>

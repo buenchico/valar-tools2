@@ -137,6 +137,11 @@ private
     if @options_families.blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     end
+    @options_families["subtools"] ||= {}
+
+    @options_families["subtools"]["tags"] = true if @options_families["tags"].present?
+    @options_families["subtools"]["loyalties"] = true if @options_families["loyalties"].present?
+    @options_families["subtools"]["armies"] = true if Tool.find_by(name: "armies").is_active?
   end
 
   def check_visble

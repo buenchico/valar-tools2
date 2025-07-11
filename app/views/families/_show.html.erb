@@ -86,13 +86,16 @@
           </div>
         <% end %>
         <% if @current_user&.is_master? %>
-          <div class="h4"><%= t('activerecord.attributes.family.loyalty') %></div>
-          <% @options_families["loyalties"].each_with_index do |value, index| %>
-            <div class="row ms-1">
-              <%= value %>: <%= number_to_modifier(family["loyalty_#{index + 1}"]) %>
-            </div>
+          <% if @options_families["subtools"]["loyalty"] %>
+            <div class="h4"><%= t('activerecord.attributes.family.loyalty') %></div>
+            <% @options_families["loyalties"].each_with_index do |value, index| %>
+              <div class="row ms-1">
+                <%= value %>: <%= number_to_modifier(family["loyalty_#{index + 1}"]) %>
+              </div>
+            <% end %>
           <% end %>
-          <% if @family.armies.present? %>
+          <% if @options_families["subtools"]["armies"] %>
+            <% if @family.armies.present? %>
             <div class="h4">Ejércitos</div>
             <div class="row ms-1">
               <% @army_options["status"]&.sort_by { |_, v| v["sort"] }.to_h.each do | key, status | %>
@@ -133,6 +136,7 @@
                 </div>
               </div>
             <% end %>
+          <% end %>
           <% end %>
         <% end %>
       </div>
