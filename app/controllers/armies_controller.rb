@@ -7,6 +7,18 @@ class ArmiesController < ApplicationController
 
 
   def index
+    @faction = Faction.find_by(id: params[:faction_id])
+    if @current_user&.is_master?
+      if @faction
+        @armies = @faction.armies.where(visible: true).order(:id)
+      else
+        @faction = @current_user.faction
+        @armies = Army.all
+      end
+    else
+      @faction = @current_user.faction
+      @armies = @faction.armies.where(visible: true).order(:id)
+    end
   end
 
   def new

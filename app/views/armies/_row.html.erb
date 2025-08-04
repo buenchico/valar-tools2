@@ -1,0 +1,19 @@
+<td>
+  <%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable option-input" %>
+</td>
+
+<td>
+  FUE
+</td>
+
+<td>
+  <%= army.name %>
+</td>
+
+<td>
+  <%= @army_status[army.status]["name"] %>
+</td>
+
+<td>
+  
+</td>

@@ -14,10 +14,11 @@ class ChangeArmiesToNewArmies < ActiveRecord::Migration[7.0]
     create_table :units do |t|
       t.references :army, null: false, foreign_key: true
       t.string :unit_type
-      t.integer :men_start
+      t.integer :count_start
+      t.integer :count
       t.integer :men
-      t.float :unit_strength
-      t.float :armour
+      t.float :strength
+      t.float :hp
 
       t.timestamps
     end
