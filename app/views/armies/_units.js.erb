@@ -1,0 +1,61 @@
+const unitsData = <%= raw @options_armies['units'].to_json %>;
+var last_unit_id = ($("select.units-select").length - 1);
+
+$("select.units-select").on("change", function () {
+  const unit = $(this).val();
+
+  var str = null
+  var hp = null
+
+  const selectId = $(this).attr("id");
+  const index = selectId.split("_")[3];
+
+  // Check if unit exists in unitsData
+  if (unitsData[unit]) {
+    var str = unitsData[unit]['str']
+    var hp = unitsData[unit]['armour']
+  }
+
+  $('#army_units_attributes_' + index + '_strength').val(str);
+  $('#army_units_attributes_' + index + '_hp').val(hp);
+});
+
+$(document).on("change", "input[id^='army_units_attributes_'][id$='_men']", function() {
+  var menId = $(this).attr("id");
+  var menIndex = parseInt(menId.split("_")[3], 10);
+
+  if (menIndex === last_unit_id) {
+    console.log($(this).val())
+    if ($(this).val() !== "0") {
+      let next_unit_id = last_unit_id + 1;
+
+      let menInput = $('<input>', {
+        type: 'number',
+        class: 'form-control',
+        step: '0.01',
+        min: '0',
+        placeholder: 'fuerza por hombre',
+        name: `army[units_attributes][${next_unit_id}][men]`,
+        id: `army_units_attributes_${next_unit_id}_men`
+      });
+
+      let unitDiv = $('<div>', {
+        id: `unit-fields-` + next_unit_id
+      });
+
+      $('#units').append(unitDiv);
+      $('#unit-fields-' + next_unit_id).append(menInput);
+
+      last_unit_id ++
+
+    } else if ($(this).val() === "0") {
+      if (menIndex !== 0) {
+        $('#unit-fields-' + last_unit_id).remove();
+      }
+
+      last_unit_id --
+    }
+  }
+
+
+});
