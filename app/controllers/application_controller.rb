@@ -8,9 +8,6 @@ class ApplicationController < ActionController::Base
   helper_method :admin_tools
   helper_method :inactive_tools
 
-  helper_method :number_to_modifier
-  helper_method :army_size_mod
-
   add_flash_types :error, :success, :info, :danger, :warning
 
   def set_current_user
@@ -97,16 +94,6 @@ class ApplicationController < ActionController::Base
 
   def inactive_tools
     inactive_tools = Tool.where(active: false)
-  end
-
-  def number_to_modifier(number)
-    if number.nil?
-      "–"
-    elsif number >= 0
-      "+#{number}"
-    else
-      "–#{number.abs}"
-    end
   end
 
   def generate_pseudorandom_id

@@ -11,6 +11,7 @@ module ApplicationHelper
       image_tag('tools-circle.webp', options)
     end
   end
+
   def calculate_mod(value)
     if value == nil
       0
@@ -78,6 +79,29 @@ module ApplicationHelper
       else
         [part.strip, 0] # Handle case with no number
       end
+    end
+  end
+
+  def number_to_modifier(number)
+    if number.nil?
+      "–"
+    elsif number >= 0
+      "+#{number}"
+    else
+      "–#{number.abs}"
+    end
+  end  
+
+  def number_to_compact(number)
+    case number
+    when 0..999
+      number.to_s
+    when 1_000..999_999
+      "#{(number / 1_000.0).round}K"
+    when 1_000_000..999_999_999
+      "#{(number / 1_000_000.0).round}M"
+    else
+      "#{(number / 1_000_000_000.0).round}G"
     end
   end
 end
