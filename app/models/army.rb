@@ -22,11 +22,11 @@ class Army < ApplicationRecord
   end
 
   def strength
-    units.sum(&:strength)
+    units.sum(&:strength).to_i
   end
 
   def men
-    units.sum(&:men)
+    units.sum(&:men).to_i
   end
 
   def search
@@ -34,32 +34,44 @@ class Army < ApplicationRecord
   end
 
   def log_changes
-    if self.persisted? && self.changes.keys != ['logs'] # Check if the record already exists (for updates) and if the only changes are not of the logs
-      current_user = Thread.current[:current_user] || User.find_by(player: "valar")
+    current_user = Thread.current[:current_user] || User.find_by(player: "valar")
 
-      changes = self.changes.map do |field, values|
-        "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
-      end
+    if self.changes.keys != ['logs'] # Check if the only changes are not of the logs
+      puts "22222"
+      puts .....
+      if new_record?
+        changes << "Army has been created"
 
-      if self.faction_ids_was != self.faction_ids
-        changes << ("Factions changed from: " + Faction.where(id: self.faction_ids_was).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s + " to: " + Faction.where(id: self.faction_ids).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s)
-      end
+        excluded = %w[family_id logs]
+        changes = self.attributes.except(*excluded)
+                         .select { |_, value| value.present? }
+                         .map { |attr, value| "#{attr} is #{value.inspect}" }
+        if self.family_id.present?
+          changes << "family is #{Family.find(self.family_id)&.title}"
+        end
 
-      # Detect added or removed units
-      previous_unit_ids = self.unit_ids_was
-      current_unit_ids = self.unit_ids
+        if self.faction_ids.present?
+          changes << "factions is #{Faction.where(id: faction_ids).pluck(:name, :id).map { |name, id | "#{name} (#{id})" }.to_s }"
+        end
 
-      added_units = current_unit_ids - previous_unit_ids
-      removed_units = previous_unit_ids - current_unit_ids
+        if unit_ids.present?
+          self.units.each do | unit |
+            changes << "Unit added : #{unit.count} #{unit.name}"
+          end
+        end
+      else
+        excluded = %w[logs]
+        changes = self.changes.except(*excluded).map do |field, values|
+          if field == "family_id"
+            "#{field} changed from #{values[0].blank? ? "nil" : Family.find(values[0])&.title} to #{values[1].blank? ? "nil" : Family.find(values[1])&.title}"
+          else
+            "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
+          end
+        end
 
-      if added_units.any?
-        added = Unit.where(id: added_units).map { |u| "#{u.count} #{u.unit_type} (#{u.id})" }
-        changes << "Units added: #{added.join(', ')}"
-      end
-
-      if removed_units.any?
-        removed = Unit.where(id: removed_units).map { |u| "#{u.count} #{u.unit_type} (#{u.id})" }
-        changes << "Units removed: #{removed.join(', ')}"
+        if self.faction_ids_was != self.faction_ids
+          changes << ("Factions changed from: " + Faction.where(id: self.faction_ids_was).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s + " to: " + Faction.where(id: self.faction_ids).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s)
+        end
       end
 
       change_log = {

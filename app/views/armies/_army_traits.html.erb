@@ -1,7 +1,8 @@
 <% army.units.each do | unit | %>
   <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= (unit.modifier == 100) ? 'success' : 'brass' %>">
-    <i class="bi bi-<%= @unit_types[unit.unit_type]['icon'] %>"></i>
-    <%= number_to_compact(unit.count) %>
+    <i class="bi bi-<%= @unit_types.fetch(unit.unit_type, {}).fetch('icon', nil) %>"></i>
+
+    <%= number_to_compact(unit.count.to_i) %>
     <%= unit.name %>
   </span>
 <% end %>

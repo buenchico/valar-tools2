@@ -1,14 +1,19 @@
 class Unit < ApplicationRecord
   belongs_to :army
   before_create :set_count_start
+
+  validates :count, presence: true
+  validates :unit_type, presence: true
+  validates :modifier, presence: true
+
   before_save :log_changes
 
   def strength
     set_options if @option_armies.nil?
 
-    unit_strength = @units[self.unit_type]["str"]
+    unit_strength = @units.fetch(self.unit_type, {}).fetch("str", 0)
 
-    self.count * unit_strength * (self.modifier / 100.0) * @scale
+    self.count.to_i * unit_strength.to_i * (self.modifier / 100.0) * @scale
   end
 
   def men
@@ -21,7 +26,7 @@ class Unit < ApplicationRecord
 
   def name
     set_options if @option_armies.nil?
-    name = (@units[self.unit_type]["name"]).pluralize(self.count)
+    name = (@units.fetch(self.unit_type, {}).fetch("name", "")).pluralize(self.count)
     if self.modifier != 100
       name += (" v" + (self.modifier / 100.0).to_s)
     end

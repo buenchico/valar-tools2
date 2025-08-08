@@ -60,7 +60,7 @@ es:
       update: 'Guardar %{model}'
       delete: 'Borrar %{model}'
       add: 'Añadir %{model}'
-      remove: 'Quitar %{model}'      
+      remove: 'Quitar %{model}'
       update_multiple: 'Guardar %{model}'
       delete_multiple: 'Borrar %{model}'
       import: 'Importar'
@@ -246,13 +246,21 @@ es:
         status_clock_style: 'Debe ser igual o mayor que cero y menor o igual que el tamaño.'
         status_balance_style: 'Debe estar entre la mitad del tamaño negativo y la mitad del tamaño positivo.'
       models:
+        unit:
+          attributes:
+            count:
+              blank: 'El número de unidades debe existir'
+            unit_type:
+              blank: 'Sólo puede elegirse un tipo de unidad de la lista'
+            modifier:
+              blank: 'El modificador debe existir'
         army:
           attributes:
             board:
               inclusion: 'Sólo pueden elegirse flotas de la lista'
             name:
               taken: 'El nombre del ejército debe ser único'
-              blank: 'El nombre dle ejército no puede estar en blanco'
+              blank: 'El nombre del ejército no puede estar en blanco'
             tags:
               inclusion: 'Sólo pueden elegirse rasgos de la lista'
             group:
