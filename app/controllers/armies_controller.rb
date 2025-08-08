@@ -45,6 +45,7 @@ class ArmiesController < ApplicationController
 
   def update
     @army.faction_ids_was = @army.faction_ids
+    @army.unit_ids_was = @army.unit_ids
     respond_to do |format|
       if @army.update(army_params)
         flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
@@ -78,7 +79,7 @@ private
     params.require(:army).permit(
       :name, :status, :position, :group, :location_id, :family_id, :confirm,
       :visible, :notes, :board, faction_ids: [], tags: [],
-      units_attributes: [:id, :unit_type, :count, :men, :strength, :hp, :_destroy]
+      units_attributes: [:id, :unit_type, :count, :modifier, :_destroy]
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
       whitelisted[:board] = nil if whitelisted.key?(:board) && whitelisted[:board].blank?

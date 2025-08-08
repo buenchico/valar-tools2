@@ -3,6 +3,7 @@
 
 <%= @options_armies %>
 
+
 <div class="tool-title">
   <i class="white <%= yield(:icon) %>"></i>
   <%= yield(:title) %>
@@ -11,7 +12,7 @@
 <% if @current_user&.is_master? %>
   <div class="col">
     <%= link_to new_army_path, class: "btn btn-primary", remote: true do %>
-      <i class="bi bi-plus-circle"></i> Crear Nuevo Ejército
+      <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
     <% end %>
   </div>
 <% end %>

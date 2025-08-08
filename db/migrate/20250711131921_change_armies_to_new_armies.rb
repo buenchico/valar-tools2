@@ -16,9 +16,7 @@ class ChangeArmiesToNewArmies < ActiveRecord::Migration[7.0]
       t.string :unit_type
       t.integer :count_start
       t.integer :count
-      t.integer :men
-      t.float :strength
-      t.float :hp
+      t.integer :modifier, default: 100
 
       t.timestamps
     end

@@ -1,6 +1,6 @@
 <div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content bg-dark">
+    <div class="modal-content bg-dark text-light">
       <div class="modal-header">
         <h5 class="modal-title w-100" id="Title"><%= army&.name %></h5>
         <% if army.id %>
@@ -118,9 +118,12 @@
             <%= form.fields_for :units do |unit_form| %>
               <%= render 'unit_fields', f: unit_form %>
             <% end %>
-            <div class='links'>
-              <%= link_to_add_association 'add task', form, :units %>
-            </div>
+            <%= link_to_add_association(
+              "<i class='bi bi-plus-circle'></i> #{t('helpers.submit.add', model: t("activerecord.models.unit", count: 1))}".html_safe,
+              form,
+              :units,
+              class: 'btn btn-sm btn-success mb-3'
+            ) %>
           </div>
 
           <%= form.submit nil, class: 'btn btn-primary' %>
@@ -146,7 +149,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  <%= render partial: 'units', formats: [:js] %>
-</script>

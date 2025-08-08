@@ -59,6 +59,8 @@ es:
       create: 'Crear %{model}'
       update: 'Guardar %{model}'
       delete: 'Borrar %{model}'
+      add: 'Añadir %{model}'
+      remove: 'Quitar %{model}'      
       update_multiple: 'Guardar %{model}'
       delete_multiple: 'Borrar %{model}'
       import: 'Importar'
@@ -219,6 +221,9 @@ es:
         zero: 'Pequeño Grupo'
         one: 'Ejército'
         other: 'Ejércitos'
+      unit:
+        one: 'Unidad'
+        other: 'Unidades'
       family: 'Familia'
       user: 'Jugador'
       faction: 'Facción'

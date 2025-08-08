@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_07_11_131921) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_11_131921) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
-  enable_extension "plpgsql"
 
   create_table "pg_search_documents", id: :serial, force: :cascade do |t|
     t.text "content"
@@ -60,11 +60,11 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_11_131921) do
     t.integer "status"
     t.string "side_a"
     t.string "side_b"
-    t.jsonb "skirmish", default: {"rolls"=>nil, "armies"=>nil, "results"=>nil, "missions"=>nil}
-    t.jsonb "engagement", default: {"rolls"=>nil, "armies"=>nil, "results"=>nil, "missions"=>nil}
-    t.jsonb "combat_1", default: {"rolls"=>nil, "armies"=>nil, "results"=>nil, "missions"=>nil}
-    t.jsonb "combat_2", default: {"rolls"=>nil, "armies"=>nil, "results"=>nil, "missions"=>nil}
-    t.jsonb "combat_3", default: {"rolls"=>nil, "armies"=>nil, "results"=>nil, "missions"=>nil}
+    t.jsonb "skirmish", default: {"rolls" => nil, "armies" => nil, "results" => nil, "missions" => nil}
+    t.jsonb "engagement", default: {"rolls" => nil, "armies" => nil, "results" => nil, "missions" => nil}
+    t.jsonb "combat_1", default: {"rolls" => nil, "armies" => nil, "results" => nil, "missions" => nil}
+    t.jsonb "combat_2", default: {"rolls" => nil, "armies" => nil, "results" => nil, "missions" => nil}
+    t.jsonb "combat_3", default: {"rolls" => nil, "armies" => nil, "results" => nil, "missions" => nil}
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -188,8 +188,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_11_131921) do
     t.string "description"
     t.integer "difficulty", default: 0
     t.integer "speed", default: 2
-    t.jsonb "factors", default: {"plus_double_once"=>[], "plus_simple_once"=>[], "minus_double_once"=>[], "minus_simple_once"=>[], "plus_double_multiple"=>[], "plus_simple_multiple"=>[], "minus_double_multiple"=>[], "minus_simple_multiple"=>[]}
-    t.jsonb "results", default: {"major"=>[], "minor"=>[], "improvement"=>[]}
+    t.jsonb "factors", default: {"plus_double_once" => [], "plus_simple_once" => [], "minus_double_once" => [], "minus_simple_once" => [], "plus_double_multiple" => [], "plus_simple_multiple" => [], "minus_double_multiple" => [], "minus_simple_multiple" => []}
+    t.jsonb "results", default: {"major" => [], "minor" => [], "improvement" => []}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -212,9 +212,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_11_131921) do
     t.string "unit_type"
     t.integer "count_start"
     t.integer "count"
-    t.integer "men"
-    t.float "strength"
-    t.float "hp"
+    t.integer "modifier", default: 100
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["army_id"], name: "index_valar_units_on_army_id"

@@ -114,7 +114,7 @@ class ApplicationController < ActionController::Base
     # @hp = @options_armies["hp"]
     # @fleets = @options_armies["fleets"]
     @army_status = @options_armies["status"]
-    @army_tags = @options_armies["tags"]&.sort_by { |key, _value| key }.to_h
+    # @army_tags = @options_armies["tags"]&.sort_by { |key, _value| key }.to_h
     @unit_types = @options_armies["units"]&.sort_by { |_, v| v["sort"] }.to_h
   end
 

@@ -1,10 +1,65 @@
 class Unit < ApplicationRecord
   belongs_to :army
   before_create :set_count_start
+  before_save :log_changes
+
+  def strength
+    set_options if @option_armies.nil?
+
+    unit_strength = @units[self.unit_type]["str"]
+
+    self.count * unit_strength * (self.modifier / 100.0) * @scale
+  end
+
+  def men
+    set_options if @option_armies.nil?
+
+    unit_men = @units[self.unit_type]["men"]
+
+    self.count * unit_men
+  end
+
+  def name
+    set_options if @option_armies.nil?
+    name = (@units[self.unit_type]["name"]).pluralize(self.count)
+    if self.modifier != 100
+      name += (" v" + (self.modifier / 100.0).to_s)
+    end
+    return name
+  end
+
+  def log_changes
+    if self.persisted?
+      current_user = Thread.current[:current_user] || User.find_by(player: "valar")
+
+      changes = self.changes.map do |field, values|
+        "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
+      end
+
+      change_log = {
+        timestamp: Time.now,
+        user_id: current_user.id, # Set the current user appropriately
+        username: current_user.player,
+        changes: ["Unit ##{id} (#{unit_type})"] + changes
+      }
+
+      self.army.logs ||= []
+      self.army.logs << change_log.to_json
+      self.army.save(validate: false) # Avoid triggering validations again
+    end
+  end
 
 private
   # Method to set hp_start to the value of hp
   def set_count_start
     self.count_start = self.count
+  end
+
+  def set_options
+    active_game = Game.find_by(active: true)
+    @option_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
+
+    @units = @option_armies["units"]
+    @scale = @option_armies["general"]["scale"]
   end
 end

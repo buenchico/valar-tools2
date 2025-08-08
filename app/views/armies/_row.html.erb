@@ -3,7 +3,7 @@
 </td>
 
 <td>
-  FUE
+  <%= army.strength %>
 </td>
 
 <td>
@@ -15,7 +15,15 @@
 </td>
 
 <td>
+  <%= render 'army_traits', army: army %>
+</td>
 
+<td>
+  POS
+</td>
+
+<td>
+  GROUP
 </td>
 
 <td>
@@ -23,11 +31,5 @@
 </td>
 
 <td>
-
+  <%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %>
 </td>
-
-<td>
-
-</td>
-
-<td><%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %></td>

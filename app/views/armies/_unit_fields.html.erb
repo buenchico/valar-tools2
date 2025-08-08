@@ -9,17 +9,17 @@
           { "data-content": "<span class='badge rounded-pill pill-tags bg-brass'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe
         }
         ]
-      }
+      },
+      f.object.unit_type
     ),
-    { include_blank: true },
+    { },
     class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select',
     title: 'Sin tipo',
     data: { }
   %>
 
-  <%= f.number_field :men, class: 'form-control', step: 1, min: 0, placeholder: 'hombres' %>
-  <%= f.number_field :strength, class: 'form-control', step: 0.01, min: 0, placeholder: 'fuerza por hombre' %>
-  <%= f.number_field :hp, class: 'form-control', step: 0.01, min: 0, placeholder: 'armadura' %>
+  <%= f.number_field :count, class: 'form-control', step: 1, min: 0, placeholder: 'hombres' %>
+  <%= f.number_field :modifier, class: 'form-control', step: 1, min: -50, max: 200, placeholder: 'modifier' %>
 
-  <%= link_to_remove_association "remove task", f %>
+  <%= link_to_remove_association("<i class='bi bi-x-circle-fill'></i>".html_safe, f, class: 'text-danger ms-1 pt-1') %>
 </div>
