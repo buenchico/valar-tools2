@@ -6,8 +6,6 @@ class Unit < ApplicationRecord
   validates :unit_type, presence: true
   validates :modifier, presence: true
 
-  before_save :log_changes
-
   def strength
     set_options if @option_armies.nil?
 
@@ -31,27 +29,6 @@ class Unit < ApplicationRecord
       name += (" v" + (self.modifier / 100.0).to_s)
     end
     return name
-  end
-
-  def log_changes
-    if self.persisted?
-      current_user = Thread.current[:current_user] || User.find_by(player: "valar")
-
-      changes = self.changes.map do |field, values|
-        "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
-      end
-
-      change_log = {
-        timestamp: Time.now,
-        user_id: current_user.id, # Set the current user appropriately
-        username: current_user.player,
-        changes: ["Unit ##{id} (#{unit_type})"] + changes
-      }
-
-      self.army.logs ||= []
-      self.army.logs << change_log.to_json
-      self.army.save(validate: false) # Avoid triggering validations again
-    end
   end
 
 private

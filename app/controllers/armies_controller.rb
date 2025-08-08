@@ -44,8 +44,6 @@ class ArmiesController < ApplicationController
   end
 
   def update
-    @army.faction_ids_was = @army.faction_ids
-    @army.unit_ids_was = @army.unit_ids
     respond_to do |format|
       if @army.update(army_params)
         flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)

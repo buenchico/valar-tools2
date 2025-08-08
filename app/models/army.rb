@@ -15,6 +15,7 @@ class Army < ApplicationRecord
   attr_accessor :faction_ids_was
   attr_accessor :unit_ids_was
 
+  after_find :cache_attributes
   before_save :log_changes
 
   def title
@@ -37,8 +38,6 @@ class Army < ApplicationRecord
     current_user = Thread.current[:current_user] || User.find_by(player: "valar")
 
     if self.changes.keys != ['logs'] # Check if the only changes are not of the logs
-      puts "22222"
-      puts .....
       if new_record?
         changes << "Army has been created"
 
@@ -74,6 +73,19 @@ class Army < ApplicationRecord
         end
       end
 
+      units.each do |unit|
+        if unit.new_record?
+          changes << "Unit created : #{unit.unit_type}, count: #{unit.count}"
+        elsif unit.marked_for_destruction?
+          changes << "Unit (##{unit.id}) destroyed : #{unit.unit_type}, count: #{unit.count}"
+        elsif unit.changed?
+          unit_changes = unit.changes.map do |field, values|
+            "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
+          end
+          changes << "Unit (##{unit.id}) #{unit_changes.join(", ")}"
+        end
+      end
+
       change_log = {
         timestamp: Time.now,
         user_id: current_user.id, # Set the current user appropriately
@@ -95,5 +107,10 @@ private
     @option_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
 
     @units = @option_armies["units"]
+  end
+
+  def cache_attributes
+    self.faction_ids_was = self.faction_ids.dup
+    self.unit_ids_was = self.unit_ids.dup
   end
 end
