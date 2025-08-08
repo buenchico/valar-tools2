@@ -34,7 +34,7 @@ class ArmiesController < ApplicationController
 
     respond_to do |format|
       if @army.save
-        flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        flash.now[:success] = t('messages.success.create', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
         format.js
       else
         flash.now[:danger] = @army.errors.to_hash

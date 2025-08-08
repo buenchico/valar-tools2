@@ -39,12 +39,12 @@ class Army < ApplicationRecord
 
     if self.changes.keys != ['logs'] # Check if the only changes are not of the logs
       if new_record?
-        changes << "Army has been created"
+        changes = ["Army has been created"]
 
         excluded = %w[family_id logs]
-        changes = self.attributes.except(*excluded)
+        changes.concat(self.attributes.except(*excluded)
                          .select { |_, value| value.present? }
-                         .map { |attr, value| "#{attr} is #{value.inspect}" }
+                         .map { |attr, value| "#{attr} is #{value.inspect}" })
         if self.family_id.present?
           changes << "family is #{Family.find(self.family_id)&.title}"
         end
