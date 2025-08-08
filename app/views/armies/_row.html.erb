@@ -18,18 +18,57 @@
   <%= render 'army_traits', army: army %>
 </td>
 
-<td>
-  POS
+<td width = "500px">
+  <span class="d-none"><%= army.position %></span>
+  <%= form_with model: army, local: false do |form| %>
+    <%= form.hidden_field :inline, value: true %>
+    <%= form.text_field :position, class: 'inline-edit-input form-control', "data-initialvalue": army.position %>
+  <% end %>
 </td>
 
 <td>
-  GROUP
+  <%= form_with model: army, class: 'inline-edit-select', local: false do |form| %>
+    <%= form.hidden_field :inline, value: true %>
+    <%= form.select :group,
+      options_for_select(
+        ARMY_GROUPS.map { | key, value |
+          [
+            key,
+            { "data-content": "<span class='badge rounded-pill pill-tags pill-#{key} filter-value'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe
+          }
+          ]
+        },
+        selected: army.group
+      ),
+      { include_blank: true },
+      class: 'selectpicker flex-fill dropdown-toggle-custom',
+      title: 'Sin agrupar',
+      data: { style: 'btn-success' }
+    %>
+  <% end %>
 </td>
 
-<td>
-
-</td>
+<% if @current_user&.is_master? %>
+  <td width = "100px" class="text-center">
+    <% if army.visible == true %>
+      <%= army.factions.pluck(:long_name).join(", ") %>
+    <% else %>
+      <i class="bi bi-x-lg text-danger"></i>
+    <% end %>
+  </td>
+<% end %>
 
 <td>
   <%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %>
+</td>
+<td>
+  <%= link_to '', edit_notes_army_path(army), remote: true, class: army.notes.blank? ? 'bi bi-sticky text-light' : 'bi bi-sticky-fill text-warning' %>
+</td>
+
+<td>
+  <% if @current_user&.is_master? %>
+    <%= link_to army_path(army), method: :delete, data: { confirm: "Estás seguro de eliminar el ejército #{army.name}?" }, remote: true do %>
+      <i class="bi bi-trash text-white"></i>
+    <% end %>
+  <% end %>
 </td>

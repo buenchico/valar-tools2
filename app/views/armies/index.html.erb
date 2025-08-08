@@ -1,9 +1,6 @@
 <% provide(:title, @tool.title) %>
 <% provide(:icon, @tool.icon_url) %>
 
-<%= @options_armies %>
-
-
 <div class="tool-title">
   <i class="white <%= yield(:icon) %>"></i>
   <%= yield(:title) %>
@@ -17,8 +14,43 @@
   </div>
 <% end %>
 
-<div class="row" id="army_stats">
+<div class="row my-3" id="army_stats">
   <%= render 'stats', faction: @faction %>
+</div>
+
+<div class="row my-3">
+  <div class="col">
+    <%= form_tag(edit_multiple_armies_path, method: :get, id: 'edit_multiple', remote: true) do %>
+      <%= hidden_field_tag 'army_ids', '', id: 'army_ids_field' %>
+      <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button mass-copy", disabled: true) do %>
+        <i class="bi bi-clipboard"></i> Copiar
+      <% end %>
+      <% if @current_user&.is_master? %>
+        <%= button_tag(type: 'button', class: "btn btn-secondary btn-sm mass_edit_button mass-copy-land", disabled: true) do %>
+          <i class="bi bi-clipboard"></i> Copiar fuerza terrestre
+        <% end %>
+      <% end %>
+      <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "update") do %>
+        <i class="bi bi-pencil-square"></i> Editar en masa
+      <% end %>
+      <% if @current_user&.is_master? %>
+        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "destroy") do %>
+          <i class="bi bi-trash"></i> Borrar en masa
+        <% end %>
+        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm", value: "import") do %>
+          Importar
+        <% end %>
+        <%= link_to t('helpers.submit.export'), export_armies_path(format: :csv), class: 'btn btn-danger btn-sm' %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="col">
+    <div class="d-flex align-items-center">
+      <%= select_tag "filter", options_for_select(@filter, t('activerecord.attributes.army.name')), id: "filterselect", class: "form-select form-select-sm me-2" %>
+      <input id="filtertext" class="form-control form-control-sm" type="text" placeholder="Filtrar...">
+    </div>
+  </div>
 </div>
 
 <div id="army_table">

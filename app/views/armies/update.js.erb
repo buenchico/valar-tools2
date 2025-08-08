@@ -1,0 +1,25 @@
+if ($(".armies").length !== 0 ) {
+  $('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
+
+  $('#army_<%= @army.id %>').addClass("table-highlight <%= @army.status %>", callback )
+
+  function callback() {
+    setTimeout(function() {
+      $('#army_<%= @army.id %>').removeClass( "table-highlight" );
+    }, 500 );
+  }
+
+  if (<%= @inline %> == true) {
+    $('#toast-title').html('<%= @toast %>');
+    var toast = new bootstrap.Toast($('#liveToast'))
+    toast.show();
+  } else {
+    $("#flash").html('<%= j render partial: "layouts/alert" %>');
+  }
+
+  $('.selectpicker').selectpicker();
+
+  $("table").trigger("updateAll");
+}
+
+$(".modal").modal('hide');
