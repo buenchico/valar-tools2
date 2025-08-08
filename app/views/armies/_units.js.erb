@@ -29,6 +29,19 @@ $(document).on("change", "input[id^='army_units_attributes_'][id$='_men']", func
     if ($(this).val() !== "0") {
       let next_unit_id = last_unit_id + 1;
 
+      let unitDiv = $('<div>', {
+        id: `unit-fields-` + next_unit_id,
+        class: `input-group mb-3 ps-3`
+      });
+
+      let unitLabel = $('<label>', {
+        class: `input-group-text`,
+        for: `army_unit`,
+        html: `Unit`
+      });
+
+      let unitSelect = ""
+
       let menInput = $('<input>', {
         type: 'number',
         class: 'form-control',
@@ -39,12 +52,16 @@ $(document).on("change", "input[id^='army_units_attributes_'][id$='_men']", func
         id: `army_units_attributes_${next_unit_id}_men`
       });
 
-      let unitDiv = $('<div>', {
-        id: `unit-fields-` + next_unit_id
-      });
+      let unitStrength = ""
+
+      let unitHp = ""
 
       $('#units').append(unitDiv);
+      $('#unit-fields-' + next_unit_id).append(unitLabel);
+      $('#unit-fields-' + next_unit_id).append(unitSelect);
+      $('#unit-fields-' + next_unit_id).append(unitStrength);
       $('#unit-fields-' + next_unit_id).append(menInput);
+      $('#unit-fields-' + next_unit_id).append(unitHp);
 
       last_unit_id ++
 

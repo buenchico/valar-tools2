@@ -42,7 +42,8 @@ gem 'pg_search', '~> 2.3', '>= 2.3.7'
 # Use pagination
 gem 'kaminari', '~> 1.2', '>= 1.2.2'
 gem 'bootstrap5-kaminari-views', '~> 0.0.1'
-
+# Nested forms
+gem "cocoon"
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'

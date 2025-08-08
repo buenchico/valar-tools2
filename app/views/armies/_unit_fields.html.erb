@@ -1,0 +1,25 @@
+<div class="input-group mb-3 ps-3 nested-fields">
+  <%= f.label :unit, class: 'input-group-text' %>
+
+  <%= f.select :unit_type,
+    options_for_select(
+      @unit_types.map { | key, value |
+        [
+          key,
+          { "data-content": "<span class='badge rounded-pill pill-tags bg-brass'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe
+        }
+        ]
+      }
+    ),
+    { include_blank: true },
+    class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select',
+    title: 'Sin tipo',
+    data: { }
+  %>
+
+  <%= f.number_field :men, class: 'form-control', step: 1, min: 0, placeholder: 'hombres' %>
+  <%= f.number_field :strength, class: 'form-control', step: 0.01, min: 0, placeholder: 'fuerza por hombre' %>
+  <%= f.number_field :hp, class: 'form-control', step: 0.01, min: 0, placeholder: 'armadura' %>
+
+  <%= link_to_remove_association "remove task", f %>
+</div>

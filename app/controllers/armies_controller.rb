@@ -26,6 +26,9 @@ class ArmiesController < ApplicationController
     @army.units.build # builds one unit field by default
   end
 
+  def edit
+  end
+
   def create
     @army = Army.new(army_params)
 
@@ -36,6 +39,19 @@ class ArmiesController < ApplicationController
       else
         flash.now[:danger] = @army.errors.to_hash
         format.js { render 'layouts/error', locals: { thing: 'el ejército', method: 'create' } }
+      end
+    end
+  end
+
+  def update
+    @army.faction_ids_was = @army.faction_ids
+    respond_to do |format|
+      if @army.update(army_params)
+        flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        format.js
+      else
+        flash.now[:danger] = @army.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: original_title + " (id: " + @army.id.to_s + ")", method: 'update' } }
       end
     end
   end
@@ -62,7 +78,7 @@ private
     params.require(:army).permit(
       :name, :status, :position, :group, :location_id, :family_id, :confirm,
       :visible, :notes, :board, faction_ids: [], tags: [],
-      units_attributes: [:id, :unit_type, :men, :unit_strength, :armour, :hp]
+      units_attributes: [:id, :unit_type, :count, :men, :strength, :hp, :_destroy]
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
       whitelisted[:board] = nil if whitelisted.key?(:board) && whitelisted[:board].blank?

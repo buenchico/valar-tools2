@@ -23,4 +23,5 @@
 //= require bootstrap
 //= require bootstrap-select
 //= require clipboard
+//= require 'cocoon'
 //= require_tree .

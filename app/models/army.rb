@@ -7,10 +7,12 @@ class Army < ApplicationRecord
   belongs_to :location, class_name: 'Location', foreign_key: 'location_id', optional: true
 
   has_many :units, dependent: :destroy
-  accepts_nested_attributes_for :units, allow_destroy: true
+  accepts_nested_attributes_for :units, reject_if: :all_blank, allow_destroy: true
 
   validates :name, presence: true
   validates_uniqueness_of :name
+
+  attr_accessor :faction_ids_was
 
   before_save :log_changes
 

@@ -108,6 +108,11 @@ $(document).on('shown.bs.modal', function (event) {
   $('.selectpicker').selectpicker();
 });
 
+// Selectpicker to work after cocoon nested fields
+$(document).on('cocoon:after-insert', function(e, insertedItem, originalEvent) {
+  $('.selectpicker').selectpicker();
+});
+
 // Table sorting by column
 $(document).on('turbolinks:load', function() {
   $(function() {
