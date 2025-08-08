@@ -1,15 +1,16 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.1.2'
+ruby '3.4.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem "rails", "~> 7.0.6"
+gem 'rails', '8.0.2'
+
 # database gems
 gem 'pg', '1.5.2'
 gem 'rails_12factor'
 # Use Puma as the app server
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 6.0'
 # Use SCSS for stylesheets
 gem 'sassc-rails', '>= 2.1.2'
 # Use jquery
@@ -41,6 +42,7 @@ gem 'pg_search', '~> 2.3', '>= 2.3.7'
 # Use pagination
 gem 'kaminari', '~> 1.2', '>= 1.2.2'
 gem 'bootstrap5-kaminari-views', '~> 0.0.1'
+
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'

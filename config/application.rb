@@ -21,6 +21,7 @@ module ValarTools2
 
     config.i18n.default_locale = :es
 
+    config.active_support.to_time_preserves_timezone = :zone
     # Autoload /lib --- for SSO with discourse
     config.autoload_once_paths << "#{Rails.root}/lib"
 
@@ -30,7 +31,7 @@ module ValarTools2
       env_file = File.join(Rails.root, 'config', 'local_env.yml')
       YAML.load(File.open(env_file)).each do |key, value|
         ENV[key.to_s] = value.to_s
-      end if File.exists?(env_file)
+      end if File.exist?(env_file)
     end
   end
 end
