@@ -33,7 +33,7 @@
       <li><%= form.button 'Visible', name: 'visibility', type: 'button', id: 'visible-true', value: 'true', class: 'nav-link nav-links-sm text-white visible-tab armies-load active' %></li>
       <li><%= form.button 'Invisible', name: 'visibility', type: 'button', id: 'visible-false', value: 'false', class: 'nav-link nav-links-sm text-white visible-tab armies-load' %></li>
     </ul>
-    <%= form.hidden_field :active_factions, value: @faction.nil? ? '' : @faction.id %>
+    <%= form.hidden_field :active_factions %>
     <%= form.hidden_field :active_visibility, value: true %>
   <% end %>
 <% end %>
