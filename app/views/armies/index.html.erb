@@ -24,7 +24,7 @@
       <li class="me-1">Facciones:</li>
       <% @factions.each do |faction| %>
         <li>
-          <%= form.button faction.long_name, type: 'button', id: 'tab-' + faction.id.to_s, value: faction.id, class: 'nav-link nav-links-sm text-white armies-tab armies-load ' + faction.name %>
+          <%= form.button faction.long_name, type: 'button', id: 'tab-' + faction.id.to_s, value: faction.id, class: "nav-link nav-links-sm text-white armies-tab armies-load #{faction.name} #{(@faction == faction) ? 'active' : nil }" %>
         </li>
       <% end %>
     </ul>
