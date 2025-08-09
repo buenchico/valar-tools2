@@ -13,7 +13,7 @@ class ArmiesController < ApplicationController
         @armies = @faction.armies.where(visible: true).order(:id)
       else
         @faction = @current_user.faction
-        @armies = Army.all
+        @armies = nil
       end
     else
       @faction = @current_user.faction
@@ -74,6 +74,25 @@ class ArmiesController < ApplicationController
         flash.now[:danger] = @army.errors.to_hash
         format.js { render 'layouts/error', locals: { thing: @army.name.strip + " (id: " + @army.id.to_s + ")", method: 'delete' } }
       end
+    end
+  end
+
+  def get_armies
+    origin = URI(request.referer).path.split('/')[1]
+
+    @active_factions = JSON.parse(params[:active_factions])
+    @active_visibility = JSON.parse(params[:active_visibility])
+
+    master = Faction.find_by(name: 'master')
+
+    if @active_factions.include?(master.id.to_s)
+      @armies = Army.all.where(visible: @active_visibility)
+    else
+      @armies = Army.joins(:factions).where(visible: @active_visibility).where(factions: { id: @active_factions })
+    end
+
+    respond_to do |format|
+      format.js
     end
   end
 

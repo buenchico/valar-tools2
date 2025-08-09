@@ -1,0 +1,9 @@
+$('#army_table').html("<%= j render 'armies_table', armies: @armies %>")
+
+$.fn.checkboxSelectable();
+$.fn.checkbox_listeners();
+$.fn.mass_edit_buttons();
+$.fn.inline_listeners();
+$("table").trigger("updateAll");
+initPopovers();
+$(".spinner-border").addClass("d-none");

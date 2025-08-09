@@ -17,24 +17,7 @@ $(document).on('turbolinks:load', function () {
 
     // Recalculate stats
     $.fn.recalculateStats = function(){
-        var countArmies = $('.checkbox_selectable:visible').length;
-        var menArmies = 0
-        var strArmies = 0
-        $('tr:visible').each(function(){
-          men = parseInt($(this).find('td.men').text());
-          if (isNaN(men)) {
-              men = 0;
-          }
-          menArmies += men;
-          str = parseFloat($(this).find('td.strenght').text());
-          if (isNaN(str)) {
-              str = 0;
-          }
-          strArmies += str
-        });
-        $("#count").html(countArmies);
-        $("#str").html(strArmies.toFixed(2));
-        $("#men").html(menArmies);
+
     }
 
     // Filters
@@ -82,55 +65,39 @@ $(document).on('turbolinks:load', function () {
 
     // Trigger armies load for master
     $('.armies-load').click(function() {
-      // Find the parent form of the clicked element
-      var form = $(this).closest('form');
-
-      // Find the container that holds the 'armies-tab' and 'active' buttons
-      var container = $(this).closest('form');
-      // Find all buttons with classes 'armies-tab' and 'active' within the container
-      var activeButtons = container.find('.armies-tab.active');
-      var active_factions = [];
-      // Iterate through the active buttons and get their values (IDs)
-      activeButtons.each(function() {
-        active_factions.push($(this).val());
-      });
-
-      if ($(this).hasClass('armies-tab')) {
-        var faction_id = $(this).val()
-        if ($(this).hasClass('armies-tab') && $(this).hasClass('active')) {
-          // Removing armies
-          var index = $.inArray(faction_id, active_factions); // Find the index of the value
-          if (index !== -1) {
-            active_factions.splice(index, 1); // Remove the value at the found index
-          }
-        } else {
-          // Adding armies
-          active_factions.push(faction_id);
-        }
-      }
-
-      if ($(this).hasClass('visible-tab')) {
-        var visible = $(this).val();
-        $('#visible').val(visible);
-      }
-
-      var active_visibility = []
-      if ($('#visible-true').hasClass('active')) {
-        active_visibility.push(true);
-      }
-      if ($('#visible-false').hasClass('active')) {
-        active_visibility.push(false);
-      }
-
-      $('#faction_id').val(faction_id);
-      $('#visible').val(visible);
-      $('#active_factions').val(JSON.stringify(active_factions));
-      $('#active_visibility').val(active_visibility);
-
       $('#spinner-main').removeClass('d-none');
 
-      $(this).closest('li').find('.spinner-border').removeClass('d-none');
+      if ($(this).hasClass('master')) {
+        if ($(this).hasClass('active')) {
+          $('.armies-tab').removeClass('active')
+        } else {
+          $('.armies-tab').addClass('active')
+        }
+      } else {
+        $(this).toggleClass('active');
+      }
+
+      if ($('.armies-tab:not(.master):not(.active)').length > 0) {
+        $('.master').removeClass('active')
+      } else {
+        $('.master').addClass('active')
+      }
+
+      const factions = $('.armies-tab.active').map(function() {
+        const id = $(this).attr('id');
+        return id ? id.split('-')[1] : null;
+      }).get();
+
+      const visibility = $('.visible-tab.active').map(function() {
+        const id = $(this).attr('id');
+        return id ? id.split('-')[1] : null;
+      }).get();
+
+      $('#active_factions').val(JSON.stringify(factions));
+      $('#active_visibility').val(JSON.stringify(visibility));
+
       // Submit the form
+      const form = $(this).closest('form');
       form.submit();
     });
 
@@ -138,19 +105,6 @@ $(document).on('turbolinks:load', function () {
     $('.btn.str_display').click(function () {
       $('.str_display').toggleClass('d-none visible')
     })
-
-
-    $(".mass-copy").click(function () {
-      $.fn.copyArmies();
-    });
-
-    $(".mass-copy-land").click(function () {
-      $('.str_display').toggleClass('visible')
-      $.fn.copyArmies();
-      $('.str_display').toggleClass('visible')
-    });
-
-
 
     // Trigger functions on load
     $.fn.recalculateStats();
