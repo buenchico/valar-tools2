@@ -15,7 +15,7 @@
             <% end %>
           </li>
           <li>
-            <%= link_to recipe_path(recipe), method: :delete, data: { confirm: t('helpers.action.confirm', thing: recipe.name) }, remote: true, class: 'dropdown-item' do %>
+            <%= link_to recipe_path(recipe), method: :delete, data: { confirm: t('helpers.action.confirm_delete', thing: recipe.name) }, remote: true, class: 'dropdown-item' do %>
               <i class="bi bi-trash text-white"></i>
               <%= t('helpers.action.delete', thing: nil) %>
             <% end %>

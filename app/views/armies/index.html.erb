@@ -45,17 +45,20 @@
     <%= form_tag(edit_multiple_armies_path, method: :get, id: 'edit_multiple', remote: true) do %>
       <%= hidden_field_tag 'army_ids', '', id: 'army_ids_field' %>
       <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button mass-copy", disabled: true) do %>
-        <i class="bi bi-clipboard"></i> Copiar
+        <i class="bi bi-clipboard"></i> <%= t('helpers.action.copy') %>
       <% end %>
       <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "update") do %>
-        <i class="bi bi-pencil-square"></i> Editar en masa
+        <i class="bi bi-pencil-square"></i> <%= t('helpers.action.mass_edit') %>
       <% end %>
       <% if @current_user&.is_master? %>
         <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "destroy") do %>
-          <i class="bi bi-trash"></i> Borrar en masa
+          <i class="bi bi-trash"></i> <%= t('helpers.action.mass_delete') %>
+        <% end %>
+        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "damage") do %>
+          <i class="bi bi-damage-kinetic"></i> <%= t('helpers.action.damage') %>
         <% end %>
         <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm", value: "import") do %>
-          Importar
+          <%= t('helpers.submit.import') %>
         <% end %>
         <%= link_to t('helpers.submit.export'), export_armies_path(format: :csv), class: 'btn btn-danger btn-sm' %>
       <% end %>

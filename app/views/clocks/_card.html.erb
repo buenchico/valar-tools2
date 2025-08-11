@@ -26,7 +26,7 @@
             <% end %>
           </li>
           <li>
-            <%= link_to clock_path(clock), method: :delete, data: { confirm: t('helpers.action.confirm', thing: clock.name) }, remote: true, class: 'dropdown-item' do %>
+            <%= link_to clock_path(clock), method: :delete, data: { confirm: t('helpers.action.confirm_delete', thing: clock.name) }, remote: true, class: 'dropdown-item' do %>
               <i class="bi bi-trash text-white"></i>
               <%= t('helpers.action.delete', thing: nil) %>
             <% end %>
