@@ -2140,6 +2140,12 @@ $bootstrap-icons-map: (
   "swords-emblem": "\f939",
   "swords": "\f93a",
   "zombie": "\f93b",
+  "artillery": "\f93c",
+  "mech": "\f93d",
+  "plane-bomber": "\f93e",
+  "plane-propeller": "\f93f",
+  "soldier": "\f940",
+  "tank": "\f941",
 );
 
 @each $icon, $codepoint in $bootstrap-icons-map {
