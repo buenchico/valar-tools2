@@ -17,23 +17,7 @@
 <% end %>
 
 <div class="row my-3" id="army_stats">
-  <div class="<%= @faction.fleets.nil? ? 'col-md-12' : 'col-md-8' %> col-sm-12 faction-name">
-    <div class="card bg-dark text-light border border-success">
-      <div class="card-body">
-        <%= render 'stats', faction: @faction %>
-      </div>
-    </div>
-  </div>
-
-  <% if @faction.fleets.present? && @options_armies["fleets"].present? %>
-    <div class="col-md-4 col-sm-12 ms-auto faction-name">
-      <div class="card bg-dark text-light border border-success">
-        <div class="card-body">
-          <%= render 'fleets', faction: @faction %>
-        </div>
-      </div>
-    </div>
-  <% end %>
+  <%= render 'stats', faction: @faction %>
 </div>
 
 <% if @current_user&.is_master? %>

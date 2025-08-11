@@ -11,15 +11,13 @@ class ArmiesController < ApplicationController
 
   def index
     @faction = Faction.find_by(id: params[:faction_id])
-    @reserve = Army.where(status: "active").where(visible: true)
-    @dead = Army.where(status: "active").where(visible: true)
-    @raised = Army.where(status: "active").where(visible: true)
+
+    @armies_all = Army.where(visible: true)
 
     if @current_user&.is_master?
       if @faction
         @armies = @faction.armies.where(visible: true).order(:id)
       else
-        @faction = @current_user.faction
         @armies = nil
       end
     else
@@ -114,7 +112,14 @@ class ArmiesController < ApplicationController
     @active_factions = JSON.parse(params[:active_factions])
     @active_visibility = JSON.parse(params[:active_visibility])
 
+    @armies_all = Army.where(visible: true)
+
     master = Faction.find_by(name: 'master')
+
+    if @active_factions.count == 1
+      puts @active_factions
+      @faction = Faction.find_by(id: @active_factions)
+    end
 
     if @active_factions.include?(master.id.to_s)
       @armies = Army.all.where(visible: @active_visibility)

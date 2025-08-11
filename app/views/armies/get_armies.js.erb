@@ -1,10 +1,14 @@
 $('#army_table').html("<%= j render 'armies_table', armies: @armies %>")
+
+$('#army_stats').html("<%= j render 'stats' %>")
+
 $('.selectpicker').selectpicker();
 
 $.fn.checkboxSelectable();
 $.fn.checkbox_listeners();
 $.fn.mass_edit_buttons();
 $.fn.inline_listeners();
+$.fn.recalculateStats();
 $("table").trigger("updateAll");
 initPopovers();
 
