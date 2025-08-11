@@ -17,17 +17,17 @@ class Unit < ApplicationRecord
   def men
     set_options if @option_armies.nil?
 
-    unit_men = @units[self.unit_type]["men"]
+    unit_men = @units.fetch(self.unit_type, {}).fetch("men", 0)
 
-    self.count * unit_men
+    self.count.to_i * unit_men
   end
 
   def men_start
     set_options if @option_armies.nil?
 
-    unit_men = @units[self.unit_type]["men"]
+    unit_men = @units.fetch(self.unit_type, {}).fetch("men", 0)
 
-    self.count_start * unit_men
+    self.count_start.to_i * unit_men
   end
 
   def name

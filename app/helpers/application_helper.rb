@@ -90,9 +90,11 @@ module ApplicationHelper
     else
       "–#{number.abs}"
     end
-  end  
+  end
 
   def number_to_compact(number)
+    number ||= 0
+
     case number
     when 0..999
       number.to_s
