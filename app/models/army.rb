@@ -23,12 +23,23 @@ class Army < ApplicationRecord
   end
 
   def strength
-    units.sum(&:strength).to_i
+    set_options if @option_armies.nil?
+
+    units.sum(&:strength).to_i * @status.fetch(self.status, {}).fetch("str", 0)
   end
 
   def men
-    units.sum(&:men).to_i
+    set_options if @option_armies.nil?
+
+    units.sum(&:men).to_i * @status.fetch(self.status, {}).fetch("men", 0)
   end
+
+  def men_start
+    set_options if @option_armies.nil?
+
+    units.sum(&:men_start).to_i
+  end
+
 
   def search
     self.family&.name
@@ -107,6 +118,7 @@ private
     @option_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
 
     @units = @option_armies["units"]
+    @status = @option_armies["status"]
   end
 
   def cache_attributes

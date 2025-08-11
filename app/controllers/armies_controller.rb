@@ -8,6 +8,10 @@ class ArmiesController < ApplicationController
 
   def index
     @faction = Faction.find_by(id: params[:faction_id])
+    @reserve = Army.where(status: "active").where(visible: true)
+    @dead = Army.where(status: "active").where(visible: true)
+    @raised = Army.where(status: "active").where(visible: true)
+
     if @current_user&.is_master?
       if @faction
         @armies = @faction.armies.where(visible: true).order(:id)

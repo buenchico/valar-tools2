@@ -22,6 +22,14 @@ class Unit < ApplicationRecord
     self.count * unit_men
   end
 
+  def men_start
+    set_options if @option_armies.nil?
+
+    unit_men = @units[self.unit_type]["men"]
+
+    self.count_start * unit_men
+  end
+
   def name
     set_options if @option_armies.nil?
     name = (@units.fetch(self.unit_type, {}).fetch("name", "")).pluralize(self.count)

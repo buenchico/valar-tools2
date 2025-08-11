@@ -1,15 +1,7 @@
-<div class="col-md-8 col-sm-12 faction-name">
-  <div class="card bg-dark text-light border border-success">
-    <div class="card-body">
-      STATS
-    </div>
-  </div>
-</div>
+<p>La población del mundo civilizado es de 480 millones</p>
 
-<div class="col-md-4 col-sm-12 ms-auto faction-name">
-  <div class="card bg-dark text-light border border-success">
-    <div class="card-body">
-      STATS
-    </div>
-  </div>
-</div>
+<p>Hay <span id="total_men"><%= total_army_men(@raised) %></span> hombres movilizados, con una fuerza de combate de <span id="total_strength"><%= total_army_strength(@raised) %></span>. La guerra ha causado <span id="total_casualties"><%= total_army_men_start(@dead) %></span> bajas entre los ejércitos.</p>
+
+<p>Dispones de <span id="faction_men"></span>, con una fuerza de combate de <span id="faction_strength"></span>. Has sufrido <span id="faction_casualties"></span> bajas durante la guerra.</p>
+
+<p>Hay <span id="visible_men"></span> hombres visibles, con una fuerza de combate de <span id="visible_strength"></span>.
