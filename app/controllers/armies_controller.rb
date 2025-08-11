@@ -6,6 +6,9 @@ class ArmiesController < ApplicationController
   before_action :set_factions, only: [:index, :edit, :edit_multiple, :new]
   before_action :set_filters, only: [:index]
 
+  before_action :check_master, only: [:destroy, :destroy_multiple, :stats]
+
+
   def index
     @faction = Faction.find_by(id: params[:faction_id])
     @reserve = Army.where(status: "active").where(visible: true)
@@ -34,6 +37,14 @@ class ArmiesController < ApplicationController
   end
 
   def edit_notes
+  end
+
+  def edit_multiple
+    army_ids = params[:army_ids].split(',')
+    @armies = Army.where(id: army_ids).order(:name)
+    @action = params[:button]
+
+    puts @action
   end
 
   def create
@@ -77,6 +88,22 @@ class ArmiesController < ApplicationController
       else
         flash.now[:danger] = @army.errors.to_hash
         format.js { render 'layouts/error', locals: { thing: @army.name.strip + " (id: " + @army.id.to_s + ")", method: 'delete' } }
+      end
+    end
+  end
+
+  def destroy_multiple
+    @armies = Army.where(id: params[:army_ids])
+
+    respond_to do |format|
+      if params[:army][:confirm] == 'DELETE'
+        if @armies.each { |army| army.factions.clear } && @armies.destroy_all
+          format.html { redirect_to armies_url, success: 'Ejércitos eliminados correctamente.' }
+        else
+          format.html { redirect_to armies_url, danger: 'Ha ocurrido un error, por favor, intentalo de nuevo más tarde.' }
+        end
+      else
+        format.html { redirect_to armies_url, danger: t('messages.multiple.validation') }
       end
     end
   end
