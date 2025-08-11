@@ -1,5 +1,8 @@
 <td>
   <%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable option-input" %>
+  <span class="army-data d-none">
+    <%= render 'army_one_line', army: army %>
+  </span>
 </td>
 
 <td>

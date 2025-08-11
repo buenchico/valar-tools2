@@ -101,10 +101,10 @@ $(document).on('turbolinks:load', function () {
       form.submit();
     });
 
-    // Change strength str_display
-    $('.btn.str_display').click(function () {
-      $('.str_display').toggleClass('d-none visible')
-    })
+    // Copy action event Trigger
+    $(".mass-copy").click(function () {
+      $.fn.copyArmies();
+    });
 
     // Trigger functions on load
     $.fn.recalculateStats();

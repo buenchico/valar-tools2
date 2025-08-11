@@ -1,0 +1,8 @@
+<span class="visible">
+  <%= army.name %>
+  <%= render 'army_traits', army: army %>
+  <%= army.position.blank? ? nil : ", en #{army.position} " %>
+  <%= army.group.blank? ? nil : " grupo " + ARMY_GROUPS[army.group.to_sym][:name].upcase %>
+  🎖️: <%= army.strength %>
+  🪖: <%= army.men %>
+</span>

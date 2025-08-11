@@ -63,11 +63,6 @@
       <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button mass-copy", disabled: true) do %>
         <i class="bi bi-clipboard"></i> Copiar
       <% end %>
-      <% if @current_user&.is_master? %>
-        <%= button_tag(type: 'button', class: "btn btn-secondary btn-sm mass_edit_button mass-copy-land", disabled: true) do %>
-          <i class="bi bi-clipboard"></i> Copiar fuerza terrestre
-        <% end %>
-      <% end %>
       <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "update") do %>
         <i class="bi bi-pencil-square"></i> Editar en masa
       <% end %>
