@@ -18,8 +18,11 @@
     data: { }
   %>
 
-  <%= f.number_field :count, class: 'form-control', step: 1, min: 0, placeholder: 'hombres' %>
-  <%= f.number_field :modifier, class: 'form-control', step: 1, min: -50, max: 200, placeholder: 'modifier' %>
+  <%= f.number_field :count, class: 'form-control', step: 1, min: 0, max: f.object.count_start, placeholder: "unidad" %>
+  <%= f.number_field :modifier, class: 'form-control percent-input', step: 1, min: -50, max: 200, placeholder: 'modifier' %>
+  <div class="input-group-append">
+    <span class="input-group-text">%</span>
+  </div>
 
   <%= link_to_remove_association("<i class='bi bi-x-circle-fill'></i>".html_safe, f, class: 'text-danger ms-1 pt-1') %>
 </div>

@@ -6,7 +6,7 @@ class ArmiesController < ApplicationController
   before_action :set_factions, only: [:index, :edit, :edit_multiple, :new]
   before_action :set_filters, only: [:index]
 
-  before_action :check_master, only: [:destroy, :destroy_multiple, :stats]
+  before_action :check_master, only: [:destroy, :destroy_multiple, :damage_multiple, :stats]
 
   def index
     @faction = Faction.find_by(id: params[:faction_id])
@@ -109,17 +109,31 @@ class ArmiesController < ApplicationController
 
     if Rails.env.development?
       times = params[:army][:times].to_i
-      simulate_damage_distribution(times)
+      simulate_damage_distribution(armies, damage, times)
     else
       formatted_log = apply_damage(armies, damage)
       puts formatted_log
     end
   end
 
-  def simulate_damage_distribution(times)
-    armies = Army.all
-    damage = 500
+  def simulate_damage_distribution(armies, damage, times)
+    armies_data = armies.each_with_object({}) do |army, hash|
+      hash[army.id] = {
+        name: army.name,
+        units: army.units.each_with_object({}) do |unit, units_hash|
+          units_hash[unit.id] = {
+            unit_type: unit.unit_type,
+            hp: unit.hp,
+            count: unit.count,
+            men: unit.men
+          }
+        end
+      }
+    end
 
+    File.open("logfile.txt", "a") do |file|
+      file.puts armies_data
+    end
     times.times do
       formatted_log = apply_damage(armies, damage)
       File.open("logfile.txt", "a") do |file|
@@ -180,7 +194,6 @@ class ArmiesController < ApplicationController
       remaining_damage -= chunk
       damage_log[selected_unit_id] += chunk
     end
-
 
     # Format and sort result
     formatted_log = damage_log.map do |unit_id, damage|

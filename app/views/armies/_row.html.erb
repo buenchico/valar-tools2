@@ -22,7 +22,7 @@
   <%= render 'army_traits', army: army %>
 </td>
 
-<td width = "500px">
+<td>
   <span class="d-none"><%= army.position %></span>
   <%= form_with model: army, local: false do |form| %>
     <%= form.hidden_field :inline, value: true %>
@@ -47,13 +47,13 @@
       { include_blank: true },
       class: 'selectpicker flex-fill dropdown-toggle-custom',
       title: 'Sin agrupar',
-      data: { style: 'btn-success' }
+      data: { style: 'btn-success', width: '130px' }
     %>
   <% end %>
 </td>
 
 <% if @current_user&.is_master? %>
-  <td width = "100px" class="text-center">
+  <td class="text-center">
     <% if army.visible == true %>
       <%= army.factions.pluck(:long_name).join(", ") %>
     <% else %>
