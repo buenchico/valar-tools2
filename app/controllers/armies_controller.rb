@@ -107,10 +107,12 @@ class ArmiesController < ApplicationController
     armies = Army.where(id: params[:army_ids])
     damage = params[:army][:damage].to_i
 
-    apply_damage(armies, damage)
-
-    File.open("logfile.txt", "a") do |file|
-      file.puts formatted_log.sort_by { |entry| entry[:unit_id] }
+    if Rails.env.development?
+      times = params[:army][:times].to_i
+      simulate_damage_distribution(times)
+    else
+      formatted_log = apply_damage(armies, damage)
+      puts formatted_log
     end
   end
 
@@ -119,7 +121,10 @@ class ArmiesController < ApplicationController
     damage = 500
 
     times.times do
-      apply_damage(armies, damage)
+      formatted_log = apply_damage(armies, damage)
+      File.open("logfile.txt", "a") do |file|
+        file.puts formatted_log.sort_by { |entry| entry[:unit_id] }
+      end
     end
   end
 

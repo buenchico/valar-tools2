@@ -24,7 +24,8 @@
               <%= form.number_field :damage, class: "form-control", value: 0, step: 1, min: 0 %>
             </div>
             <div class="input-group mt-3">
-              <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'DAMAGE' para confirmar los cambios." %>
+              <%= form.label :times, class: 'input-group-text' %>
+              <%= form.number_field :times, class: "form-control", value: 1, step: 1, min: 0, max: 10000 %>
             </div>
             <div class="input-group mt-3">
               <%= form.submit t('helpers.submit.damage_multiple', model: Army.model_name.human.pluralize), class: 'btn btn-primary' %>
