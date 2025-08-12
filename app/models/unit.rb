@@ -11,7 +11,15 @@ class Unit < ApplicationRecord
 
     unit_strength = @units.fetch(self.unit_type, {}).fetch("str", 0)
 
-    self.count.to_i * unit_strength.to_i * (self.modifier / 100.0) * @scale
+    self.count.to_i * unit_strength.to_i * (self.modifier / 100.0) * @status.fetch(self.army.status, {}).fetch("str", 0) * @scale
+  end
+
+  def hp
+    set_options if @option_armies.nil?
+
+    unit_hp = @units.fetch(self.unit_type, {}).fetch("hp", 0)
+
+    (self.count.to_i * unit_hp.to_i * @status.fetch(self.army.status, {}).fetch("hp", 0)).to_i
   end
 
   def men
@@ -19,7 +27,7 @@ class Unit < ApplicationRecord
 
     unit_men = @units.fetch(self.unit_type, {}).fetch("men", 0)
 
-    self.count.to_i * unit_men
+    self.count.to_i * unit_men * @status.fetch(self.army.status, {}).fetch("men", 0)
   end
 
   def men_start
@@ -50,6 +58,7 @@ private
     @option_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
 
     @units = @option_armies["units"]
+    @status = @option_armies["status"]
     @scale = @option_armies["general"]["scale"]
   end
 end

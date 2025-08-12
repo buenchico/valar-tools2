@@ -65,6 +65,7 @@ es:
       delete: 'Borrar %{model}'
       add: 'Añadir %{model}'
       remove: 'Quitar %{model}'
+      damage_multiple: 'Dañar %{model}'
       update_multiple: 'Guardar %{model}'
       delete_multiple: 'Borrar %{model}'
       import: 'Importar'
@@ -125,6 +126,7 @@ es:
         army_type: "Tipo"
         selected: "Seleccionado"
         traits: "Rasgos"
+        damage: "Daño"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"

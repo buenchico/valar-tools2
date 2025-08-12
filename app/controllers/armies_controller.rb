@@ -103,6 +103,93 @@ class ArmiesController < ApplicationController
     end
   end
 
+  def damage_multiple
+    armies = Army.where(id: params[:army_ids])
+    damage = params[:army][:damage].to_i
+
+    apply_damage(armies, damage)
+
+    File.open("logfile.txt", "a") do |file|
+      file.puts formatted_log.sort_by { |entry| entry[:unit_id] }
+    end
+  end
+
+  def simulate_damage_distribution(times)
+    armies = Army.all
+    damage = 500
+
+    times.times do
+      apply_damage(armies, damage)
+    end
+  end
+
+  def apply_damage(armies, damage)
+    units = armies.flat_map(&:units).select { |u| u.hp > 0 }
+
+    # Track simulated HP per unit by ID
+    simulated_hp = units.index_with(&:hp).transform_keys(&:id)
+    unit_lookup = units.index_by(&:id)
+
+    remaining_damage = damage
+    damage_log = Hash.new { |h, k| h[k] = 0 }
+
+    while remaining_damage > 0 && simulated_hp.any?
+      eligible_units = simulated_hp.select do |unit_id, hp|
+        unit = unit_lookup[unit_id]
+        chunk = @options_armies.dig("units", unit.unit_type, "hp") || 1
+        unit && hp >= chunk && remaining_damage >= chunk
+      end
+
+      break if eligible_units.empty?
+
+      # Weight units by number of chunks they can absorb
+      weighted_units = {}
+      eligible_units.each do |unit_id, hp|
+        unit = unit_lookup[unit_id]
+        next unless unit
+
+        chunk = @options_armies.dig("units", unit.unit_type, "hp") || 1
+        next if chunk <= 0
+
+        weighted_units[unit_id] = hp / chunk
+      end
+
+      total_weight = weighted_units.values.sum
+      target = rand(total_weight)
+
+      selected_unit_id = nil
+      weighted_units.each do |unit_id, weight|
+        target -= weight
+        if target < 0
+          selected_unit_id = unit_id
+          break
+        end
+      end
+
+      next unless selected_unit_id
+
+      unit = unit_lookup[selected_unit_id]
+      chunk = @options_armies.dig("units", unit.unit_type, "hp") || 1
+
+      simulated_hp[selected_unit_id] -= chunk
+      remaining_damage -= chunk
+      damage_log[selected_unit_id] += chunk
+    end
+
+
+    # Format and sort result
+    formatted_log = damage_log.map do |unit_id, damage|
+      unit = unit_lookup[unit_id]
+      {
+        unit_id: unit.id,
+        unit_type: unit.unit_type,
+        damage: damage
+      }
+    end
+
+    return formatted_log.sort_by { |entry| entry[:unit_id] }
+  end
+
   def get_armies
     origin = URI(request.referer).path.split('/')[1]
 

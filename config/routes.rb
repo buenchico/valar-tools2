@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   get 'armies/edit_multiple', to: 'armies#edit_multiple', as: 'edit_multiple_armies'
   put 'armies/update_multiple', to: 'armies#update_multiple', as: 'update_multiple_armies'
   put 'armies/destroy_multiple', to: 'armies#destroy_multiple', as: 'destroy_multiple_armies'
+  put 'armies/damage_multiple', to: 'armies#damage_multiple', as: 'damage_multiple_armies'
   post 'armies/import', to: 'armies#import', as: 'import_armies'
   get 'armies/export', to: 'armies#export', as: 'export_armies'
   get 'armies/faction/:faction_id', to: 'armies#index'

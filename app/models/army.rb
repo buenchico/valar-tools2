@@ -23,23 +23,20 @@ class Army < ApplicationRecord
   end
 
   def strength
-    set_options if @option_armies.nil?
-
-    units.sum(&:strength).to_i * @status.fetch(self.status, {}).fetch("str", 0)
+    units.sum(&:strength).to_i
   end
 
   def men
-    set_options if @option_armies.nil?
-
-    units.sum(&:men).to_i * @status.fetch(self.status, {}).fetch("men", 0)
+    units.sum(&:men).to_i
   end
 
   def men_start
-    set_options if @option_armies.nil?
-
     units.sum(&:men_start).to_i
   end
 
+  def hp
+    units.sum(&:hp).to_i
+  end
 
   def search
     self.family&.name
