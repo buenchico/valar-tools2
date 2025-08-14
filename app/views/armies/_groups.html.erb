@@ -1,0 +1,32 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title w-100" id="Title"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <% @factions.each do | faction | %>
+          <% if faction == @current_user.faction || (@current_user.is_master? && faction.armies.present?) %>
+            <h2><%= faction.long_name %></h2>
+            <% ARMY_GROUPS.each do | key, value | %>
+              <% armies = faction.armies.where(group: key) %>
+              <% if armies.present? %>
+                <h4><%= t('activerecord.attributes.army.group') %> <%= "<span class='badge rounded-pill pill-tags pill-#{key}'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe %></h3>
+                <ul>
+                  <li><%= "#{armies.count} #{t('activerecord.models.army', count: armies.count).downcase} con una fuerza de #{total_army_strength(armies)} y #{total_army_men(armies)} hombres." %></li>
+                  <% if armies.pluck(:position).compact.reject(&:blank?).join(", ").present? %>
+                    <li>En <%= armies.pluck(:position).compact.reject(&:blank?).join(", ") %></li>
+                  <% end %>
+                  <li>Compuesto por:</li>
+                  <ul>
+                    <% total_army_units(armies).each do | unit, count | %>
+                      <li><%= "#{number_to_compact(count)} #{@unit_types[unit]["name"].pluralize(count)}" %></li>
+                    <% end %>
+                  </ul>
+                </ul>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>

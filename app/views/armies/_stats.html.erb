@@ -1,6 +1,9 @@
 <div class="<%= @faction&.fleets.nil? ? 'col-md-12' : 'col-md-8' %> col-sm-12 faction-name">
   <div class="card bg-dark text-light border border-success">
     <div class="card-body">
+      <%= link_to show_army_groups_path, class: "btn btn-warning float-end", remote: true do %>
+        <i class="bi bi-filter-square"></i> <%= t('helpers.action.view', thing: t('activerecord.attributes.army.group').pluralize.downcase) %>
+      <% end %>
       <p>La población del mundo civilizado es de 480 millones</p>
 
       <p>Hay <span id="total_men"><%= total_army_men(@armies_all) %></span> hombres movilizados, con una fuerza de combate de <span id="total_strength"><%= total_army_strength(@armies_all) %></span>. La guerra ha causado <span id="total_casualties"><%= (total_army_men_start(@armies_all) - total_army_men(@armies_all)) %></span> bajas entre los ejércitos.</p>

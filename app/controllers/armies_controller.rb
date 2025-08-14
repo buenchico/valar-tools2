@@ -3,7 +3,7 @@ class ArmiesController < ApplicationController
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show]
   before_action :set_options
   before_action :set_regions, only: [:new, :edit, :edit_multiple]
-  before_action :set_factions, only: [:index, :edit, :edit_multiple, :new]
+  before_action :set_factions, only: [:index, :edit, :edit_multiple, :new, :groups]
   before_action :set_filters, only: [:index]
 
   before_action :check_master, only: [:destroy, :destroy_multiple, :damage_multiple, :stats]
@@ -40,6 +40,9 @@ class ArmiesController < ApplicationController
     army_ids = params[:army_ids].split(',')
     @armies = Army.where(id: army_ids).order(:name)
     @action = params[:button]
+  end
+
+  def groups
   end
 
   def create
