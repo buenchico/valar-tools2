@@ -105,7 +105,7 @@ class ArmiesController < ApplicationController
 
   def damage_multiple
     armies = Army.where(id: params[:army_ids])
-    damage = params[:army][:damage].to_i * @scale
+    damage = params[:army][:damage].to_i * @army_scale
 
     if Rails.env.development?
       times = params[:army][:times].to_i

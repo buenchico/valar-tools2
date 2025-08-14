@@ -114,11 +114,15 @@ class ApplicationController < ActionController::Base
     # @hp = @options_armies["hp"]
     # @fleets = @options_armies["fleets"]
     @army_status = @options_armies["status"]
-    # @army_tags = @options_armies["tags"]&.sort_by { |key, _value| key }.to_h
+    @army_tags = @options_armies["tags"]&.sort_by do |_, v|
+      [v["sort"] || 99, v["name"]]
+    end.to_h
     @unit_types = @options_armies["units"]&.sort_by do |_, v|
       [v["sort"] || 99, v["name"]]
     end.to_h
-    @scale = @options_armies["general"]["scale"]
+    @army_scale = @options_armies["general"]["scale"]
+    @army_xp = @options_armies["general"]["xp"]
+    @army_morale = @options_armies["general"]["morale"]
   end
 
   def set_options_clocks
