@@ -118,6 +118,7 @@ class ApplicationController < ActionController::Base
     @unit_types = @options_armies["units"]&.sort_by do |_, v|
       [v["sort"] || 99, v["name"]]
     end.to_h
+    @scale = @options_armies["general"]["scale"]
   end
 
   def set_options_clocks

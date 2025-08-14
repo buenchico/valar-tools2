@@ -112,10 +112,10 @@ class Army < ApplicationRecord
 private
   def set_options
     active_game = Game.find_by(active: true)
-    @option_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
+    @options_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
 
-    @units = @option_armies["units"]
-    @status = @option_armies["status"]
+    @units = @options_armies["units"]
+    @status = @options_armies["status"]
   end
 
   def cache_attributes

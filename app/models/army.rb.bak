@@ -40,11 +40,11 @@ class Army < ApplicationRecord
 
   def set_options
     active_game = Game.find_by(active: true)
-    @option_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
+    @options_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
 
-    @army_status = @option_armies["status"].keys
-    @fleet_types = [nil] + @option_armies["fleets"].keys
-    @army_type = @option_armies["army_type"].keys
+    @army_status = @options_armies["status"].keys
+    @fleet_types = [nil] + @options_armies["fleets"].keys
+    @army_type = @options_armies["army_type"].keys
   end
 
   validates :status, inclusion: { in: ->(army) { army.instance_variable_get(:@army_status) || ARMY_STATUS } }
@@ -59,11 +59,11 @@ class Army < ApplicationRecord
       end
       changes = self.changes.map do |field, values|
         if field.starts_with?("attr")
-          field_name = (@option_armies["attributes"].keys.find { |key| @option_armies["attributes"][key]["sort"] == field.slice(3).to_i })  || "no_name"
+          field_name = (@options_armies["attributes"].keys.find { |key| @options_armies["attributes"][key]["sort"] == field.slice(3).to_i })  || "no_name"
           field = field_name + "(" + field + ")"
         end
         if field.starts_with?("men")
-          field_name = (@option_armies["men"].keys.find { |key| @option_armies["men"][key]["sort"] == field.slice(3).to_i })  || "no_name"
+          field_name = (@options_armies["men"].keys.find { |key| @options_armies["men"][key]["sort"] == field.slice(3).to_i })  || "no_name"
           field = field_name + "(" + field + ")"
         end
         "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
@@ -92,13 +92,13 @@ class Army < ApplicationRecord
   end
 
   def composition
-    set_options if @option_armies.nil?
+    set_options if @options_armies.nil?
 
-    status = @option_armies.fetch("status", {}).fetch(self.status, {}).fetch("men", 1)
-    fill = @option_armies.fetch("army_type", {}).fetch(self.army_type, {}).fetch("fill", 1)
+    status = @options_armies.fetch("status", {}).fetch(self.status, {}).fetch("men", 1)
+    fill = @options_armies.fetch("army_type", {}).fetch(self.army_type, {}).fetch("fill", 1)
     composition = []
 
-    @option_armies.fetch("men", {})&.sort_by { |_, v| v["sort"] }.to_h.each do | key, value |
+    @options_armies.fetch("men", {})&.sort_by { |_, v| v["sort"] }.to_h.each do | key, value |
       if key != "default"
         troops = (value["men"] || 10)
         number = (self["men#{value['sort']}"] || 0)
@@ -119,9 +119,9 @@ class Army < ApplicationRecord
   end
 
   def men
-    set_options if @option_armies.nil?
+    set_options if @options_armies.nil?
 
-    base = @option_armies.fetch("soldiers", 1000)
+    base = @options_armies.fetch("soldiers", 1000)
 
     men = (self.composition.sum * (self.hp || 0) * base * 0.01 * 0.01).to_i
 
@@ -129,21 +129,21 @@ class Army < ApplicationRecord
   end
 
   def strength_calc(terrain = nil)
-    set_options if @option_armies.nil?
+    set_options if @options_armies.nil?
 
     # If terrain is not provided, determine terrain based on self.board
     terrain ||= self.board.nil? ? "str" : "board"
 
-    army_type = @option_armies.fetch("army_type", {}).fetch(self.army_type, {})
+    army_type = @options_armies.fetch("army_type", {}).fetch(self.army_type, {})
 
     base_str = army_type.fetch("str", 0)
     fill = army_type.fetch("fill", 1)
 
-    tags = @option_armies.fetch("tags", {})&.sort_by { |key, _value| key }.to_h
+    tags = @options_armies.fetch("tags", {})&.sort_by { |key, _value| key }.to_h
 
     hp = (self.hp * 0.01).to_f
 
-    men = @option_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value[terrain] || value["str"] }
+    men = @options_armies.fetch("men", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value[terrain] || value["str"] }
 
     men_str = []
     men.each_with_index do | value, index |
@@ -155,7 +155,7 @@ class Army < ApplicationRecord
       tags_str << tags.fetch(tag, {}).fetch(terrain, 0)
     end
 
-    attributes = @option_armies.fetch("attributes", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["str"] }
+    attributes = @options_armies.fetch("attributes", {})&.sort_by { |_key, value| value["sort"] }.map { |_key, value| value["str"] }
 
     attr = []
     attributes.each_with_index do | value, index |
@@ -169,7 +169,7 @@ class Army < ApplicationRecord
     end
 
     if terrain == "board"
-      fleet_str = @option_armies.fetch("fleets", {})&.fetch(self.board, {})&.fetch("str", 0)
+      fleet_str = @options_armies.fetch("fleets", {})&.fetch(self.board, {})&.fetch("str", 0)
     else
       fleet_str = 0
     end
