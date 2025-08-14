@@ -1,11 +1,45 @@
 <span class="army_strength" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="army-str-data" title="
   <div class='row'>
     <div class='fst-italic text-start col-8'>
-      <i class='bi bi-'></i> WORK IN PROGRESS
+      ARMY
     </div>
     <div class='text-end col-4'>
+      STR
     </div>
   </div>
+  <% army.units.each do | unit | %>
+    <div class='row'>
+      <div class='fst-italic text-start col-8'>
+        <i class='bi bi-<%= unit.icon %>'></i>
+        <%= number_to_compact(unit.count.to_i) %>
+        <%= unit.name %>
+      </div>
+      <div class='text-end col-4'>
+        <%= unit.strength %>
+      </div>
+    </div>
+  <% end %>
+  <div class='row'>
+   <div class='text-start col-8'><u>Subtotal:</u></div>
+   <div class='text-end col-4'><u><%= army.strength_calc[:subtotal] %></u></div>
+  </div>
+  <div class='row'>
+   <div class='text-start col-8'><i class='bi bi-<%= @army_xp["icon"] %>'></i> <%= @army_xp["name"].capitalize %>:</div>
+   <div class='text-end col-4'>* <%= ((@army_xp["str"].to_i * army.xp)).to_i %>%</div>
+  </div>
+  <div class='row'>
+   <div class='text-start col-8'><i class='bi bi-<%= @army_morale["icon"] %>'></i> <%= @army_morale["name"].capitalize %>:</div>
+   <div class='text-end col-4'>* <%= ((@army_morale["str"].to_i * army.morale)).to_i %>%</div>
+  </div>
+    <div class='row'>
+     <div class='text-start col-8'><u>Mult:</u></div>
+     <div class='text-end col-4'><u>* <%= army.strength_calc[:mult].to_i * 100 %>%</u></div>
+    </div>
+  <div class='row'>
+    <div class='text-start fw-bold col-8'>Total:</div>
+    <div class='text-end col-4'><%= army.strength %></div>
+  </div>
+
   ">
   <%= army.strength %>
 </span>

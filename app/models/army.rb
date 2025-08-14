@@ -23,7 +23,23 @@ class Army < ApplicationRecord
   end
 
   def strength
-    units.sum(&:strength).to_i
+    self.strength_calc[:total]
+  end
+
+  def strength_calc
+    set_options if @options_armies.nil?
+
+    units = self.units.sum(&:strength)
+
+    mult = (self.xp / 100) * (self.morale / 100)
+
+    tags = 0
+
+    total = units * mult
+
+    str = { "total": total, "subtotal": units, "mult": mult, "tags": tags }
+
+    return str
   end
 
   def men

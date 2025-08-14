@@ -47,6 +47,12 @@ class Unit < ApplicationRecord
     return name
   end
 
+  def icon
+    set_options if @options_armies.nil?
+    icon = @units.fetch(self.unit_type, {}).fetch('icon', nil)
+    return icon
+  end
+
 private
   # Method to set hp_start to the value of hp
   def set_count_start
