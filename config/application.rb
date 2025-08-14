@@ -24,6 +24,7 @@ module ValarTools2
     config.active_support.to_time_preserves_timezone = :zone
     # Autoload /lib --- for SSO with discourse
     config.autoload_once_paths << "#{Rails.root}/lib"
+    config.autoload_once_paths << "#{Rails.root}/app/lib"
 
     config.exceptions_app = self.routes
 

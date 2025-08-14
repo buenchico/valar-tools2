@@ -29,10 +29,12 @@ class Family < ApplicationRecord
   def set_army_options
   end
 
-  def hp(status)
+  def hp
+    (self.armies&.sum(&:hp) / 5000).to_i || 0
   end
 
-  def hp_start(type)
+  def hp_start
+    (self.armies&.sum(&:hp_start) / 5000).to_i || 0
   end
 
 private

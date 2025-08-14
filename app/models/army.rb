@@ -54,6 +54,10 @@ class Army < ApplicationRecord
     units.sum(&:hp).to_i
   end
 
+  def hp_start
+    units.sum(&:hp_start).to_i
+  end
+
   def search
     self.family&.name
   end
