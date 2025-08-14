@@ -2,15 +2,21 @@ $(document).on('turbolinks:load', function () {
   if ($(".armies").length !== 0 ) {
     $.fn.copyArmies = function(){
       let message = "";
+      let str = 0;
+      let men = 0;
 
       //Loop through all checked CheckBoxes in GridView.
-      $("input[type=checkbox]:visible:checked").each(function () {
+      $(".checkbox_selectable:visible:checked").each(function () {
           let row = $(this).closest("tr");
           if (row.hasClass("tablesorter-headerRow") == false) {
             message += "> * " + row.find('.army-data .visible').text().replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
             message += "\n";
+            str += parseFloat(row.find('.army_strength').text())
+            men += parseInt(row.find('.army_men').text())
           }
       });
+
+      message += "Total: 🎖️: " + str + " 🪖: " + men 
 
       navigator.clipboard.writeText(message)
     }
