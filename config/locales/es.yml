@@ -127,6 +127,10 @@ es:
         selected: "Seleccionado"
         traits: "Rasgos"
         damage: "Daño"
+      unit:
+        unit: "Unidad"
+        count: "número"
+        modifier: "mod."
       faction:
         name: "Nombre"
         long_name: "Nombre completo"

@@ -23,7 +23,23 @@
               <%= form.select :status, @army_status.map { |k,v| [v["name"], k]}, {}, class: 'form-select' %>
             </div>
 
-            <% if @army_tags.present? %>
+            <div class="input-group mb-3">
+              <%= form.label :xp, ('<i class="bi bi-' + @army_xp["icon"] + '"></i>&nbsp;').html_safe + @army_xp["name"].capitalize + " *(" + @army_xp["str"].to_s + ")", class: 'input-group-text' %>
+              <%= form.number_field  :xp, class: 'form-control text-end', step: 1 %>
+
+              <div class="input-group-append me-2">
+                <span class="input-group-text bg-white text-dark">%</span>
+              </div>
+
+              <%= form.label :xp, ('<i class="bi bi-' + @army_morale["icon"] + '"></i>&nbsp;').html_safe + @army_morale["name"].capitalize + " *(" + @army_morale["str"].to_s + ")", class: 'input-group-text' %>
+              <%= form.number_field  :xp, class: 'form-control text-end', step: 1 %>
+
+              <div class="input-group-append">
+                <span class="input-group-text bg-white text-dark">%</span>
+              </div>
+            </div>
+
+            <% if @army_tags.present? && false %>
               <div class="input-group mb-3">
                 <%= form.label :tags, class: 'input-group-text' %>
                 <%= form.select :tags,
@@ -38,7 +54,7 @@
                     selected: army.tags
                   ),
                   { include_blank: false },
-                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white',
                   title: 'Sin rasgos',
                   multiple: true,
                   data: { }

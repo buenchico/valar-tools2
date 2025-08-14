@@ -1,3 +1,15 @@
 $(".modal").modal('hide');
 $('#content').html("<%= j render 'form', army: @army %>");
 $('#armyModal').modal('show');
+
+// Rebind Cocoon events
+$(document).on('click', '.remove_fields.dynamic', function(e) {
+  e.preventDefault();
+  $(this).closest('.nested-fields').remove();
+});
+
+$(document).on('click', '.remove_fields.existing', function(e) {
+  e.preventDefault();
+  $(this).prev('input[type=hidden]').val('1');
+  $(this).closest('.nested-fields').hide();
+});

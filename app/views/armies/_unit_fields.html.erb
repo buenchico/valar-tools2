@@ -1,4 +1,4 @@
-<div class="input-group mb-3 ps-3 nested-fields">
+<div class="input-group mb-1 ps-3 nested-fields">
   <%= f.label :unit, class: 'input-group-text' %>
 
   <%= f.select :unit_type,
@@ -13,15 +13,17 @@
       f.object.unit_type
     ),
     { },
-    class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select',
+    class: 'selectpicker flex-fill dropdown-toggle dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select',
     title: 'Sin tipo',
     data: { }
   %>
 
-  <%= f.number_field :count, class: 'form-control', step: 1, min: 0, max: f.object.count_start, placeholder: "unidad" %>
-  <%= f.number_field :modifier, class: 'form-control percent-input', step: 1, min: -50, max: 200, placeholder: 'modifier' %>
+  <%= f.number_field :count, class: 'form-control', step: 1, min: 0, max: f.object.count_start, placeholder: t('activerecord.attributes.unit.count') %>
+  <div class="col-md-1 col-sm-2">
+    <%= f.number_field :modifier, class: 'form-control text-end', step: 1, min: -50, max: 200, placeholder: t('activerecord.attributes.unit.modifier') %>
+  </div>
   <div class="input-group-append">
-    <span class="input-group-text">%</span>
+    <span class="input-group-text bg-white text-dark">%</span>
   </div>
 
   <%= link_to_remove_association("<i class='bi bi-x-circle-fill'></i>".html_safe, f, class: 'text-danger ms-1 pt-1') %>
