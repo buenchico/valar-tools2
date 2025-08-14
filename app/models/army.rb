@@ -31,13 +31,13 @@ class Army < ApplicationRecord
 
     units = self.units.sum(&:strength)
 
-    mult = (self.xp / 100) * (self.morale / 100)
+    mult = (self.xp / 100) * (self.morale / 100).to_i
 
     tags = 0
 
     total = units * mult
 
-    str = { "total": total, "subtotal": units, "mult": mult, "tags": tags }
+    str = { "total": total.round(2), "subtotal": units.round(2), "mult": mult, "tags": tags }
 
     return str
   end

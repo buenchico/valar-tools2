@@ -11,7 +11,7 @@ class Unit < ApplicationRecord
 
     unit_strength = @units.fetch(self.unit_type, {}).fetch("str", 0)
 
-    (self.count.to_i * unit_strength.to_i * (self.modifier / 100.0) * @status.fetch(self.army.status, {}).fetch("str", 0)) / @army_scale
+    ((self.count.to_i * unit_strength.to_i * (self.modifier / 100.0) * @status.fetch(self.army.status, {}).fetch("str", 0)) / @army_scale).round(2)
   end
 
   def hp

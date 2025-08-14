@@ -1,0 +1,4 @@
+{91 => {name: "1 de Invernalia", units: {1 => {unit_type: "infantry", hp: 30000, count: 30000, men: 30000}, 2 => {unit_type: "artillery", hp: 40000, count: 1000, men: 8000}, 3 => {unit_type: "mech", hp: 100, count: 1, men: 1}, 4 => {unit_type: "tank", hp: 2250, count: 45, men: 360}}}}
+{unit_id: 1, unit_type: "infantry", damage: 1930}
+{unit_id: 2, unit_type: "artillery", damage: 2920}
+{unit_id: 4, unit_type: "tank", damage: 150}
