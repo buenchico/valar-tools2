@@ -7,6 +7,7 @@ class ArmiesController < ApplicationController
   before_action :set_filters, only: [:index]
 
   before_action :check_master, only: [:destroy, :destroy_multiple, :damage_multiple, :stats]
+  before_action :check_owner, only: [:edit, :edit_notes, :update, :edit_multiple, :update_multiple]
 
   def index
     @faction = Faction.find_by(id: params[:faction_id])
@@ -284,6 +285,28 @@ private
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
       whitelisted[:board] = nil if whitelisted.key?(:board) && whitelisted[:board].blank?
+    end
+  end
+
+  def check_owner
+    armies_to_include = [@army] # Initialize with @army
+
+    if params[:army_ids].present?
+      armies_to_include += Army.where(id: params[:army_ids]).order(:name)
+    end
+
+    ownership = armies_to_include.all? do |army|
+      army.factions.include?(@current_user.faction)
+    end
+
+    if !@current_user&.is_master? && !ownership
+      respond_to do |format|
+        format.html { redirect_to armies_url, danger: t('messages.permissions', model: Army.model_name.human(:count => 1).downcase) }
+        format.js do
+          flash[:danger] = t('messages.permissions', model: Army.model_name.human(:count => 1).downcase)
+          render js: "window.location='/armies'"
+        end
+      end
     end
   end
 
