@@ -15,7 +15,8 @@
     { },
     class: 'selectpicker flex-fill dropdown-toggle dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select',
     title: 'Sin tipo',
-    data: { }
+    data: { },
+    disabled: f.object.persisted? ? true : false
   %>
 
   <%= f.number_field :count, class: 'form-control', step: 1, min: 0, max: f.object.count, placeholder: t('activerecord.attributes.unit.count') %>
