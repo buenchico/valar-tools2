@@ -127,7 +127,7 @@ class ArmiesController < ApplicationController
           units_hash[unit.id] = {
             unit_type: unit.unit_type,
             hp: unit.hp,
-            count: unit.count,
+            count: unit.troops,
             men: unit.men
           }
         end

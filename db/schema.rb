@@ -212,7 +212,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_11_131921) do
   create_table "units", force: :cascade do |t|
     t.bigint "army_id", null: false
     t.string "unit_type"
-    t.integer "count_start"
+    t.integer "troops_start"
     t.integer "count"
     t.integer "modifier", default: 100
     t.datetime "created_at", null: false

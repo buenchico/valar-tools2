@@ -1,6 +1,6 @@
 class Unit < ApplicationRecord
   belongs_to :army
-  before_create :set_count_start
+  before_create :set_troops_start
 
   validates :count, presence: true
   validates :unit_type, presence: true
@@ -11,7 +11,7 @@ class Unit < ApplicationRecord
 
     unit_strength = @units.fetch(self.unit_type, {}).fetch("str", 0)
 
-    ((self.count.to_i * unit_strength.to_i * (self.modifier / 100.0) * @status.fetch(self.army.status, {}).fetch("str", 0)) / @army_scale).round(2)
+    ((self.troops.to_i * unit_strength.to_i * (self.modifier / 100.0)) / @army_scale).round(2)
   end
 
   def hp
@@ -19,7 +19,7 @@ class Unit < ApplicationRecord
 
     unit_hp = @units.fetch(self.unit_type, {}).fetch("hp", 0)
 
-    (self.count.to_i * unit_hp.to_i * @status.fetch(self.army.status, {}).fetch("hp", 0)).to_i
+    (self.troops.to_i * unit_hp.to_i).to_i
   end
 
   def hp_start
@@ -27,7 +27,7 @@ class Unit < ApplicationRecord
 
     unit_hp = @units.fetch(self.unit_type, {}).fetch("hp", 0)
 
-    (self.count_start.to_i * unit_hp.to_i)
+    (self.troops_start.to_i * unit_hp.to_i)
   end
 
   def men
@@ -35,7 +35,7 @@ class Unit < ApplicationRecord
 
     unit_men = @units.fetch(self.unit_type, {}).fetch("men", 0)
 
-    self.count.to_i * unit_men * @status.fetch(self.army.status, {}).fetch("men", 0)
+    self.troops.to_i * unit_men
   end
 
   def men_start
@@ -43,7 +43,7 @@ class Unit < ApplicationRecord
 
     unit_men = @units.fetch(self.unit_type, {}).fetch("men", 0)
 
-    self.count_start.to_i * unit_men
+    self.troops_start.to_i * unit_men
   end
 
   def name
@@ -61,10 +61,17 @@ class Unit < ApplicationRecord
     return icon
   end
 
+  def troops
+    set_options if @options_armies.nil?
+
+    status_mod = @status.fetch(self.army.status, {}).fetch("mod", 0)
+
+    self.count.to_i * @status.fetch(self.army.status, {}).fetch("mod", 0)
+  end
+
 private
-  # Method to set hp_start to the value of hp
-  def set_count_start
-    self.count_start = self.count
+  def set_troops_start
+    self.troops_start = self.count
   end
 
   def set_options

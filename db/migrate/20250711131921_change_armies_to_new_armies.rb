@@ -12,12 +12,12 @@ class ChangeArmiesToNewArmies < ActiveRecord::Migration[7.0]
     remove_column :armies, :army_type, :string
 
     add_column :armies, :xp, :integer, default: 100
-    add_column :armies, :morale, :integer, default: 100    
+    add_column :armies, :morale, :integer, default: 100
 
     create_table :units do |t|
       t.references :army, null: false, foreign_key: true
       t.string :unit_type
-      t.integer :count_start
+      t.integer :troops_start
       t.integer :count
       t.integer :modifier, default: 100
 

@@ -2,7 +2,7 @@
   <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= (unit.modifier == 100) ? 'success' : 'brass' %>">
     <i class="bi bi-<%= unit.icon %>"></i>
 
-    <%= number_to_compact(unit.count.to_i) %>
+    <%= number_to_compact(unit.troops.to_i) %>
     <%= unit.name %>
   </span>
 <% end %>

@@ -18,7 +18,7 @@
     data: { }
   %>
 
-  <%= f.number_field :count, class: 'form-control', step: 1, min: 0, max: f.object.count_start, placeholder: t('activerecord.attributes.unit.count') %>
+  <%= f.number_field :count, class: 'form-control', step: 1, min: 0, max: f.object.count, placeholder: t('activerecord.attributes.unit.count') %>
   <div class="col-md-1 col-sm-2">
     <%= f.number_field :modifier, class: 'form-control text-end', step: 1, min: -50, max: 200, placeholder: t('activerecord.attributes.unit.modifier') %>
   </div>
@@ -26,5 +26,7 @@
     <span class="input-group-text bg-white text-dark">%</span>
   </div>
 
-  <%= link_to_remove_association("<i class='bi bi-x-circle-fill'></i>".html_safe, f, class: 'text-danger ms-1 pt-1') %>
+  <% unless f.object.persisted? %>
+    <%= link_to_remove_association("<i class='bi bi-x-circle-fill'></i>".html_safe, f, class: 'text-danger ms-1 pt-1') %>
+  <% end %>
 </div>
