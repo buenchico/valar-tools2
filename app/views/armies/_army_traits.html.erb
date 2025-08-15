@@ -1,5 +1,5 @@
 <% army.units.each do | unit | %>
-  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= (unit.modifier == 100) ? 'success' : 'brass' %>">
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= unit.colour %>">
     <i class="bi bi-<%= unit.icon %>"></i>
 
     <%= number_to_compact(unit.troops.to_i) %>

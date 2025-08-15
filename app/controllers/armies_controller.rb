@@ -6,6 +6,7 @@ class ArmiesController < ApplicationController
   before_action :set_factions, only: [:index, :edit, :edit_multiple, :new, :groups]
   before_action :set_filters, only: [:index]
 
+  before_action :check_player, except: [:get_discourse_armies, :post_discourse_armies]
   before_action :check_master, only: [:destroy, :destroy_multiple, :damage_multiple, :stats]
   before_action :check_owner, only: [:edit, :edit_notes, :update, :edit_multiple, :update_multiple]
 
@@ -239,7 +240,6 @@ class ArmiesController < ApplicationController
   end
 
   def export
-
   end
 
   def import
@@ -250,6 +250,12 @@ class ArmiesController < ApplicationController
         format.html
       end
     end
+  end
+
+  def get_discourse_armies
+  end
+
+  def post_discourse_armies
   end
 
 private

@@ -6,7 +6,7 @@
       @unit_types.map { | key, value |
         [
           key,
-          { "data-content": "<span class='badge rounded-pill pill-tags bg-brass'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe
+          { "data-content": "<span class='badge rounded-pill pill-tags bg-#{value.fetch("colour", "brass")}'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe
         }
         ]
       },
