@@ -1,6 +1,6 @@
 <div class="modal fade" id="familyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content bg-dark">
+    <div class="modal-content bg-dark text-light">
       <div class="modal-header">
         <h5 class="modal-title" id="Title"><%= family.title %></h5>
         <div class="w-100">
@@ -97,42 +97,40 @@
           <% if @options_families["subtools"]["armies"] %>
             <% if @family.armies.present? %>
             <div class="h4">Ejércitos</div>
-            <div class="row ms-1">
-              <% @army_options["status"]&.sort_by { |_, v| v["sort"] }.to_h.each do | key, status | %>
-                <div class="col">
-                  <i class="bi bi-<%= status['icon'] %>"></i>
-                  HP <%= status["name"] %> :
-                  <%= @family.hp(key) %>
-                </div>
+            <% unit_summary = @family.armies.each_with_object(Hash.new { |h, k| h[k] = Hash.new { |i, j| i[j] = Hash.new(0) } }) do |army, acc| %>
+              <% army.units.each do |unit| %>
+                <% acc[unit.unit_type][army.status]["troops"] += unit.troops.to_i %>
+                <% acc[unit.unit_type]["all"]["troops_start"] += unit.troops_start.to_i %>
               <% end %>
-            </div>
-            <div class="row ms-1 mt-1 h5">
-              HP iniciales
-            </div>
-            <div class="row ms-1 mb-1">
-              <% @army_options["army_type"]&.sort_by { |_, v| v["sort"] }.to_h.each do | key, status | %>
-                <% if family.hp_start(key) != 0 %>
-                  <div class="col">
-                    <i class="bi bi-<%= status['icon'] %>"></i>
-                    HP <%= status["name"] %> :
-                    <%= @family.hp_start(key) %>
-                  </div>
+            <% end %>
+            <table class="table table-dark table-striped table-borderless table-hover table-sm">
+              <thead>
+                <tr id="table_title">
+                  <td></td>
+                  <td><%= @army_status["raised"]["name"] %></td>
+                  <td><%= @army_status["active"]["name"] %></td>
+                  <td><%= @army_status["inactive"]["name"] %></td>
+                </tr>
+              </thead>
+              <tbody>
+                <% unit_summary.each do | key, value | %>
+                  <tr>
+                    <td><%= @unit_types[key]["name"].capitalize %></td>
+                    <td><%= number_to_compact(value["raised"]["troops"]) %></td>
+                    <td><%= number_to_compact(value["active"]["troops"]) %></td>
+                    <td><%= number_to_compact(value["all"]["troops_start"]) %></td>
+                  </tr>
                 <% end %>
-              <% end %>
-              <div class="col">
-                HP total :
-                <%= @family.hp_start('all') %>
-              </div>
-            </div>
+              <tbody>
+            </table>
+
             <div class="row ms-1 mt-1 h5">
               Lista
             </div>
             <% @family.armies.order(:name).each do | army | %>
               <div class="row ms-1">
                 <div class="col <%= army.status %>">
-                  <%= link_to(army.name, edit_army_path(army.id), remote: true, class: 'text-white') %>
-                  <%= army.position.blank? ? '' : 'en ' + army.position %>
-                  (<%= @army_options["status"][army.status]["name"] %>)
+                  <%= render 'armies/army_one_line', army: army, link: true %>
                 </div>
               </div>
             <% end %>

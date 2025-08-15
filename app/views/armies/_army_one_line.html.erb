@@ -1,6 +1,12 @@
+<% link = false if local_assigns[:link].nil? %>
+
 <span class="visible">
-  <%= army.name %>
-  <%= render 'army_traits', army: army %>
+  <% if link %>
+    <%= link_to(army.name, edit_army_path(army.id), remote: true, class: 'text-white') %>
+  <% else %>
+    <%= army.name %>
+  <% end %>
+  <%= render 'armies/army_traits', army: army %>
   <%= army.position.blank? ? nil : ", en #{army.position} " %>
   <%= army.group.blank? ? nil : " grupo " + ARMY_GROUPS[army.group.to_sym][:name].upcase %>
   🎖️: <%= army.strength %>
