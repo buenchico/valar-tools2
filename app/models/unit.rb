@@ -48,7 +48,7 @@ class Unit < ApplicationRecord
 
   def name
     set_options if @options_armies.nil?
-    name = (@units.fetch(self.unit_type, {}).fetch("name", "")).pluralize(self.count)
+    name = (@units.fetch(self.unit_type, {}).fetch("name", "")).pluralize_all_words(self.count)
     if self.modifier != 100
       name += (" v" + (self.modifier / 100.0).to_s)
     end
