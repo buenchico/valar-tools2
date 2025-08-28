@@ -3,11 +3,12 @@
 
   <%= f.select :unit_type,
     options_for_select(
-      @unit_types.map { | key, value |
+      @unit_types.select { |_, v| v["type"] == @army.army_type }.map { | key, value |
         [
           key,
-          { "data-content": "<span class='badge rounded-pill pill-tags bg-#{value.fetch("colour", "brass")}'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe
-        }
+          {
+            "data-content": "<span class='badge rounded-pill pill-tags bg-#{@army_types.fetch(value["type"], {}).fetch("colour", "brass")}'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe
+          }
         ]
       },
       f.object.unit_type

@@ -110,9 +110,9 @@ class ApplicationController < ActionController::Base
   def set_options_armies
     # @attributes = @options_armies["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
     # @men = @options_armies["men"]&.sort_by { |_, v| v["sort"] }.to_h
-    # @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     # @hp = @options_armies["hp"]
     # @fleets = @options_armies["fleets"]
+    @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @army_status = @options_armies["status"]
     @army_tags = @options_armies["tags"]&.sort_by do |_, v|
       [v["sort"] || 99, v["name"]]
@@ -120,6 +120,10 @@ class ApplicationController < ActionController::Base
     @unit_types = @options_armies["units"]&.sort_by do |_, v|
       [v["sort"] || 99, v["name"]]
     end.to_h
+    @land_units = @unit_types.select { |_, v| v["type"] == "land" }
+    @sea_units = @unit_types.select { |_, v| v["type"] == "sea" }
+    @air_units = @unit_types.select { |_, v| v["type"] == "air" }
+
     @army_scale = @options_armies["general"]["scale"]
     @army_xp = @options_armies["general"]["xp"]
     @army_morale = @options_armies["general"]["morale"]

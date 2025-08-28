@@ -9,7 +9,6 @@ class ChangeArmiesToNewArmies < ActiveRecord::Migration[7.0]
     # Remove hp and hp_start — you were missing the table name!
     remove_column :armies, :hp, :integer
     remove_column :armies, :hp_start, :integer
-    remove_column :armies, :army_type, :string
 
     add_column :armies, :xp, :integer, default: 100
     add_column :armies, :morale, :integer, default: 100

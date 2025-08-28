@@ -63,8 +63,8 @@ class Unit < ApplicationRecord
 
   def colour
     set_options if @options_armies.nil?
-    icon = @units.fetch(self.unit_type, {}).fetch('colour', 'brass')
-    return icon
+    colour = @units.fetch(self.unit_type, {}).fetch('type', 'land')
+    return colour
   end
 
   def troops
@@ -85,6 +85,7 @@ private
     @options_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
 
     @units = @options_armies["units"]
+    @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @status = @options_armies["status"]
     @army_scale = @options_armies["general"]["scale"]
   end

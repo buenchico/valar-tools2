@@ -16,7 +16,7 @@ $(document).on('turbolinks:load', function () {
           }
       });
 
-      message += "Total: 🎖️: " + str + " 🪖: " + men 
+      message += "Total: 🎖️: " + str + " 🪖: " + men
 
       navigator.clipboard.writeText(message)
     }
@@ -130,5 +130,6 @@ $(document).on('turbolinks:load', function () {
     // Trigger functions on load
     $.fn.recalculateStats();
     $.fn.checkboxSelectable();
+
   }
 });

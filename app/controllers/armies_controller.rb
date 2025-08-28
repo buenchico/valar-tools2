@@ -28,7 +28,7 @@ class ArmiesController < ApplicationController
   end
 
   def new
-    @army = Army.new
+    @army = Army.new(army_type: params[:army_type])
     @army.units.build # builds one unit field by default
   end
 
