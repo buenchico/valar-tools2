@@ -1,0 +1,21 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title w-100" id="Title"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <% @army_types.each do | key, value | %>
+          <div class="row mb-3">
+            <div class="col">
+              <%= link_to new_army_path(selector: false, army_type: key), class: "btn btn-primary", remote: true do %>
+                <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: value["name"]) %> <i class='bi bi-<%= value["icon"]%>'></i>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

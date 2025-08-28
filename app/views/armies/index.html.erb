@@ -8,10 +8,8 @@
 
 <% if @current_user&.is_master? %>
   <div class="col">
-    <% @army_types.each do | key, value | %>
-      <%= link_to new_army_path(army_type: key), class: "btn btn-primary", remote: true do %>
-        <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: value["name"]) %> <i class='bi bi-<%= value["icon"]%>'></i>
-      <% end %>
+    <%= link_to new_army_path(selector: (@army_types.length == 1 ? false : true)), class: "btn btn-primary", remote: true do %>
+      <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
     <% end %>
   </div>
 <% end %>

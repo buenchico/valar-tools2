@@ -28,8 +28,20 @@ class ArmiesController < ApplicationController
   end
 
   def new
-    @army = Army.new(army_type: params[:army_type])
+    selector = params[:selector] == "true"
+    army_type = params[:army_type].presence || @army_types&.keys&.first || "land"
+    @army = Army.new(army_type: army_type)
     @army.units.build # builds one unit field by default
+
+    if selector
+      respond_to do |format|
+        format.js { render 'new_selector' }
+      end
+    else
+      respond_to do |format|
+        format.js
+      end
+    end
   end
 
   def edit
