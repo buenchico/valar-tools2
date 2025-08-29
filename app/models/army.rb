@@ -9,8 +9,11 @@ class Army < ApplicationRecord
   has_many :units, dependent: :destroy
   accepts_nested_attributes_for :units, reject_if: :all_blank, allow_destroy: true
 
+  before_validation :set_options
+
   validates :name, presence: true
   validates_uniqueness_of :name
+  validate :army_type_must_be_valid
 
   attr_accessor :faction_ids_was
   attr_accessor :unit_ids_was
@@ -129,13 +132,20 @@ class Army < ApplicationRecord
     end
   end
 
-private
   def set_options
     active_game = Game.find_by(active: true)
     @options_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
 
     @units = @options_armies["units"]
     @status = @options_armies["status"]
+    @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
+  end
+
+  def army_type_must_be_valid
+    valid_types = @army_types&.keys&.map(&:to_s) || []
+    unless valid_types.include?(army_type)
+      errors.add(:army_type, "is not a valid type. Must be one of: #{valid_types.join(', ')}")
+    end
   end
 
   def cache_attributes

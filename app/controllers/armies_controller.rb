@@ -298,7 +298,7 @@ private
   def army_params
     params.require(:army).permit(
       :name, :status, :position, :group, :location_id, :family_id, :confirm,
-      :visible, :notes, :board, faction_ids: [], tags: [],
+      :visible, :notes, :board, :xp, :army_type, faction_ids: [], tags: [],
       units_attributes: [:id, :unit_type, :count, :modifier, :_destroy]
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]

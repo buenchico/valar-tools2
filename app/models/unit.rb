@@ -61,9 +61,15 @@ class Unit < ApplicationRecord
     return icon
   end
 
+  def army_type
+    set_options if @options_armies.nil?
+    type = @units.fetch(self.unit_type, {}).fetch('type', 'land')
+    return type
+  end
+
   def colour
     set_options if @options_armies.nil?
-    colour = @units.fetch(self.unit_type, {}).fetch('type', 'land')
+    colour = @army_types.fetch(self.army_type, {}).fetch('colour', 'brass')
     return colour
   end
 

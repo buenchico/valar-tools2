@@ -148,6 +148,7 @@
             ) %>
           </div>
 
+          <%= form.hidden_field :army_type, class: 'form-control' %>
           <%= form.submit nil, class: 'btn btn-primary' %>
 
           <% if army.logs&.empty? == false %>
