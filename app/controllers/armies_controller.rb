@@ -122,14 +122,18 @@ class ArmiesController < ApplicationController
 
   def damage_multiple
     armies = Army.where(id: params[:army_ids])
-    damage = params[:army][:damage].to_i * @army_scale
+    damage = params[:army][:damage].to_i * @army_scale # 1 dmg kills 1 scale of hp
+    times = params[:army][:times].to_i
 
-    if Rails.env.development?
-      times = params[:army][:times].to_i
+    if Rails.env.development? && times > 1
       simulate_damage_distribution(armies, damage, times)
     else
-      formatted_log = apply_damage(armies, damage)
-      puts formatted_log
+      @damage_log = apply_damage(armies, damage)
+      army_ids = @damage_log.keys
+      @armies = Army.where(id: army_ids)
+      respond_to do | format |
+        format.js
+      end
     end
   end
 
@@ -151,6 +155,7 @@ class ArmiesController < ApplicationController
     File.open("logfile.txt", "a") do |file|
       file.puts armies_data
     end
+
     times.times do
       formatted_log = apply_damage(armies, damage)
       File.open("logfile.txt", "a") do |file|
@@ -216,13 +221,19 @@ class ArmiesController < ApplicationController
     formatted_log = damage_log.map do |unit_id, damage|
       unit = unit_lookup[unit_id]
       {
+        army_id: unit.army.id,
         unit_id: unit.id,
         unit_type: unit.unit_type,
-        damage: damage
+        damage: damage,
+        unit_losses: (damage / unit.hp_per_unit),
+        unit_survivors: (unit.count - (damage / unit.hp_per_unit))
       }
     end
 
-    return formatted_log.sort_by { |entry| entry[:unit_id] }
+    grouped_log = formatted_log.group_by { |entry| entry[:army_id] }
+                               .transform_values { |entries| entries.map { |e| e.except(:army_id) } }
+                               .sort.to_h
+    return grouped_log
   end
 
   def get_armies
@@ -236,7 +247,6 @@ class ArmiesController < ApplicationController
     master = Faction.find_by(name: 'master')
 
     if @active_factions.count == 1
-      puts @active_factions
       @faction = Faction.find_by(id: @active_factions)
     end
 
@@ -307,7 +317,7 @@ private
   end
 
   def check_owner
-    armies_to_include = [@army] # Initialize with @army
+    armies_to_include = @army.present? ? [@army] : []
 
     if params[:army_ids].present?
       armies_to_include += Army.where(id: params[:army_ids]).order(:name)

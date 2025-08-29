@@ -25,7 +25,7 @@ $('.damage_unit').on('click', function () {
 $('.damage_apply').on('click', function () {
   const box = $(this).closest('.damage_box')
   var damage_field = $(this).siblings('.damage_field').first()
-  var damage = Number(damage_field.val()) || 0;
+  var damage = (Number(damage_field.val()) || 0) * <%= @army_scale %>;
   var count_field = $(this).closest('.nested-fields').find('.unit_count');
   var hp_per_unit = Number($(this).siblings('.hp_per_unit').first().val()) || 1;
   var casualties = parseInt(damage / hp_per_unit)

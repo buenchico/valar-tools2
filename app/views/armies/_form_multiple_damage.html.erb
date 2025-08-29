@@ -9,8 +9,10 @@
         <div class="container-fluid">
           <%= form_for :army, url: damage_multiple_armies_path, remote: true, method: :put do | form | %>
             <div class="alert alert-danger">
-              <div class="float-left mr-2"><i class="fas fa-exclamation-triangle fa-3x"></i></div>
-              <div>Se aplicará daño sobre los siguientes ejércitos</div>
+              <div>
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                Se aplicará daño sobre los siguientes ejércitos:
+              </div>
             </div>
               <% armies.each do | army | %>
                 <p>
@@ -22,11 +24,16 @@
             <div class="input-group mt-3">
               <%= form.label :damage, t("activerecord.attributes.army.damage"), class: 'input-group-text' %>
               <%= form.number_field :damage, class: "form-control", value: 0, step: 1, min: 0 %>
+              <div class="bg-danger-subtle text-danger-emphasis p-2">
+                1 punto de daño = <%= @army_scale %> hp
+              </div>
             </div>
-            <div class="input-group mt-3">
-              <%= form.label :times, class: 'input-group-text' %>
-              <%= form.number_field :times, class: "form-control", value: 1, step: 1, min: 0, max: 10000 %>
-            </div>
+            <% if Rails.env.development? %>
+              <div class="input-group mt-3">
+                <%= form.label :times, class: 'input-group-text' %>
+                <%= form.number_field :times, class: "form-control", value: 1, step: 1, min: 0, max: 10000 %>
+              </div>
+            <% end %>
             <div class="input-group mt-3">
               <%= form.submit t('helpers.submit.damage_multiple', model: Army.model_name.human.pluralize), class: 'btn btn-primary' %>
             </div>

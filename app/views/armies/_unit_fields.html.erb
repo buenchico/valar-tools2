@@ -33,7 +33,7 @@
   <% else %>
     <i class='bi bi-damage-kinetic ms-1 pt-1 text-warning damage_unit'></i>
     <div class="position-absolute bg-light text-dark border p-3 shadow damage_box d-none" style="top: -50px; right: -15px; z-index: 1050;">
-      <%= number_field_tag "damage", nil, id: "damage_#{f.object.id || SecureRandom.hex(4)}", class: "damage_field" %>
+      <%= number_field_tag "damage", nil, id: "damage_#{f.object.id || SecureRandom.hex(4)}", class: "damage_field", placeholder: t("activerecord.attributes.army.damage") %>
       <%= hidden_field_tag "hp", f.object.hp_per_unit, id: "damage_#{f.object.id || SecureRandom.hex(4)}", class: "hp_per_unit" %>
       <i class='bi bi-damage-kinetic ms-1 pt-1 text-success damage_apply'></i>
     </div>
