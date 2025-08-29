@@ -155,8 +155,7 @@ class ArmiesController < ApplicationController
     end
 
     respond_to do |format|
-      format.js
-      format.html { redirect_to armies_path, notice: "Armies updated." }
+      format.js { render 'update_multiple' }
     end
   end
 

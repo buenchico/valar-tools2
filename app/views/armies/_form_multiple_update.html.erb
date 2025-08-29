@@ -1,0 +1,154 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title">Edición masiva</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <%= form_for :army, url: update_multiple_armies_path, method: :put do | form | %>
+            <div class="alert alert-danger">
+              <div>
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                Los siguientes ejércitos serán actualizados, cualquier campo dejado en blanco no será actualizado:
+              </div>
+            </div>
+              <% armies.each do | army | %>
+                <p>
+                  <%= hidden_field_tag "army_ids[]", army.id %>
+                  <%= "* id: (#{army.id})" %>
+                  <%= render 'army_one_line', army: army %>
+                </p>
+              <% end %>
+            <div class="input-group mt-3">
+              <%= form.label :position, t('activerecord.attributes.army.position'), class: 'input-group-text' %>
+              <%= form.text_field :position, class: "form-control", "data-bs-toggle": "tooltip", "data-bs-placement": "top", "data-bs-html": "true", title: ("Escribe <em>CLEAR</em> para borrar la posición").html_safe %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :group, t('activerecord.attributes.army.group'), class: 'input-group-text' %>
+              <%= form.select :group,
+                options_for_select(
+                  ARMY_GROUPS.map { | key, value |
+                    [
+                      key,
+                      { "data-content": "<span class='badge rounded-pill pill-tags pill-#{key}'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe
+                    }
+                    ]
+                  }.unshift([{"data-content": "<span class='badge rounded-pill pill-tags bg-secondary'><span class='pill-tags-text'>Quitar grupos</span>"},"CLEAR"]),
+                  selected: nil
+                ),
+                { include_blank: true },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                data: { noneSelectedText: ' '}
+              %>
+            </div>
+            <% if @current_user.is_master? %>
+              <div class="input-group mt-3">
+                <%= form.label :status, t('activerecord.attributes.army.status'), class: 'input-group-text' %>
+                <%= form.select :status, ([""] + @army_status.map { |k,v| [v["name"], k]}), {}, class: 'form-select' %>
+              </div>
+              <div class="input-group mt-3">
+                <%= form.label :xp, ('<i class="bi bi-' + @army_xp["icon"] + '"></i>&nbsp;').html_safe + @army_xp["name"].capitalize + " *(" + @army_xp["str"].to_s + ")", class: 'input-group-text' %>
+                <%= form.number_field :xp_sum, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.sum'), step: 10, min: 10, max: 300  %>
+                <div class="input-group-append">
+                  <span class="input-group-text bg-white text-dark">%</span>
+                </div>
+                <%= form.number_field :xp_change, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.change'), step: 10, min: 0, max: 300  %>
+                <div class="input-group-append">
+                  <span class="input-group-text bg-white text-dark">%</span>
+                </div>
+              </div>
+              <div class="input-group mt-3">
+                <%= form.label :morale, ('<i class="bi bi-' + @army_morale["icon"] + '"></i>&nbsp;').html_safe + @army_morale["name"].capitalize + " *(" + @army_morale["str"].to_s + ")", class: 'input-group-text' %>
+                <%= form.number_field :morale_sum, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.sum'), step: 10, min: 10, max: 300  %>
+                <div class="input-group-append">
+                  <span class="input-group-text bg-white text-dark">%</span>
+                </div>
+                <%= form.number_field :morale_change, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.change'), step: 10, min: 0, max: 300  %>
+                <div class="input-group-append">
+                  <span class="input-group-text bg-white text-dark">%</span>
+                </div>
+              </div>
+
+              <% if @army_tags.present? %>
+                <div class="input-group mt-3">
+                  <%= form.label :tags, t('activerecord.attributes.army.tags'), class: 'input-group-text' %>
+                  <%= form.select :tags_add,
+                    options_for_select(
+                      @army_tags.map { | tag |
+                        [
+                          tag[0],
+                          { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                        }
+                        ]
+                      }
+                    ),
+                    { include_blank: false },
+                    class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                    title: t('helpers.placeholder.add'),
+                    multiple: true,
+                    data: { }
+                  %>
+                  <%= form.select :tags_remove,
+                    options_for_select(
+                      @army_tags.map { | tag |
+                        [
+                          tag[0],
+                          { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                        }
+                        ]
+                      }
+                    ),
+                    { include_blank: false },
+                    class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                    title: t('helpers.placeholder.remove'),
+                    multiple: true,
+                    data: { }
+                  %>
+                </div>
+              <% end %>
+              <div class="input-group mt-3">
+                <%= form.label :location_id, t('activerecord.attributes.army.location_id'), class: 'input-group-text' %>
+                <%= form.select :location_id, [[""],["Quitar región", "CLEAR"]] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
+              </div>
+              <div class="input-group mt-3">
+                <%= form.label :family_id, t('activerecord.attributes.army.family_id'), class: 'input-group-text' %>
+                <%= form.select :family_id, [[""],["Quitar señor", "CLEAR"]] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+              </div>
+              <div class="input-group mt-3">
+                <%= form.label :visible, t('activerecord.attributes.army.visible'), class: 'input-group-text' %>
+                <%= form.select :visible, [[""],["Invisible", "CLEAR"],["Visible", true]], {}, class: 'form-select' %>
+              </div>
+              <div class="input-group mt-3">
+                <%= form.label t('activerecord.attributes.army.factions'), class: 'input-group-text' %>
+                <%= form.select :faction_ids,
+                  options_for_select(
+                    @factions.pluck(:long_name, :id).map { |name, id|
+                      [
+                        id,
+                        { "data-content": name
+                      }
+                      ]
+                    }.unshift([{"data-content": "Quitar todas las facciones"},"CLEAR"]),
+                    selected: nil
+                  ),
+                  { include_blank: true },
+                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  multiple: true,
+                  data: { noneSelectedText: ' '}
+                %>
+              </div>
+            <% end %>
+            <div class="input-group mt-3">
+              <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'VALIDATE' para confirmar los cambios." %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.submit t('helpers.submit.update_multiple', model: Army.model_name.human.pluralize), class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,8 +9,10 @@
         <div class="container-fluid">
           <%= form_for :army, url: destroy_multiple_armies_path, method: :put do | form | %>
             <div class="alert alert-danger">
-              <div class="float-left mr-2"><i class="fas fa-exclamation-triangle fa-3x"></i></div>
-              <div>Los siguientes ejércitos serán eliminados:</div>
+              <div>
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                Los siguientes ejércitos serán eliminados:
+              </div>
             </div>
               <% armies.each do | army | %>
                 <p>
