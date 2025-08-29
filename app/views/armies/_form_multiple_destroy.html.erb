@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
         <div class="container-fluid">
-          <%= form_for :army, url: destroy_multiple_armies_path, method: :put do | form | %>
+          <%= form_for :army, url: destroy_multiple_armies_path, remote: true, method: :put do | form | %>
             <div class="alert alert-danger">
               <div>
                 <i class="bi bi-exclamation-triangle-fill"></i>

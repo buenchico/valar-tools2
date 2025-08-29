@@ -104,6 +104,108 @@ class ArmiesController < ApplicationController
     end
   end
 
+  def update_multiple
+    @armies = Army.where(id: params[:army_ids])
+
+    army_params_sum = {}
+    army_params_tags = {}
+    army_params_hash = {}
+
+    if @current_user&.is_master?
+      if (params["army"]["xp_change"].blank? == false)
+        army_params_hash[:xp] = params["army"]["xp_change"]
+      end
+      if (params["army"]["xp_sum"].blank? == false)
+        army_params_sum[:xp] = params["army"]["xp_sum"]
+      end
+      if (params["army"]["morale_change"].blank? == false)
+        army_params_hash[:xp] = params["army"]["morale_change"]
+      end
+      if (params["army"]["morale_sum"].blank? == false)
+        army_params_sum[:morale] = params["army"]["morale_sum"]
+      end
+    end
+
+    army_params.to_hash.each do | key, value |
+      unless value.blank?
+        if key == "faction_ids"
+          if value.reject!(&:empty?).blank?
+            nil
+          elsif value == "CLEAR"
+            army_params_hash[key] = nil
+          else
+            army_params_hash[key] = value
+          end
+        end
+        if key == "board"
+          if value == "CLEAR"
+            army_params_hash[key] = nil
+          else
+            army_params_hash[key] = value
+          end
+        end
+        if key == "position"
+          if value == "CLEAR"
+            army_params_hash[key] = nil
+          else
+            army_params_hash[key] = value
+          end
+        end
+        if key == "group"
+          if value == "CLEAR"
+            army_params_hash[key] = nil
+          else (ARMY_GROUPS.keys.map { |k| k.to_s }).include?(value.to_s)
+            army_params_hash[key] = value
+          end
+        end
+        if @current_user&.is_master? # Checking the user is admin to modify the status
+          if key == "status"
+            if @army_status.keys.include?(value.to_s)
+              army_params_hash[key] = value
+            end
+          end
+          if key == "location_id"
+            if value == "CLEAR"
+              army_params_hash[key] = nil
+            else
+              army_params_hash[key] = value
+            end
+          end
+          if key == "family_id"
+            if value == "CLEAR"
+              army_params_hash[key] = nil
+            else
+              army_params_hash[key] = value
+            end
+          end
+          if key == "visible"
+            if value == "CLEAR"
+              army_params_hash[key] = nil
+            else
+              army_params_hash[key] = value
+            end
+          end
+        end
+      end
+    end
+
+    @errors_armies = []
+    @updated_armies = []
+
+    respond_to do |format|
+      if params[:army][:confirm] == 'VALIDATE'
+        if army_params_hash.empty? && army_params_sum.empty? && army_params_tags.empty?
+          @armies = nil
+          format.js
+        else
+          @armies = nil
+        end
+      else
+        format.js { render 'invalid_confirm' }
+      end
+    end
+  end
+
   def destroy_multiple
     @armies = Army.where(id: params[:army_ids])
 
@@ -115,7 +217,7 @@ class ArmiesController < ApplicationController
           format.html { redirect_to armies_url, danger: 'Ha ocurrido un error, por favor, intentalo de nuevo más tarde.' }
         end
       else
-        format.html { redirect_to armies_url, danger: t('messages.multiple.validation') }
+        format.js { render 'invalid_confirm' }
       end
     end
   end

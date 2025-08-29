@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
         <div class="container-fluid">
-          <%= form_for :army, url: update_multiple_armies_path, method: :put do | form | %>
+          <%= form_for :army, url: update_multiple_armies_path, remote: true, method: :put do | form | %>
             <div class="alert alert-danger">
               <div>
                 <i class="bi bi-exclamation-triangle-fill"></i>
@@ -143,6 +143,7 @@
             <div class="input-group mt-3">
               <%= form.text_field :confirm, class: "form-control", placeholder: "Escribe 'VALIDATE' para confirmar los cambios." %>
             </div>
+            <div id="confirm_notice" class='alert alert-danger mt-2 d-none'>Escribe la palabra correcta para confirmar.</div>
             <div class="input-group mt-3">
               <%= form.submit t('helpers.submit.update_multiple', model: Army.model_name.human.pluralize), class: 'btn btn-primary' %>
             </div>
