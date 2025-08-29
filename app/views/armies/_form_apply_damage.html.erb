@@ -6,18 +6,24 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <%= form_for :army, url: damage_multiple_armies_path, remote: true, method: :put do | form | %>
+        <%= form_for :army, url: update_damage_multiple_armies_path, remote: true, method: :put do | form | %>
           <%= @damage_log %>
           <% @armies.each do | army | %>
             <div>
-              <%= hidden_field_tag "army_ids[]", army.id %>
+              <%= hidden_field_tag "armies[][id]", army.id %>
               <%= "* id: (#{army.id})" %>
               <%= render 'army_one_line', army: army %>
-              <% @damage_log[army.id].each do | unit | %>
-                <div class="ps-1">* Mueren <%= unit[:unit_losses] %></div>
+              <% @damage_log[army.id].each do | damage | %>
+                <% unit = Unit.find(damage[:unit_id])%>
+                <div class="ps-1">* Morirán <%= damage[:unit_losses] %> <%= unit.name %></div>
+                <%= hidden_field_tag "armies[][units][][id]", damage[:unit_id] %>
+                <%= hidden_field_tag "armies[][units][][count]", damage[:unit_survivors] %>
               <% end %>
             </div>
           <% end %>
+          <div class="input-group mt-3">
+            <%= form.submit t('helpers.submit.damage_multiple', model: Army.model_name.human.pluralize.downcase), class: 'btn btn-primary' %>
+          </div>
         <% end %>
       </div>
     </div>

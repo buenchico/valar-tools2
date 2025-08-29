@@ -113,7 +113,7 @@ class Army < ApplicationRecord
           unit_changes = unit.changes.map do |field, values|
             "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
           end
-          changes << "Unit (##{unit.id}) #{unit_changes.join(", ")}"
+          changes << "Unit (##{unit.id}) : #{unit.unit_type} #{unit_changes.join(", ")}"
         end
       end
 

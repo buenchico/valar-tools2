@@ -66,6 +66,7 @@ es:
       add: 'Añadir %{model}'
       remove: 'Quitar %{model}'
       damage_multiple: 'Dañar %{model}'
+      damage_multiple_update: 'Aplicar daño a %{model}'
       update_multiple: 'Guardar %{model}'
       delete_multiple: 'Borrar %{model}'
       import: 'Importar'

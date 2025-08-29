@@ -7,7 +7,7 @@ class ArmiesController < ApplicationController
   before_action :set_filters, only: [:index]
 
   before_action :check_player, except: [:get_discourse_armies, :post_discourse_armies]
-  before_action :check_master, only: [:destroy, :destroy_multiple, :damage_multiple, :stats]
+  before_action :check_master, only: [:destroy, :destroy_multiple, :damage_multiple, :damage_multiple_update, :stats]
   before_action :check_owner, only: [:edit, :edit_notes, :update, :edit_multiple, :update_multiple]
 
   def index
@@ -134,6 +134,29 @@ class ArmiesController < ApplicationController
       respond_to do | format |
         format.js
       end
+    end
+  end
+
+  def damage_multiple_update
+    army_params_by_id = params[:armies].index_by { |a| a[:id].to_i }
+    @armies = Army.includes(:units).where(id: army_params_by_id.keys)
+
+    @armies.each do |army|
+      unit_updates = army_params_by_id[army.id]["units"]
+
+      unit_updates.each do |unit_param|
+        unit = army.units.find { |u| u.id == unit_param["id"].to_i }
+        next unless unit
+
+        unit.count = unit_param["count"].to_i
+      end
+
+      army.save # triggers callbacks
+    end
+
+    respond_to do |format|
+      format.js
+      format.html { redirect_to armies_path, notice: "Armies updated." }
     end
   end
 

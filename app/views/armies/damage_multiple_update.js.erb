@@ -1,0 +1,25 @@
+<% @armies.each do |army| %>
+  var checkbox_status = $('#id_<%= army.id %>').is(":checked");
+  $('#army_<%= army.id %>').html('<%= j render "row", army: army %>');
+
+  $('#army_<%= army.id %>').addClass("table-highlight <%= army.status %>");
+  setTimeout(function() {
+    $('#army_<%= army.id %>').removeClass("table-highlight");
+  }, 500);
+
+  $('#id_<%= army.id %>').prop("checked", checkbox_status);
+<% end %>
+
+
+$('.selectpicker').selectpicker();
+
+$("table").trigger("updateAll");
+
+$.fn.recalculateStats();
+$.fn.checkboxSelectable();
+$.fn.checkbox_listeners();
+$.fn.mass_edit_buttons();
+$.fn.inline_listeners();
+initPopovers();
+
+$(".modal").modal('hide');
