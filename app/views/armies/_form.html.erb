@@ -135,12 +135,13 @@
               <%= render 'unit_fields', f: unit_form %>
             <% end %>
           </div>
-          <div class="ps-3">
+
+          <div class="ps-3 mb-3">
             <%= link_to_add_association(
               "<i class='bi bi-plus-circle'></i> #{t('helpers.submit.add', model: t("activerecord.models.unit", count: 1))}".html_safe,
               form,
               :units,
-              class: 'btn btn-sm btn-success mb-3',
+              class: 'btn btn-sm btn-success',
               data: {
                 association_insertion_method: 'append',
                 association_insertion_node: '#units'

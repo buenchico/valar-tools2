@@ -20,7 +20,7 @@
     disabled: f.object.persisted? ? true : false
   %>
 
-  <%= f.number_field :count, class: 'form-control', step: 1, min: 0, max: f.object.count, placeholder: t('activerecord.attributes.unit.count') %>
+  <%= f.number_field :count, class: 'form-control unit_count', step: 1, min: 0, max: f.object.count, placeholder: t('activerecord.attributes.unit.count'), readonly: f.object.persisted? ? true : false %>
   <div class="col-md-1 col-sm-2">
     <%= f.number_field :modifier, class: 'form-control text-end', step: 1, min: -50, max: 200, placeholder: t('activerecord.attributes.unit.modifier') %>
   </div>
@@ -30,5 +30,12 @@
 
   <% unless f.object.persisted? %>
     <%= link_to_remove_association("<i class='bi bi-x-circle-fill'></i>".html_safe, f, class: 'text-danger ms-1 pt-1') %>
+  <% else %>
+    <i class='bi bi-damage-kinetic ms-1 pt-1 text-warning damage_unit'></i>
+    <div class="position-absolute bg-light text-dark border p-3 shadow damage_box d-none" style="top: -50px; right: -15px; z-index: 1050;">
+      <%= number_field_tag "damage", nil, id: "damage_#{f.object.id || SecureRandom.hex(4)}", class: "damage_field" %>
+      <%= hidden_field_tag "hp", f.object.hp_per_unit, id: "damage_#{f.object.id || SecureRandom.hex(4)}", class: "hp_per_unit" %>
+      <i class='bi bi-damage-kinetic ms-1 pt-1 text-success damage_apply'></i>
+    </div>
   <% end %>
 </div>

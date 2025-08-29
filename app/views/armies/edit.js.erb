@@ -13,3 +13,30 @@ $(document).on('click', '.remove_fields.existing', function(e) {
   $(this).prev('input[type=hidden]').val('1');
   $(this).closest('.nested-fields').hide();
 });
+
+$('.damage_unit').on('click', function () {
+  const box = $(this).siblings('.damage_box').first();
+  // Hide all other damage_box elements
+  $('.damage_box').not(box).addClass('d-none');
+  // Toggle the clicked one
+  box.toggleClass('d-none');
+});
+
+$('.damage_apply').on('click', function () {
+  const box = $(this).closest('.damage_box')
+  var damage_field = $(this).siblings('.damage_field').first()
+  var damage = Number(damage_field.val()) || 0;
+  var count_field = $(this).closest('.nested-fields').find('.unit_count');
+  var hp_per_unit = Number($(this).siblings('.hp_per_unit').first().val()) || 1;
+  var casualties = parseInt(damage / hp_per_unit)
+  count_field.val(count_field.val() - casualties);
+  damage_field.val(null)
+  box.addClass('d-none');
+});
+
+$('#armyModal').on('click', function (e) {
+  const target = $(e.target);
+  if (!target.hasClass('damage_unit') && !target.hasClass('damage_field')) {
+    $('.damage_box').addClass('d-none');
+  }
+});

@@ -30,6 +30,14 @@ class Unit < ApplicationRecord
     (self.troops_start.to_i * unit_hp.to_i)
   end
 
+  def hp_per_unit
+    set_options if @options_armies.nil?
+
+    unit_hp = @units.fetch(self.unit_type, {}).fetch("hp", 0)
+
+    return unit_hp
+  end
+
   def men
     set_options if @options_armies.nil?
 

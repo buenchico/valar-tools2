@@ -596,3 +596,11 @@ input[type=number]::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+/* Readonly fields to display as disabled */
+input[readonly],
+textarea[readonly],
+select[readonly] {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
