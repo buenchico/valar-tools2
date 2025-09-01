@@ -74,7 +74,7 @@ private
 
   def validate_status_for_clock_style
     if style == 'clock'
-      unless status >= 0 && status <= size
+      unless status >= 0 && status <= size.to_i
         errors.add(:status, I18n.t('errors.messages.status_clock_style'))
       end
     end
