@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_11_131921) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_01_135206) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -163,6 +163,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_11_131921) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "games_recipes", id: false, force: :cascade do |t|
+    t.bigint "game_id", null: false
+    t.bigint "recipe_id", null: false
+    t.index ["game_id", "recipe_id"], name: "index_valar_games_recipes_on_game_id_and_recipe_id", unique: true
+    t.index ["game_id"], name: "index_valar_games_recipes_on_game_id"
+    t.index ["recipe_id"], name: "index_valar_games_recipes_on_recipe_id"
+  end
+
   create_table "locations", force: :cascade do |t|
     t.string "name_en"
     t.string "name_es"
@@ -239,6 +247,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_11_131921) do
   add_foreign_key "factions_games", "factions"
   add_foreign_key "factions_games", "games"
   add_foreign_key "families", "families", column: "lord_id"
+  add_foreign_key "games_recipes", "games"
+  add_foreign_key "games_recipes", "recipes"
   add_foreign_key "locations", "locations", column: "region_id"
   add_foreign_key "units", "armies"
 end

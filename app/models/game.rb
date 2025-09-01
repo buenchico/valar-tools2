@@ -4,6 +4,7 @@ class Game < ApplicationRecord
   validates_uniqueness_of :name, :title
 
   has_and_belongs_to_many :factions
+  has_and_belongs_to_many :recipes
 
   has_many :game_tools, :dependent => :destroy
   has_many :tools, -> { order('sort ASC, name ASC') }, :through => :game_tools

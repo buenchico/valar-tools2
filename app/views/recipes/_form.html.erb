@@ -91,6 +91,26 @@
             </div>
           <% end %>
 
+          <div class="input-group mb-3">
+            <%= form.label :game_ids, class: 'input-group-text' %>
+            <%= form.select :game_ids,
+              options_for_select(
+                @games.map { | game |
+                  [
+                    game.id,
+                    { "data-content": "#{image_tag(game.icon_url, alt: game.name, id: game.name, class: 'icon-select bg-secondary')} #{game.title}".html_safe
+                  }
+                  ]
+                },
+                selected: form.object.games.pluck(:id)
+              ),
+              { include_blank: false },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              multiple: true,
+              data: { multipleSeparator: ' ', noneSelectedText: 'Elige partidas' }
+            %>
+          </div>          
+
           <%= form.submit nil, class: 'btn btn-primary' %>
         </div>
       <% end %>

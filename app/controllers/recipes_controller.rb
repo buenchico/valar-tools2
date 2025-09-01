@@ -67,6 +67,7 @@ private
 
   def set_options
     # Getting missions options
+    @games = Game.all
     tool = Tool.find_by(name: "missions")
     @options_missions = get_options(tool)
     if @options_missions.blank?
@@ -78,7 +79,7 @@ private
 
   def recipe_params
     # Permit the parameters and initialize with sanitized values
-    recipe_params = params.require(:recipe).permit(:name, :section, :description, :difficulty, :speed, factors: {}, results: {}).tap do |whitelisted|
+    recipe_params = params.require(:recipe).permit(:name, :section, :description, :difficulty, :speed, game_ids: [], factors: {}, results: {}).tap do |whitelisted|
       # Clean up empty elements in factors
       whitelisted[:factors] = clean_empty_elements(whitelisted[:factors])
       # Clean up empty elements in results
@@ -88,8 +89,10 @@ private
 
   # Method to clean up empty elements in a JSON hash
   def clean_empty_elements(json)
+    return {} unless json.is_a?(Hash)
+
     json.transform_values do |array|
-      array.reject(&:blank?)
+      Array(array).reject(&:blank?)
     end
   end
 end

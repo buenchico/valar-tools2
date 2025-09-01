@@ -9,6 +9,8 @@ class Recipe < ApplicationRecord
   validates :difficulty, inclusion: { in: -6..3 }
   validates :speed, inclusion: { in: -1..4 }
 
+  has_and_belongs_to_many :games
+
   SECTIONS = ["default"]
 
   def set_options
