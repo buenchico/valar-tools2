@@ -20,8 +20,8 @@
                   <% end %>
                   <li>Compuesto por:</li>
                   <ul>
-                    <% total_army_units_by_type(armies).each do | unit, count | %>
-                      <li><%= "#{number_to_compact(count)} #{@unit_types[unit]["name"].pluralize(count)}" %></li>
+                    <% total_army_units_by_type(armies).each do | unit, data | %>
+                      <li><%= "#{number_to_compact(data[:count])} #{@unit_types[unit]["name"].pluralize(data[:count])}, FUE: #{data[:strength]}" %></li>
                     <% end %>
                   </ul>
                 </ul>
