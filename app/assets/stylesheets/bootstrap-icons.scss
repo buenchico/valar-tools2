@@ -2146,6 +2146,9 @@ $bootstrap-icons-map: (
   "plane-propeller": "\f93f",
   "soldier": "\f940",
   "tank": "\f941",
+  "air-force": "\f942",
+  "army": "\f943",
+  "tank-heavy": "\f944",
 );
 
 @each $icon, $codepoint in $bootstrap-icons-map {
