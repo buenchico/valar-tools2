@@ -6,6 +6,6 @@ class ErrorsController < ApplicationController
   end
 
   def internal_server
-    render status: 500
+    render template: "errors/internal_server", status: 500
   end
  end

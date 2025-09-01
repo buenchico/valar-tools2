@@ -1,6 +1,6 @@
-<% provide(:title, '404 Page Not Found') %>
+<% provide(:title, t('errors.not_found.title')) %>
 
 <div class="tool-title text-center">
     <p><%= yield(:title) %></p>
-    <p>La página que buscas se ha perdido más allá del Muro</p>
+    <p><%= t('errors.not_found.text') %></p>
 </div>
