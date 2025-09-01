@@ -12,11 +12,13 @@ class MapController < ApplicationController
 
 private
   def set_options
-    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
-    if @options.nil?
-      redirect_to settings_url, warning: 'Prepara una partida antes de usar el mapa'
+    @options_map = get_options(@tool)
+    @options_locations = get_options(Tool.find_by(name: "locations"))
+    if @options_map.blank? || @options_locations.blank?
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      @location_types = Tool.find_by(name: "locations").game_tools.find_by(game_id: active_game&.id)&.options["types"]
+      set_options_map
+      set_options_locations
     end
   end
 

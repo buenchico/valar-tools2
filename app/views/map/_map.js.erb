@@ -2,9 +2,9 @@ $(document).on('turbolinks:load', function () {
   if ($(".map.index, .map.show").length !== 0 || $(".map.full").length !== 0) {
     if ($('#map-container').data('loaded') == false) {
 
-      var imgSize = <%= @options["imgSize"] %>
-      var bounds = <%= @options["bounds"] %>
-      var zoom = <%= @options["zoom"] %>
+      var imgSize = <%= @options_map["imgSize"] %>
+      var bounds = <%= @options_map["bounds"] %>
+      var zoom = <%= @options_map["zoom"] %>
 
       function resizeMap() {
         if ($('#map-container').hasClass('fs') || window.innerWidth <= 576) {
@@ -82,9 +82,9 @@ $(document).on('turbolinks:load', function () {
       map.createPane('imagebg');
       map.getPane('imagebg').style.zIndex = 50;
 
-      var baseImage = L.imageOverlay('<%= asset_path(@options["img"]) %>', [[0,0],imgSize], {opacity: 1, attribution: '<%= @options["attribution"].html_safe %>', pane: 'imagebg'}).addTo(map);
+      var baseImage = L.imageOverlay('<%= asset_path(@options_map["img"]) %>', [[0,0],imgSize], {opacity: 1, attribution: '<%= @options_map["attribution"].html_safe %>', pane: 'imagebg'}).addTo(map);
 
-      const sideLength = <%= (@options["scale"] || 1 ) %>;
+      const sideLength = <%= (@options_map["scale"] || 1 ) %>;
 
       var hexGrid = L.GridLayer.extend({
           options: {
@@ -104,8 +104,8 @@ $(document).on('turbolinks:load', function () {
 
       var hexLayer = new hexGrid().addTo(map);
 
-      <% @options["layers"].each do | code, layer | %>
-        var <%= code %> = new L.layerGroup.collision({margin: <%= @options['margin'] || 0 %>});
+      <% @options_map["layers"].each do | code, layer | %>
+        var <%= code %> = new L.layerGroup.collision({margin: <%= @options_map['margin'] || 0 %>});
 
         <% layer["types"].each do | type | %>
           // if there is a layer image
@@ -173,7 +173,7 @@ $(document).on('turbolinks:load', function () {
                   L.marker(
                     [<%= location.y %>,<%= location.x %>],
                       { icon: L.divIcon({
-                        className: "regionLabel <%= @options['font'] %>",
+                        className: "regionLabel <%= @options_map['font'] %>",
                         html: "<%= location.name %>",
                         iconSize: [<%= location.name.length * 30 * 0.6 %>, 30],
                         iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
@@ -204,7 +204,7 @@ $(document).on('turbolinks:load', function () {
                   L.marker(
                     [<%= location.y %>,<%= location.x %>],
                       { icon: L.divIcon({
-                        className: "locationLabel <%= @options['font'] %>",
+                        className: "locationLabel <%= @options_map['font'] %>",
                         html: "<img src=" + icon + " height='30' width='30' /><%= location.name %>",
                         style: "background:red !important;",
                         iconSize: [<%= (location.name.length * 5) + 40 %>, 30],
@@ -231,7 +231,7 @@ $(document).on('turbolinks:load', function () {
       var drawnItems = new L.FeatureGroup();
 
       var overlays = {
-        <% @options["layers"].sort_by { |_key, value| value["name"] }.each do | code, layer | %>
+        <% @options_map["layers"].sort_by { |_key, value| value["name"] }.each do | code, layer | %>
           <%= layer["name"] %>: <%= code %>,
         <% end %>
         "Rutas": drawnItems,

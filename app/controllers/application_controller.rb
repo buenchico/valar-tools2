@@ -151,4 +151,7 @@ class ApplicationController < ActionController::Base
   def set_options_missions
     @sections = @options_missions["sections"]
   end
+
+  def set_options_map
+  end
 end
