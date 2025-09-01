@@ -4,7 +4,7 @@ class MissionsController < ApplicationController
   before_action :check_master, only: [:list]
 
   def index
-    @recipes = Recipe.where(game: active_game).order(:section, :id)
+    @recipes = Recipe.joins(:games).where(games: { id: active_game.id })
     @default_recipe = Recipe.find_by(id: @options_missions["default_recipe"])
   end
 

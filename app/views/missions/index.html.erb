@@ -145,17 +145,17 @@
           <%= Kramdown::Document.new(replace_traits(@default_recipe.description)  || "").to_html.html_safe %>
         </div>
         <div id="consequences" class="fortune-field">
-          <% @default_recipe.results["major"].each_with_index do |result, index| %>
+          <% @default_recipe.results["major"]&.each_with_index do |result, index| %>
             <div id="major_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-danger disabled">
               <span class='result-data'>🟰 <%= result %></span>
             </div>
           <% end %>
-          <% @default_recipe.results["minor"].each_with_index do |result, index| %>
+          <% @default_recipe.results["minor"]&.each_with_index do |result, index| %>
             <div id="minor_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-warning disabled">
               <span class='result-data'>➖ <%= result %></span>
             </div>
           <% end %>
-          <% @default_recipe.results["improvement"].each_with_index do |result, index| %>
+          <% @default_recipe.results["improvement"]&.each_with_index do |result, index| %>
             <div id="improvement_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-success disabled">
               <span class='result-data'>➕ <%= result %></span>
             </div>
