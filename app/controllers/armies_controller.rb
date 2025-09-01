@@ -124,6 +124,12 @@ class ArmiesController < ApplicationController
       if (params["army"]["morale_sum"].blank? == false)
         army_params_sum[:morale] = params["army"]["morale_sum"]
       end
+      if (params["army"]["tags_add"].blank? == false)
+        army_params_tags[:tags_add] = params["army"]["tags_add"]
+      end
+        if (params["army"]["tags_remove"].blank? == false)
+        army_params_tags[:tags_remove] = params["army"]["tags_remove"]
+      end
     end
 
     army_params.to_hash.each do | key, value |
@@ -198,7 +204,48 @@ class ArmiesController < ApplicationController
           @armies = nil
           format.js
         else
-          @armies = nil
+          @armies.each do |army|
+            if army_params_sum.empty? == false
+              army_params_sum.each do |key, value|
+                # Check if the attribute exists in the Army model
+                if army.respond_to?(key)
+                  old_value = army[key].to_i
+                  army_params_hash[key] = (old_value += value.to_i)
+                end
+              end
+            end
+
+            if army_params_tags.empty? == false
+              if army_params_tags[:tags_remove].empty? == false
+                army_params_hash[:tags] = army[:tags]&.reject! { |tag| army_params_tags[:tags_remove].include?(tag) }
+              end
+
+              if army_params_tags[:tags_add].empty? == false
+                if army[:tags].nil?
+                  army_params_hash[:tags] = army_params_tags[:tags_add]
+                else
+                  army_params_hash[:tags] = (army[:tags] || []).dup.concat(army_params_tags[:tags_add]).uniq
+                end
+              end
+
+              army_params_hash[:tags].compact.reject(&:empty?).sort
+            end
+
+            army.faction_ids_was = army.faction_ids
+            if army.update(army_params_hash)
+              @updated_armies << army.name
+            else
+              @errors_armies << (army.name.to_s + " | " + army.errors.full_messages.join(", "))
+            end
+          end
+
+          if @errors_armies.length == 0
+            flash[:success] = t('messages.multiple.success', model: Army.model_name.human(:count => @updated_armies.length), succeed: ("<br>" + @updated_armies.join("<br>")).html_safe)
+            format.html { redirect_to armies_url }
+          else
+            flash[:danger] = t('messages.multiple.error', model: Army.model_name.human(:count => @errors_armies.length), failed: ("<br>" + @errors_armies.join("<br>") + "<br>").html_safe, succeed: ("<br>" + @updated_armies.join("<br>")).html_safe)
+            format.html { redirect_to armies_url }
+          end
         end
       else
         format.js { render 'invalid_confirm' }
