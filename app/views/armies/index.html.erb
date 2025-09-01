@@ -55,10 +55,6 @@
         <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "damage") do %>
           <i class="bi bi-damage-kinetic"></i> <%= t('helpers.action.damage') %>
         <% end %>
-        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm", value: "import") do %>
-          <%= t('helpers.submit.import') %>
-        <% end %>
-        <%= link_to t('helpers.submit.export'), export_armies_path(format: :csv), class: 'btn btn-danger btn-sm' %>
       <% end %>
     <% end %>
   </div>
