@@ -6,6 +6,10 @@
 </td>
 
 <td>
+  <i class="bi bi-<%= @army_types[army.army_type]["icon"] %>"></i>
+</td>
+
+<td>
   <%= render 'army_strength', army: army, terrain: nil %>
   <span class="army_men d-none"><%= army.men %></span>
 </td>

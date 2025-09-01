@@ -6,3 +6,11 @@
     <%= unit.name %>
   </span>
 <% end %>
+
+<% army.tags.each do | tag | %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @army_tags[tag]['colour'] %>">
+    <i class="bi bi-<%= @army_tags[tag]['icon'] %>"></i>
+
+    <%= @army_tags[tag]['name'] %>
+  </span>
+<% end %>
