@@ -1,0 +1,22 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title">Información de ejércitos</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid alert alert-primary">
+          <p><%= @armies.count %> ejércitos</p>
+          <p><%= total_army_strength(@armies) %> fuerza</p>
+          <p><%= total_army_men(@armies) %> hombres</p>
+        </div>
+        <div class="container-fluid alert alert-success">
+          <% @armies.each do | army |%>
+            <p><%= render 'army_one_line', army: army %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

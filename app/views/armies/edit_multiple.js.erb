@@ -1,19 +1,23 @@
 $(".modal").modal('hide');
 
 if ('<%= @action %>' == 'update') {
-  $('#content').html("<%= j render 'form_multiple_update', armies: @armies, action: @action %>");
+  $('#content').html("<%= j render 'form_multiple_update', armies: @armies %>");
 }
 
 if ('<%= @action %>' == 'destroy') {
-  $('#content').html("<%= j render 'form_multiple_destroy', armies: @armies, action: @action %>");
+  $('#content').html("<%= j render 'form_multiple_destroy', armies: @armies %>");
 }
 
 if ('<%= @action %>' == 'damage') {
-  $('#content').html("<%= j render 'form_multiple_damage', armies: @armies, action: @action %>");
+  $('#content').html("<%= j render 'form_multiple_damage', armies: @armies %>");
 }
 
 if ('<%= @action %>' == 'import') {
-  $('#content').html("<%= j render 'form_multiple_import', action: @action %>");
+  $('#content').html("<%= j render 'form_multiple_import' %>");
+}
+
+if ('<%= @action %>' == 'stats') {
+  $('#content').html("<%= j render 'form_multiple_stats' %>");
 }
 
 $('#armyModal').modal('show');
