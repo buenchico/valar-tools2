@@ -1,7 +1,7 @@
 class ArmiesRefactor < ActiveRecord::Migration[8.0]
   def change
-    drop_table :armies
-    drop_table :units
+    drop_table :armies, force: :cascade
+    drop_table :units, force: :cascade
 
     create_table :armies do |t|
       t.string :name, null: false
@@ -10,6 +10,7 @@ class ArmiesRefactor < ActiveRecord::Migration[8.0]
       t.integer "xp", default: 100
       t.integer "morale", default: 100
       t.text "logs", default: [], array: true
+      t.text :tags, default: [], array: true
 
       t.timestamps
     end
@@ -23,6 +24,7 @@ class ArmiesRefactor < ActiveRecord::Migration[8.0]
       t.integer :strength
       t.integer :strength_indirect
       t.integer :hp
+      t.text :tags, default: [], array: true
 
       t.references :army, foreign_key: true
       t.references :family, foreign_key: true
