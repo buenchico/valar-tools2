@@ -61,6 +61,7 @@ Rails.application.routes.draw do
   get 'armies/get_discourse_armies/:faction_id/:group', to: 'armies#get_discourse_armies'
   post 'armies/post_discourse_armies', to: 'armies#post_discourse_armies'
   resources :armies
+  resources :units
 
   resources :locations
   get '/lists/locations', to: 'locations#list', as: 'locations_list'

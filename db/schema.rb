@@ -29,19 +29,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
     t.string "name", null: false
     t.string "position"
     t.text "notes"
+    t.string "status"
     t.integer "xp", default: 100
     t.integer "morale", default: 100
+    t.boolean "visible", default: true
     t.text "logs", default: [], array: true
     t.text "tags", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "armies_factions", force: :cascade do |t|
-    t.bigint "army_id"
-    t.bigint "faction_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "armies_factions", id: false, force: :cascade do |t|
+    t.bigint "army_id", null: false
+    t.bigint "faction_id", null: false
+    t.index ["army_id", "faction_id"], name: "index_valar_armies_factions_on_army_id_and_faction_id", unique: true
     t.index ["army_id"], name: "index_valar_armies_factions_on_army_id"
     t.index ["faction_id"], name: "index_valar_armies_factions_on_faction_id"
   end
@@ -108,6 +109,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
     t.datetime "updated_at", null: false
     t.index ["faction_id"], name: "index_valar_factions_games_on_faction_id"
     t.index ["game_id"], name: "index_valar_factions_games_on_game_id"
+  end
+
+  create_table "factions_units", id: false, force: :cascade do |t|
+    t.bigint "unit_id", null: false
+    t.bigint "faction_id", null: false
+    t.index ["faction_id"], name: "index_valar_factions_units_on_faction_id"
+    t.index ["unit_id", "faction_id"], name: "index_valar_factions_units_on_unit_id_and_faction_id", unique: true
+    t.index ["unit_id"], name: "index_valar_factions_units_on_unit_id"
   end
 
   create_table "families", force: :cascade do |t|
@@ -215,9 +224,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
     t.integer "count"
     t.integer "count_start"
     t.integer "count_death"
-    t.integer "strength"
-    t.integer "strength_indirect"
-    t.integer "hp"
+    t.integer "strength_mod", default: 100
+    t.integer "strength_indirect_mod", default: 100
+    t.integer "hp_mod", default: 100
+    t.boolean "visible", default: true
     t.text "tags", default: [], array: true
     t.bigint "army_id"
     t.bigint "family_id"
@@ -241,10 +251,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
     t.index ["faction_id"], name: "index_valar_users_on_faction_id"
   end
 
+  add_foreign_key "armies_factions", "armies"
   add_foreign_key "armies_factions", "factions"
   add_foreign_key "battles", "users"
   add_foreign_key "factions_games", "factions"
   add_foreign_key "factions_games", "games"
+  add_foreign_key "factions_units", "factions"
+  add_foreign_key "factions_units", "units"
   add_foreign_key "families", "families", column: "lord_id"
   add_foreign_key "games_recipes", "games"
   add_foreign_key "games_recipes", "recipes"

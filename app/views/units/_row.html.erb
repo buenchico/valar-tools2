@@ -1,0 +1,45 @@
+<td>
+  <%= check_box_tag "unit_ids[]", unit.id, false, id: 'id_' + unit.id.to_s,class: "checkbox_selectable option-input" %>
+</td>
+
+<td>
+  <i class="bi bi-<%= @unit_types[unit.unit_type]["icon"] %>"></i>
+</td>
+
+<td>
+</td>
+
+<td>
+  <%= unit.name %>
+</td>
+
+<td>
+</td>
+
+<td>
+</td>
+
+<td>
+</td>
+
+<% if @current_user&.is_master? %>
+  <td class="text-center">
+    <% if unit.visible == true %>
+      <%= unit.factions.pluck(:long_name).join(", ") %>
+    <% else %>
+      <i class="bi bi-x-lg text-danger"></i>
+    <% end %>
+  </td>
+<% end %>
+
+<td>
+  <%= link_to '', edit_unit_path(unit), remote: true, class: 'bi bi-pencil-square text-white' %>
+</td>
+
+<td>
+  <% if @current_user&.is_master? %>
+    <%= link_to unit_path(unit), method: :delete, data: { confirm: "Estás seguro de eliminar la unidad #{unit.name}?" }, remote: true do %>
+      <i class="bi bi-trash text-white"></i>
+    <% end %>
+  <% end %>
+</td>

@@ -1,0 +1,36 @@
+<% if @current_user&.is_master? %>
+  <div class="col">
+    <%= link_to new_unit_path, class: "btn btn-primary", remote: true do %>
+      <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.unit', count: 1) ) %>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="table-responsive">
+  <table id="unit_list" class="table table-dark table-striped table-borderless table-hover table-sm sortable">
+    <caption>Lista de unidades</caption>
+    <thead>
+      <tr>
+        <th data-sorter="false" data-filter="checkbox" scope="col" style="width: 30px">
+          <input type="checkbox" class="checkbox_select_all option-input" /><span class="d-none"></span>
+        </th>
+        <th scope="col" style="width: 78px"><i class="bi bi-award"></i></th>
+        <th scope="col"><%= t('activerecord.attributes.unit.name') %></th>
+        <% if @current_user&.is_master? %>
+          <th scope="col"><%= t('activerecord.attributes.family.visible') %></th>
+        <% end %>
+        <th scope="col" colspan="3" data-sorter="false"></th>
+      </tr>
+    </thead>
+    <tbody id="table_body">
+      <div class="d-flex justify-content-center">
+        <div id="spinner-units" class="spinner-border fs-1 d-none" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <% @units&.each do |unit| %>
+        <%= render 'units/row_container', unit: unit %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

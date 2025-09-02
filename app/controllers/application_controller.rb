@@ -103,6 +103,10 @@ class ApplicationController < ActionController::Base
     return pseudorandom_id
   end
 
+  def set_factions
+    @factions = Faction.where.not(name: ['admin','player']).where(active: true).order(:id)
+  end
+
   def get_options(tool)
     tool.game_tools.find_by(game_id: active_game&.id)&.options
   end
@@ -114,15 +118,15 @@ class ApplicationController < ActionController::Base
     # @fleets = @options_armies["fleets"]
     @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @army_status = @options_armies["status"]
-    @army_tags = @options_armies["tags"]&.sort_by do |_, v|
+    @army_tags = @options_armies["army_tags"]&.sort_by do |_, v|
       [v["sort"] || 99, v["name"]]
     end.to_h
     @unit_types = @options_armies["units"]&.sort_by do |_, v|
+      [v["type"], v["sort"] || 99, v["name"]]
+    end.to_h
+    @unit_tags = @options_armies["unit_tags"]&.sort_by do |_, v|
       [v["sort"] || 99, v["name"]]
     end.to_h
-    @land_units = @unit_types.select { |_, v| v["type"] == "land" }
-    @sea_units = @unit_types.select { |_, v| v["type"] == "sea" }
-    @air_units = @unit_types.select { |_, v| v["type"] == "air" }
 
     @army_scale = @options_armies["general"]["scale"]
     @army_xp = @options_armies["general"]["xp"]

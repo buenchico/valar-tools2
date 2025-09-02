@@ -1,0 +1,135 @@
+$(document).on('turbolinks:load', function () {
+  if ($(".armies").length !== 0 ) {
+    $.fn.copyArmies = function(){
+      let message = "";
+      let str = 0;
+      let men = 0;
+
+      //Loop through all checked CheckBoxes in GridView.
+      $(".checkbox_selectable:visible:checked").each(function () {
+          let row = $(this).closest("tr");
+          if (row.hasClass("tablesorter-headerRow") == false) {
+            message += "> * " + row.find('.army-data .visible').text().replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
+            message += "\n";
+            str += parseFloat(row.find('.army_strength').text())
+            men += parseInt(row.find('.army_men').text())
+          }
+      });
+
+      message += "Total: 🎖️: " + str + " 🪖: " + men
+
+      navigator.clipboard.writeText(message)
+    }
+
+    // Recalculate stats
+    $.fn.recalculateStats = function(){
+      var menArmies = 0
+      var strArmies = 0
+      $('tr:visible').each(function(){
+        men = parseInt($(this).find('.army_men').text());
+        if (isNaN(men)) {
+            men = 0;
+        }
+        menArmies += men;
+        str = parseFloat($(this).find('.army_strength').text());
+        if (isNaN(str)) {
+            str = 0;
+        }
+        strArmies += str
+      });
+      $("#visible_strength").html(strArmies.toFixed(2));
+      $("#visible_men").html(menArmies);
+    }
+
+    // Filters
+    $.fn.armyFilters = function(){
+        var value = $("#filtertext").val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        var column = $("#filterselect").children("option:selected").val();
+        $(".army_list").filterTable(value, column);
+        var countArmies = $('.checkbox_selectable:visible').length;
+        $("#count-visible").html(countArmies);
+    }
+
+    // Trigger filters
+    $("#filterselect").on("change", function() {
+        $.fn.armyFilters() // Why I need to remove the semicolons!!!!!
+        $.fn.recalculateStats()
+    });
+    $("#filtertext").on("keyup", function() {
+        $.fn.armyFilters()
+        $.fn.recalculateStats()
+    });
+
+    // Add hidden checkboxes for mass edit options
+    $.fn.checkboxSelectable = function(){
+      $('.checkbox_selectable').change(function() {
+        var form = $('#edit_multiple');
+        var armyId = $(this).val();
+
+        var hiddenInput = $('#army_ids_field');
+        var selectedIds = hiddenInput.val().split(',').filter(Boolean); // Splits by comma and removes empty values
+
+        if ($(this).is(':checked')) {
+          // Add armyId if it's checked and not already in the list
+          if (!selectedIds.includes(armyId)) {
+            selectedIds.push(armyId);
+          }
+        } else {
+          // Remove armyId if it's unchecked
+          selectedIds = selectedIds.filter(id => id !== armyId);
+        }
+
+        // Update the hidden input field with the new list of ids, joined by commas
+        hiddenInput.val(selectedIds.join(','));
+      });
+    }
+
+    // Trigger armies load for master
+    $('.armies-load').click(function() {
+      $('#spinner-main').removeClass('d-none');
+
+      if ($(this).hasClass('master')) {
+        if ($(this).hasClass('active')) {
+          $('.armies-tab').removeClass('active')
+        } else {
+          $('.armies-tab').addClass('active')
+        }
+      } else {
+        $(this).toggleClass('active');
+      }
+
+      if ($('.armies-tab:not(.master):not(.active)').length > 0) {
+        $('.master').removeClass('active')
+      } else {
+        $('.master').addClass('active')
+      }
+
+      const factions = $('.armies-tab.active').map(function() {
+        const id = $(this).attr('id');
+        return id ? id.split('-')[1] : null;
+      }).get();
+
+      const visibility = $('.visible-tab.active').map(function() {
+        const id = $(this).attr('id');
+        return id ? id.split('-')[1] : null;
+      }).get();
+
+      $('#active_factions').val(JSON.stringify(factions));
+      $('#active_visibility').val(JSON.stringify(visibility));
+
+      // Submit the form
+      const form = $(this).closest('form');
+      form.submit();
+    });
+
+    // Copy action event Trigger
+    $(".mass-copy").click(function () {
+      $.fn.copyArmies();
+    });
+
+    // Trigger functions on load
+    $.fn.recalculateStats();
+    $.fn.checkboxSelectable();
+
+  }
+});

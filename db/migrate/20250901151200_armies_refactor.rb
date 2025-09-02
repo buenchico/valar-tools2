@@ -1,15 +1,19 @@
 class ArmiesRefactor < ActiveRecord::Migration[8.0]
   def change
-    drop_table :armies, force: :cascade
-    drop_table :units, force: :cascade
+    def up
+      drop_table :units, force: :cascade if table_exists?(:units)
+      drop_table :armies, force: :cascade if table_exists?(:armies)
+    end
 
     create_table :armies do |t|
       t.string :name, null: false
       t.string :position
       t.text :notes
-      t.integer "xp", default: 100
-      t.integer "morale", default: 100
-      t.text "logs", default: [], array: true
+      t.string :status
+      t.integer :xp, default: 100
+      t.integer :morale, default: 100
+      t.boolean :visible, default: true
+      t.text :logs, default: [], array: true
       t.text :tags, default: [], array: true
 
       t.timestamps
@@ -21,9 +25,10 @@ class ArmiesRefactor < ActiveRecord::Migration[8.0]
       t.integer :count
       t.integer :count_start
       t.integer :count_death
-      t.integer :strength
-      t.integer :strength_indirect
-      t.integer :hp
+      t.integer :strength_mod, default: 100
+      t.integer :strength_indirect_mod, default: 100
+      t.integer :hp_mod, default: 100
+      t.boolean :visible, default: true
       t.text :tags, default: [], array: true
 
       t.references :army, foreign_key: true
@@ -32,5 +37,17 @@ class ArmiesRefactor < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
+
+    create_table :factions_units, id: false do |t|
+      t.references :unit, null: false, foreign_key: true
+      t.references :faction, null: false, foreign_key: true
+    end
+    add_index :factions_units, [:unit_id, :faction_id], unique: true
+
+    create_table :armies_factions, id: false do |t|
+      t.references :army, null: false, foreign_key: true
+      t.references :faction, null: false, foreign_key: true
+    end
+    add_index :armies_factions, [:army_id, :faction_id], unique: true
   end
 end
