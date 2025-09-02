@@ -22,7 +22,7 @@ class ArmiesRefactor < ActiveRecord::Migration[8.0]
     create_table :units do |t|
       t.string :name, null: false
       t.string :unit_type
-      t.integer :count
+      t.integer :count, default: 1
       t.integer :count_start
       t.integer :count_death
       t.integer :strength_mod, default: 100
@@ -30,6 +30,7 @@ class ArmiesRefactor < ActiveRecord::Migration[8.0]
       t.integer :hp_mod, default: 100
       t.boolean :visible, default: true
       t.text :tags, default: [], array: true
+      t.text :logs, default: [], array: true
 
       t.references :army, foreign_key: true
       t.references :family, foreign_key: true

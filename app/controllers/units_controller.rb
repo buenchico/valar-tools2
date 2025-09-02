@@ -26,6 +26,30 @@ class UnitsController < ApplicationController
     end
   end
 
+  def update
+    respond_to do |format|
+      if @unit.update(unit_params)
+        flash.now[:success] = t('messages.success.update', thing: @unit.name.strip + " (id: " + @unit.id.to_s + ")", count: 1)
+        format.js
+      else
+        flash.now[:danger] = @unit.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: @unit.name.strip + " (id: " + @unit.id.to_s + ")", method: 'update' } }
+      end
+    end
+  end
+
+  def destroy
+    respond_to do |format|
+      if @unit.destroy
+        flash.now[:danger] = t('messages.success.destroy', thing: @unit.name.strip + " (id: " + @unit.id.to_s + ")", count: 1)
+        format.js
+      else
+        flash.now[:danger] = @unit.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: @unit.name.strip + " (id: " + @unit.id.to_s + ")", method: 'delete' } }
+      end
+    end
+  end
+
 private
   def set_unit
     @unit = Unit.find(params[:id])

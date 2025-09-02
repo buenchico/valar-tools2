@@ -3,23 +3,16 @@
 </td>
 
 <td>
-  <i class="bi bi-<%= @unit_types[unit.unit_type]["icon"] %>"></i>
+  <%= unit.strength %>
 </td>
 
 <td>
-</td>
-
-<td>
+  <i class="bi bi-<%= unit.army_icon %> text-<%= unit.colour %>"></i>
   <%= unit.name %>
 </td>
 
 <td>
-</td>
-
-<td>
-</td>
-
-<td>
+  <%= render 'units/one_line', unit: unit %>
 </td>
 
 <% if @current_user&.is_master? %>

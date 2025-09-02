@@ -67,10 +67,10 @@
               <%= form.number_field :count, class: 'form-control text-end', step: 1, min: 0 %>
 
               <%= form.label :count_start, class: 'input-group-text' %>
-              <%= form.number_field :count_start, class: 'form-control text-end', step: 1, min: 0 %>
+              <%= form.number_field :count_start, class: 'form-control text-end', disabled: true %>
 
               <%= form.label :count_death, class: 'input-group-text' %>
-              <%= form.number_field :count_death, class: 'form-control text-end', step: 10, min: 50, max: 200 %>
+              <%= form.number_field :count_death, class: 'form-control text-end', disabled: true %>
             </div>
 
             <div class="input-group mb-3">
@@ -133,7 +133,9 @@
             </div>
           </div>
 
-          <%= form.submit nil, class: 'btn btn-primary' %>
+          <div class="input-group mb-3">
+            <%= form.submit nil, class: 'btn btn-primary' %>
+          </div>
 
         <% end %>
       </div>

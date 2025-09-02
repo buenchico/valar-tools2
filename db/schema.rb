@@ -221,7 +221,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
   create_table "units", force: :cascade do |t|
     t.string "name", null: false
     t.string "unit_type"
-    t.integer "count"
+    t.integer "count", default: 1
     t.integer "count_start"
     t.integer "count_death"
     t.integer "strength_mod", default: 100
@@ -229,6 +229,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
     t.integer "hp_mod", default: 100
     t.boolean "visible", default: true
     t.text "tags", default: [], array: true
+    t.text "logs", default: [], array: true
     t.bigint "army_id"
     t.bigint "family_id"
     t.bigint "location_id"

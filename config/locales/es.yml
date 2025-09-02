@@ -116,6 +116,7 @@ es:
         status: "Estado"
       unit:
         name: "Nombre"
+        description: "Descripción"
         unit_type: "Tipo"
         count: "Tropas"
         count_start: "Inicial"
@@ -257,8 +258,14 @@ es:
               blank: 'El número de unidades debe existir'
             unit_type:
               blank: 'Sólo puede elegirse un tipo de unidad de la lista'
-            modifier:
-              blank: 'El modificador debe existir'
+            strength_mod:
+              blank: 'El modificador de fuerza debe existir'
+            strength_indirect_mod:
+              blank: 'El modificador de fuerza indirecta debe existir'
+            hp_mod:
+              blank: 'El modificador de puntos de vida debe existir'
+            name:
+              taken_in_faction: "Ya existe una unidad con ese nombre en la facción %{faction}"
         army:
           attributes:
             board:

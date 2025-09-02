@@ -1,0 +1,17 @@
+const checkbox_status = $('#id_<%= @unit.id %>').is(":checked");
+
+$('#unit_<%= @unit.id %>').html('<%= j render "row", unit: @unit  %>');
+
+$('#unit_<%= @unit.id %>').addClass("table-highlight", callback )
+
+function callback() {
+  setTimeout(function() {
+    $('#unit_<%= @unit.id %>').removeClass( "table-highlight" );
+  }, 500 );
+}
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+
+$("#id_<%= @unit.id %>").prop("checked", checkbox_status);
+
+$(".modal").modal('hide');
