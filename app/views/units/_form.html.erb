@@ -32,8 +32,8 @@
                   form.object.unit_type
                 ),
                 { },
-                class: 'selectpicker flex-fill dropdown-toggle dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select',
-                title: 'Sin tipo',
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select',
+                title: t('helpers.select.no_type'),
                 data: { },
                 disabled: form.object.persisted? ? true : false
               %>
@@ -55,7 +55,7 @@
                   ),
                   { include_blank: false },
                   class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                  title: 'Sin rasgos',
+                  title: t('helpers.select.no_tags'),
                   multiple: true,
                   data: { }
                 %>
@@ -108,7 +108,7 @@
                 ),
                 { include_blank: false },
                 class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                title: 'Sin facción',
+                title: t('helpers.select.no_faction'),
                 multiple: true,
                 data: { }
               %>

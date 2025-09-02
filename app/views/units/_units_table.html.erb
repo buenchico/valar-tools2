@@ -3,6 +3,9 @@
     <%= link_to new_unit_path, class: "btn btn-primary", remote: true do %>
       <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.unit', count: 1) ) %>
     <% end %>
+    <%= link_to new_units_path, class: "btn btn-success", remote: true do %>
+      <i class="bi bi-clipboard2-plus-fill"></i> <%= t('helpers.submit.create', model: t('activerecord.models.unit', count: 2) ) %>
+    <% end %>
   </div>
 <% end %>
 
@@ -44,6 +47,12 @@
         </th>
         <th scope="col">
           <%= t('activerecord.attributes.unit.description') %>
+        </th>
+        <th scope="col">
+          <%= t('activerecord.attributes.unit.location_id') %>
+        </th>
+        <th scope="col">
+          <%= t('activerecord.attributes.unit.family_id') %>
         </th>
         <% if @current_user&.is_master? %>
           <th scope="col" class="text-center"><%= t('activerecord.attributes.family.visible') %></th>

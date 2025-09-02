@@ -137,7 +137,7 @@ private
   def generate_random_name
     return unless name.blank?
 
-    existing_count = 0
+    existing_count = 1
     self.factions.each do |faction|
       count = faction.units.where(unit_type: self.unit_type).count
       existing_count = [existing_count,count].max

@@ -45,22 +45,25 @@ Rails.application.routes.draw do
   get 'factions/:id/edit_fleets', to: 'factions#edit_fleets', as: 'edit_fleets_faction'
   get 'lists/factions', to: 'factions#list', as: 'factions_list'
 
-  get 'armies/stats', to: 'armies#stats'
-  get 'armies/groups', to: 'armies#groups', as: 'show_army_groups'
-  get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'
-  get 'armies/:id/confirm_delete', to: 'armies#confirm', as: 'confirm_delete_army'
+  #get 'armies/stats', to: 'armies#stats'
+  #get 'armies/groups', to: 'armies#groups', as: 'show_army_groups'
+  #get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'
+  #get 'armies/:id/confirm_delete', to: 'armies#confirm', as: 'confirm_delete_army'
   get 'armies/edit_multiple', to: 'armies#edit_multiple', as: 'edit_multiple_armies'
-  put 'armies/update_multiple', to: 'armies#update_multiple', as: 'update_multiple_armies'
-  put 'armies/destroy_multiple', to: 'armies#destroy_multiple', as: 'destroy_multiple_armies'
-  put 'armies/damage_multiple', to: 'armies#damage_multiple', as: 'damage_multiple_armies'
-  put 'armies/damage_multiple_update', to: 'armies#damage_multiple_update', as: 'update_damage_multiple_armies'
-  post 'armies/import', to: 'armies#import', as: 'import_armies'
-  get 'armies/export', to: 'armies#export', as: 'export_armies'
-  get 'armies/faction/:faction_id', to: 'armies#index'
+  #put 'armies/update_multiple', to: 'armies#update_multiple', as: 'update_multiple_armies'
+  #put 'armies/destroy_multiple', to: 'armies#destroy_multiple', as: 'destroy_multiple_armies'
+  #put 'armies/damage_multiple', to: 'armies#damage_multiple', as: 'damage_multiple_armies'
+  #put 'armies/damage_multiple_update', to: 'armies#damage_multiple_update', as: 'update_damage_multiple_armies'
+  #post 'armies/import', to: 'armies#import', as: 'import_armies'
+  #get 'armies/export', to: 'armies#export', as: 'export_armies'
+  #get 'armies/faction/:faction_id', to: 'armies#index'
   get 'armies/get_armies', to: 'armies#get_armies', as: 'get_armies'
-  get 'armies/get_discourse_armies/:faction_id/:group', to: 'armies#get_discourse_armies'
-  post 'armies/post_discourse_armies', to: 'armies#post_discourse_armies'
+  #get 'armies/get_discourse_armies/:faction_id/:group', to: 'armies#get_discourse_armies'
+  #post 'armies/post_discourse_armies', to: 'armies#post_discourse_armies'
   resources :armies
+
+  get 'units/new_multiple', to: 'units#new_multiple', as: 'new_units'
+  post 'units/create_multiple', to:'units#create_multiple', as: 'create_units'
   resources :units
 
   resources :locations

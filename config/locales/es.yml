@@ -47,6 +47,12 @@ es:
           one: Mostrando <b>%{count}</b> %{entry_name}
           other: Mostrando <b>un total de %{count}</b> %{entry_name}
           zero: No se han encontrado %{entry_name}
+    validate:
+      validate: "Escribe 'VALIDATE' para confirmar los cambios."
+    select:
+      no_type: 'Sin tipo'
+      no_tags: 'Sin rasgos'
+      no_faction: 'Sin facción'
     action:
       view: 'Ver %{thing}'
       edit: 'Editar %{thing}'
@@ -67,6 +73,7 @@ es:
       remove: 'Quitar %{model}'
       damage_multiple: 'Dañar %{model}'
       damage_multiple_update: 'Aplicar daño a %{model}'
+      create_multiple: 'Crear %{model}'
       update_multiple: 'Guardar %{model}'
       delete_multiple: 'Borrar %{model}'
       import: 'Importar'
@@ -127,6 +134,7 @@ es:
         location_id: "Lugar"
         family_id: "Familia"
         visible: "Visible"
+        tags: "Rasgos"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"
@@ -413,8 +421,6 @@ es:
       error: >
         Se ha encontrado un error. %{model} fallidos:
         %{failed}
-        %{model} exitosos:
-        %{succeed}
       nothing: 'Nada que actualizar.'
       validation: 'La palabra de validación es incorrecta'
     click_to_create: 'Haz click para crear «{tag}»'

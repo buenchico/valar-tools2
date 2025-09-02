@@ -1,0 +1,54 @@
+<tr>
+  <td>
+    <%= form.select :unit_type,
+      options_for_select(
+        @unit_types.map { | key, value |
+          [
+            key,
+            {
+              "data-content": "<span class='badge rounded-pill pill-tags bg-#{@army_types.fetch(value["type"], {}).fetch("colour", "brass")}'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe                      }
+          ]
+        },
+        form.object.unit_type
+      ),
+      { },
+      class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select me-1',
+      title: t('helpers.select.no_type'),
+      data: { width: '150px'},
+      disabled: form.object.persisted? ? true : false
+    %>
+  </td>
+  <td>
+    <%= form.number_field :count, class: 'form-control text-end me-1', step: 1, min: 0 %>
+  </td>
+
+  <% if @unit_tags.present? %>
+    <td>
+      <%= form.select :tags,
+        options_for_select(
+          @unit_tags.map { | tag |
+            [
+              tag[0],
+              { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+            }
+            ]
+          },
+          selected: form.object.tags
+        ),
+        { include_blank: false },
+        class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white me-1',
+        title: t('helpers.select.no_type'),
+        multiple: true,
+        data: { width: '150px'}
+      %>
+    </td>
+  <% end %>
+
+  <td>
+    <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select', placeholder: "T" %>
+  </td>
+
+  <td>
+    <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+  </td>
+</tr>

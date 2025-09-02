@@ -15,6 +15,14 @@
   <%= render 'units/one_line', unit: unit %>
 </td>
 
+<td>
+  <%= unit.location&.name %>
+</td>
+
+<td>
+  <%= unit.family&.title %>
+</td>
+
 <% if @current_user&.is_master? %>
   <td class="text-center">
     <% if unit.visible == true %>

@@ -1,12 +1,16 @@
 class UnitsController < ApplicationController
   before_action :set_options
-  before_action :set_factions, only: [:new, :edit]
-  before_action :set_regions, only: [:new, :edit]
+  before_action :set_factions, only: [:new, :edit, :new_multiple]
+  before_action :set_regions, only: [:new, :edit, :new_multiple]
   before_action :set_unit, only: [:edit, :update, :destroy]
   before_action :check_master, only: [:new, :edit, :create, :destroy, :update]
 
   def new
     @unit = Unit.new
+  end
+
+  def new_multiple
+    @units = [Unit.new]
   end
 
   def edit
@@ -49,6 +53,54 @@ class UnitsController < ApplicationController
       end
     end
   end
+
+  def create_multiple
+    faction_ids = params[:faction_ids]
+    units = params[:units]
+
+    created_units = []
+    failed_units = []
+
+    units.each do |unit_data|
+      unit_params = {
+        name: '',
+        unit_type: unit_data[:unit_type],
+        location_id: unit_data[:location_id],
+        family_id: unit_data[:family_id],
+        count: unit_data[:count],
+        tags: unit_data[:tags].reject!(&:empty?)
+      }
+
+      unit = Unit.new(unit_params)
+
+      unit.faction_ids = faction_ids if faction_ids.present?
+
+      if unit.valid?
+        created_units << unit
+      else
+        failed_units << { unit: unit, errors: unit.errors.full_messages }
+      end
+    end
+
+    respond_to do |format|
+      if params[:confirm] != 'VALIDATE'
+        format.html { redirect_to armies_url, danger: t('messages.multiple.validation') }
+      else
+        if failed_units.any?
+          flash.now[:danger] = t('messages.multiple.success', model: Unit.model_name.human(:count => created_units.count), failed: ("<br>" + failed_units.map { |u| "Unidad inválida: #{u[:errors].join(', ')}" }).html_safe)
+          format.js
+        else
+          Unit.transaction do
+            created_units.each(&:save!)
+          end
+
+          flash[:success] = t('messages.multiple.success', model: Unit.model_name.human(:count => created_units.count), succeed: ("<br>" + created_units.pluck(:name).join("<br>")).html_safe)
+          format.js
+        end
+      end
+    end
+  end
+
 
 private
   def set_unit
