@@ -51,4 +51,8 @@
   <td>
     <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
   </td>
+
+  <td>
+    <i class='bi bi-circle-fill ms-1 pt-1 text-danger remove_unit'></i>
+  </td>
 </tr>

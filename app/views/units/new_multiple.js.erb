@@ -11,3 +11,7 @@ $('#add-unit-row').on('click', function() {
   $('table.my-3').append(newRow);
   $('table.my-3 .selectpicker').selectpicker('refresh');
 });
+
+$('#armyModal').on('click', '.remove_unit', function() {
+  $(this).closest('tr').remove();
+});
