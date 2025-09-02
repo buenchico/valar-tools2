@@ -31,15 +31,43 @@ class Unit < ApplicationRecord
   end
 
   def men
+    set_options if @options_armies.nil?
+
+    unit_men = @units.fetch(self.unit_type, {}).fetch("men", 0)
+
+    self.count.to_i * unit_men
   end
 
   def men_start
+    set_options if @options_armies.nil?
+
+    unit_men = @units.fetch(self.unit_type, {}).fetch("men", 0)
+
+    self.count_start.to_i * unit_men
   end
 
   def hp
+    set_options if @options_armies.nil?
+
+    unit_hp = @units.fetch(self.unit_type, {}).fetch("hp", 0)
+
+    (self.count.to_i * unit_hp.to_i).to_i
   end
 
   def hp_start
+    set_options if @options_armies.nil?
+
+    unit_hp = @units.fetch(self.unit_type, {}).fetch("hp", 0)
+
+    (self.count_start.to_i * unit_hp.to_i).to_i
+  end
+
+  def hp_per_unit
+    set_options if @options_armies.nil?
+
+    unit_hp = @units.fetch(self.unit_type, {}).fetch("hp", 0)
+
+    return unit_hp
   end
 
   def title
