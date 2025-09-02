@@ -2,6 +2,8 @@ class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show]
   before_action :set_options
+  before_action :set_factions, only: [:index, :new, :edit]
+
 
 def index
   @faction = Faction.find_by(id: params[:faction_id])
