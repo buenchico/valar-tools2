@@ -1,0 +1,35 @@
+<span
+  class="army_strength"
+  data-bs-toggle="tooltip"
+  data-bs-placement="top"
+  data-bs-html="true"
+  data-bs-custom-class="army-str-data"
+  title="
+    <div class='row'>
+      <div class='text-start col-8'>
+        <%= t('activerecord.attributes.unit.strength')  %>
+      </div>
+      <div class='text-end col-4'>
+        <%= unit.strength %>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='text-start col-8'>
+        <%= t('activerecord.attributes.unit.strength_indirect')  %>
+      </div>
+      <div class='text-end col-4'>
+        <%= unit.strength_indirect %>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='text-start col-8'>
+        <%= t('activerecord.attributes.unit.hp')  %>
+      </div>
+      <div class='text-end col-4'>
+        <%= unit.hp %>
+      </div>
+    </div>
+  "
+>
+  <%= unit.strength %>
+</span>

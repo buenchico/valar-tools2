@@ -131,6 +131,7 @@ es:
         count_death: "Bajas"
         strength: "Fuerza"
         strength_indirect: "Fuerza indirecta"
+        hp: "Puntos de vida"
         factions: "Facciones"
         location_id: "Lugar"
         family_id: "Familia"
