@@ -181,33 +181,55 @@ $.fn.inline_listeners = function() {
   });
 }
 
-$(document).on('turbolinks:load', function() {
-  $.fn.inline_listeners();
-});
-
 $.fn.checkbox_listeners = function() {
   $('.checkbox_selectable').change(function() {
-    if ($(".checkbox_selectable:visible:checked").length == $(".checkbox_selectable:visible").length ) {
-      $(".checkbox_select_all").prop('checked', true);
+
+    var checkboxGroup = $(this).data("checkbox");
+
+    if (checkboxGroup !== undefined && checkboxGroup !== null && checkboxGroup !== "") {
+      var selectAll = $(`.checkbox_select_all[data-checkbox='${checkboxGroup}']`)
+      var selectItems = $(`.checkbox_selectable:visible[data-checkbox='${checkboxGroup}']`)
     } else {
-      $(".checkbox_select_all").prop('checked', false);
+      var selectAll = $(`.checkbox_select_all`)
+      var selectItems = $(".checkbox_selectable:visible")
     }
-    $.fn.mass_edit_buttons();
+
+    if (selectItems.filter(':checked').length == selectItems.length ) {
+      selectAll.prop("checked", true);
+    } else {
+      selectAll.prop("checked", false);
+    }
+    $.fn.mass_edit_buttons(checkboxGroup);
   });
 
   $(".checkbox_select_all").click(function () {
-    $(".checkbox_selectable:visible").prop('checked', $(this).prop('checked'));
-    $(".checkbox_selectable:visible").trigger('change'); // Trigger the change event on individual checkboxes
+    var checkboxGroup = $(this).data("checkbox");
+
+    if (checkboxGroup !== undefined && checkboxGroup !== null && checkboxGroup !== "") {
+      var selectItems = $(`.checkbox_selectable:visible[data-checkbox='${checkboxGroup}']`)
+    } else {
+      var selectItems = $(".checkbox_selectable:visible")
+    }
+
+    selectItems.prop('checked', $(this).prop('checked'));
+    selectItems.trigger('change'); // Trigger the change event on individual checkboxes
   });
 }
 
-$.fn.mass_edit_buttons = function() {
-  var countCheckedCheckboxes = $('.checkbox_selectable').filter(':checked').length;
+$.fn.mass_edit_buttons = function(checkboxGroup) {
+  if (checkboxGroup !== undefined && checkboxGroup !== null && checkboxGroup !== "") {
+    var countCheckedCheckboxes = $(`.checkbox_selectable[data-checkbox='${checkboxGroup}']`).filter(':checked').length;
+    var massEditButtons = $(`.mass_edit_button[data-checkbox='${checkboxGroup}']`)
+  } else {
+    var countCheckedCheckboxes = $('.checkbox_selectable').filter(':checked').length;
+    var massEditButtons = $(".mass_edit_button")
+  }
+
   if (countCheckedCheckboxes == 0 ) {
-    $(".mass_edit_button").prop("disabled", true);
+    massEditButtons.prop("disabled", true);
   }
   if (countCheckedCheckboxes != 0) {
-    $(".mass_edit_button").prop("disabled", false);
+    massEditButtons.prop("disabled", false);
   }
 }
 

@@ -13,17 +13,17 @@
   <div class="col">
     <%= form_tag(edit_multiple_armies_path, method: :get, id: 'edit_multiple', remote: true) do %>
       <%= hidden_field_tag 'army_ids', '', id: 'army_ids_field' %>
-      <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button mass-copy", disabled: true) do %>
+      <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button mass-copy", disabled: true, data: {checkbox: "units" }) do %>
         <i class="bi bi-clipboard"></i> <%= t('helpers.action.copy') %>
       <% end %>
-      <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "update") do %>
+      <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "update", data: {checkbox: "units" }) do %>
         <i class="bi bi-pencil-square"></i> <%= t('helpers.action.mass_edit') %>
       <% end %>
       <% if @current_user&.is_master? %>
-        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "destroy") do %>
+        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "destroy", data: {checkbox: "units" }) do %>
           <i class="bi bi-trash"></i> <%= t('helpers.action.mass_delete') %>
         <% end %>
-        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "damage") do %>
+        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "damage", data: {checkbox: "units" }) do %>
           <i class="bi bi-damage-kinetic"></i> <%= t('helpers.action.damage') %>
         <% end %>
       <% end %>
@@ -37,7 +37,7 @@
     <thead>
       <tr>
         <th data-sorter="false" data-filter="checkbox" scope="col" style="width: 30px">
-          <input type="checkbox" class="checkbox_select_all option-input" /><span class="d-none"></span>
+          <input type="checkbox" class="checkbox_select_all option-input" data-checkbox="units" /><span class="d-none"></span>
         </th>
         <th scope="col" style="width: 78px">
           <i class="bi bi-award"></i>

@@ -1,5 +1,5 @@
 <td>
-  <%= check_box_tag "unit_ids[]", unit.id, false, id: 'id_' + unit.id.to_s,class: "checkbox_selectable option-input" %>
+  <%= check_box_tag "unit_ids[]", unit.id, false, id: 'id_' + unit.id.to_s, class: "checkbox_selectable option-input", data: {checkbox: "units" } %>
 </td>
 
 <td>

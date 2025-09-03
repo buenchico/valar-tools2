@@ -37,5 +37,7 @@ $(document).on('turbolinks:load', function () {
       const form = $(this).closest('form');
       form.submit();
     });
+
+    $.fn.inline_listeners();
   }
 });
