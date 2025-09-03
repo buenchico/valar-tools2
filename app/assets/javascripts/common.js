@@ -186,13 +186,8 @@ $.fn.checkbox_listeners = function() {
 
     var checkboxGroup = $(this).data("checkbox");
 
-    if (checkboxGroup !== undefined && checkboxGroup !== null && checkboxGroup !== "") {
-      var selectAll = $(`.checkbox_select_all[data-checkbox='${checkboxGroup}']`)
-      var selectItems = $(`.checkbox_selectable:visible[data-checkbox='${checkboxGroup}']`)
-    } else {
-      var selectAll = $(`.checkbox_select_all`)
-      var selectItems = $(".checkbox_selectable:visible")
-    }
+    var selectAll = $(`.checkbox_select_all[data-checkbox='${checkboxGroup}']`)
+    var selectItems = $(`.checkbox_selectable:visible[data-checkbox='${checkboxGroup}']`)
 
     if (selectItems.filter(':checked').length == selectItems.length ) {
       selectAll.prop("checked", true);
@@ -205,11 +200,7 @@ $.fn.checkbox_listeners = function() {
   $(".checkbox_select_all").click(function () {
     var checkboxGroup = $(this).data("checkbox");
 
-    if (checkboxGroup !== undefined && checkboxGroup !== null && checkboxGroup !== "") {
-      var selectItems = $(`.checkbox_selectable:visible[data-checkbox='${checkboxGroup}']`)
-    } else {
-      var selectItems = $(".checkbox_selectable:visible")
-    }
+    var selectItems = $(`.checkbox_selectable:visible[data-checkbox='${checkboxGroup}']`)
 
     selectItems.prop('checked', $(this).prop('checked'));
     selectItems.trigger('change'); // Trigger the change event on individual checkboxes
@@ -217,13 +208,8 @@ $.fn.checkbox_listeners = function() {
 }
 
 $.fn.mass_edit_buttons = function(checkboxGroup) {
-  if (checkboxGroup !== undefined && checkboxGroup !== null && checkboxGroup !== "") {
-    var countCheckedCheckboxes = $(`.checkbox_selectable[data-checkbox='${checkboxGroup}']`).filter(':checked').length;
-    var massEditButtons = $(`.mass_edit_button[data-checkbox='${checkboxGroup}']`)
-  } else {
-    var countCheckedCheckboxes = $('.checkbox_selectable').filter(':checked').length;
-    var massEditButtons = $(".mass_edit_button")
-  }
+  var countCheckedCheckboxes = $(`.checkbox_selectable[data-checkbox='${checkboxGroup}']`).filter(':checked').length;
+  var massEditButtons = $(`.mass_edit_button[data-checkbox='${checkboxGroup}']`)
 
   if (countCheckedCheckboxes == 0 ) {
     massEditButtons.prop("disabled", true);
@@ -233,16 +219,49 @@ $.fn.mass_edit_buttons = function(checkboxGroup) {
   }
 }
 
+// Add hidden checkboxes for mass edit options
+$.fn.checkboxSelectable = function(){
+  $('.checkbox_selectable').change(function() {
+    var checkboxGroup = $(this).data("checkbox");
+
+    if (checkboxGroup !== undefined && checkboxGroup !== null && checkboxGroup !== "") {
+      var form = $('#edit_multiple_' + checkboxGroup);
+    } else {
+      var form = $('#edit_multiple');
+    }
+
+    var objectId = $(this).val();
+
+    var hiddenInput = $('#' + checkboxGroup + '_ids_field');
+    var selectedIds = hiddenInput.val().split(',').filter(Boolean); // Splits by comma and removes empty values
+
+    if ($(this).is(':checked')) {
+      // Add armyId if it's checked and not already in the list
+      if (!selectedIds.includes(objectId)) {
+        selectedIds.push(objectId);
+      }
+    } else {
+      // Remove armyId if it's unchecked
+      selectedIds = selectedIds.filter(id => id !== objectId);
+    }
+
+    // Update the hidden input field with the new list of ids, joined by commas
+    hiddenInput.val(selectedIds.join(','));
+  });
+}
+
 // Select all checkboxes
 $(document).on('turbolinks:load', function() {
   $.fn.checkbox_listeners();
   $.fn.mass_edit_buttons();
+  $.fn.checkboxSelectable();
 });
 
 // Select all checkboxes to work in modals
 $(document).on('shown.bs.modal', function (event) {
   $.fn.checkbox_listeners();
   $.fn.mass_edit_buttons();
+  $.fn.checkboxSelectable();
 });
 
 

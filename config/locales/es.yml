@@ -423,6 +423,7 @@ es:
       error: >
         Se ha encontrado un error. %{model} fallidos:
         %{failed}
+      delete: "%{model} eliminados con éxito"
       nothing: 'Nada que actualizar.'
     validation: 'La palabra de validación es incorrecta'
     click_to_create: 'Haz click para crear «{tag}»'

@@ -65,6 +65,8 @@ Rails.application.routes.draw do
   get 'units/new_multiple', to: 'units#new_multiple', as: 'new_units'
   post 'units/create_multiple', to:'units#create_multiple', as: 'create_units'
   get 'units/:id/delete', to: 'units#delete', as: 'delete_unit'
+  get 'units/edit_multiple', to: 'units#edit_multiple', as: 'edit_multiple_units'
+  put 'units/destroy_multiple', to: 'units#destroy_multiple', as: 'destroy_multiple_units'
   resources :units
 
   resources :locations

@@ -16,6 +16,12 @@ class UnitsController < ApplicationController
   def edit
   end
 
+  def edit_multiple
+    unit_ids = params[:unit_ids].split(',')
+    @units = Unit.where(id: unit_ids).order(:name)
+    @template = 'form_' + params[:button] + '_multiple'
+  end
+
   def delete
   end
 
@@ -112,6 +118,21 @@ class UnitsController < ApplicationController
     end
   end
 
+  def destroy_multiple
+    @units = Unit.where(id: params[:unit_ids])
+
+    respond_to do |format|
+      if params[:unit][:confirm] == 'DELETE'
+        if @units.each { |unit| unit.factions.clear } && @units.destroy_all
+          format.html { redirect_to armies_url, danger: t('messages.multiple.delete', model: t('activerecord.models.unit', count: 2)) }
+        else
+          format.html { redirect_to armies_url, danger: t('messages.multiple.error', model: t('activerecord.models.unit', count: 2), failed: @units.length) }
+        end
+      else
+        format.html { redirect_to armies_url, danger: t('messages.multiple.validation') }
+      end
+    end
+  end
 
 private
   def set_unit

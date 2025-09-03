@@ -7,14 +7,14 @@
       </div>
       <div class="modal-body">
         <%= form_with url: unit_path(unit), method: :delete, local: false do |form| %>
-        <div class="alert alert-warning">
-          <strong>
-            <%= unit.name %>
-            <%= render 'one_line', unit: unit %>
-          </strong>
-          será borrado, ¿estás seguro?
-        </div>
-        <div class="input-group mt-3">
+          <div class="alert alert-warning">
+            <strong>
+              <%= unit.name %>
+              <%= render 'one_line', unit: unit %>
+            </strong>
+            será borrado, ¿estás seguro?
+          </div>
+          <div class="input-group mt-3">
             <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.delete') %>
           </div>
 
