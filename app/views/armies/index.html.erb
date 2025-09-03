@@ -26,6 +26,16 @@
   <% end %>
 <% end %>
 
-<%= render 'armies/armies_table' %>
+<div class="d-flex justify-content-center">
+  <div id="spinner-main" class="spinner-border fs-1 d-none" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
 
-<%= render 'units/units_table' %>
+<div id="army_table">
+  <%= render 'armies/armies_table' %>
+</div>
+
+<div id="unit_table">
+  <%= render 'units/units_table' %>
+</div>

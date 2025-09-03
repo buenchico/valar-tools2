@@ -1,10 +1,41 @@
 $(document).on('turbolinks:load', function () {
   if ($(".armies").length !== 0) {
-    $(document).on('changed.bs.select', '.units-select', function (e, clickedIndex, isSelected, previousValue) {
-      const selectedValue = $(this).val();
-      console.log('New value:', selectedValue);
-    });
+    // Trigger armies load for master
+    $('.armies-load').click(function() {
+      $('#spinner-main').removeClass('d-none');
 
-    $('.units-select').selectpicker(); // Ensure it's initialized
+      if ($(this).hasClass('master')) {
+        if ($(this).hasClass('active')) {
+          $('.armies-tab').removeClass('active')
+        } else {
+          $('.armies-tab').addClass('active')
+        }
+      } else {
+        $(this).toggleClass('active');
+      }
+
+      if ($('.armies-tab:not(.master):not(.active)').length > 0) {
+        $('.master').removeClass('active')
+      } else {
+        $('.master').addClass('active')
+      }
+
+      const factions = $('.armies-tab.active').map(function() {
+        const id = $(this).attr('id');
+        return id ? id.split('-')[1] : null;
+      }).get();
+
+      const visibility = $('.visible-tab.active').map(function() {
+        const id = $(this).attr('id');
+        return id ? id.split('-')[1] : null;
+      }).get();
+
+      $('#active_factions').val(JSON.stringify(factions));
+      $('#active_visibility').val(JSON.stringify(visibility));
+
+      // Submit the form
+      const form = $(this).closest('form');
+      form.submit();
+    });
   }
 });
