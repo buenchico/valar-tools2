@@ -123,7 +123,10 @@ class UnitsController < ApplicationController
 
     respond_to do |format|
       if params[:unit][:confirm] == 'DELETE'
-        if @units.each { |unit| unit.factions.clear } && @units.destroy_all
+        @units.each { |unit| unit.factions.clear }
+        destroyed = @units.destroy_all
+
+        if destroyed.any?
           format.html { redirect_to armies_url, danger: t('messages.multiple.delete', model: t('activerecord.models.unit', count: 2)) }
         else
           format.html { redirect_to armies_url, danger: t('messages.multiple.error', model: t('activerecord.models.unit', count: 2), failed: @units.length) }

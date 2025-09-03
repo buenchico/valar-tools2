@@ -12,6 +12,7 @@
               <div>Las siguientes unidades serán eliminadas</div>
               <ul>
                 <% units.each do | unit | %>
+                  <%= hidden_field_tag "unit_ids[]", unit.id %>
                   <li>
                     <%= unit.name %>
                     <%= render 'one_line', unit: unit %>
