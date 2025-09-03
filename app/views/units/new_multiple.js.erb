@@ -1,5 +1,5 @@
 $(".modal").modal('hide');
-$('#content').html("<%= j render 'form_multiple', units: @units, action: 'create' %>");
+$('#content').html("<%= j render 'form_create_multiple', units: @units, action: 'create' %>");
 $('#armyModal').modal('show');
 
 $('#add-unit-row').on('click', function() {
