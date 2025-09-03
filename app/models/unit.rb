@@ -35,7 +35,7 @@ class Unit < ApplicationRecord
 
     unit_men = @units.fetch(self.unit_type, {}).fetch("men", 0)
 
-    self.count.to_i * unit_men
+    return (self.count.to_i * unit_men).to_i
   end
 
   def men_start
@@ -43,23 +43,15 @@ class Unit < ApplicationRecord
 
     unit_men = @units.fetch(self.unit_type, {}).fetch("men", 0)
 
-    self.count_start.to_i * unit_men
+    return (self.count_start.to_i * unit_men).to_i
   end
 
   def hp
-    set_options if @options_armies.nil?
-
-    unit_hp = @units.fetch(self.unit_type, {}).fetch("hp", 0)
-
-    (self.count.to_i * unit_hp.to_i).to_i
+    (self.count.to_i * self.hp_per_unit).to_i
   end
 
   def hp_start
-    set_options if @options_armies.nil?
-
-    unit_hp = @units.fetch(self.unit_type, {}).fetch("hp", 0)
-
-    (self.count_start.to_i * unit_hp.to_i).to_i
+    (self.count_start.to_i * self.hp_per_unit).to_i
   end
 
   def hp_per_unit
@@ -67,7 +59,7 @@ class Unit < ApplicationRecord
 
     unit_hp = @units.fetch(self.unit_type, {}).fetch("hp", 0)
 
-    return unit_hp
+    return (unit_hp * self.hp_mod * 0.01).round(2)
   end
 
   def title
