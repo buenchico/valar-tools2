@@ -129,11 +129,19 @@ private
   end
 
   def unit_params
-    params.require(:unit).permit(
-      :name, :location_id, :family_id,
-      :count, :count_start, :count_death, :strength_mod, :strength_indirect_mod, :hp_mod,
-      :visible, :unit_type, faction_ids: [], tags: []
-    ).tap do |whitelisted|
+    permitted_keys = if @current_user.is_master?
+      [
+        :name, :location_id, :family_id,
+        :count, :count_start, :count_death,
+        :strength_mod, :strength_indirect_mod, :hp_mod,
+        :visible, :unit_type,
+        { faction_ids: [], tags: [] }
+      ]
+    else
+      [:name, { tags: [] }]
+    end
+
+    params.require(:unit).permit(*permitted_keys).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
     end
   end
