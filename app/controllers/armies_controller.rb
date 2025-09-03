@@ -23,31 +23,11 @@ def index
   end
 end
 
-def get_armies
-  origin = URI(request.referer).path.split('/')[1]
+def show_armies
+  active_factions = JSON.parse(params[:active_factions])
+  active_visibility = JSON.parse(params[:active_visibility])
 
-  @active_factions = JSON.parse(params[:active_factions])
-  @active_visibility = JSON.parse(params[:active_visibility])
-
-  @armies_all = Army.where(visible: true)
-
-  master = Faction.find_by(name: 'master')
-
-  if @active_factions.count == 1
-    @faction = Faction.find_by(id: @active_factions)
-  end
-
-  if @active_factions.include?(master.id.to_s)
-    @armies = Army.all.where(visible: @active_visibility)
-    @units = Unit.all.where(visible: @active_visibility)
-  else
-    @armies = Army.joins(:factions).where(visible: @active_visibility).where(factions: { id: @active_factions })
-    @units = Unit.joins(:factions).where(visible: @active_visibility).where(factions: { id: @active_factions })
-  end
-
-  respond_to do |format|
-    format.js
-  end
+  @armies, @units = get_armies(active_factions, active_visibility)
 end
 
 private
@@ -58,5 +38,23 @@ private
     else
       set_options_armies
     end
+  end
+
+  def get_armies(factions, visibility)
+    master = Faction.find_by(name: 'master')
+
+    if factions.count == 1
+      faction = Faction.find_by(id: factions)
+    end
+
+    if factions.include?(master.id.to_s)
+      armies = Army.all.where(visible: visibility)
+      units = Unit.all.where(visible: visibility)
+    else
+      armies = Army.joins(:factions).where(visible: visibility).where(factions: { id: factions })
+      units = Unit.joins(:factions).where(visible: visibility).where(factions: { id: factions })
+    end
+
+    return [armies, units]
   end
 end

@@ -7,7 +7,7 @@
 </div>
 
 <% if @current_user&.is_master? %>
-  <%= form_with url: get_armies_path, id: 'get-armies', method: :get, local: false do |form| %>
+  <%= form_with url: show_armies_path, id: 'get-armies', method: :get, local: false do |form| %>
     <ul class="nav nav-pills mb-3">
       <li class="me-1">Facciones:</li>
       <% @factions.each do |faction| %>
