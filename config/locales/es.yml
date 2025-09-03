@@ -49,6 +49,7 @@ es:
           zero: No se han encontrado %{entry_name}
     validate:
       validate: "Escribe 'VALIDATE' para confirmar los cambios."
+      delete: "Escribe 'DELETE' para confirmar los cambios."
     select:
       no_type: 'Sin tipo'
       no_tags: 'Sin rasgos'
@@ -422,7 +423,7 @@ es:
         Se ha encontrado un error. %{model} fallidos:
         %{failed}
       nothing: 'Nada que actualizar.'
-      validation: 'La palabra de validación es incorrecta'
+    validation: 'La palabra de validación es incorrecta'
     click_to_create: 'Haz click para crear «{tag}»'
   views:
     # kaminari

@@ -1,0 +1,28 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title w-100" id="Title"><%= t('helpers.submit.delete', model: t('activerecord.models.unit', count: 1) ) %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with url: unit_path(unit), method: :delete, local: false do |form| %>
+        <div class="alert alert-warning">
+          <strong>
+            <%= unit.name %>
+            <%= render 'one_line', unit: unit %>
+          </strong>
+          será borrado, ¿estás seguro?
+        </div>
+        <div class="input-group mt-3">
+            <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.delete') %>
+          </div>
+
+          <div class="input-group mt-3">
+            <%= form.submit t('helpers.submit.delete', model: Unit.model_name.human), class: 'btn btn-danger' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

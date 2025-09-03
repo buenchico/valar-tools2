@@ -7,8 +7,12 @@
 </td>
 
 <td>
-  <i class="bi bi-<%= unit.army_icon %> text-<%= unit.colour %>"></i>
-  <%= unit.name %>
+  <span class="d-none"><%= unit.name %></span>
+  <%= form_with model: unit, local: false, html: { class: "d-inline-flex align-items-center gap-2" } do |form| %>
+    <i class="bi bi-<%= unit.army_icon %> text-<%= unit.colour %>"></i>
+    <%= form.hidden_field :inline, value: true %>
+    <%= form.text_field :name, class: 'inline-edit-input input-sm form-control', style: 'height: 1.75rem', "data-initialvalue": unit.name %>
+  <% end %>
 </td>
 
 <td>
@@ -31,16 +35,12 @@
       <i class="bi bi-x-lg text-danger"></i>
     <% end %>
   </td>
+
+  <td>
+    <%= link_to '', edit_unit_path(unit), remote: true, class: 'bi bi-pencil-square text-white' %>
+  </td>
+
+  <td>
+    <%= link_to '', delete_unit_path(unit), remote: true, class: 'bi bi-trash text-white' %>
+  </td>
 <% end %>
-
-<td>
-  <%= link_to '', edit_unit_path(unit), remote: true, class: 'bi bi-pencil-square text-white' %>
-</td>
-
-<td>
-  <% if @current_user&.is_master? %>
-    <%= link_to unit_path(unit), method: :delete, data: { confirm: "Estás seguro de eliminar la unidad #{unit.name}?" }, remote: true do %>
-      <i class="bi bi-trash text-white"></i>
-    <% end %>
-  <% end %>
-</td>

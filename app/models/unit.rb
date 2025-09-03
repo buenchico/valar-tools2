@@ -130,12 +130,23 @@ private
     return unless name.blank?
 
     existing_count = 1
-    self.factions.each do |faction|
-      count = faction.units.where(unit_type: self.unit_type).count
-      existing_count = [existing_count,count].max
-    end
+    base_name = "#{unit_name} de #{title.singularize}"
 
-    self.name = "#{existing_count} #{self.unit_name} de #{self.title.singularize}"
+    loop do
+      candidate_name = "#{existing_count} #{base_name}"
+
+      # Check if any faction already has a unit with this name and type
+      conflict = self.factions.any? do |faction|
+        faction.units.where(unit_type: unit_type, name: candidate_name).exists?
+      end
+
+      if conflict
+        existing_count += 1
+      else
+        self.name = candidate_name
+        break
+      end
+    end
 
     save(validate: false, touch: false)
   end

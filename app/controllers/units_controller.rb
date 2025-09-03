@@ -2,8 +2,8 @@ class UnitsController < ApplicationController
   before_action :set_options
   before_action :set_factions, only: [:new, :edit, :new_multiple]
   before_action :set_regions, only: [:new, :edit, :new_multiple]
-  before_action :set_unit, only: [:edit, :update, :destroy]
-  before_action :check_master, only: [:new, :edit, :create, :destroy, :update]
+  before_action :set_unit, only: [:edit, :update, :destroy, :delete]
+  before_action :check_master, only: [:new, :edit, :create, :destroy, :delete]
 
   def new
     @unit = Unit.new
@@ -14,6 +14,9 @@ class UnitsController < ApplicationController
   end
 
   def edit
+  end
+
+  def delete
   end
 
   def create
@@ -44,12 +47,16 @@ class UnitsController < ApplicationController
 
   def destroy
     respond_to do |format|
-      if @unit.destroy
-        flash.now[:danger] = t('messages.success.destroy', thing: @unit.name.strip + " (id: " + @unit.id.to_s + ")", count: 1)
-        format.js
+      if params[:confirm].nil? || params[:confirm] == 'DELETE'
+        if @unit.destroy
+          flash.now[:danger] = t('messages.success.destroy', thing: @unit.name.strip + " (id: " + @unit.id.to_s + ")", count: 1)
+          format.js
+        else
+          flash.now[:danger] = @unit.errors.to_hash
+          format.js { render 'layouts/error', locals: { thing: @unit.name.strip + " (id: " + @unit.id.to_s + ")", method: 'delete' } }
+        end
       else
-        flash.now[:danger] = @unit.errors.to_hash
-        format.js { render 'layouts/error', locals: { thing: @unit.name.strip + " (id: " + @unit.id.to_s + ")", method: 'delete' } }
+        format.html { redirect_to armies_url, danger: t('messages.validation') }
       end
     end
   end
@@ -84,10 +91,14 @@ class UnitsController < ApplicationController
 
     respond_to do |format|
       if params[:confirm] != 'VALIDATE'
-        format.html { redirect_to armies_url, danger: t('messages.multiple.validation') }
+        format.html { redirect_to armies_url, danger: t('messages.validation') }
       else
         if failed_units.any?
-          flash.now[:danger] = t('messages.multiple.success', model: Unit.model_name.human(:count => created_units.count), failed: ("<br>" + failed_units.map { |u| "Unidad inválida: #{u[:errors].join(', ')}" }).html_safe)
+          flash.now[:danger] = t(
+            'messages.multiple.error',
+            model: Unit.model_name.human(count: created_units.count),
+            failed: ("<br>" + failed_units.map { |u| "Unidad inválida: #{u[:errors].join(', ')}" }.join("<br>")).html_safe
+          )
           format.js
         else
           Unit.transaction do

@@ -56,8 +56,8 @@
         </th>
         <% if @current_user&.is_master? %>
           <th scope="col" class="text-center"><%= t('activerecord.attributes.family.visible') %></th>
+          <th scope="col" colspan="2" data-sorter="false"></th>
         <% end %>
-        <th scope="col" colspan="3" data-sorter="false"></th>
       </tr>
     </thead>
     <tbody id="table_body">
