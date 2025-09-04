@@ -3,9 +3,8 @@ $('#unit_table').html("<%= j render 'units/units_table', units: @units %>")
 
 $('.selectpicker').selectpicker();
 
-$("table").trigger("updateAll");
-
 $(".spinner-border").addClass("d-none");
 
+$.fn.table_sorter();
 $.fn.checkbox_listeners();
 $.fn.checkboxSelectable();
