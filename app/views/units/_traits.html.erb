@@ -1,0 +1,13 @@
+<span class="badge rounded-pill pill-tags pill-tags-text bg-<%= unit.colour %>">
+  <i class="bi bi-<%= unit.icon %>"></i>
+
+  <%= number_to_compact(unit.count.to_i) %>
+  <%= unit.title %>
+</span>
+
+<% unit.tags.each do |tag| %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @unit_tags[tag].fetch('colour', 'success') %>">
+    <i class="bi bi-<%= @unit_tags[tag].fetch('icon', '') %>"></i>
+    <%= @unit_tags[tag].fetch('name', tag) %>
+  </span>
+<% end %>

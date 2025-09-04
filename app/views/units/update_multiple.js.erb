@@ -1,0 +1,14 @@
+<% @updated_units.each do |unit| %>
+  var checkbox_status = $('#id_unit_<%= unit.id %>').is(":checked");
+
+  $('#unit_<%= unit.id %>').html('<%= j render "row", unit: unit  %>');
+  $('#unit_<%= unit.id %>').addClass("table-highlight");
+  setTimeout(function() {
+    $('#unit_<%= unit.id %>').removeClass("table-highlight");
+  }, 500);
+  $("#id_unit_<%= unit.id %>").prop("checked", checkbox_status);
+<% end %>
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+
+$(".modal").modal('hide');

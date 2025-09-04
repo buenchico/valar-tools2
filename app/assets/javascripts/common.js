@@ -98,6 +98,31 @@ $(document).on('shown.bs.modal', function (event) {
   initPopovers();
 });
 
+// Selectpicker to act on "none" option
+let suppressSelectChange = false;
+
+$(document).on('changed.bs.select', 'select.selectpicker', function (e, clickedIndex, isSelected, previousValue) {
+  if (suppressSelectChange) return;
+
+  const $select = $(this);
+  const clickedOption = $select.find('option').eq(clickedIndex);
+  const clickedValue = clickedOption.val();
+  const selected = $select.val() || [];
+
+  suppressSelectChange = true;
+
+  if (clickedValue === 'CLEAR' && isSelected) {
+    // If CLEAR was selected, deselect all others
+    $select.selectpicker('val', ['CLEAR']);
+  } else if (selected.includes('CLEAR')) {
+    // If CLEAR is already selected and user selects something else, remove CLEAR
+    const newSelection = selected.filter(v => v !== 'CLEAR');
+    $select.selectpicker('val', newSelection);
+  }
+
+  suppressSelectChange = false;
+});
+
 // Initializing selectpicker
 $(document).on('turbolinks:load', function() {
   $('.selectpicker').selectpicker();
@@ -113,22 +138,24 @@ $(document).on('cocoon:after-insert', function(e, insertedItem, originalEvent) {
   $('.selectpicker').selectpicker();
 });
 
-// Table sorting by column
-$(document).on('turbolinks:load', function() {
-  $(function() {
-    $("table.sortable").tablesorter({
-      headerTemplate : '{icon}{content}',
-      cssIconNone: 'bi bi-sort-caret sorter-icon',
-      cssIconAsc:  'bi bi-sort-caret-up sorter-icon',
-      cssIconDesc: 'bi bi-sort-caret-down sorter-icon',
-      imgAttr: 'title', // image attribute used by "image" parser
+// exclusive form fields
+$.fn.table_sorter =  function() {
+  $("table.sortable").tablesorter({
+    headerTemplate : '{icon}{content}',
+    cssIconNone: 'bi bi-sort-caret sorter-icon',
+    cssIconAsc:  'bi bi-sort-caret-up sorter-icon',
+    cssIconDesc: 'bi bi-sort-caret-down sorter-icon',
+    imgAttr: 'title', // image attribute used by "image" parser
 
-      textExtraction: function(node) {
-          // Replace en dash with hyphen
-          return $(node).text().replace(/–/g, '-');
-      }
-    });
+    textExtraction: function(node) {
+        // Replace en dash with hyphen
+        return $(node).text().replace(/–/g, '-');
+    }
   });
+}
+
+$(document).on('turbolinks:load', function() {
+  $.fn.table_sorter();
 });
 
 $.tablesorter.addParser({

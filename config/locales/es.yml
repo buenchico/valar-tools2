@@ -423,6 +423,8 @@ es:
       error: >
         Se ha encontrado un error. %{model} fallidos:
         %{failed}
+        Los siguientes %{model} han sido exitosos:
+        %{succeed}
       delete: "%{model} eliminados con éxito"
       nothing: 'Nada que actualizar.'
     validation: 'La palabra de validación es incorrecta'

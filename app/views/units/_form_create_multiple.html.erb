@@ -28,33 +28,35 @@
             %>
           </div>
 
-          <table class="my-3">
-            <tr>
-              <td>
-                <%= t('activerecord.attributes.unit.unit_type') %>
-              </td>
-              <td>
-                <%= t('activerecord.attributes.unit.count') %>
-              </td>
-              <% if @unit_tags.present? %>
+          <div class="table-responsive">
+            <table class="table table-dark table-borderless table-sm">
+              <tr>
                 <td>
-                  <%= t('activerecord.attributes.unit.tags') %>
+                  <%= t('activerecord.attributes.unit.unit_type') %>
                 </td>
-              <% end %>
-              <td>
-                <%= t('activerecord.attributes.unit.location_id') %>
-              </td>
-              <td>
-                <%= t('activerecord.attributes.unit.family_id') %>
-              </td>
-            </tr>
+                <td>
+                  <%= t('activerecord.attributes.unit.count') %>
+                </td>
+                <% if @unit_tags.present? %>
+                  <td>
+                    <%= t('activerecord.attributes.unit.tags') %>
+                  </td>
+                <% end %>
+                <td>
+                  <%= t('activerecord.attributes.unit.location_id') %>
+                </td>
+                <td>
+                  <%= t('activerecord.attributes.unit.family_id') %>
+                </td>
+              </tr>
 
-            <% units.each_with_index do |unit, index| %>
-              <%= fields_for "units[]", unit do |unit_form| %>
-                <%= render 'unit_fields', form: unit_form %>
+              <% units.each_with_index do |unit, index| %>
+                <%= fields_for "units[]", unit do |unit_form| %>
+                  <%= render 'unit_fields', form: unit_form %>
+                <% end %>
               <% end %>
-            <% end %>
-          </table>
+            </table>
+          </div>
 
           <button type="button" id="add-unit-row" class="btn btn-outline-primary">
             <i class="bi bi-plus-circle"></i> Añadir unidad

@@ -19,7 +19,7 @@
     %>
   </td>
   <td>
-    <%= form.number_field :count, class: 'form-control text-end me-1', step: 1, min: 0 %>
+    <%= form.number_field :count, class: 'form-control text-end me-1', step: 1, min: 0, style: "width: 80px" %>
   </td>
 
   <% if @unit_tags.present? %>
@@ -37,7 +37,7 @@
         ),
         { include_blank: false },
         class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white me-1',
-        title: t('helpers.select.no_type'),
+        title: t('helpers.select.no_tags'),
         multiple: true,
         data: { width: '150px'}
       %>
@@ -45,11 +45,11 @@
   <% end %>
 
   <td>
-    <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select', placeholder: "T" %>
+    <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select', style: 'width: 150px' %>
   </td>
 
   <td>
-    <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+    <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select', style: 'width: 150px' %>
   </td>
 
   <td>

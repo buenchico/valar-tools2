@@ -1,5 +1,5 @@
 <td>
-  <%= check_box_tag "unit_ids[]", unit.id, false, id: 'id_' + unit.id.to_s, class: "checkbox_selectable option-input", data: {checkbox: "units" } %>
+  <%= check_box_tag "unit_ids[]", unit.id, false, id: 'id_unit_' + unit.id.to_s, class: "checkbox_selectable option-input", data: {checkbox: "units" } %>
 </td>
 
 <td>
@@ -16,7 +16,7 @@
 </td>
 
 <td>
-  <%= render 'units/one_line', unit: unit %>
+  <%= render 'units/traits', unit: unit %>
 </td>
 
 <td>
