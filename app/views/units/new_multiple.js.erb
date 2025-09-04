@@ -8,8 +8,8 @@ $('#add-unit-row').on('click', function() {
   <% end %>
 
   const newRow = `<%= j(rendered_row) %>`;
-  $('table.my-3').append(newRow);
-  $('table.my-3 .selectpicker').selectpicker('refresh');
+  $('tbody.multiple-units-tbody').append(newRow);
+  $('tbody.multiple-units-tbody .selectpicker').selectpicker('refresh');
 });
 
 $('#armyModal').on('click', '.remove_unit', function() {
