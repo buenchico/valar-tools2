@@ -1,3 +1,12 @@
+<% @created_units.each do |unit| %>
+  $('#unit_list').find('tbody').append('<tr id="unit_<%= unit.id.to_s %>"></tr>');
+  $('#unit_<%= unit.id %>').html('<%= j render "row", unit: unit  %>');
+  $('#unit_<%= unit.id %>').addClass("table-highlight");
+  setTimeout(function() {
+    $('#unit_<%= unit.id %>').removeClass("table-highlight");
+  }, 500);
+<% end %>
+
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
 
 $(".modal").modal('hide');

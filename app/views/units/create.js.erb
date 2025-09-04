@@ -1,11 +1,11 @@
 $('#unit_list').find('tbody').append('<tr id="unit_<%= @unit.id.to_s %>"></tr>');
 $('#unit_<%= @unit.id %>').html('<%= j render "row", unit: @unit  %>');
 
-$('.unit_<%= @unit.id %>').addClass( "table-highlight", callback )
+$('#unit_<%= @unit.id %>').addClass( "table-highlight", callback )
 
 function callback() {
   setTimeout(function() {
-    $('.unit_<%= @unit.id %>').removeClass( "table-highlight" );
+    $('#unit_<%= @unit.id %>').removeClass( "table-highlight" );
   }, 500 );
 }
 

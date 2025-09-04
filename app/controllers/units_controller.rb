@@ -71,7 +71,7 @@ class UnitsController < ApplicationController
     faction_ids = params[:faction_ids]
     units = params[:units]
 
-    created_units = []
+    @created_units = []
     failed_units = []
 
     units.each do |unit_data|
@@ -89,7 +89,7 @@ class UnitsController < ApplicationController
       unit.faction_ids = faction_ids if faction_ids.present?
 
       if unit.valid?
-        created_units << unit
+        @created_units << unit
       else
         failed_units << { unit: unit, errors: unit.errors.full_messages }
       end
@@ -102,16 +102,16 @@ class UnitsController < ApplicationController
         if failed_units.any?
           flash.now[:danger] = t(
             'messages.multiple.error',
-            model: Unit.model_name.human(count: created_units.count),
+            model: Unit.model_name.human(count: @created_units.count),
             failed: ("<br>" + failed_units.map { |u| "Unidad inválida: #{u[:errors].join(', ')}" }.join("<br>")).html_safe
           )
           format.js
         else
           Unit.transaction do
-            created_units.each(&:save!)
+            @created_units.each(&:save!)
           end
 
-          flash[:success] = t('messages.multiple.success', model: Unit.model_name.human(:count => created_units.count), succeed: ("<br>" + created_units.pluck(:name).join("<br>")).html_safe)
+          flash[:success] = t('messages.multiple.success', model: Unit.model_name.human(:count => @created_units.count), succeed: ("<br>" + @created_units.pluck(:name).join("<br>")).html_safe)
           format.js
         end
       end
