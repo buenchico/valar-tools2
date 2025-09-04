@@ -2,11 +2,52 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content bg-dark text-light">
       <div class="modal-header">
-        <h5 class="modal-title w-100" id="Title"></h5>
+        <h5 class="modal-title w-100" id="Title"><%= t('helpers.submit.create', model: Army.model_name.human) %></h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        TEST
+        <div class="container-fluid">
+          <%= form_for :unit, url: destroy_multiple_units_path, method: :put do | form | %>
+            <div class="alert alert-warning">
+              <div>Las siguientes unidades serán añadidas a un ejército</div>
+              <ul>
+                <% units.each do | unit | %>
+                  <%= hidden_field_tag "unit_ids[]", unit.id %>
+                  <li>
+                    <%= render 'units/one_line', unit: unit %>
+                  </li>
+                <% end %>
+              <ul>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label t('activerecord.models.army.one'), class: 'input-group-text' %>
+              <%= form.select :faction_ids,
+                options_for_select(
+                  @armies.pluck(:name, :id).map { |name, id|
+                    [
+                      id,
+                      { "data-content": name
+                    }
+                    ]
+                  }.unshift([{"data-content": "Nuevo ejército"},"NEW"]),
+                  selected: "NEW"
+                ),
+                { },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                multiple: false,
+                data: {
+                  "live-search": "true"
+                }
+              %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.validate') %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.submit t('helpers.submit.update', model: Army.model_name.human), class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

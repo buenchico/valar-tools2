@@ -13,8 +13,8 @@
   <div class="col">
     <%= form_tag(edit_multiple_units_path, method: :get, id: 'edit_multiple_units', remote: true) do %>
       <%= hidden_field_tag 'unit_ids', '', id: 'units_ids_field' %>
-      <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button mass-copy", disabled: true, data: {checkbox: "units" }) do %>
-        <i class="bi bi-clipboard"></i> <%= t('helpers.action.copy') %>
+      <%= button_tag(type: 'submit', class: "btn btn-success btn-sm mass_edit_button", disabled: true, value: "create_army", data: {checkbox: "units" }) do %>
+        <i class="bi bi-exclude"></i> <%= t('helpers.submit.create', model: Army.model_name.human) %>
       <% end %>
       <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "edit", data: {checkbox: "units" }) do %>
         <i class="bi bi-pencil-square"></i> <%= t('helpers.action.mass_edit') %>
