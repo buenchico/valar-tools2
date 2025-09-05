@@ -6,109 +6,100 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <% if @army_type.length > 1 %>
-          <div class="container-fluid">
-            <div class="alert alert-danger">
-              <div>Por favor, escoge solo unidades del mismo tipo.</div>
-              <div>Tipos presentes: <%= @army_type %>
+        <div class="container-fluid">
+          <%= form_for :unit, url: update_multiple_units_path, remote: true, method: :put do | form | %>
+            <div class="alert alert-warning">
+              <div>Las siguientes unidades serán actualizadas</div>
+              <ul>
+                <% units.each do | unit | %>
+                  <%= hidden_field_tag "unit_ids[]", unit.id %>
+                  <li>
+                    <%= render 'units/one_line', unit: unit %>
+                  </li>
+                <% end %>
+              <ul>
             </div>
-          </div>
-        <% else %>
-          <div class="container-fluid">
-            <%= form_for :unit, url: update_multiple_units_path, remote: true, method: :put do | form | %>
-              <div class="alert alert-warning">
-                <div>Las siguientes unidades serán actualizadas</div>
-                <ul>
-                  <% units.each do | unit | %>
-                    <%= hidden_field_tag "unit_ids[]", unit.id %>
-                    <li>
-                      <%= render 'units/one_line', unit: unit %>
-                    </li>
-                  <% end %>
-                <ul>
-              </div>
-              <div class="input-group mt-3">
-                <%= form.label t('activerecord.attributes.unit.factions'), class: 'input-group-text' %>
-                <%= form.select :faction_ids,
-                  options_for_select(
-                    @factions.pluck(:long_name, :id).map { |name, id|
-                      [
-                        id,
-                        { "data-content": name
-                      }
-                      ]
-                    }.unshift([{"data-content": "Quitar todas las facciones"},"CLEAR"]),
-                    selected: nil
-                  ),
-                  { include_blank: true },
-                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                  multiple: true,
-                  data: { noneSelectedText: ' '}
-                %>
-              </div>
-              <div class="input-group mt-3">
-                <%= form.label :strength, t('activerecord.attributes.unit.strength'), class: 'input-group-text w-25' %>
-                <%= form.number_field :strength_sum, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.sum'), step: 10, min: -200, max: 200 %>
-                <%= form.number_field :strength_change, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.change'), step: 10, min: 50, max: 200 %>
-              </div>
-              <div class="input-group mt-3">
-                <%= form.label :strength_indirect, t('activerecord.attributes.unit.strength_indirect'), class: 'input-group-text w-25' %>
-                <%= form.number_field :strength_indirect_sum, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.sum'), step: 10, min: -200, max: 200 %>
-                <%= form.number_field :strength_indirect_change, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.change'), step: 10, min: 50, max: 200 %>
-              </div>
-              <div class="input-group mt-3">
-                <%= form.label :hp, t('activerecord.attributes.unit.hp'),class: 'input-group-text w-25' %>
-                <%= form.number_field :hp_sum, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.sum'), step: 10, min: -200, max: 200 %>
-                <%= form.number_field :hp_change, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.change'), step: 10, min: 50, max: 200 %>
-              </div>
-              <div class="input-group mt-3">
-                <%= form.label :tags, t('activerecord.attributes.unit.tags'), class: 'input-group-text' %>
-                <%= form.select :tags_add,
-                  options_for_select(
-                    @unit_tags.map { | tag |
-                      [
-                        tag[0],
-                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
-                      }
-                      ]
+            <div class="input-group mt-3">
+              <%= form.label t('activerecord.attributes.unit.factions'), class: 'input-group-text' %>
+              <%= form.select :faction_ids,
+                options_for_select(
+                  @factions.pluck(:long_name, :id).map { |name, id|
+                    [
+                      id,
+                      { "data-content": name
                     }
-                  ),
-                  { include_blank: false },
-                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                  title: t('helpers.placeholder.add'),
-                  multiple: true,
-                  data: { }
-                %>
-                <%= form.select :tags_remove,
-                  options_for_select(
-                    @unit_tags.map { | tag |
-                      [
-                        tag[0],
-                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
-                      }
-                      ]
+                    ]
+                  }.unshift([{"data-content": "Quitar todas las facciones"},"CLEAR"]),
+                  selected: nil
+                ),
+                { include_blank: true },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                multiple: true,
+                data: { noneSelectedText: ' '}
+              %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :strength, t('activerecord.attributes.unit.strength'), class: 'input-group-text w-25' %>
+              <%= form.number_field :strength_sum, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.sum'), step: 10, min: -200, max: 200 %>
+              <%= form.number_field :strength_change, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.change'), step: 10, min: 50, max: 200 %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :strength_indirect, t('activerecord.attributes.unit.strength_indirect'), class: 'input-group-text w-25' %>
+              <%= form.number_field :strength_indirect_sum, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.sum'), step: 10, min: -200, max: 200 %>
+              <%= form.number_field :strength_indirect_change, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.change'), step: 10, min: 50, max: 200 %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :hp, t('activerecord.attributes.unit.hp'),class: 'input-group-text w-25' %>
+              <%= form.number_field :hp_sum, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.sum'), step: 10, min: -200, max: 200 %>
+              <%= form.number_field :hp_change, class: 'form-control form-exclusive', placeholder: t('helpers.placeholder.change'), step: 10, min: 50, max: 200 %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :tags, t('activerecord.attributes.unit.tags'), class: 'input-group-text' %>
+              <%= form.select :tags_add,
+                options_for_select(
+                  @unit_tags.map { | tag |
+                    [
+                      tag[0],
+                      { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
                     }
-                  ),
-                  { include_blank: false },
-                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                  title: t('helpers.placeholder.remove'),
-                  multiple: true,
-                  data: { }
-                %>
-              </div>
-              <div class="input-group mt-3">
-                <%= form.label :visible, t('activerecord.attributes.unit.visible'), class: 'input-group-text' %>
-                <%= form.select :visible, [[""],["Invisible", "CLEAR"],["Visible", true]], {}, class: 'form-select' %>
-              </div>
-              <div class="input-group mt-3">
-                <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.validate') %>
-              </div>
-              <div class="input-group mt-3">
-                <%= form.submit t('helpers.submit.update_multiple', model: t('activerecord.models.unit', count: 2)), class: 'btn btn-primary' %>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
+                    ]
+                  }
+                ),
+                { include_blank: false },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                title: t('helpers.placeholder.add'),
+                multiple: true,
+                data: { }
+              %>
+              <%= form.select :tags_remove,
+                options_for_select(
+                  @unit_tags.map { | tag |
+                    [
+                      tag[0],
+                      { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                    }
+                    ]
+                  }
+                ),
+                { include_blank: false },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                title: t('helpers.placeholder.remove'),
+                multiple: true,
+                data: { }
+              %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :visible, t('activerecord.attributes.unit.visible'), class: 'input-group-text' %>
+              <%= form.select :visible, [[""],["Invisible", "CLEAR"],["Visible", true]], {}, class: 'form-select' %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.validate') %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.submit t('helpers.submit.update_multiple', model: t('activerecord.models.unit', count: 2)), class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

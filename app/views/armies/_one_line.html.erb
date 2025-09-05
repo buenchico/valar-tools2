@@ -1,2 +1,4 @@
-
-<%= render 'armies/traits', unit: unit %>
+<i class="bi bi-<%= army.icon %> text-<%= army.colour %>"></i>
+<%= army.name %>
+<%= render 'armies/traits', army: army %>
+<%= army.factions.pluck(:long_name).join(", ") %>

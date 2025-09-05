@@ -66,7 +66,8 @@ class UnitsController < ApplicationController
           format.js { render 'layouts/error', locals: { thing: @unit.name.strip + " (id: " + @unit.id.to_s + ")", method: 'delete' } }
         end
       else
-        format.html { redirect_to armies_url, danger: t('messages.validation') }
+        flash.now[:danger] = t('messages.validation')
+	      format.js { render 'layouts/error' }
       end
     end
   end
@@ -101,7 +102,8 @@ class UnitsController < ApplicationController
 
     respond_to do |format|
       if params[:confirm] != 'VALIDATE'
-        format.html { redirect_to armies_url, danger: t('messages.validation') }
+        flash.now[:danger] = t('messages.validation')
+      	format.js { render 'layouts/error' }
       else
         if failed_units.any?
           flash.now[:danger] = t(

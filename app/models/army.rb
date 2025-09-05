@@ -2,11 +2,12 @@ class Army < ApplicationRecord
   include PgSearch::Model
   multisearchable against: [:name, :position, :notes, :search]
 
-  has_many :units, dependent: :destroy
+  has_many :units, dependent: :nullify
   accepts_nested_attributes_for :units, allow_destroy: true
   has_and_belongs_to_many :factions
 
   validate :must_have_at_least_one_unit
+  validates :name, presence: true, uniqueness: true
 
   def search
    nil
@@ -69,22 +70,26 @@ class Army < ApplicationRecord
   end
 
   def families
-    self.units.includes(:family).map(&:family).compact.uniq
+    self.units.includes(:family).map(&:family).compact.uniq.sort_by(&:name)
   end
 
   def factions
-    self.units.includes(:factions).flat_map(&:factions).uniq
+    self.units.includes(:factions).flat_map(&:factions).uniq.sort_by(&:name)
   end
 
   def composition
-    self.units.group_by(&:unit_type).transform_values do |units|
-    {
-      count: units.sum(&:count),
-      icon: units.first.icon,
-      colour: units.first.colour,
-      title: units.first.title
-    }
-    end
+    self.units
+      .group_by(&:unit_type)
+      .sort_by { |unit_type, _| unit_type }
+      .to_h
+      .transform_values do |units|
+        {
+          count: units.sum(&:count),
+          icon: units.first.icon,
+          colour: units.first.colour,
+          title: units.first.title
+        }
+      end
   end
 
   def unit_tags
@@ -93,6 +98,14 @@ class Army < ApplicationRecord
 
   def army_type
     units&.first&.army_type
+  end
+
+  def icon
+    units&.first&.army_icon
+  end
+
+  def colour
+    units&.first&.colour
   end
 
 private

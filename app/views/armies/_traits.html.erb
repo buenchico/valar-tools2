@@ -1,13 +1,17 @@
-<span class="badge rounded-pill pill-tags pill-tags-text bg-byzantium %>">
-  <i class="bi bi-<%= @options_armies["general"]["xp"]["icon"] %>"></i>
-  <%= @options_armies["general"]["xp"]["name"] %>
-  <%= number_to_modifier(percent_to_trait(army.xp)) %>
-</span>
-<span class="badge rounded-pill pill-tags pill-tags-text bg-secondary %>">
-  <i class="bi bi-<%= @options_armies["general"]["morale"]["icon"] %>"></i>
-  <%= @options_armies["general"]["morale"]["name"] %>
-  <%= number_to_modifier(percent_to_trait(army.morale)) %>
-</span>
+<% if percent_to_trait(army.xp) != 0 %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-byzantium %>">
+    <i class="bi bi-<%= @options_armies["general"]["xp"]["icon"] %>"></i>
+    <%= @options_armies["general"]["xp"]["name"] %>
+    <%= number_to_modifier(percent_to_trait(army.xp)) %>
+  </span>
+<% end %>
+<% if percent_to_trait(army.morale) != 0 %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-secondary %>">
+    <i class="bi bi-<%= @options_armies["general"]["morale"]["icon"] %>"></i>
+    <%= @options_armies["general"]["morale"]["name"] %>
+    <%= number_to_modifier(percent_to_trait(army.morale)) %>
+  </span>
+<% end %>
 
 <% army.composition.each do | key, unit | %>
   <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= unit[:colour] %>">

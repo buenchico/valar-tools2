@@ -12,8 +12,6 @@ $('#step-users').click(function() {
     uncheckedFactionIds.push(factionId); // Add the faction_id to the array
   });
 
-  console.log(uncheckedFactionIds)
-
   $('.select-factions').each(function() {
     var select = $(this);
     uncheckedFactionIds.forEach(function(id) {

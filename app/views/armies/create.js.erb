@@ -1,0 +1,22 @@
+$('#army_list').find('tbody').append('<tr id="army_<%= @army.id.to_s %>"></tr>');
+$('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
+
+$('#army_<%= @army.id %>').addClass("table-highlight", callback )
+
+console.log('<%= @army.id %>')
+
+function callback() {
+  setTimeout(function() {
+    $('#army_<%= @army.id %>').removeClass( "table-highlight" );
+  }, 500 );
+}
+
+<% @unit_ids.each do |unit_id| %>
+  $('#unit_' + <%= unit_id %>).remove();
+<% end %>
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+
+$(".modal").modal('hide');
+
+initPopovers();

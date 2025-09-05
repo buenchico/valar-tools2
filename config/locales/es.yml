@@ -144,6 +144,7 @@ es:
         family_id: "Familia"
         visible: "Visible"
         tags: "Rasgos"
+        men: "Hombres"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"

@@ -7,6 +7,7 @@
 </td>
 
 <td>
+  <i class="bi bi-<%= army.icon %> text-<%= army.colour %>"></i>
   <%= army.name %>
 </td>
 
@@ -35,3 +36,9 @@
     <%= link_to '', delete_army_path(army), remote: true, class: 'bi bi-trash text-white' %>
   </td>
 <% end %>
+<td>
+  <%= link_to '', army_path(army), remote: true, class: 'bi bi-eye text-white' %>
+</td>
+<td>
+  <%= link_to '', edit_notes_army_path(army), remote: true, class: army.notes.blank? ? 'bi bi-sticky text-white' : 'bi bi-sticky-fill text-warning' %>
+</td>

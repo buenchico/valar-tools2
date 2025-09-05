@@ -1,0 +1,80 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title w-100" id="Title"><%= army&.name %></h5>
+        <% if army.id %>
+          <div class="w-100">
+            <%= link_to '', send("army_path", army.id), remote: true, class: 'btn-Close bi bi-eye-fill text-white float-end' %>
+          </div>
+        <% end %>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with model: army, local: false do |form| %>
+          <% if @current_user.is_master? %>
+            <div class="input-group mb-3">
+              <%= form.label :name, class: 'input-group-text' %>
+              <%= form.text_field :name, class: 'form-control' %>
+            </div>
+
+            <div class="input-group mb-3">
+              <%= form.label :status, class: 'input-group-text' %>
+              <%= form.select :status, @army_status.map { |k,v| [v["name"], k]}, {}, class: 'form-select' %>
+            </div>
+            <div class="input-group mb-3">
+              <%= form.label :xp, class: 'input-group-text' %>
+              <%= form.number_field :xp, class: 'form-control text-end', step: 10, min: 0 %>
+
+              <%= form.label :morale, class: 'input-group-text' %>
+              <%= form.number_field :morale, class: 'form-control text-end', step: 10, min: 0 %>
+            </div>
+
+            <% if @army_tags.present? %>
+              <div class="input-group mb-3">
+                <%= form.label :tags, class: 'input-group-text' %>
+                <%= form.select :tags,
+                  options_for_select(
+                    @army_tags.map { | tag |
+                      [
+                        tag[0],
+                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                      }
+                      ]
+                    },
+                    selected: army.tags
+                  ),
+                  { include_blank: false },
+                  class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  title: t('helpers.select.no_tags'),
+                  multiple: true,
+                  data: { }
+                %>
+              </div>
+            <% end %>
+          <% end %>
+
+          <div class="input-group mb-3">
+            <%= form.label :position, class: 'input-group-text' %>
+            <%= form.text_field :position, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path} %>
+          </div>
+          <div class="input-group mb-3">
+            <%= form.label :notes, class: 'input-group-text' %>
+            <%= form.text_area :notes, class: 'form-control' %>
+          </div>
+
+          <div class="input-group mb-3">
+            <%= form.label :visible, class: 'input-group-text' %>
+            <div class="form-check form-switch switch-group fs-2">
+              <%= form.check_box :visible, class: 'form-check-input switch-group h-100' %>
+            </div>
+          </div>
+
+          <div class="input-group mb-3">
+            <%= form.submit nil, class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

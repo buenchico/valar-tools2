@@ -17,9 +17,9 @@
   </div>
 </div>
 
-<div class="table-responsive">
-  <table id="armieslist" class="table table-dark table-striped table-borderless table-hover table-sm sortable">
-    <caption>Lista de unidades</caption>
+<div class="table-responsive text-light">
+  <table id="army_list" class="table table-dark table-striped table-borderless table-hover table-sm sortable">
+    <caption class="text-light">Lista de ejércitos</caption>
     <thead>
       <tr>
         <th data-sorter="false" data-filter="checkbox" scope="col" style="width: 30px">
@@ -39,7 +39,7 @@
         </th>
         <% if @current_user&.is_master? %>
           <th scope="col" class="text-center"><%= t('activerecord.attributes.family.visible') %></th>
-          <th scope="col" colspan="3" data-sorter="false"></th>
+          <th scope="col" colspan="<%= @current_user.is_master? ? 4 : 2 %>" data-sorter="false"></th>
         <% end %>
       </tr>
     </thead>

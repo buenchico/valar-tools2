@@ -1,6 +1,6 @@
 class ArmiesController < ApplicationController
   before_action :set_tool
-  before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show]
+  before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show, :delete]
   before_action :set_options
   before_action :set_factions, only: [:index, :new, :edit]
 
@@ -10,16 +10,18 @@ class ArmiesController < ApplicationController
 
     if @current_user&.is_master?
       if @faction
-        @armies = @faction.armies.where(visible: true).order(:id)
-        @units = @faction.units.where(visible: true, army_id: nil).order(:id)
+        armies, units = get_armies([@faction.id], ["true"])
+        @armies = armies.sort_by(&:army_type)
+        @units = units.where(army: nil).sort_by(&:army_type).sort_by(&:army_type)
       else
         @armies = nil
         @units = nil
       end
     else
       @faction = @current_user.faction
-      @armies = @faction.armies.where(visible: true).order(:id)
-      @units = @faction.units.where(visible: true, army_id: nil).order(:id)
+      armies, units = get_armies([@faction.id], ["true"])
+      @armies = armies.sort_by(&:army_type)
+      @units = units.where(army: nil).sort_by(&:army_type).sort_by(&:army_type)
     end
   end
 
@@ -31,20 +33,45 @@ class ArmiesController < ApplicationController
     @units = units.where(army: nil)
   end
 
+  def delete
+  end
+
   def create
+    @army = Army.new(army_params)
+
+    if params[:source] == 'units'
+      @unit_ids = params["unit_ids"]
+      army_params = self.army_params # This is needed to be able to redefine army_params later
+      army_params = army_params.merge(unit_ids: @unit_ids)
+    end
+
+    respond_to do |format|
+      if params[:confirm].nil? || params[:confirm] == 'VALIDATE'
+        if @army.update(army_params)
+          flash.now[:success] = t('messages.success.create', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+          format.js
+        else
+          flash.now[:danger] = @army.errors.to_hash
+          format.js { render 'layouts/error', locals: { thing: @army.name.strip + " (id: " + @army.id.to_s + ")", method: 'create' } }
+        end
+      else
+        flash.now[:danger] = t('messages.validation')
+        format.js { render 'layouts/error' }
+      end
+    end
   end
 
   def update
     if params[:source] == 'units'
-      new_unit_ids = params["unit_ids"]
+      @new_unit_ids = params["unit_ids"]
       old_unit_ids = @army.unit_ids
-      unit_ids = new_unit_ids.concat(old_unit_ids)
+      unit_ids = @new_unit_ids.concat(old_unit_ids)
       army_params = self.army_params # This is needed to be able to redefine army_params later
       army_params = army_params.merge(unit_ids: unit_ids)
     end
 
     respond_to do |format|
-      if params[:confirm].nil? || params[:confirm] == 'CONFIRM'
+      if params[:confirm].nil? || params[:confirm] == 'VALIDATE'
         if @army.update(army_params)
           flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
           format.js
@@ -53,7 +80,25 @@ class ArmiesController < ApplicationController
           format.js { render 'layouts/error', locals: { thing: @army.name.strip + " (id: " + @army.id.to_s + ")", method: 'update' } }
         end
       else
-        format.html { redirect_to armies_url, danger: t('messages.validation') }
+        flash.now[:danger] = t('messages.validation')
+        format.js { render 'layouts/error' }
+      end
+    end
+  end
+
+  def destroy
+    respond_to do |format|
+      if params[:confirm].nil? || params[:confirm] == 'DELETE'
+        if @army.destroy
+          flash.now[:danger] = t('messages.success.destroy', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+          format.js
+        else
+          flash.now[:danger] = @army.errors.to_hash
+          format.js { render 'layouts/error', locals: { thing: @army.name.strip + " (id: " + @army.id.to_s + ")", method: 'delete' } }
+        end
+      else
+        flash.now[:danger] = t('messages.validation')
+	      format.js { render 'layouts/error' }
       end
     end
   end
@@ -74,7 +119,6 @@ private
 
   def get_armies(factions, visibility)
     master = Faction.find_by(name: 'master')
-
     if factions.count == 1
       faction = Faction.find_by(id: factions)
     end
@@ -83,7 +127,11 @@ private
       armies = Army.all.where(visible: visibility)
       units = Unit.all.where(visible: visibility)
     else
-      armies = Army.joins(:factions).where(visible: visibility).where(factions: { id: factions })
+      armies = Army
+        .joins(units: :factions)
+        .where(visible: visibility)
+        .where(factions: { id: factions })
+        .distinct
       units = Unit.joins(:factions).where(visible: visibility).where(factions: { id: factions })
     end
 

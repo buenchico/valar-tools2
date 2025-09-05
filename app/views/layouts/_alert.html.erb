@@ -1,9 +1,10 @@
 <% method = (method || "base" ) %>
 <% thing = (thing || nil ) %>
+<% message_type = (message_type || "danger") %>
 
 <% flash.each do |message_type, message| %>
-  <% if message.class == Hash %>
-    <div class="container mt-3 mx-auto text-center alert alert-danger">
+  <div class="container mt-3 mx-auto text-center alert alert-<%= message_type %>">
+    <% if message.class == Hash %>
       <h2><%= t("messages.error.#{method}", thing: thing) %></h2>
       <ul class="list-unstyled text-left">
       <% message.values.each do |msg| %>
@@ -12,10 +13,9 @@
         <% end %>
       <% end %>
       </ul>
-    </div>
-  <% else %>
-    <div class="container mt-3 mx-auto text-center alert alert-<%= message_type %>" style="">
+    <% else %>
       <%= message.html_safe %>
-    </div>
-  <% end %>
+    <% end %>
+    <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
 <% end %>

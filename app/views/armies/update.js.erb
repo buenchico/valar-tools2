@@ -1,0 +1,23 @@
+const checkbox_status = $('#id_<%= @army.id %>').is(":checked");
+
+$('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
+
+$('#army_<%= @army.id %>').addClass("table-highlight", callback )
+
+function callback() {
+  setTimeout(function() {
+    $('#army_<%= @army.id %>').removeClass( "table-highlight" );
+  }, 500 );
+}
+
+<% @new_unit_ids.each do |unit_id| %>
+  $('#unit_' + <%= unit_id %>).remove();
+<% end %>
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+
+$("#id_<%= @army.id %>").prop("checked", checkbox_status);
+
+$(".modal").modal('hide');
+
+initPopovers();

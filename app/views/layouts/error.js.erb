@@ -1,2 +1,6 @@
+<% method = (method || "base" ) %>
+<% thing = (thing || nil ) %>
+
 $("#flash").html('<%= j render partial: "layouts/alert", locals: { thing: thing, method: method } %>');
 $(".modal").modal('hide');
+$('html, body').scrollTop(0);

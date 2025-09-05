@@ -7,7 +7,15 @@
       </div>
       <div class="modal-body">
         <div class="container-fluid">
-          <%= form_with model: @army, id: "army_form", local: false do | form | %>
+          <% if @army_type.length > 1 %>
+            <div class="container-fluid">
+              <div class="alert alert-danger">
+                <div>Por favor, escoge solo unidades del mismo tipo.</div>
+                <div>Tipos presentes: <%= @army_type %>
+              </div>
+            </div>
+          <% else %>
+            <%= form_with model: @army, id: "army_form", local: false do | form | %>
             <div class="alert alert-warning">
               <div>Las siguientes unidades serán añadidas a un ejército</div>
               <ul>
@@ -23,20 +31,32 @@
               <%= label_tag :army_id, t('activerecord.models.army.one'), class: 'input-group-text' %>
               <%= select_tag :army_id,
                 options_for_select(
-                  @armies.pluck(:name, :id, :xp, :morale, :tags, :position, :notes, :status).map { |name, id, xp, morale, tags, position, notes, status|
+                  [["Nuevo ejército", nil, { "data-content": "Nuevo ejército" }]] +
+                  @armies.map do |army|
+                    factions = army.factions.map(&:name).join(", ") # assuming army.factions returns an array of Faction objects
                     [
-                      id,
-                      { "data-content": "<span id='army_data_#{id}' data-name='#{name}' data-xp='#{xp}' data-morale='#{morale}' data-tags='#{tags}' data-position='#{position}' data-status='#{status}' data-notes='#{notes}'>#{name}</span>".html_safe}
+                      army.name,
+                      army.id,
+                      {
+                        "data-content": "<span id='army_data_#{army.id}'
+                          data-name='#{army.name}'
+                          data-xp='#{army.xp}'
+                          data-morale='#{army.morale}'
+                          data-tags='#{army.tags}'
+                          data-position='#{army.position}'
+                          data-status='#{army.status}'
+                          data-notes='#{army.notes}'>
+                          #{army.name} #{army.factions.nil? ? '' : '(' + army&.factions&.pluck(:long_name)&.join(", ") + ')'}
+                        </span>".html_safe
+                      }
                     ]
-                  }.unshift([{"data-content": "Nuevo ejército"}, nil]),
+                  end,
                   selected: nil
                 ),
                 id: "army_select",
                 class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
                 multiple: false,
-                data: {
-                  "live-search": "true"
-                }
+                data: { "live-search": "true" }
               %>
             </div>
             <div class="input-group mt-3">
@@ -89,6 +109,7 @@
               <%= hidden_field_tag "source", controller_name %>
               <%= form.submit t('helpers.submit.update', model: Army.model_name.human), class: 'btn btn-primary' %>
             </div>
+          <% end %>
           <% end %>
         </div>
       </div>
