@@ -19,7 +19,7 @@ class Unit < ApplicationRecord
     set_options if @options_armies.nil?
     unit_strength = @units.fetch(self.unit_type, {}).fetch("str", 0)
 
-    return ((self.count.to_i * unit_strength.to_i * (self.strength_mod / 100.0)) / @army_scale).round(2)
+    return ((self.count.to_i * unit_strength.to_i * (self.strength_mod.to_f / 100)) / @army_scale).round(2)
   end
 
   def strength_indirect
@@ -27,7 +27,7 @@ class Unit < ApplicationRecord
     unit_data = @units[self.unit_type] || {}
     unit_strength = unit_data["str_indirect"] || unit_data["str"] || 0
 
-    return ((self.count.to_i * unit_strength.to_i * (self.strength_indirect_mod / 100.0)) / @army_scale).round(2)
+    return ((self.count.to_i * unit_strength.to_i * (self.strength_indirect_mod.to_f / 100)) / @army_scale).round(2)
   end
 
   def men

@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   get 'armies/show_armies', to: 'armies#show_armies', as: 'show_armies'
   #get 'armies/get_discourse_armies/:faction_id/:group', to: 'armies#get_discourse_armies'
   #post 'armies/post_discourse_armies', to: 'armies#post_discourse_armies'
+  get 'armies/:id/delete', to: 'armies#delete', as: 'delete_army'
   resources :armies
 
   get 'units/new_multiple', to: 'units#new_multiple', as: 'new_units'

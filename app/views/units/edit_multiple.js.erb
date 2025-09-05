@@ -13,20 +13,23 @@ $('#content').html("<%= j render partial: @template, locals: { units: @units } %
     const tags = tempElement.data('tags');
     const position = tempElement.data('position');
     const notes = tempElement.data('notes');
+    const status = tempElement.data('status');
     console.log(tags)
     $('#army_form').attr('action', '/armies/' + selectedValue);
     if (selectedValue === '') {
       $('#army_form').attr('method', 'post');
       $('#army_name').prop('disabled', false);
-      $('#army_xp').prop('disabled', false);
-      $('#army_morale').prop('disabled', false);
+      $('#army_xp').prop('readonly', false);
+      $('#army_morale').prop('readonly', false);
       $('#army_tags').prop('disabled', false);
+      $('#army_status').prop('disabled', false);
     } else {
       $('#army_form').attr('method', 'patch');
       $('#army_name').prop('disabled', true);
-      $('#army_xp').prop('disabled', true);
-      $('#army_morale').prop('disabled', true);
+      $('#army_xp').prop('readonly', true);
+      $('#army_morale').prop('readonly', true);
       $('#army_tags').prop('disabled', true);
+      $('#army_status').prop('disabled', true);
     }
     $('#army_name').val(name);
     $('#army_xp').val(xp - 10);
@@ -34,6 +37,7 @@ $('#content').html("<%= j render partial: @template, locals: { units: @units } %
     $('#army_position').val(position);
     $('#army_notes').val(notes);
     $('#army_tags').val(tags).selectpicker('refresh');
+    $('#army_status').val(status);
   });
 
 <% end %>

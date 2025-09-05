@@ -20,18 +20,17 @@
               <ul>
             </div>
             <div class="input-group mt-3">
-              <%= form.label t('activerecord.models.army.one'), class: 'input-group-text' %>
-              <%= form.select :army_id,
+              <%= label_tag :army_id, t('activerecord.models.army.one'), class: 'input-group-text' %>
+              <%= select_tag :army_id,
                 options_for_select(
-                  @armies.pluck(:name, :id, :xp, :morale, :tags, :position, :notes).map { |name, id, xp, morale, tags, position, notes|
+                  @armies.pluck(:name, :id, :xp, :morale, :tags, :position, :notes, :status).map { |name, id, xp, morale, tags, position, notes, status|
                     [
                       id,
-                      { "data-content": "<span id='army_data_#{id}' data-name='#{name}' data-xp='#{xp}' data-morale='#{morale}' data-tags='#{tags}' data-position='#{position}' data-notes='#{notes}'>#{name}</span>".html_safe}
+                      { "data-content": "<span id='army_data_#{id}' data-name='#{name}' data-xp='#{xp}' data-morale='#{morale}' data-tags='#{tags}' data-position='#{position}' data-status='#{status}' data-notes='#{notes}'>#{name}</span>".html_safe}
                     ]
                   }.unshift([{"data-content": "Nuevo ejército"}, nil]),
                   selected: nil
                 ),
-                { },
                 id: "army_select",
                 class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
                 multiple: false,
@@ -43,6 +42,10 @@
             <div class="input-group mt-3">
               <%= form.label :name, class: 'input-group-text' %>
               <%= form.text_field :name, class: "form-control" %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :status, class: 'input-group-text' %>
+              <%= form.select :status, @army_status.map { |k,v| [v["name"], k]}, {}, class: 'form-select' %>
             </div>
             <div class="input-group mt-3">
               <%= form.label :xp, class: 'input-group-text' %>
@@ -80,9 +83,10 @@
               <%= form.text_area :notes, class: 'form-control' %>
             </div>
             <div class="input-group ms-1 mt-3">
-              <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.validate') %>
+              <%= text_field_tag :confirm, nil, class: "form-control", placeholder: t('helpers.validate.validate') %>
             </div>
             <div class="input-group mt-3">
+              <%= hidden_field_tag "source", controller_name %>
               <%= form.submit t('helpers.submit.update', model: Army.model_name.human), class: 'btn btn-primary' %>
             </div>
           <% end %>

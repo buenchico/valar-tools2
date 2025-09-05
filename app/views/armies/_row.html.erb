@@ -1,0 +1,37 @@
+<td>
+  <%= check_box_tag "army_ids[]", army.id, false, id: 'id_army_' + army.id.to_s, class: "checkbox_selectable option-input", data: {checkbox: "armies" } %>
+</td>
+
+<td>
+  <%= army.strength %>
+</td>
+
+<td>
+  <%= army.name %>
+</td>
+
+<td>
+  <%= army.status %>
+</td>
+
+<td>
+  <%= render 'traits', army: army %>
+</td>
+
+<% if @current_user&.is_master? %>
+  <td class="text-center">
+    <% if army.visible == true %>
+      <%= army.factions.pluck(:long_name).join(", ") %>
+    <% else %>
+      <i class="bi bi-x-lg text-danger"></i>
+    <% end %>
+  </td>
+
+  <td>
+    <%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %>
+  </td>
+
+  <td>
+    <%= link_to '', delete_army_path(army), remote: true, class: 'bi bi-trash text-white' %>
+  </td>
+<% end %>

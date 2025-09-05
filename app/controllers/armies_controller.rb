@@ -27,16 +27,42 @@ class ArmiesController < ApplicationController
     active_factions = JSON.parse(params[:active_factions])
     active_visibility = JSON.parse(params[:active_visibility])
 
-    @armies, @units = get_armies(active_factions, active_visibility)
+    @armies, units = get_armies(active_factions, active_visibility)
+    @units = units.where(army: nil)
   end
 
   def create
   end
 
   def update
+    if params[:source] == 'units'
+      new_unit_ids = params["unit_ids"]
+      old_unit_ids = @army.unit_ids
+      unit_ids = new_unit_ids.concat(old_unit_ids)
+      army_params = self.army_params # This is needed to be able to redefine army_params later
+      army_params = army_params.merge(unit_ids: unit_ids)
+    end
+
+    respond_to do |format|
+      if params[:confirm].nil? || params[:confirm] == 'CONFIRM'
+        if @army.update(army_params)
+          flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+          format.js
+        else
+          flash.now[:danger] = @unit.errors.to_hash
+          format.js { render 'layouts/error', locals: { thing: @army.name.strip + " (id: " + @army.id.to_s + ")", method: 'update' } }
+        end
+      else
+        format.html { redirect_to armies_url, danger: t('messages.validation') }
+      end
+    end
   end
 
 private
+  def set_army
+    @army = Army.find(params[:id])
+  end
+
   def set_options
     @options_armies = get_options(@tool)
     if @options_armies.blank?
@@ -62,5 +88,15 @@ private
     end
 
     return [armies, units]
+  end
+
+  def army_params
+    params.require(:army).permit(
+      :name, :status, :position,
+      :visible, :notes, :xp, :morale, tags: [],
+      units_attributes: [:id, :_destroy]
+    ).tap do |whitelisted|
+      whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
+    end
   end
 end
