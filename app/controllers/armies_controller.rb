@@ -5,30 +5,36 @@ class ArmiesController < ApplicationController
   before_action :set_factions, only: [:index, :new, :edit]
 
 
-def index
-  @faction = Faction.find_by(id: params[:faction_id])
+  def index
+    @faction = Faction.find_by(id: params[:faction_id])
 
-  if @current_user&.is_master?
-    if @faction
+    if @current_user&.is_master?
+      if @faction
+        @armies = @faction.armies.where(visible: true).order(:id)
+        @units = @faction.units.where(visible: true, army_id: nil).order(:id)
+      else
+        @armies = nil
+        @units = nil
+      end
+    else
+      @faction = @current_user.faction
       @armies = @faction.armies.where(visible: true).order(:id)
       @units = @faction.units.where(visible: true, army_id: nil).order(:id)
-    else
-      @armies = nil
-      @units = nil
     end
-  else
-    @faction = @current_user.faction
-    @armies = @faction.armies.where(visible: true).order(:id)
-    @units = @faction.units.where(visible: true, army_id: nil).order(:id)
   end
-end
 
-def show_armies
-  active_factions = JSON.parse(params[:active_factions])
-  active_visibility = JSON.parse(params[:active_visibility])
+  def show_armies
+    active_factions = JSON.parse(params[:active_factions])
+    active_visibility = JSON.parse(params[:active_visibility])
 
-  @armies, @units = get_armies(active_factions, active_visibility)
-end
+    @armies, @units = get_armies(active_factions, active_visibility)
+  end
+
+  def create
+  end
+
+  def update
+  end
 
 private
   def set_options

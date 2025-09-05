@@ -2,4 +2,40 @@ $(".modal").modal('hide');
 
 $('#content').html("<%= j render partial: @template, locals: { units: @units } %>");
 
+<% if @template == 'form_create_army_multiple' %>
+  $('#army_select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+    const selectedValue = $(this).val();
+    const selectedOption = $(this).find('option:selected').data('content');
+    const tempElement = $('<div>').html(selectedOption).find('span');
+    const name = tempElement.data('name');
+    const xp = tempElement.data('xp');
+    const morale = tempElement.data('morale');
+    const tags = tempElement.data('tags');
+    const position = tempElement.data('position');
+    const notes = tempElement.data('notes');
+    console.log(tags)
+    $('#army_form').attr('action', '/armies/' + selectedValue);
+    if (selectedValue === '') {
+      $('#army_form').attr('method', 'post');
+      $('#army_name').prop('disabled', false);
+      $('#army_xp').prop('disabled', false);
+      $('#army_morale').prop('disabled', false);
+      $('#army_tags').prop('disabled', false);
+    } else {
+      $('#army_form').attr('method', 'patch');
+      $('#army_name').prop('disabled', true);
+      $('#army_xp').prop('disabled', true);
+      $('#army_morale').prop('disabled', true);
+      $('#army_tags').prop('disabled', true);
+    }
+    $('#army_name').val(name);
+    $('#army_xp').val(xp - 10);
+    $('#army_morale').val(morale - 10);
+    $('#army_position').val(position);
+    $('#army_notes').val(notes);
+    $('#army_tags').val(tags).selectpicker('refresh');
+  });
+
+<% end %>
+
 $('#armyModal').modal('show');

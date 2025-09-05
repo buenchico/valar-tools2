@@ -3,7 +3,7 @@ class UnitsController < ApplicationController
   before_action :set_factions, only: [:new, :edit, :new_multiple, :edit_multiple]
   before_action :set_regions, only: [:new, :edit, :new_multiple]
   before_action :set_unit, only: [:edit, :update, :destroy, :delete]
-  before_action :check_master, only: [:new, :edit, :delete, :edit_multiple, :create, :destroy, :delete, :update_multiple, :destroy_multiple, :create_army]
+  before_action :check_master, only: [:new, :edit, :delete, :edit_multiple, :create, :destroy, :delete, :update_multiple, :destroy_multiple]
   before_action :check_owner, only: [:edit, :edit_notes, :update]
 
   def new
@@ -22,6 +22,7 @@ class UnitsController < ApplicationController
     @units = Unit.where(id: unit_ids).order(:name)
     @army_type = @units.map(&:army_type).uniq
     @armies = Army.includes(:units).select { |army| army.army_type == @army_type[0] }
+    @army = Army.new
     @template = 'form_' + params[:button] + '_multiple'
   end
 

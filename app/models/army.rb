@@ -10,6 +10,6 @@ class Army < ApplicationRecord
   end
 
   def army_type
-    units.first.army_type
+    units&.first&.army_type
   end
 end

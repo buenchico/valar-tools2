@@ -122,6 +122,12 @@ es:
       army:
         name: "Nombre"
         status: "Estado"
+        xp: "Experiencia"
+        morale: "Moral"
+        tags: "Rasgos"
+        position: "Posición"
+        notes: "Notas"
+        visible: "Visible"
       unit:
         name: "Nombre"
         description: "Descripción"

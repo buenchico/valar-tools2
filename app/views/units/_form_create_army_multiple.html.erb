@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
         <div class="container-fluid">
-          <%= form_for :unit, url: destroy_multiple_units_path, method: :put do | form | %>
+          <%= form_with model: @army, id: "army_form", local: false do | form | %>
             <div class="alert alert-warning">
               <div>Las siguientes unidades serán añadidas a un ejército</div>
               <ul>
@@ -21,18 +21,18 @@
             </div>
             <div class="input-group mt-3">
               <%= form.label t('activerecord.models.army.one'), class: 'input-group-text' %>
-              <%= form.select :faction_ids,
+              <%= form.select :army_id,
                 options_for_select(
-                  @armies.pluck(:name, :id).map { |name, id|
+                  @armies.pluck(:name, :id, :xp, :morale, :tags, :position, :notes).map { |name, id, xp, morale, tags, position, notes|
                     [
                       id,
-                      { "data-content": name
-                    }
+                      { "data-content": "<span id='army_data_#{id}' data-name='#{name}' data-xp='#{xp}' data-morale='#{morale}' data-tags='#{tags}' data-position='#{position}' data-notes='#{notes}'>#{name}</span>".html_safe}
                     ]
-                  }.unshift([{"data-content": "Nuevo ejército"},"NEW"]),
-                  selected: "NEW"
+                  }.unshift([{"data-content": "Nuevo ejército"}, nil]),
+                  selected: nil
                 ),
                 { },
+                id: "army_select",
                 class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
                 multiple: false,
                 data: {
@@ -41,6 +41,45 @@
               %>
             </div>
             <div class="input-group mt-3">
+              <%= form.label :name, class: 'input-group-text' %>
+              <%= form.text_field :name, class: "form-control" %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :xp, class: 'input-group-text' %>
+              <%= form.number_field :xp, class: 'form-control text-end', step: 10, min: 0 %>
+
+              <%= form.label :morale, class: 'input-group-text' %>
+              <%= form.number_field :morale, class: 'form-control text-end', step: 10, min: 0 %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :tags, class: 'input-group-text' %>
+              <%= form.select :tags,
+                options_for_select(
+                  @army_tags.map { | tag |
+                    [
+                      tag[0],
+                      { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                    }
+                    ]
+                  },
+                  selected: nil
+                ),
+                { include_blank: false },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                title: 'Sin rasgos',
+                multiple: true,
+                data: { }
+              %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :position, class: 'input-group-text' %>
+              <%= form.text_field :position, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path} %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :notes, class: 'input-group-text' %>
+              <%= form.text_area :notes, class: 'form-control' %>
+            </div>
+            <div class="input-group ms-1 mt-3">
               <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.validate') %>
             </div>
             <div class="input-group mt-3">
