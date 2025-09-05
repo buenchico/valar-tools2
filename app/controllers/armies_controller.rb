@@ -76,9 +76,6 @@ class ArmiesController < ApplicationController
       @removed_unit_ids = Array(old_unit_ids).compact - Array(army_params[:unit_ids]).compact
     end
 
-    if params[:source]
-    end
-
     respond_to do |format|
       if params[:confirm].nil? || params[:confirm] == 'VALIDATE'
         puts army_params
@@ -86,7 +83,7 @@ class ArmiesController < ApplicationController
           flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
           format.js
         else
-          flash.now[:danger] = @unit.errors.to_hash
+          flash.now[:danger] = @army.errors.to_hash
           format.js { render 'layouts/error', locals: { thing: @army.name.strip + " (id: " + @army.id.to_s + ")", method: 'update' } }
         end
       else
