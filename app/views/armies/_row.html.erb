@@ -3,7 +3,8 @@
 </td>
 
 <td>
-  <%= army.strength %>
+  <span class="strength"><%= army.strength %></span>
+  <span class="men d-none"><%= army.men %></span>
 </td>
 
 <td>
@@ -12,7 +13,7 @@
 </td>
 
 <td>
-  <%= army.status %>
+  <%= @army_status[army.status]["name"] %>
 </td>
 
 <td>

@@ -71,8 +71,17 @@ class ArmiesController < ApplicationController
       army_params = army_params.merge(unit_ids: unit_ids)
     end
 
+    if params[:source] == 'army_form'
+      old_unit_ids = @army.units.pluck(:id).map(&:to_s)
+      @removed_unit_ids = Array(old_unit_ids).compact - Array(army_params[:unit_ids]).compact
+    end
+
+    if params[:source]
+    end
+
     respond_to do |format|
       if params[:confirm].nil? || params[:confirm] == 'VALIDATE'
+        puts army_params
         if @army.update(army_params)
           flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
           format.js
@@ -142,7 +151,7 @@ private
   def army_params
     params.require(:army).permit(
       :name, :status, :position,
-      :visible, :notes, :xp, :morale, tags: [],
+      :visible, :notes, :xp, :morale, tags: [], unit_ids: [],
       units_attributes: [:id, :_destroy]
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]

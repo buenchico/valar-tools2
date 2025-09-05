@@ -14,11 +14,25 @@ function callback() {
   $('#unit_' + <%= unit_id %>).remove();
 <% end %>
 
+<% @removed_unit_ids&.each do |unit_id| %>
+  <% unit = Unit.find_by(id: unit_id) %>
+  $('#unit_list').find('tbody').append('<tr id="unit_<%= unit.id.to_s %>"></tr>');
+  $('#unit_<%= unit.id %>').html('<%= j render "units/row", unit: unit  %>');
+
+  $('#unit_<%= unit.id %>').addClass("table-highlight");
+  setTimeout(function() {
+    $('#unit_<%= unit.id %>').removeClass("table-highlight");
+  }, 500);
+<% end %>
+
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
 
 $("#id_<%= @army.id %>").prop("checked", checkbox_status);
 
 $(".modal").modal('hide');
 
+$.fn.table_sorter();
+$.fn.checkbox_listeners();
+$.fn.checkboxSelectable();
 initPopovers();
 $.fn.inline_listeners();

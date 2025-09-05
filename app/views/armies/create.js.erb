@@ -3,8 +3,6 @@ $('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
 
 $('#army_<%= @army.id %>').addClass("table-highlight", callback )
 
-console.log('<%= @army.id %>')
-
 function callback() {
   setTimeout(function() {
     $('#army_<%= @army.id %>').removeClass( "table-highlight" );
@@ -19,5 +17,8 @@ $("#flash").html('<%= j render partial: "layouts/alert" %>');
 
 $(".modal").modal('hide');
 
+$.fn.table_sorter();
+$.fn.checkbox_listeners();
+$.fn.checkboxSelectable();
 initPopovers();
 $.fn.inline_listeners();
