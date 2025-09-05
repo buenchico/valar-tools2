@@ -10,7 +10,7 @@
   <span class="d-none"><%= unit.name %></span>
   <%= form_with model: unit, local: false, html: { class: "d-inline-flex align-items-center gap-2" } do |form| %>
     <i class="bi bi-<%= unit.army_icon %> text-<%= unit.colour %>"></i>
-    <%= form.hidden_field :inline, value: true %>
+    <%= hidden_field_tag :inline, value: true %>
     <%= form.text_field :name, class: 'inline-edit-input input-sm form-control', style: 'height: 1.75rem', "data-initialvalue": unit.name %>
   <% end %>
 </td>

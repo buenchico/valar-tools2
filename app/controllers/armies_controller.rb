@@ -62,11 +62,12 @@ class ArmiesController < ApplicationController
   end
 
   def update
+    army_params = self.army_params # This is needed to be able to redefine army_params later
+
     if params[:source] == 'units'
       @new_unit_ids = params["unit_ids"]
       old_unit_ids = @army.unit_ids
       unit_ids = @new_unit_ids.concat(old_unit_ids)
-      army_params = self.army_params # This is needed to be able to redefine army_params later
       army_params = army_params.merge(unit_ids: unit_ids)
     end
 

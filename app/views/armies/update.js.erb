@@ -10,7 +10,7 @@ function callback() {
   }, 500 );
 }
 
-<% @new_unit_ids.each do |unit_id| %>
+<% @new_unit_ids&.each do |unit_id| %>
   $('#unit_' + <%= unit_id %>).remove();
 <% end %>
 
@@ -21,3 +21,4 @@ $("#id_<%= @army.id %>").prop("checked", checkbox_status);
 $(".modal").modal('hide');
 
 initPopovers();
+$.fn.inline_listeners();
