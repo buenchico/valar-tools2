@@ -295,6 +295,8 @@ es:
               inclusion: 'Sólo pueden elegirse rasgos de la lista'
             group:
               inclusion: 'Sólo pueden elegirse grupos de la lista'
+            units:
+              must_include_one: 'No puede quitarse la última unidad de un ejército.'
           clock:
             size:
               inclusion: 'Sólo pueden elegirse tamaños de la lista'

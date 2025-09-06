@@ -2,7 +2,7 @@ class UnitsController < ApplicationController
   before_action :set_options
   before_action :set_factions, only: [:new, :edit, :new_multiple, :edit_multiple]
   before_action :set_regions, only: [:new, :edit, :new_multiple]
-  before_action :set_unit, only: [:edit, :update, :destroy, :delete]
+  before_action :set_unit, only: [:edit, :update, :destroy, :delete, :show]
   before_action :check_master, only: [:new, :edit, :delete, :edit_multiple, :create, :destroy, :delete, :update_multiple, :destroy_multiple]
   before_action :check_owner, only: [:edit, :edit_notes, :update]
 
@@ -240,21 +240,21 @@ private
   end
 
   def check_owner
-    units_to_include = [@unit] # Initialize with @army
+    units_to_include = [@unit] # Initialize with @unit
 
     if params[:unit_ids].present?
       units_to_include += Unit.where(id: params[:unit_ids]).order(:name)
     end
 
+    pass = units_to_include.compact.all? { |unit| unit.factions.include?(@current_user.faction) }
+
     if !@current_user&.is_master?
-      units_to_include.compact.each do |unit|
-        if !@current_user.faction.units.include?(unit)
-          respond_to do |format|
-            format.html { redirect_to armies_url, danger: t('messages.permissions', model: Unit.model_name.human(:count => 1).downcase) }
-            format.js do
-              flash[:danger] = t('messages.permissions', model: Unit.model_name.human(:count => 1).downcase)
-              render js: "window.location='/armies'"
-            end
+      if pass == false
+        respond_to do |format|
+          format.html { redirect_to armies_url, danger: t('messages.permissions', model: Unit.model_name.human(:count => 1).downcase) }
+          format.js do
+            flash[:danger] = t('messages.permissions', model: Unit.model_name.human(:count => 1).downcase)
+            render js: "window.location='/armies'"
           end
         end
       end

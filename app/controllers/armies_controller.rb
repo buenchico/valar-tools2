@@ -1,9 +1,10 @@
 class ArmiesController < ApplicationController
   before_action :set_tool
-  before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show, :delete]
+  before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show, :delete, :show]
   before_action :set_options
   before_action :set_factions, only: [:index, :new, :edit]
-
+  before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete]
+  before_action :check_owner_exclusive, only: [:show]
 
   def index
     @faction = Faction.find_by(id: params[:faction_id])
@@ -143,6 +144,42 @@ private
     end
 
     return [armies, units]
+  end
+
+  def check_owner_exclusive
+    check_owner("exclusive")
+  end
+
+  def check_owner_inclusive
+    check_owner("inclusive")
+  end
+
+  def check_owner(type)
+    armies_to_include = [@army] # Initialize with @army
+
+    if params[:army_ids].present?
+      armies_to_include += Army.where(id: params[:army_ids]).order(:name)
+    end
+
+    units = Unit.where(army_id: armies_to_include)
+
+    if !@current_user&.is_master?
+      if type == "exclusive"
+        pass = units.all? { |unit| unit.factions.include?(@current_user.faction) }
+      else
+        pass = units.any? { |unit| unit.factions.include?(@current_user.faction) }
+      end
+
+      if pass == false
+        respond_to do |format|
+          format.html { redirect_to armies_url, danger: t('messages.permissions', model: Unit.model_name.human(:count => 1).downcase) }
+          format.js do
+            flash[:danger] = t('messages.permissions', model: Unit.model_name.human(:count => 1).downcase)
+            render js: "window.location='/armies'"
+          end
+        end
+      end
+    end
   end
 
   def army_params

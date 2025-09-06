@@ -6,8 +6,13 @@ class Army < ApplicationRecord
   accepts_nested_attributes_for :units, allow_destroy: true
   has_and_belongs_to_many :factions
 
+  before_validation :ensure_minimum_xp
+  before_validation :ensure_minimum_morale
+
   validate :must_have_at_least_one_unit
   validates :name, presence: true, uniqueness: true
+  validates :xp, numericality: { greater_than_or_equal_to: 50 }
+  validates :morale, numericality: { greater_than_or_equal_to: 0 }
 
   def search
    nil
@@ -70,7 +75,11 @@ class Army < ApplicationRecord
   end
 
   def families
-    self.units.includes(:family).map(&:family).compact.uniq.sort_by(&:name)
+    self.units.includes(:family).map(&:family).compact.uniq.sort_by(&:title)
+  end
+
+  def locations
+    self.units.includes(:location).map(&:location).compact.uniq.sort_by(&:name)
   end
 
   def factions
@@ -121,7 +130,15 @@ private
 
   def must_have_at_least_one_unit
     if units.empty? || units.all?(&:marked_for_destruction?)
-      errors.add(:units, "must include at least one unit")
+      errors.add(:units, I18n.t('activerecord.errors.models.army.attributes.units.must_include_one'))
     end
+  end
+
+  def ensure_minimum_xp
+    self.xp = 50 if xp.present? && xp < 50
+  end
+
+  def ensure_minimum_morale
+    self.morale = 0 if morale.present? && morale < 0
   end
 end

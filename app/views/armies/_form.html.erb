@@ -14,9 +14,13 @@
         <%= form_with model: army, local: false do |form| %>
           <div class="alert alert-warning">
             <div>
-              ARMY description
+              <strong><%= render 'armies/one_line', army: army %></strong>
             </div>
-            <div id="units">
+            <div>
+              <%= render 'armies/stats', army: army %>
+            </div>
+            <hr class="border border-secondary opacity-75 border-2">
+            <div id="units" class="ms-3">
               <%= hidden_field_tag "army[unit_ids][]", nil %>
               <% army.units.each do |unit| %>
                 <div id="unit_fields_<%= unit.id %>">

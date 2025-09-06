@@ -56,7 +56,7 @@
         </th>
         <% if @current_user&.is_master? %>
           <th scope="col" class="text-center"><%= t('activerecord.attributes.family.visible') %></th>
-          <th scope="col" colspan="2" data-sorter="false"></th>
+          <th scope="col" colspan="<%= @current_user.is_master? ? 3 : 2 %>" data-sorter="false"></th>
         <% end %>
       </tr>
     </thead>
