@@ -69,6 +69,8 @@ Rails.application.routes.draw do
   get 'units/edit_multiple', to: 'units#edit_multiple', as: 'edit_multiple_units'
   put 'units/update_multiple', to: 'units#update_multiple', as: 'update_multiple_units'
   put 'units/destroy_multiple', to: 'units#destroy_multiple', as: 'destroy_multiple_units'
+  put 'units/damage_multiple', to: 'units#damage_multiple', as: 'damage_multiple_units'
+  put 'units/damage_multiple_apply', to: 'units#damage_multiple_apply', as: 'apply_damage_multiple_units'
   resources :units
 
   resources :locations

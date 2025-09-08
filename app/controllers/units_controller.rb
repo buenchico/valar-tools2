@@ -235,6 +235,20 @@ class UnitsController < ApplicationController
     end
   end
 
+  def damage_multiple
+    units = Unit.where(id: params[:unit_ids])
+    damage = params[:unit][:damage].to_i * @army_scale # 1 dmg kills 1 scale of hp
+    times = params.dig(:unit, :times).presence&.to_i || 1
+
+    @damage_log = DamageSimulator.simulate_damage(units: units, damage: damage, times: times).to_json
+    data = JSON.parse(@damage_log) # if starting from raw JSON
+    unit_ids = data.values.flatten.map { |unit| unit["unit_id"] }
+    @units = Unit.where(id: unit_ids)
+  end
+
+  def damage_multiple_apply
+  end
+
 private
   def set_unit
     @unit = Unit.find(params[:id])

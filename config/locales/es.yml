@@ -50,6 +50,7 @@ es:
     validate:
       validate: "Escribe 'VALIDATE' para confirmar los cambios."
       delete: "Escribe 'DELETE' para confirmar los cambios."
+      damage: "Escribe 'DAMAGE' para aplicar el daño."
     select:
       no_type: 'Sin tipo'
       no_tags: 'Sin rasgos'
@@ -72,8 +73,7 @@ es:
       delete: 'Borrar %{model}'
       add: 'Añadir %{model}'
       remove: 'Quitar %{model}'
-      damage_multiple: 'Dañar %{model}'
-      damage_multiple_update: 'Aplicar daño a %{model}'
+      damage_multiple: 'Aplicar daño a %{model}'
       create_multiple: 'Crear %{model}'
       update_multiple: 'Guardar %{model}'
       delete_multiple: 'Borrar %{model}'
@@ -129,6 +129,11 @@ es:
         notes: "Notas"
         visible: "Visible"
         families: "Familias"
+        damage: "Daño"
+        strength: "Fuerza"
+        strength_indirect: "Fuerza indirecta"
+        hp: "Puntos de vida"
+        men: "Hombres"
       unit:
         name: "Nombre"
         description: "Descripción"
@@ -145,6 +150,7 @@ es:
         visible: "Visible"
         tags: "Rasgos"
         men: "Hombres"
+        damage: "Daño"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"
@@ -347,6 +353,11 @@ es:
     index:
       calculate: 'Calcular'
       add_step: 'Añadir etapa'
+  units:
+    form_damage_multiple:
+      damage: "Calcular daño"
+    form_apply_damage_multiple:
+      damage: "Aplicar daño"
   search:
     title: 'Resultados para'
     submit: 'Buscar ...'
