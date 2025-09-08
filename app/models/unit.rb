@@ -78,9 +78,6 @@ class Unit < ApplicationRecord
     return @army_types.fetch(self.army_type, {}).fetch("colour", "success")
   end
 
-  def troops
-  end
-
   def army_type
     set_options if @options_armies.nil?
     return @units.fetch(self.unit_type, {}).fetch("type", nil)

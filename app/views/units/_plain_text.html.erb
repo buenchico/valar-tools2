@@ -1,0 +1,7 @@
+<%= unit.name %>
+<%= number_to_compact(unit.count.to_i) %>
+<%= unit.title %>
+
+<% if unit.factions.present? %>
+  (<%= unit.factions.pluck(:long_name).join(", ") %>)
+<% end %>
