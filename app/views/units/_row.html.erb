@@ -1,10 +1,19 @@
 <td>
   <%= check_box_tag "unit_ids[]", unit.id, false, id: 'id_unit_' + unit.id.to_s, class: "checkbox_selectable option-input", data: {checkbox: "units" } %>
-  <span id="unit_copy_<%= unit.id.to_s %>" class="d-none">
+  <span id="unit_copy_<%= unit.id.to_s %>" class="d-none units_copy">
     <%= render 'units/plain_text', unit: unit %>
   </span>
-  <span class="men d-none">
+  <span class="units_men d-none">
     <%= unit.men %>
+  </span>
+  <span class="units_strength d-none">
+    <%= unit.strength %>
+  </span>
+  <span class="units_strength_indirect d-none">
+    <%= unit._strength_indirect %>
+  </span>
+  <span class="units_hp d-none">
+    <%= unit.hp %>
   </span>
 </td>
 
