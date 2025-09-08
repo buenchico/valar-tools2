@@ -104,7 +104,7 @@
           </div>
         <% end %>
       </div>
-      <% if @current_user.is_master? && unit.logs&.present? %>
+      <% if @current_user.is_master? && army.logs&.present? %>
         <div class="modal-footer">
           <% army.logs.reverse.each do |log| %>
             <div class="container w-100">
