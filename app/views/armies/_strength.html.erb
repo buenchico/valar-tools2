@@ -1,5 +1,5 @@
 <span
-  class="unit_strength"
+  class="army_strength"
   data-bs-toggle="tooltip"
   data-bs-placement="top"
   data-bs-html="true"
@@ -9,7 +9,7 @@
         <i class='bi bi-award'></i> <%= t('activerecord.attributes.unit.strength')  %>
       </div>
       <div class='text-end col-4'>
-        <%= unit.strength %>
+        <%= army.strength %>
       </div>
     </div>
     <div class='row'>
@@ -17,7 +17,7 @@
         <i class='bi bi-crosshair'></i> <%= t('activerecord.attributes.unit.strength_indirect')  %>
       </div>
       <div class='text-end col-4'>
-        <%= unit.strength_indirect %>
+        <%= army.strength_indirect %>
       </div>
     </div>
     <div class='row'>
@@ -25,7 +25,7 @@
         <i class='bi bi-heart-fill'></i> <%= t('activerecord.attributes.unit.hp')  %>
       </div>
       <div class='text-end col-4'>
-        <%= unit.hp %>
+        <%= army.hp %>
       </div>
     </div>
     <div class='row'>
@@ -33,10 +33,10 @@
         <i class='bi bi-person-standing'></i> <%= t('activerecord.attributes.unit.men')  %>
       </div>
       <div class='text-end col-4'>
-        <%= unit.men %>
+        <%= army.men %>
       </div>
     </div>
   "
 >
-  <%= unit.strength %>
+  <%= army.strength %>
 </span>
