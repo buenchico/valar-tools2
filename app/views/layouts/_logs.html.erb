@@ -1,0 +1,11 @@
+<div class="input-group mt-3">
+  <% log = JSON.parse(log) %>
+  <div class="ms-3 mt-1 w-100 fw-bolder">
+    <%= DateTime.parse(log["timestamp"]).strftime("%d/%m/%Y @ %H:%M") + ", by " + log["username"] %>
+    <% log["changes"].each do |change| %>
+      <div class="ms-3 mt-1 w-100 fw-lighter">
+        <%= change %>
+      </div>
+    <% end %>
+  </div>
+</div>

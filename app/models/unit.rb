@@ -4,9 +4,7 @@ class Unit < ApplicationRecord
   belongs_to :family, class_name: 'Family', foreign_key: 'family_id', optional: true
   belongs_to :location, class_name: 'Location', foreign_key: 'location_id', optional: true
 
-  before_create :set_count_start
-  after_create :generate_random_name
-  after_update :track_count_changes
+  attr_accessor :faction_ids_was
 
   validates :unit_type, presence: true
   validates :count, presence: true
@@ -15,7 +13,13 @@ class Unit < ApplicationRecord
   validates :hp_mod, presence: true
   validate :unique_name_within_faction
 
-  after_find :cache_attributes
+  before_create :set_count_start
+  after_create :generate_random_name
+
+  after_find :cache_factions
+
+  after_update :track_count_changes
+
   before_save :log_changes
 
   def strength
@@ -161,7 +165,54 @@ private
     end
   end
 
+  def cache_factions
+    self.faction_ids_was = self.faction_ids.dup
+  end
+
   def log_changes
+    excluded_keys = ["updated_at", "created_at", "logs"]
+    association_fields = {
+      "family_id" => Family,
+      "location_id" => Location,
+      "army_id" => Army
+    }
+
+    message = []
+
     current_user = Thread.current[:current_user] || User.find_by(player: "valar")
+
+    if self.changes.keys != ['logs'] # Check if the only changes are not of the logs
+      changes.each do |attr, (old, new)|
+        next if excluded_keys.include?(attr)
+
+        if association_fields.key?(attr)
+          model = association_fields[attr]
+          old_name = model.find_by(id: old)&.name || "None"
+          new_name = model.find_by(id: new)&.name || "None"
+          message << "Unit ##{id || "None"} - #{attr.gsub('_id', '')} changed from '#{old_name}' to '#{new_name}'"
+        else
+          message << "Unit ##{id || "None"} - #{attr || "None"} changed from #{old || "None"} to #{new || "None"}"
+        end
+      end
+
+      if self.faction_ids_was&.sort != faction_ids&.sort
+        old_names = Faction.where(id: self.faction_ids_was.sort).pluck(:name).join(", ")
+        new_names = Faction.where(id: faction_ids).pluck(:name).join(", ")
+        message << "Unit ##{id} - factions changed from '#{old_names}' to '#{new_names}'"
+      end
+
+      change_log = {
+        timestamp: Time.now,
+        user_id: current_user.id, # Set the current user appropriately
+        username: current_user.player,
+        changes: message
+      }
+
+      # Initialize self.logs as an empty array if it's nil
+      self.logs ||= []
+
+      # Append the change log to the "logs" array
+      self.logs << change_log.to_json
+    end
   end
 end

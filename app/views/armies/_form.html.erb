@@ -104,6 +104,15 @@
           </div>
         <% end %>
       </div>
+      <% if @current_user.is_master? && unit.logs&.present? %>
+        <div class="modal-footer">
+          <% army.logs.reverse.each do |log| %>
+            <div class="container w-100">
+              <%= render 'layouts/logs', log: log %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
