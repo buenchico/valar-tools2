@@ -6,8 +6,9 @@
 </span>
 
 <% unit.tags.each do |tag| %>
-  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @unit_tags.fetch('tag', {}).fetch('colour', 'success') %>">
-    <i class="bi bi-<%= @unit_tags.fetch('tag', {}).fetch('icon', '') %>"></i>
-    <%= @unit_tags.fetch('tag', {}).fetch('name', tag) %>
+  <% tag_options = @unit_tags.fetch(tag, {}) %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= tag_options.fetch('colour', 'success') %>">
+    <i class="bi bi-<%= tag_options.fetch('icon', '') %>"></i>
+    <%= tag_options.fetch('name', tag) %>
   </span>
 <% end %>

@@ -1,4 +1,4 @@
-const checkbox_status = $('#id_<%= @unit.id %>').is(":checked");
+const checkbox_status = $('#id_unit_<%= @unit.id %>').is(":checked");
 
 $('#unit_<%= @unit.id %>').html('<%= j render "row", unit: @unit  %>');
 
@@ -12,7 +12,7 @@ function callback() {
 
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
 
-$("#id_<%= @unit.id %>").prop("checked", checkbox_status);
+$("#id_unit_<%= @unit.id %>").prop("checked", checkbox_status);
 
 $(".modal").modal('hide');
 

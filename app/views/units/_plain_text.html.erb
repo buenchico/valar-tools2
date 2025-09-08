@@ -1,6 +1,10 @@
 <%= unit.name %>
 <%= number_to_compact(unit.count.to_i) %>
 <%= unit.title %>
+<% unit.tags.each do |tag| %>
+  <% tag_options = @unit_tags.fetch(tag, {}) %>
+  <%= tag_options.fetch('name', tag).titleize %>
+<% end %>
 
 <% if unit.factions.present? %>
   (<%= unit.factions.pluck(:long_name).join(", ") %>)

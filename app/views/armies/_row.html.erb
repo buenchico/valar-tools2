@@ -4,7 +4,21 @@
 
 <td>
   <span class="strength"><%= render 'armies/strength', army: army %></span>
-  <span class="men d-none"><%= army.men %></span>
+  <span id="army_copy_<%= army.id.to_s %>" class="d-none armies_copy">
+    <%= render 'armies/plain_text', army: army %>
+  </span>
+  <span class="armies_men d-none">
+    <%= army.men %>
+  </span>
+  <span class="armies_strength d-none">
+    <%= army.strength %>
+  </span>
+  <span class="armies_strength_indirect d-none">
+    <%= army.strength_indirect %>
+  </span>
+  <span class="armies_hp d-none">
+    <%= army.hp %>
+  </span>
 </td>
 
 <td>

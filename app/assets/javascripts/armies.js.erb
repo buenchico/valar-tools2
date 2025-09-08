@@ -38,40 +38,35 @@ $(document).on('turbolinks:load', function () {
       form.submit();
     });
 
-    $.fn.copyArmies = function(){
-      var checkboxGroup = $(this).data("checkbox");
-      let message = "";
-      let str = 0;
-      let men = 0;
-      let ind = 0;
-      let hp = 0;
+    $.fn.copyArmies = function() {
+      $('.mass-copy').click(function() {
+        var checkboxGroup = $(this).data("checkbox");
+        let message = "";
+        let str = 0;
+        let men = 0;
+        let ind = 0;
+        let hp = 0;
 
-      // Loop through all checked CheckBoxes in GridView.
-    $(`.checkbox_selectable:visible:checked[data-checkbox='${checkboxGroup}']`).each(function () {
-          let row = $(this).closest("tr");
-          if (row.hasClass("tablesorter-headerRow") == false) {
-            console.log(row)
-            message += "> * " + row.find('.' + checkboxGroup + '_copy').text().replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
-            message += "\n";
-            str += parseFloat(row.find('.' + checkboxGroup + '_strength').text())
-            men += parseInt(row.find('.' + checkboxGroup + '_men').text())
-            ind += parseFloat(row.find('.' + checkboxGroup + '_strength_indirect').text())
-            hp += parseFloat(row.find('.' + checkboxGroup + '_hp').text())
-          }
+        // Loop through all checked CheckBoxes in GridView.
+      $(`.checkbox_selectable:visible:checked[data-checkbox='${checkboxGroup}']`).each(function () {
+            let row = $(this).closest("tr");
+            if (row.hasClass("tablesorter-headerRow") == false) {
+              message += "> * " + row.find('.' + checkboxGroup + '_copy').text().replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
+              message += "\n";
+              str += parseFloat(row.find('.' + checkboxGroup + '_strength').text())
+              men += parseInt(row.find('.' + checkboxGroup + '_men').text())
+              ind += parseFloat(row.find('.' + checkboxGroup + '_strength_indirect').text())
+              hp += parseInt(row.find('.' + checkboxGroup + '_hp').text())
+            }
+        });
+
+        message += "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men
+
+        navigator.clipboard.writeText(message)
       });
-
-      message += "Total: 🎖️: " + str + " 𖦏: " + ind + " ❤︎: " + hp + " 🪖: " + men
-
-      console.log(message)
-
-      navigator.clipboard.writeText(message)
     }
 
-    // Copy action event Trigger
-    $(".mass-copy").click(function () {
-      $(this).copyArmies();
-    });
-
+    $.fn.copyArmies();
     $.fn.inline_listeners();
   }
 });

@@ -1,14 +1,18 @@
+<% general = @options_armies.fetch("general", {}) %>
 <% if percent_to_trait(army.xp) != 0 %>
+  <% xp_data = general.fetch("xp", {}) %>
   <span class="badge rounded-pill pill-tags pill-tags-text bg-byzantium %>">
-    <i class="bi bi-<%= @options_armies["general"]["xp"]["icon"] %>"></i>
-    <%= @options_armies["general"]["xp"]["name"] %>
+    <i class="bi bi-<%= xp_data.fetch('icon', '') %>"></i>
+    <%= xp_data.fetch('name', 'xp') %>
     <%= number_to_modifier(percent_to_trait(army.xp)) %>
   </span>
 <% end %>
 <% if percent_to_trait(army.morale) != 0 %>
+  <% morale_data = general.fetch("morale", {}) %>
   <span class="badge rounded-pill pill-tags pill-tags-text bg-secondary %>">
-    <i class="bi bi-<%= @options_armies["general"]["morale"]["icon"] %>"></i>
-    <%= @options_armies["general"]["morale"]["name"] %>
+    <i class="bi bi-<%= morale_data.fetch('icon', '') %>"></i>
+
+    <%= morale_data.fetch('name', 'morale') %>
     <%= number_to_modifier(percent_to_trait(army.morale)) %>
   </span>
 <% end %>
@@ -23,15 +27,17 @@
 <% end %>
 
 <% army.unit_tags.each do |tag| %>
-  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @unit_tags.fetch('tag', {}).fetch('colour', 'success') %>">
-    <i class="bi bi-<%= @unit_tags.fetch('tag', {}).fetch('icon', '') %>"></i>
-    <%= @unit_tags.fetch('tag', {}).fetch('name', tag) %>
+  <% tag_options = @unit_tags.fetch(tag, {}) %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= tag_options.fetch('colour', 'success') %>">
+    <i class="bi bi-<%= tag_options.fetch('icon', '') %>"></i>
+    <%= tag_options.fetch('name', tag) %>
   </span>
 <% end %>
 
 <% army.tags.each do |tag| %>
-  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= @army_tags.fetch('tag', {}).fetch('colour', 'success') %>">
-    <i class="bi bi-<%= @army_tags.fetch('tag', {}).fetch('icon', '') %>"></i>
-    <%= @army_tags.fetch('tag', {}).fetch('name', tag) %>
+  <% tag_options = @army_tags.fetch(tag, {}) %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= tag_options.fetch('colour', 'success') %>">
+    <i class="bi bi-<%= tag_options.fetch('icon', '') %>"></i>
+    <%= tag_options.fetch('name', tag) %>
   </span>
 <% end %>

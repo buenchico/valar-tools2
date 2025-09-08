@@ -4,7 +4,7 @@ class ArmiesController < ApplicationController
   before_action :set_options
   before_action :set_factions, only: [:index, :new, :edit]
   before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete]
-  before_action :check_owner_exclusive, only: [:show]
+  before_action :check_owner_inclusive, only: [:show]
 
   def index
     @faction = Faction.find_by(id: params[:faction_id])
