@@ -141,10 +141,7 @@ class ArmiesController < ApplicationController
           flash.now[:danger] = t('messages.multiple.success', model: (t('activerecord.models.army', count: @destroyed.size)), succeed: @destroyed.size)
           format.js
         else
-          flash.now[:danger] = {
-            message: t('messages.partial_failure'),
-            details: @failed.map { |f| "#{f[:army].name} (id: #{f[:army].id}) → #{f[:errors].values.flatten.join(', ')}" }
-          }
+          flash.now[:danger] = t('messages.multiple.error', model: (t('activerecord.models.army', count: @failed.size)), succeed: @destroyed.size, failed: @failed.size)
           format.js { render 'layouts/error', locals: { method: 'delete', thing: 'multiple armies' } }
         end
       else

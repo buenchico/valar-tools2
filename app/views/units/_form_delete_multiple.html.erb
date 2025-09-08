@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
         <div class="container-fluid">
-          <%= form_for :unit, url: destroy_multiple_units_path, method: :put do | form | %>
+          <%= form_for :unit, url: destroy_multiple_units_path, remote: true, method: :put do | form | %>
             <div class="alert alert-warning">
               <div>Las siguientes unidades serán eliminadas</div>
               <ul>

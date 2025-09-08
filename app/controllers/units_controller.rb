@@ -209,17 +209,28 @@ class UnitsController < ApplicationController
     @units = Unit.where(id: params[:unit_ids])
 
     respond_to do |format|
-      if params[:unit][:confirm] == 'DELETE'
-        @units.each { |unit| unit.factions.clear }
-        destroyed = @units.destroy_all
+      if params[:confirm].nil? || params[:confirm] == 'DELETE'
+        @destroyed = []
+        @failed = []
 
-        if destroyed.any?
-          format.html { redirect_to armies_url, danger: t('messages.multiple.delete', model: t('activerecord.models.unit', count: 2)) }
+        @units.each do |unit|
+          if unit.destroy
+            @destroyed << unit
+          else
+            @failed << { unit: unit, errors: unit.errors.to_hash }
+          end
+        end
+
+        if @failed.empty?
+          flash.now[:danger] = t('messages.multiple.success', model: (t('activerecord.models.unit', count: @destroyed.size)), succeed: @destroyed.size)
+          format.js
         else
-          format.html { redirect_to armies_url, danger: t('messages.multiple.error', model: t('activerecord.models.unit', count: 2), failed: @units.length) }
+          flash.now[:danger] = t('messages.multiple.error', model: (t('activerecord.models.unit', count: @failed.size)), succeed: @destroyed.size, failed: @failed.size)
+          format.js { render 'layouts/error', locals: { method: 'delete', thing: 'multiple armies' } }
         end
       else
-        format.html { redirect_to armies_url, danger: t('messages.multiple.validation') }
+        flash.now[:danger] = t('messages.validation')
+        format.js { render 'layouts/error' }
       end
     end
   end

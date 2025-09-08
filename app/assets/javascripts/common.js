@@ -222,6 +222,7 @@ $.fn.checkbox_listeners = function() {
       selectAll.prop("checked", false);
     }
     $.fn.mass_edit_buttons(checkboxGroup);
+    $.fn.checkboxFieldUpdate(checkboxGroup);
   });
 
   $(".checkbox_select_all").click(function () {
@@ -256,25 +257,20 @@ $.fn.checkboxSelectable = function(){
     } else {
       var form = $('#edit_multiple');
     }
-
-    var objectId = $(this).val();
-
-    var hiddenInput = $('#' + checkboxGroup + '_ids_field');
-    var selectedIds = hiddenInput.val().split(',').filter(Boolean); // Splits by comma and removes empty values
-
-    if ($(this).is(':checked')) {
-      // Add armyId if it's checked and not already in the list
-      if (!selectedIds.includes(objectId)) {
-        selectedIds.push(objectId);
-      }
-    } else {
-      // Remove armyId if it's unchecked
-      selectedIds = selectedIds.filter(id => id !== objectId);
-    }
-
-    // Update the hidden input field with the new list of ids, joined by commas
-    hiddenInput.val(selectedIds.join(','));
   });
+}
+
+$.fn.checkboxFieldUpdate = function (checkboxGroup) {
+  var hiddenInput = $('#' + checkboxGroup + '_ids_field');
+
+  var selectedIds = $(`.checkbox_selectable:visible:checked[data-checkbox='${checkboxGroup}']`)
+                        .map(function () {
+                          return $(this).val();
+                        })
+                        .get();
+
+  // Update the hidden input field with the new list of ids, joined by commas
+  hiddenInput.val(selectedIds.join(','));
 }
 
 // Select all checkboxes

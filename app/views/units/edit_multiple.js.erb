@@ -14,7 +14,7 @@ $('#content').html("<%= j render partial: @template, locals: { units: @units } %
     const position = tempElement.data('position');
     const notes = tempElement.data('notes');
     const status = tempElement.data('status');
-    
+
     $('#army_form').attr('action', '/armies/' + selectedValue);
     if (selectedValue === '') {
       $('#army_form').attr('method', 'post');

@@ -4,3 +4,6 @@ $('#unit_<%= @unit.id %>').remove();
 
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
 $(".modal").modal('hide');
+
+$.fn.checkboxFieldUpdate('units');
+$.fn.mass_edit_buttons();
