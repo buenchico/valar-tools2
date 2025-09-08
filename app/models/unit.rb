@@ -15,6 +15,9 @@ class Unit < ApplicationRecord
   validates :hp_mod, presence: true
   validate :unique_name_within_faction
 
+  after_find :cache_attributes
+  before_save :log_changes
+
   def strength
     set_options if @options_armies.nil?
     unit_strength = @units.fetch(self.unit_type, {}).fetch("str", 0)
@@ -156,5 +159,9 @@ private
         errors.add(:name, :taken_in_faction, faction: faction.name)
       end
     end
+  end
+
+  def log_changes
+    current_user = Thread.current[:current_user] || User.find_by(player: "valar")
   end
 end
