@@ -123,23 +123,33 @@ class ArmiesController < ApplicationController
 
     respond_to do |format|
       if params[:confirm].nil? || params[:confirm] == 'DELETE'
-        destroyed = []
-        failed = []
+        @destroyed = []
+        @failed = []
+        @units = []
 
-        respond_to do |format|
-          if params[:army][:confirm] == 'DELETE'
-            @armies.each { |army| army.factions.clear }
-            destroyed = @armies.destroy_all
-
-            if destroyed.any?
-              format.html { redirect_to armies_url, danger: t('messages.multiple.delete', model: t('activerecord.models.army', count: 2)) }
-            else
-              format.html { redirect_to armies_url, danger: t('messages.multiple.error', model: t('activerecord.models.army', count: 2), failed: @armies.length) }
-            end
+        @armies.each do |army|
+          released_units = army.units.to_a
+          if army.destroy
+            @destroyed << army
+            @units.concat(released_units)
           else
-            format.html { redirect_to armies_url, danger: t('messages.multiple.validation') }
+            @failed << { army: army, errors: army.errors.to_hash }
           end
         end
+
+        if @failed.empty?
+          flash.now[:danger] = t('messages.multiple.success', model: (t('activerecord.models.army', count: @destroyed.size)), succeed: @destroyed.size)
+          format.js
+        else
+          flash.now[:danger] = {
+            message: t('messages.partial_failure'),
+            details: @failed.map { |f| "#{f[:army].name} (id: #{f[:army].id}) → #{f[:errors].values.flatten.join(', ')}" }
+          }
+          format.js { render 'layouts/error', locals: { method: 'delete', thing: 'multiple armies' } }
+        end
+      else
+        flash.now[:danger] = t('messages.validation')
+        format.js { render 'layouts/error' }
       end
     end
   end

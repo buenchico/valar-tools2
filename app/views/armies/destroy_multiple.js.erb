@@ -1,0 +1,12 @@
+<% @destroyed&.each do |army| %>
+  $('#army_<%= army.id %>').remove();
+<% end %>
+
+<% @units&.each do |unit| %>
+  $('#unit_<%= unit.id %>').remove();
+<% end %>
+
+$("html, body").animate({ scrollTop: 0 }, "slow");
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+$(".modal").modal('hide');
