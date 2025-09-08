@@ -170,8 +170,6 @@ class UnitsController < ApplicationController
 
             unit_params[:add].each do |key, value|
               if unit.respond_to?(key)
-                puts key
-                puts unit[key]
                 old_value = unit[key]
                 unit.send("#{key}=", (old_value + value))
               end
@@ -192,7 +190,7 @@ class UnitsController < ApplicationController
           end
 
           if @errors_units.length == 0
-            flash[:success] = t('messages.multiple.success', model: Unit.model_name.human(:count => @updated_units.length), succeed: ("<br>" + @updated_units.join("<br>")).html_safe)
+            flash[:success] = t('messages.multiple.success', model: Unit.model_name.human(:count => @updated_units.length), succeed: ("<br>" + @updated_units.pluck(:name).join("<br>")).html_safe)
             format.js
           else
             flash[:danger] = t('messages.multiple.error', model: Unit.model_name.human(:count => @errors_units.length), failed: ("<br>" + @errors_units.join("<br>") + "<br>").html_safe, succeed: ("<br>" + @updated_units.pluck(:name).join("<br>")).html_safe)
@@ -236,17 +234,53 @@ class UnitsController < ApplicationController
   end
 
   def damage_multiple
-    units = Unit.where(id: params[:unit_ids])
+    @units = Unit.where(id: params[:unit_ids])
     damage = params[:unit][:damage].to_i * @army_scale # 1 dmg kills 1 scale of hp
     times = params.dig(:unit, :times).presence&.to_i || 1
 
-    @damage_log = DamageSimulator.simulate_damage(units: units, damage: damage, times: times).to_json
-    data = JSON.parse(@damage_log) # if starting from raw JSON
-    unit_ids = data.values.flatten.map { |unit| unit["unit_id"] }
-    @units = Unit.where(id: unit_ids)
+    @damage_log = DamageSimulator.simulate_damage(units: @units, damage: damage, times: times)
+
+    respond_to do |format|
+      if times > 1
+        flash[:danger] = "Check logfile.txt for development logs"
+        format.js { render 'layouts/development' }
+      else
+        format.js
+      end
+    end
   end
 
   def damage_multiple_apply
+    units = Unit.where(id: params[:unit_ids])
+
+    @updated_units = []
+    @errors_units = []
+
+    params[:units].each do |unit_fields|
+      unit = units.find_by(id: unit_fields["id"])
+      unit.count = unit_fields["count"]
+
+      if unit.save
+        @updated_units << unit
+      else
+        @errors_units << (unit.name.to_s + " | " + unit.errors.full_messages.join(", "))
+      end
+    end
+
+    respond_to do |format|
+      if params[:unit][:confirm] == 'DAMAGE'
+        if @errors_units.length == 0
+          flash[:success] = t('messages.multiple.success', model: Unit.model_name.human(:count => @updated_units.length), succeed: ("<br>" + @updated_units.pluck(:name).join("<br>")).html_safe)
+          format.js { render 'update_multiple'}
+        else
+          flash[:danger] = t('messages.multiple.error', model: Unit.model_name.human(:count => @errors_units.length), failed: ("<br>" + @errors_units.join("<br>") + "<br>").html_safe, succeed: ("<br>" + @updated_units.pluck(:name).join("<br>")).html_safe)
+          format.js
+        end
+      else
+        flash.now[:danger] = t('messages.validation')
+        format.js { render 'layouts/error' }
+      end
+    end
   end
 
 private

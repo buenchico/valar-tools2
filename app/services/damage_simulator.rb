@@ -19,6 +19,7 @@ class DamageSimulator
 
 private
   def simulate_damage_distribution
+    # Build unit data
     units_by_army = @units.each_with_object(Hash.new { |h, k| h[k] = {} }) do |unit, hash|
       army_id = unit.army_id || 0
 
@@ -28,33 +29,34 @@ private
         count: unit.count,
         men: unit.men
       }
-
-      hash["total"] = {
-        "damage": @damage,
-        "attempts": @times
-      }
     end
 
-    File.open("logfile.txt", "w") do |file|
-      file.puts JSON.pretty_generate({ unit_data: units_by_army })
-    end
+    # Add summary stats
+    units_by_army["total"] = {
+      "damage": @damage,
+      "attempts": @times
+    }
 
-    attempts_log = {}
+    # Step 1: Initialize flat array
+    attempt_logs = []
 
-    @times.times.with_index do |_, i|
+    # Step 2: Collect all unit records across attempts
+    @times.times do |attempt_index|
       formatted_log = calculate_damage
-
-      # Inject attempt number into each unit entry
-      tagged_log = formatted_log.transform_values do |entries|
-        entries.map { |entry| entry.merge("attempt" => i) }
+      formatted_log.each do |unit_id, data|
+        attempt_logs << data.merge(attempt: attempt_index)
       end
-
-      attempts_log[i.to_s] = tagged_log
     end
 
-    # Write the full structure to file
-    File.open("logfile.txt", "a") do |file|
-      file.puts JSON.pretty_generate({ "attempts" => attempts_log })
+    # Step 3: Final JSON structure
+    full_log = {
+      unit_data: units_by_army,
+      attempt_logs: attempt_logs
+    }
+
+    # Step 4: Write to file
+    File.open("logfile.txt", "w") do |file|
+      file.puts JSON.pretty_generate(full_log)
     end
   end
 
@@ -111,23 +113,21 @@ private
     end
 
     # Format and sort result
-    formatted_log = damage_log.map do |unit_id, damage|
+    formatted_log = damage_log.to_h do |unit_id, damage|
       unit = unit_lookup[unit_id]
-      {
-        army_id: unit&.army&.id,
-        unit_id: unit.id,
-        unit_type: unit.unit_type,
-        damage: damage,
-        unit_losses: (damage / unit.hp_per_unit),
-        unit_survivors: (unit.count - (damage / unit.hp_per_unit))
-      }
+      [
+        unit_id,
+        {
+          army_id: unit&.army&.id || 0,
+          unit_id: unit.id,
+          unit_type: unit.unit_type,
+          damage: damage,
+          unit_losses: (damage / unit.hp_per_unit),
+          unit_survivors: (unit.count - (damage / unit.hp_per_unit))
+        }
+      ]
     end
 
-    grouped_log = formatted_log
-      .group_by { |entry| (entry[:army_id] || 0).to_s }
-      .transform_values { |entries| entries.map { |e| e.except(:army_id) } }
-      .sort.to_h
-
-    return grouped_log
+    return formatted_log
   end
 end

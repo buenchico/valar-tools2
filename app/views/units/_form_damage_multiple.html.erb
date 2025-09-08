@@ -32,9 +32,6 @@
             </div>
           <% end %>
           <div class="input-group mt-3">
-            <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.damage') %>
-          </div>
-          <div class="input-group mt-3">
             <%= form.submit t('.damage', model: t('activerecord.models.unit', count: 2)), class: 'btn btn-primary' %>
           </div>
         <% end %>

@@ -9,7 +9,20 @@
         <%= form_for :unit, url: apply_damage_multiple_units_path, remote: true, method: :put do | form | %>
           <div class="alert alert-warning">
             <div>Las siguientes unidades recibirán daño</div>
+            <ul>
+              <% @damage_log.each do |key, value| %>
+              <%= hidden_field_tag "unit_ids[]", value[:unit_id] %>
+              <%= hidden_field_tag "units[][id]", value[:unit_id] %>
+              <%= hidden_field_tag "units[][count]", value[:unit_survivors].to_i %>
 
+                <li>
+                  <%= render 'units/one_line', unit: units.find_by(id: value[:unit_id]) %>
+                   —
+                  <span class="small"><%= value[:unit_losses].to_i %> <%= t('activerecord.attributes.unit.count_death').pluralize.downcase %></span>
+                  <span class="small"><%= value[:damage].to_i %> <%= t('activerecord.attributes.unit.damage').downcase %></span>
+                </li>
+              <% end %>
+            <ul>
           </div>
           <div class="input-group mt-3">
             <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.damage') %>
