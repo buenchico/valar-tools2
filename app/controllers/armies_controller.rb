@@ -2,7 +2,7 @@ class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show, :delete, :show]
   before_action :set_options
-  before_action :set_factions, only: [:index, :new, :edit]
+  before_action :set_factions, only: [:index, :new, :edit, :edit_multiple]
   before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete]
   before_action :check_owner_inclusive, only: [:show]
 
@@ -35,6 +35,13 @@ class ArmiesController < ApplicationController
   end
 
   def delete
+  end
+
+  def edit_multiple
+    army_ids = params[:army_ids].split(',')
+    @armies = Army.where(id: army_ids).order(:name)
+    @units = @armies.includes(:units).flat_map(&:units).uniq
+    @template = 'form_' + params[:button] + '_multiple'
   end
 
   def create
@@ -110,6 +117,33 @@ class ArmiesController < ApplicationController
       end
     end
   end
+
+  def destroy_multiple
+    @armies = Army.where(id: params[:army_ids])
+
+    respond_to do |format|
+      if params[:confirm].nil? || params[:confirm] == 'DELETE'
+        destroyed = []
+        failed = []
+
+        respond_to do |format|
+          if params[:army][:confirm] == 'DELETE'
+            @armies.each { |army| army.factions.clear }
+            destroyed = @armies.destroy_all
+
+            if destroyed.any?
+              format.html { redirect_to armies_url, danger: t('messages.multiple.delete', model: t('activerecord.models.army', count: 2)) }
+            else
+              format.html { redirect_to armies_url, danger: t('messages.multiple.error', model: t('activerecord.models.army', count: 2), failed: @armies.length) }
+            end
+          else
+            format.html { redirect_to armies_url, danger: t('messages.multiple.validation') }
+          end
+        end
+      end
+    end
+  end
+
 
 private
   def set_army

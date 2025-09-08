@@ -14,9 +14,14 @@
               </strong>
               será borrado, ¿estás seguro?
             </div>
+            <hr class="border border-secondary opacity-75 border-2">
             <div>
               Las siguientes unidades serán liberadas:
-              <%= render 'units', army: army %>
+              <% army.units.each do |unit| %>
+                <div class="ms-1">
+                  <%= render 'units/one_line', unit: unit %>
+                </div>
+              <% end %>
             </div>
           </div>
           <div class="input-group mt-3">

@@ -1,0 +1,56 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title id="Title"><%= t('helpers.action.mass_edit') %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <%= form_for :unit, url: update_multiple_armies_path, remote: true, method: :put do | form | %>
+            <div class="alert alert-warning">
+              <div>Los siguientes ejércitos serán actualizadas</div>
+              <ul>
+                <% armies.each do | armies | %>
+                  <%= hidden_field_tag "armyt_ids[]", army.id %>
+                  <li>
+                    <%= render 'armies/one_line', army: army %>
+                  </li>
+                <% end %>
+              <ul>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label t('activerecord.attributes.army.factions'), class: 'input-group-text' %>
+              <%= form.select :faction_ids,
+                options_for_select(
+                  @factions.pluck(:long_name, :id).map { |name, id|
+                    [
+                      id,
+                      { "data-content": name
+                    }
+                    ]
+                  }.unshift([{"data-content": "Quitar todas las facciones"},"CLEAR"]),
+                  selected: nil
+                ),
+                { include_blank: true },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                multiple: true,
+                data: { noneSelectedText: ' '}
+              %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :visible, t('activerecord.attributes.army.visible'), class: 'input-group-text' %>
+              <%= form.select :visible, [[""],["Invisible", "CLEAR"],["Visible", true]], {}, class: 'form-select' %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.validate') %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.submit t('helpers.submit.update_multiple', model: t('activerecord.models.army', count: 2)), class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

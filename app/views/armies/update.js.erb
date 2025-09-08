@@ -1,4 +1,4 @@
-const checkbox_status = $('#id_<%= @army.id %>').is(":checked");
+const checkbox_status = $('#id_army_<%= @army.id %>').is(":checked");
 
 $('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
 
@@ -27,7 +27,7 @@ function callback() {
 
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
 
-$("#id_<%= @army.id %>").prop("checked", checkbox_status);
+$("#id_army_<%= @army.id %>").prop("checked", checkbox_status);
 
 $(".modal").modal('hide');
 
