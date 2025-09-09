@@ -101,6 +101,80 @@ class ArmiesController < ApplicationController
     end
   end
 
+  def update_multiple
+    @armies = Army.where(id: params[:army_ids])
+
+    army_params = { change: {}, sum: {}, add: {}, remove: {} }
+
+    army_params[:change][:xp] = params["army"]["xp_change"] unless params["army"]["xp_change"].empty?
+    army_params[:sum][:xp] = params["army"]["xp_sum"] unless params["army"]["xp_sum"].empty?
+    army_params[:change][:morale] = params["army"]["morale_change"] unless params["army"]["morale_change"].empty?
+    army_params[:sum][:morale] = params["army"]["morale_sum"] unless params["army"]["morale_sum"].empty?
+    army_params[:add][:tags] = params["army"]["tags_add"].reject(&:empty?)
+    army_params[:remove][:tags] = params["army"]["tags_remove"].reject(&:empty?)
+    army_params[:change][:visible] = params["army"]["visible"] unless params["army"]["visible"].empty?
+    army_params[:change][:position] = params["army"]["position"] unless params["army"]["position"].empty?
+    army_params[:change][:group] = params["army"]["group"] unless params["army"]["group"].empty?
+    army_params[:change][:status] = params["army"]["status"] unless params["army"]["status"].empty?
+
+    @errors_armies = []
+    @updated_armies = []
+
+    respond_to do |format|
+      if params[:army][:confirm] == 'VALIDATE'
+        if army_params.values.map(&:values).flatten.compact.empty? # all values are empty
+          format.html { redirect_to armies_url, success: t('messages.multiple.nothing') }
+        else
+          @armies.each do |army|
+            army_params[:sum].each do |key, value|
+              if army.respond_to?(key)
+                old_value = army[key]
+                army.send("#{key}=", (old_value += value))
+              end
+            end
+
+            army_params[:change].each do |key, value|
+              if army.respond_to?(key)
+                army.send("#{key}=", value)
+              end
+            end
+
+            army_params[:add].each do |key, value|
+              if army.respond_to?(key)
+                old_value = army[key]
+                army.send("#{key}=", (old_value + value))
+              end
+            end
+
+            army_params[:remove].each do |key, value|
+              if army.respond_to?(key)
+                old_value = army[key]
+                army.send("#{key}=", (old_value - value))
+              end
+            end
+
+            if army.save
+              @updated_armies << army
+            else
+              @errors_armies << (army.name.to_s + " | " + army.errors.full_messages.join(", "))
+            end
+          end
+
+          if @errors_armies.length == 0
+            flash[:success] = t('messages.multiple.success', model: Army.model_name.human(:count => @updated_armies.length), succeed: ("<br>" + @updated_armies.pluck(:name).join("<br>")).html_safe)
+            format.js
+          else
+            flash[:danger] = t('messages.multiple.error', model: Army.model_name.human(:count => @errors_armies.length), failed: ("<br>" + @errors_armies.join("<br>") + "<br>").html_safe, succeed: ("<br>" + @updated_armies.pluck(:name).join("<br>")).html_safe)
+            format.js
+          end
+        end
+      else
+        flash.now[:danger] = t('messages.validation')
+        format.js { render 'layouts/error' }
+      end
+    end
+  end
+
   def destroy
     respond_to do |format|
       if params[:confirm].nil? || params[:confirm] == 'DELETE'

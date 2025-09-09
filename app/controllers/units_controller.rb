@@ -198,7 +198,8 @@ class UnitsController < ApplicationController
           end
         end
       else
-        format.html { redirect_to armies_url, danger: t('messages.multiple.validation') }
+        flash.now[:danger] = t('messages.validation')
+        format.js { render 'layouts/error' }
       end
     end
   end

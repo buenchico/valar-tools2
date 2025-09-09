@@ -2,6 +2,8 @@
   var checkbox_status = $('#id_army_<%= army.id %>').is(":checked");
 
   $('#army_<%= army.id %>').html('<%= j render "row", army: army  %>');
+  $('#army_<%= army.id %>').attr('class', '<%= army.status %>')
+
   $('#army_<%= army.id %>').addClass("table-highlight");
   setTimeout(function() {
     $('#army_<%= army.id %>').removeClass("table-highlight");
