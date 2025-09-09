@@ -10,11 +10,12 @@ class ArmiesRefactor < ActiveRecord::Migration[8.0]
       t.string :position
       t.text :notes
       t.string :status
+      t.string :group
       t.integer :xp, default: 100
       t.integer :morale, default: 100
       t.boolean :visible, default: true
-      t.text :logs, default: [], array: true
       t.text :tags, default: [], array: true
+      t.text :logs, default: [], array: true
 
       t.timestamps
     end

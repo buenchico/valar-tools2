@@ -30,11 +30,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
     t.string "position"
     t.text "notes"
     t.string "status"
+    t.string "group"
     t.integer "xp", default: 100
     t.integer "morale", default: 100
     t.boolean "visible", default: true
-    t.text "logs", default: [], array: true
     t.text "tags", default: [], array: true
+    t.text "logs", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
