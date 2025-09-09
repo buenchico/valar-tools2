@@ -51,6 +51,7 @@ es:
       validate: "Escribe 'VALIDATE' para confirmar los cambios."
       delete: "Escribe 'DELETE' para confirmar los cambios."
       damage: "Escribe 'DAMAGE' para aplicar el daño."
+      clear: "Escribe 'CLEAR' para borrar la posición"
     select:
       no_type: 'Sin tipo'
       no_tags: 'Sin rasgos'
