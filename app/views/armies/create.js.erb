@@ -17,11 +17,9 @@ $("#flash").html('<%= j render partial: "layouts/alert" %>');
 
 $(".modal").modal('hide');
 
+initPopovers();
 $.fn.table_sorter();
 $.fn.checkbox_listeners();
-$.fn.checkboxSelectable();
-initPopovers();
 $.fn.inline_listeners();
-
-$.fn.checkboxFieldUpdate('armies');
-$.fn.checkboxFieldUpdate('units');
+$.fn.mass_edit_buttons('units');
+$.fn.mass_edit_buttons('armies');
