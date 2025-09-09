@@ -134,6 +134,7 @@ es:
         strength_indirect: "Fuerza indirecta"
         hp: "Puntos de vida"
         men: "Hombres"
+        group: "Grupo"
       unit:
         name: "Nombre"
         description: "Descripción"

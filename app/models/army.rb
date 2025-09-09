@@ -1,6 +1,6 @@
 class Army < ApplicationRecord
   include PgSearch::Model
-  multisearchable against: [:name, :position, :notes, :search]
+  multisearchable against: [:name, :group, :position, :notes, :search]
 
   has_many :units, dependent: :nullify
   accepts_nested_attributes_for :units, allow_destroy: true
@@ -11,6 +11,7 @@ class Army < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :xp, numericality: { greater_than_or_equal_to: 50 }
   validates :morale, numericality: { greater_than_or_equal_to: 0 }
+  validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
 
   after_find :cache_units
 

@@ -196,7 +196,7 @@ private
       end
 
       if self.faction_ids_was&.sort != faction_ids&.sort
-        old_names = Faction.where(id: self.faction_ids_was.sort).pluck(:name).join(", ")
+        old_names = Faction.where(id: self.faction_ids_was&.sort).pluck(:name).join(", ")
         new_names = Faction.where(id: faction_ids).pluck(:name).join(", ")
         message << "Unit ##{id} - factions changed from '#{old_names}' to '#{new_names}'"
       end

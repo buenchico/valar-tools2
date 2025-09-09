@@ -86,6 +86,26 @@
             <%= form.label :position, class: 'input-group-text' %>
             <%= form.text_field :position, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path} %>
           </div>
+
+          <div class="input-group mb-3">
+            <%= form.label :group, class: 'input-group-text' %>
+            <%= form.select :group,
+              options_for_select(
+                ARMY_GROUPS.map { | key, value |
+                  [
+                    key,
+                    { "data-content": "<span class='badge rounded-pill pill-tags pill-#{key}'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe
+                  }
+                  ]
+                },
+                selected: army.group
+              ),
+              { include_blank: true },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              data: { noneselectedtext: 'Sin agrupar'}
+            %>
+          </div>
+
           <div class="input-group mb-3">
             <%= form.label :notes, class: 'input-group-text' %>
             <%= form.text_area :notes, class: 'form-control' %>
