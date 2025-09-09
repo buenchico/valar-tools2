@@ -37,7 +37,30 @@
 <td>
   <%= form_with model: army, local: false, html: { class: "d-inline-flex align-items-center gap-2" } do |form| %>
     <%= hidden_field_tag :inline, value: true %>
-    <%= form.text_field :position, class: 'inline-edit-input input-sm form-control', style: 'height: 1.75rem', "data-initialvalue": army.position %>
+    <%= form.text_field :position, class: 'inline-edit-input form-control', style: 'height: 2.4rem', "data-initialvalue": army.position %>
+  <% end %>
+</td>
+
+<td>
+  <%= form_with model: army, class: 'inline-edit-select', local: false do |form| %>
+    <%= form.hidden_field :inline, value: true %>
+    <%= form.select :group,
+      options_for_select(
+        ARMY_GROUPS.map { | key, value |
+          [
+            key,
+            {
+              "data-content": "<span class='badge rounded-pill pill-tags pill-#{key} filter-value'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe
+            }
+          ]
+        },
+        selected: army.group
+      ),
+      { include_blank: true },
+      class: 'selectpicker flex-fill dropdown-toggle-custom inline-edit-select',
+      title: 'Sin agrupar',
+      data: { style: 'btn-success' }
+    %>
   <% end %>
 </td>
 

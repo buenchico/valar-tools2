@@ -43,6 +43,9 @@
         <th scope="col">
           <%= t('activerecord.attributes.army.position') %>
         </th>
+        <th scope="col">
+          <%= t('activerecord.attributes.army.group') %>
+        </th>
         <% if @current_user&.is_master? %>
           <th scope="col" class="text-center"><%= t('activerecord.attributes.family.visible') %></th>
           <th scope="col" colspan="<%= @current_user.is_master? ? 4 : 2 %>" data-sorter="false"></th>

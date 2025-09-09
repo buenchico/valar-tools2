@@ -282,7 +282,7 @@ private
 
   def army_params
     params.require(:army).permit(
-      :name, :status, :position,
+      :name, :status, :position, :group,
       :visible, :notes, :xp, :morale, tags: [], unit_ids: [],
       units_attributes: [:id, :_destroy]
     ).tap do |whitelisted|
