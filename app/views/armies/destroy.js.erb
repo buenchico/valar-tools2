@@ -6,4 +6,6 @@ $("#flash").html('<%= j render partial: "layouts/alert" %>');
 $(".modal").modal('hide');
 
 $.fn.checkboxFieldUpdate('armies');
-$.fn.mass_edit_buttons();
+$.fn.checkboxFieldUpdate('units');
+$.fn.mass_edit_buttons('armies');
+$.fn.mass_edit_buttons('units');

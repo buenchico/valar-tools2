@@ -276,14 +276,12 @@ $.fn.checkboxFieldUpdate = function (checkboxGroup) {
 // Select all checkboxes
 $(document).on('turbolinks:load', function() {
   $.fn.checkbox_listeners();
-  $.fn.mass_edit_buttons();
   $.fn.checkboxSelectable();
 });
 
 // Select all checkboxes to work in modals
 $(document).on('shown.bs.modal', function (event) {
   $.fn.checkbox_listeners();
-  $.fn.mass_edit_buttons();
   $.fn.checkboxSelectable();
 });
 

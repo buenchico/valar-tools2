@@ -11,7 +11,7 @@
             <div class="alert alert-warning">
               <div>Los siguientes ejércitos serán actualizadas</div>
               <ul>
-                <% armies.each do | armies | %>
+                <% armies.each do | army | %>
                   <%= hidden_field_tag "army_ids[]", army.id %>
                   <li>
                     <%= render 'armies/one_line', army: army %>
