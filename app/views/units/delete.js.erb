@@ -1,3 +1,8 @@
 $(".modal").modal('hide');
 $('#content').html("<%= j render 'form_delete', unit: @unit %>");
 $('#armyModal').modal('show');
+
+initPopovers();
+$.fn.table_sorter();
+$.fn.checkbox_listeners();
+$.fn.inline_listeners();

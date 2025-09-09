@@ -138,7 +138,7 @@ $(document).on('cocoon:after-insert', function(e, insertedItem, originalEvent) {
   $('.selectpicker').selectpicker();
 });
 
-// exclusive form fields
+// Activating custom sorting in tables
 $.fn.table_sorter =  function() {
   $("table.sortable").tablesorter({
     headerTemplate : '{icon}{content}',
@@ -153,7 +153,6 @@ $.fn.table_sorter =  function() {
     }
   });
 }
-
 $(document).on('turbolinks:load', function() {
   $.fn.table_sorter();
 });
@@ -208,6 +207,8 @@ $.fn.inline_listeners = function() {
   });
 }
 
+// Custom checkbox listeners
+
 $.fn.checkbox_listeners = function() {
   $('.checkbox_selectable').change(function() {
 
@@ -247,19 +248,6 @@ $.fn.mass_edit_buttons = function(checkboxGroup) {
   }
 }
 
-// Add hidden checkboxes for mass edit options
-$.fn.checkboxSelectable = function(){
-  $('.checkbox_selectable').change(function() {
-    var checkboxGroup = $(this).data("checkbox");
-
-    if (checkboxGroup !== undefined && checkboxGroup !== null && checkboxGroup !== "") {
-      var form = $('#edit_multiple_' + checkboxGroup);
-    } else {
-      var form = $('#edit_multiple');
-    }
-  });
-}
-
 $.fn.checkboxFieldUpdate = function (checkboxGroup) {
   var hiddenInput = $('#' + checkboxGroup + '_ids_field');
 
@@ -276,15 +264,12 @@ $.fn.checkboxFieldUpdate = function (checkboxGroup) {
 // Select all checkboxes
 $(document).on('turbolinks:load', function() {
   $.fn.checkbox_listeners();
-  $.fn.checkboxSelectable();
 });
 
 // Select all checkboxes to work in modals
 $(document).on('shown.bs.modal', function (event) {
   $.fn.checkbox_listeners();
-  $.fn.checkboxSelectable();
 });
-
 
 // Change collpase icon
 function changeCollapseIcon(event) {

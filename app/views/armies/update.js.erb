@@ -31,8 +31,7 @@ $("#id_army_<%= @army.id %>").prop("checked", checkbox_status);
 
 $(".modal").modal('hide');
 
+initPopovers();
 $.fn.table_sorter();
 $.fn.checkbox_listeners();
-$.fn.checkboxSelectable();
-initPopovers();
 $.fn.inline_listeners();

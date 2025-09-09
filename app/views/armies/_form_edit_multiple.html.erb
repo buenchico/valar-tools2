@@ -19,24 +19,16 @@
                 <% end %>
               <ul>
             </div>
-            <div class="input-group mt-3">
-              <%= form.label t('activerecord.attributes.army.factions'), class: 'input-group-text' %>
-              <%= form.select :faction_ids,
-                options_for_select(
-                  @factions.pluck(:long_name, :id).map { |name, id|
-                    [
-                      id,
-                      { "data-content": name
-                    }
-                    ]
-                  }.unshift([{"data-content": "Quitar todas las facciones"},"CLEAR"]),
-                  selected: nil
-                ),
-                { include_blank: true },
-                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                multiple: true,
-                data: { noneSelectedText: ' '}
-              %>
+            <hr class="border border-secondary opacity-75 border-2">
+            <div>
+              Las siguientes unidades serán afectadas:
+              <ul>
+                <% @units.each do |unit| %>
+                  <li>
+                    <%= render 'units/one_line', unit: unit %>
+                  </li>
+                <% end %>
+              </ul>
             </div>
             <div class="input-group mt-3">
               <%= form.label :visible, t('activerecord.attributes.army.visible'), class: 'input-group-text' %>

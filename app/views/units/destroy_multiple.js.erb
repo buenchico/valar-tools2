@@ -2,12 +2,12 @@
   $('#unit_<%= unit.id %>').remove();
 <% end %>
 
-$.fn.checkboxFieldUpdate('armies');
-$.fn.checkboxFieldUpdate('units');
-$.fn.mass_edit_buttons('armies');
-$.fn.mass_edit_buttons('units');
-
 $("html, body").animate({ scrollTop: 0 }, "slow");
 
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
 $(".modal").modal('hide');
+
+initPopovers();
+$.fn.table_sorter();
+$.fn.checkbox_listeners();
+$.fn.inline_listeners();
