@@ -3,7 +3,12 @@
 <% end %>
 
 <% @units&.each do |unit| %>
-  $('#unit_<%= unit.id %>').remove();
+  $('#unit_list').find('tbody').append('<tr id="unit_<%= unit.id.to_s %>"></tr>');
+  $('#unit_<%= unit.id %>').html('<%= j render "units/row", unit: unit  %>');
+  $('#unit_<%= unit.id %>').addClass("table-highlight");
+  setTimeout(function() {
+    $('#unit_<%= unit.id %>').removeClass("table-highlight");
+  }, 500)
 <% end %>
 
 $("html, body").animate({ scrollTop: 0 }, "slow");

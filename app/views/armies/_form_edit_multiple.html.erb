@@ -7,12 +7,12 @@
       </div>
       <div class="modal-body">
         <div class="container-fluid">
-          <%= form_for :unit, url: update_multiple_armies_path, remote: true, method: :put do | form | %>
+          <%= form_for :army, url: update_multiple_armies_path, remote: true, method: :put do | form | %>
             <div class="alert alert-warning">
               <div>Los siguientes ejércitos serán actualizadas</div>
               <ul>
                 <% armies.each do | armies | %>
-                  <%= hidden_field_tag "armyt_ids[]", army.id %>
+                  <%= hidden_field_tag "army_ids[]", army.id %>
                   <li>
                     <%= render 'armies/one_line', army: army %>
                   </li>
