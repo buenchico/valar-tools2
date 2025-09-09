@@ -3,7 +3,7 @@ class ArmiesController < ApplicationController
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show, :delete, :show]
   before_action :set_options
   before_action :set_factions, only: [:index, :new, :edit, :edit_multiple]
-  before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete]
+  before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete, :damage_multiple, :damage_multiple_apply]
   before_action :check_owner_inclusive, only: [:show]
 
   def index
@@ -151,6 +151,63 @@ class ArmiesController < ApplicationController
     end
   end
 
+  def damage_multiple
+    @units = Unit.where(id: params[:unit_ids])
+    @armies = Army.where(id: params[:army_ids])
+    damage = params[:army][:damage].to_i * @army_scale # 1 dmg kills 1 scale of hp
+    times = params.dig(:army, :times).presence&.to_i || 1
+
+    damage_log = DamageSimulator.simulate_damage(units: @units, damage: damage, times: times)
+    @damage_log_by_armies = damage_log.values.group_by { |unit| unit[:army_id] }
+    @totals_by_army = @damage_log_by_armies.transform_values do |units|
+      {
+        total_damage: units.sum { |u| u[:damage].to_f },
+        total_losses: units.sum { |u| u[:unit_losses].to_f }
+      }
+    end
+
+    respond_to do |format|
+      if times > 1
+        flash[:danger] = "Check logfile.txt for development logs"
+        format.js { render 'layouts/development' }
+      else
+        format.js
+      end
+    end
+  end
+
+  def damage_multiple_apply
+    units = Unit.where(id: params[:unit_ids])
+
+    @updated_armies = []
+    @errors_units = []
+
+    params[:units].each do |unit_fields|
+      unit = units.find_by(id: unit_fields["id"])
+      unit.count = unit_fields["count"]
+
+      if unit.save
+        @updated_armies << unit.army
+      else
+        @errors_units << (unit.name.to_s + " | " + unit.errors.full_messages.join(", "))
+      end
+    end
+
+    respond_to do |format|
+      if params[:army][:confirm] == 'DAMAGE'
+        if @errors_units.length == 0
+          flash[:success] = t('messages.multiple.success', model: Army.model_name.human(:count => @updated_armies.length), succeed: ("<br>" + @updated_armies.pluck(:name).join("<br>")).html_safe)
+          format.js { render 'update_multiple'}
+        else
+          flash[:danger] = t('messages.multiple.error', model: Unit.model_name.human(:count => @errors_units.length), failed: ("<br>" + @errors_units.join("<br>") + "<br>").html_safe, succeed: ("<br>" + @updated_units.pluck(:name).join("<br>")).html_safe)
+          format.js { render 'layouts/error' }
+        end
+      else
+        flash.now[:danger] = t('messages.validation')
+        format.js { render 'layouts/error' }
+      end
+    end
+  end
 
 private
   def set_army

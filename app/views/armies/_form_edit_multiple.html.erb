@@ -9,7 +9,7 @@
         <div class="container-fluid">
           <%= form_for :army, url: update_multiple_armies_path, remote: true, method: :put do | form | %>
             <div class="alert alert-warning">
-              <div>Los siguientes ejércitos serán actualizadas</div>
+              <div>Los siguientes ejércitos serán actualizados:</div>
               <ul>
                 <% armies.each do | army | %>
                   <%= hidden_field_tag "army_ids[]", army.id %>
@@ -17,18 +17,17 @@
                     <%= render 'armies/one_line', army: army %>
                   </li>
                 <% end %>
+              </ul>
+              <hr class="border border-secondary opacity-75 border-2">
+              <div>Las siguientes unidades serán afectadas:</div>
               <ul>
-            </div>
-            <hr class="border border-secondary opacity-75 border-2">
-            <div>
-              Las siguientes unidades serán afectadas:
-              <ul>
-                <% @units.each do |unit| %>
+                <% units.each do | unit | %>
+                  <%= hidden_field_tag "unit_ids[]", unit.id %>
                   <li>
                     <%= render 'units/one_line', unit: unit %>
                   </li>
                 <% end %>
-              </ul>
+              <ul>
             </div>
             <% if @current_user.is_master? %>
               <div class="input-group mt-3">

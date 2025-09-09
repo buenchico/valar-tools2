@@ -3,7 +3,7 @@ class UnitsController < ApplicationController
   before_action :set_factions, only: [:new, :edit, :new_multiple, :edit_multiple]
   before_action :set_regions, only: [:new, :edit, :new_multiple]
   before_action :set_unit, only: [:edit, :update, :destroy, :delete, :show]
-  before_action :check_master, only: [:new, :edit, :delete, :edit_multiple, :create, :destroy, :delete, :update_multiple, :destroy_multiple]
+  before_action :check_master, only: [:new, :edit, :delete, :edit_multiple, :create, :destroy, :delete, :update_multiple, :destroy_multiple, :damage_multiple, :damage_multiple_apply]
   before_action :check_owner, only: [:edit, :edit_notes, :update]
 
   def new
@@ -274,7 +274,7 @@ class UnitsController < ApplicationController
           format.js { render 'update_multiple'}
         else
           flash[:danger] = t('messages.multiple.error', model: Unit.model_name.human(:count => @errors_units.length), failed: ("<br>" + @errors_units.join("<br>") + "<br>").html_safe, succeed: ("<br>" + @updated_units.pluck(:name).join("<br>")).html_safe)
-          format.js
+          format.js { render 'layouts/error' }
         end
       else
         flash.now[:danger] = t('messages.validation')

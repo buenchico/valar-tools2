@@ -20,19 +20,19 @@ class DamageSimulator
 private
   def simulate_damage_distribution
     # Build unit data
-    units_by_army = @units.each_with_object(Hash.new { |h, k| h[k] = {} }) do |unit, hash|
-      army_id = unit.army_id || 0
-
-      hash[army_id][unit.id] = {
+    units_by_id = @units.map { |unit|
+      [unit.id, {
         unit_type: unit.unit_type,
         hp: unit.hp,
         count: unit.count,
-        men: unit.men
-      }
-    end
+        men: unit.men,
+        army_id: unit.army_id || 0,
+        unit_id: unit.id
+      }]
+    }.to_h
 
     # Add summary stats
-    units_by_army["total"] = {
+    units_by_id["total"] = {
       "damage": @damage,
       "attempts": @times
     }
@@ -50,7 +50,7 @@ private
 
     # Step 3: Final JSON structure
     full_log = {
-      unit_data: units_by_army,
+      unit_data: units_by_id,
       attempt_logs: attempt_logs
     }
 

@@ -1,5 +1,5 @@
 $(".modal").modal('hide');
 
-$('#content').html("<%= j render partial: @template, locals: { armies: @armies } %>");
+$('#content').html("<%= j render partial: @template, locals: { armies: @armies, units: @units } %>");
 
 $('#armyModal').modal('show');

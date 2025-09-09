@@ -355,6 +355,11 @@ es:
     index:
       calculate: 'Calcular'
       add_step: 'Añadir etapa'
+  armies:
+    form_damage_multiple:
+      damage: "Calcular daño"
+    form_apply_damage_multiple:
+      damage: "Aplicar daño"      
   units:
     form_damage_multiple:
       damage: "Calcular daño"

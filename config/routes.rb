@@ -48,7 +48,7 @@ Rails.application.routes.draw do
   #get 'armies/stats', to: 'armies#stats'
   #get 'armies/groups', to: 'armies#groups', as: 'show_army_groups'
   get 'armies/:id/edit_notes', to: 'armies#edit_notes', as: 'edit_notes_army'
-  #get 'armies/:id/confirm_delete', to: 'armies#confirm', as: 'confirm_delete_army'
+  get 'armies/:id/delete', to: 'armies#delete', as: 'delete_army'
   get 'armies/edit_multiple', to: 'armies#edit_multiple', as: 'edit_multiple_armies'
   put 'armies/update_multiple', to: 'armies#update_multiple', as: 'update_multiple_armies'
   put 'armies/destroy_multiple', to: 'armies#destroy_multiple', as: 'destroy_multiple_armies'
@@ -60,7 +60,8 @@ Rails.application.routes.draw do
   get 'armies/show_armies', to: 'armies#show_armies', as: 'show_armies'
   #get 'armies/get_discourse_armies/:faction_id/:group', to: 'armies#get_discourse_armies'
   #post 'armies/post_discourse_armies', to: 'armies#post_discourse_armies'
-  get 'armies/:id/delete', to: 'armies#delete', as: 'delete_army'
+  put 'armies/damage_multiple', to: 'armies#damage_multiple', as: 'damage_multiple_armies'
+  put 'armies/damage_multiple_apply', to: 'armies#damage_multiple_apply', as: 'apply_damage_multiple_armies'
   resources :armies
 
   get 'units/new_multiple', to: 'units#new_multiple', as: 'new_units'
