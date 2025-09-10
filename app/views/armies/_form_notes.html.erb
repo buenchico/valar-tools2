@@ -1,0 +1,22 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <%= form_with model: army, local: false do |form| %>
+        <div class="modal-header">
+          <h5 class="modal-title" id="Title"><%= army&.name %></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <%= form.label :notes, class: 'input-group-text' %>
+            <%= form.text_area :notes, class: 'form-control', rows: 8 %>
+            <div class="input-group-append textarea-submit">
+              <%= form.button nil, class: "btn btn-primary" do %>
+                <i class="bi bi-check-square-fill"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+  </div>
+</div>

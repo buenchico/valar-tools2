@@ -9,6 +9,10 @@ function callback() {
   }, 500 );
 }
 
+<% @old_armies&.each do |army| %>
+  $('#army_<%= army.id %>').remove();
+<% end %>
+
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
 
 $(".modal").modal('hide');

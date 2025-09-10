@@ -3,7 +3,7 @@ class ArmiesController < ApplicationController
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show, :delete, :show]
   before_action :set_options
   before_action :set_factions, only: [:index, :new, :edit, :edit_multiple]
-  before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete, :damage_multiple, :damage_multiple_apply]
+  before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete, :damage_multiple, :damage_multiple_apply, :merge_multiple]
   before_action :check_owner_inclusive, only: [:show]
 
   def index
@@ -37,9 +37,16 @@ class ArmiesController < ApplicationController
   def delete
   end
 
+  def edit
+  end
+
+  def edit_notes
+  end
+
   def edit_multiple
     army_ids = params[:army_ids].split(',')
     @armies = Army.where(id: army_ids).order(:name)
+    @army_types = @armies.map(&:army_type).uniq
     @units = @armies.includes(:units).flat_map(&:units).uniq
     @template = 'form_' + params[:button] + '_multiple'
   end
@@ -275,6 +282,47 @@ class ArmiesController < ApplicationController
         else
           flash[:danger] = t('messages.multiple.error', model: Unit.model_name.human(:count => @errors_units.length), failed: ("<br>" + @errors_units.join("<br>") + "<br>").html_safe, succeed: ("<br>" + @updated_units.pluck(:name).join("<br>")).html_safe)
           format.js { render 'layouts/error' }
+        end
+      else
+        flash.now[:danger] = t('messages.validation')
+        format.js { render 'layouts/error' }
+      end
+    end
+  end
+
+  def merge_multiple
+    armies = Army.where(id: params["army_ids"]).order(:name)
+    units = Unit.where(id: params["unit_ids"]).order(:name)
+    xp = armies.minimum(:xp)
+    morale = armies.minimum(:morale)
+    position = armies.pluck(:position).uniq.join(', ')
+    notes = armies.pluck(:position).uniq.join(', ')
+    tags = armies.pluck(:tags).flatten.uniq
+    visible = (armies.all.pluck(:visible).uniq == [true]) ? true : false
+    name = params[:army][:name]
+    status = params[:army][:status]
+    logs = [
+      {
+        timestamp: Time.now,
+        user_id: @current_user.id, # Set the current user appropriately
+        username: @current_user.player,
+        changes: "Army created from merging armies: #{params["army_ids"].join(", ")}"
+      }
+    ]
+
+    @army = Army.new(name: name, position: position, notes: notes, status: status, xp: xp, morale: morale, visible: visible, tags: tags, logs: logs)
+    @army.units = units
+
+    respond_to do |format|
+      if params[:army][:confirm] == 'VALIDATE'
+        if @army.save
+          armies.delete_all
+          @old_army_ids = params["army_ids"]
+          flash.now[:success] = t('messages.success.create', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+          format.js { render 'create'}
+        else
+          flash.now[:danger] = @army.errors.to_hash
+          format.js { render 'layouts/error', locals: { thing: name , method: 'create' } }
         end
       else
         flash.now[:danger] = t('messages.validation')

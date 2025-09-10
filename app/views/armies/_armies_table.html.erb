@@ -5,6 +5,11 @@
       <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button mass-copy", disabled: true, data: {checkbox: "armies" }) do %>
         <i class="bi bi-clipboard"></i> <%= t('helpers.action.copy') %> <i class="bi bi-check d-none"></i>
       <% end %>
+      <% if @current_user&.is_master? %>
+        <%= button_tag(type: 'submit', class: "btn btn-success btn-sm mass_edit_button", disabled: true, value: "merge_armies", data: {checkbox: "armies" }) do %>
+          <i class="bi bi-exclude"></i> <%= t('helpers.submit.merge', model: Army.model_name.human.pluralize) %>
+        <% end %>
+      <% end %>
       <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "edit", data: {checkbox: "armies" }) do %>
         <i class="bi bi-pencil-square"></i> <%= t('helpers.action.mass_edit') %>
       <% end %>

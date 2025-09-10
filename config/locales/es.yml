@@ -74,6 +74,7 @@ es:
       delete: 'Borrar %{model}'
       add: 'Añadir %{model}'
       remove: 'Quitar %{model}'
+      merge: 'Unir %{model}'
       damage_multiple: 'Aplicar daño a %{model}'
       create_multiple: 'Crear %{model}'
       update_multiple: 'Guardar %{model}'
@@ -359,7 +360,7 @@ es:
     form_damage_multiple:
       damage: "Calcular daño"
     form_apply_damage_multiple:
-      damage: "Aplicar daño"      
+      damage: "Aplicar daño"
   units:
     form_damage_multiple:
       damage: "Calcular daño"

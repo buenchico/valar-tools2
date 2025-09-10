@@ -9,8 +9,12 @@ function callback() {
   }, 500 );
 }
 
-<% @unit_ids.each do |unit_id| %>
+<% @unit_ids&.each do |unit_id| %>
   $('#unit_' + <%= unit_id %>).remove();
+<% end %>
+
+<% @old_army_ids&.each do |army_id| %>
+  $('#army_' + <%= army_id %>).remove();
 <% end %>
 
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
