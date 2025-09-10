@@ -106,4 +106,8 @@ module ApplicationHelper
       "#{(number / 1_000_000_000.0).round}G"
     end
   end
+
+  def percent_to_trait(number)
+    ((number - 100) / 10.0).floor
+  end
 end

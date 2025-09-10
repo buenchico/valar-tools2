@@ -1,20 +1,28 @@
 <td>
-  <%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable option-input" %>
-  <span class="army-data d-none">
-    <%= render 'army_one_line', army: army %>
+  <%= check_box_tag "army_ids[]", army.id, false, id: 'id_army_' + army.id.to_s, class: "checkbox_selectable option-input", data: {checkbox: "armies" } %>
+  <span id="army_copy_<%= army.id.to_s %>" class="d-none armies_copy">
+    <%= render 'armies/plain_text', army: army %>
+  </span>
+  <span class="armies_men d-none">
+    <%= army.men %>
+  </span>
+  <span class="armies_strength d-none">
+    <%= army.strength %>
+  </span>
+  <span class="armies_strength_indirect d-none">
+    <%= army.strength_indirect %>
+  </span>
+  <span class="armies_hp d-none">
+    <%= army.hp %>
   </span>
 </td>
 
 <td>
-  <i class="bi bi-<%= @army_types[army.army_type]["icon"] %>"></i>
+  <span class="strength"><%= render 'armies/strength', army: army %></span>
 </td>
 
 <td>
-  <%= render 'army_strength', army: army, terrain: nil %>
-  <span class="army_men d-none"><%= army.men %></span>
-</td>
-
-<td>
+  <i class="bi bi-<%= army.icon %> text-<%= army.colour %>"></i>
   <%= army.name %>
 </td>
 
@@ -23,14 +31,13 @@
 </td>
 
 <td>
-  <%= render 'army_traits', army: army %>
+  <%= render 'traits', army: army %>
 </td>
 
 <td>
-  <span class="d-none"><%= army.position %></span>
-  <%= form_with model: army, local: false do |form| %>
-    <%= form.hidden_field :inline, value: true %>
-    <%= form.text_field :position, class: 'inline-edit-input form-control', "data-initialvalue": army.position %>
+  <%= form_with model: army, local: false, html: { class: "d-inline-flex align-items-center gap-2" } do |form| %>
+    <%= hidden_field_tag :inline, value: true %>
+    <%= form.text_field :position, class: 'inline-edit-input form-control', style: 'height: 2.4rem', "data-initialvalue": army.position %>
   <% end %>
 </td>
 
@@ -42,16 +49,17 @@
         ARMY_GROUPS.map { | key, value |
           [
             key,
-            { "data-content": "<span class='badge rounded-pill pill-tags pill-#{key} filter-value'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe
-          }
+            {
+              "data-content": "<span class='badge rounded-pill pill-tags pill-#{key} filter-value'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe
+            }
           ]
         },
         selected: army.group
       ),
       { include_blank: true },
-      class: 'selectpicker flex-fill dropdown-toggle-custom',
+      class: 'selectpicker flex-fill dropdown-toggle-custom inline-edit-select',
       title: 'Sin agrupar',
-      data: { style: 'btn-success', width: '130px', dropupAuto: false }
+      data: { style: 'btn-success' }
     %>
   <% end %>
 </td>
@@ -64,19 +72,18 @@
       <i class="bi bi-x-lg text-danger"></i>
     <% end %>
   </td>
+
+  <td>
+    <%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %>
+  </td>
+
+  <td>
+    <%= link_to '', delete_army_path(army), remote: true, class: 'bi bi-trash text-white' %>
+  </td>
 <% end %>
-
 <td>
-  <%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %>
+  <%= link_to '', army_path(army), remote: true, class: 'bi bi-eye-fill text-white' %>
 </td>
 <td>
-  <%= link_to '', edit_notes_army_path(army), remote: true, class: army.notes.blank? ? 'bi bi-sticky text-light' : 'bi bi-sticky-fill text-warning' %>
-</td>
-
-<td>
-  <% if @current_user&.is_master? %>
-    <%= link_to army_path(army), method: :delete, data: { confirm: "Estás seguro de eliminar el ejército #{army.name}?" }, remote: true do %>
-      <i class="bi bi-trash text-white"></i>
-    <% end %>
-  <% end %>
+  <%= link_to '', edit_notes_army_path(army), remote: true, class: army.notes.blank? ? 'bi bi-sticky text-white' : 'bi bi-sticky-fill text-warning' %>
 </td>

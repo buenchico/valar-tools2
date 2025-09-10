@@ -1,0 +1,516 @@
+class ArmiesController < ApplicationController
+  before_action :set_tool
+  before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show]
+  before_action :set_options
+  before_action :set_regions, only: [:new, :edit, :edit_multiple]
+  before_action :set_factions, only: [:index, :edit, :edit_multiple, :new, :groups]
+  before_action :set_filters, only: [:index]
+
+  before_action :check_player, except: [:get_discourse_armies, :post_discourse_armies]
+  before_action :check_master, only: [:destroy, :destroy_multiple, :damage_multiple, :damage_multiple_update, :stats]
+  before_action :check_owner, only: [:edit, :edit_notes, :update, :edit_multiple, :update_multiple]
+
+  def index
+    @faction = Faction.find_by(id: params[:faction_id])
+
+    @armies_all = Army.where(visible: true)
+
+    if @current_user&.is_master?
+      if @faction
+        @armies = @faction.armies.where(visible: true).order(:id)
+      else
+        @armies = nil
+      end
+    else
+      @faction = @current_user.faction
+      @armies = @faction.armies.where(visible: true).order(:id)
+    end
+  end
+
+  def new
+    selector = params[:selector] == "true"
+    army_type = params[:army_type].presence || @army_types&.keys&.first || "land"
+    @army = Army.new(army_type: army_type)
+    @army.units.build # builds one unit field by default
+
+    if selector
+      respond_to do |format|
+        format.js { render 'new_selector' }
+      end
+    else
+      respond_to do |format|
+        format.js
+      end
+    end
+  end
+
+  def edit
+  end
+
+  def edit_notes
+  end
+
+  def edit_multiple
+    army_ids = params[:army_ids].split(',')
+    @armies = Army.where(id: army_ids).order(:name)
+    @action = params[:button]
+  end
+
+  def groups
+  end
+
+  def create
+    @army = Army.new(army_params)
+
+    respond_to do |format|
+      if @army.save
+        flash.now[:success] = t('messages.success.create', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        format.js
+      else
+        flash.now[:danger] = @army.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: 'el ejército', method: 'create' } }
+      end
+    end
+  end
+
+  def update
+    @inline = inline_param # Set the inline variable based on the parameter
+    original_title =  @army.name
+
+    respond_to do |format|
+      if @army.update(army_params)
+        if @inline == true
+          @toast = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        else
+          flash.now[:success] = t('messages.success.update', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        end
+        format.js
+      else
+        flash.now[:danger] = @army.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: original_title + " (id: " + @army.id.to_s + ")", method: 'update' } }
+      end
+    end
+  end
+
+  def destroy
+    respond_to do |format|
+      if @army.destroy
+        flash.now[:danger] = t('messages.success.destroy', thing: @army.name.strip + " (id: " + @army.id.to_s + ")", count: 1)
+        format.js
+      else
+        flash.now[:danger] = @army.errors.to_hash
+        format.js { render 'layouts/error', locals: { thing: @army.name.strip + " (id: " + @army.id.to_s + ")", method: 'delete' } }
+      end
+    end
+  end
+
+  def update_multiple
+    @armies = Army.where(id: params[:army_ids])
+
+    army_params_sum = {}
+    army_params_tags = {}
+    army_params_hash = {}
+
+    if @current_user&.is_master?
+      if (params["army"]["xp_change"].blank? == false)
+        army_params_hash[:xp] = params["army"]["xp_change"]
+      end
+      if (params["army"]["xp_sum"].blank? == false)
+        army_params_sum[:xp] = params["army"]["xp_sum"]
+      end
+      if (params["army"]["morale_change"].blank? == false)
+        army_params_hash[:xp] = params["army"]["morale_change"]
+      end
+      if (params["army"]["morale_sum"].blank? == false)
+        army_params_sum[:morale] = params["army"]["morale_sum"]
+      end
+      if (params["army"]["tags_add"].blank? == false)
+        army_params_tags[:tags_add] = params["army"]["tags_add"]
+      end
+        if (params["army"]["tags_remove"].blank? == false)
+        army_params_tags[:tags_remove] = params["army"]["tags_remove"]
+      end
+    end
+
+    army_params.to_hash.each do | key, value |
+      unless value.blank?
+        if key == "faction_ids"
+          if value.reject!(&:empty?).blank?
+            nil
+          elsif value == "CLEAR"
+            army_params_hash[key] = nil
+          else
+            army_params_hash[key] = value
+          end
+        end
+        if key == "board"
+          if value == "CLEAR"
+            army_params_hash[key] = nil
+          else
+            army_params_hash[key] = value
+          end
+        end
+        if key == "position"
+          if value == "CLEAR"
+            army_params_hash[key] = nil
+          else
+            army_params_hash[key] = value
+          end
+        end
+        if key == "group"
+          if value == "CLEAR"
+            army_params_hash[key] = nil
+          else (ARMY_GROUPS.keys.map { |k| k.to_s }).include?(value.to_s)
+            army_params_hash[key] = value
+          end
+        end
+        if @current_user&.is_master? # Checking the user is admin to modify the status
+          if key == "status"
+            if @army_status.keys.include?(value.to_s)
+              army_params_hash[key] = value
+            end
+          end
+          if key == "location_id"
+            if value == "CLEAR"
+              army_params_hash[key] = nil
+            else
+              army_params_hash[key] = value
+            end
+          end
+          if key == "family_id"
+            if value == "CLEAR"
+              army_params_hash[key] = nil
+            else
+              army_params_hash[key] = value
+            end
+          end
+          if key == "visible"
+            if value == "CLEAR"
+              army_params_hash[key] = nil
+            else
+              army_params_hash[key] = value
+            end
+          end
+        end
+      end
+    end
+
+    @errors_armies = []
+    @updated_armies = []
+
+    respond_to do |format|
+      if params[:army][:confirm] == 'VALIDATE'
+        if army_params_hash.empty? && army_params_sum.empty? && army_params_tags.empty?
+          @armies = nil
+          format.js
+        else
+          @armies.each do |army|
+            if army_params_sum.empty? == false
+              army_params_sum.each do |key, value|
+                # Check if the attribute exists in the Army model
+                if army.respond_to?(key)
+                  old_value = army[key].to_i
+                  army_params_hash[key] = (old_value += value.to_i)
+                end
+              end
+            end
+
+            if army_params_tags.empty? == false
+              if army_params_tags[:tags_remove].empty? == false
+                army_params_hash[:tags] = army[:tags]&.reject! { |tag| army_params_tags[:tags_remove].include?(tag) }
+              end
+
+              if army_params_tags[:tags_add].empty? == false
+                if army[:tags].nil?
+                  army_params_hash[:tags] = army_params_tags[:tags_add]
+                else
+                  army_params_hash[:tags] = (army[:tags] || []).dup.concat(army_params_tags[:tags_add]).uniq
+                end
+              end
+
+              army_params_hash[:tags].compact.reject(&:empty?).sort
+            end
+
+            army.faction_ids_was = army.faction_ids
+            if army.update(army_params_hash)
+              @updated_armies << army.name
+            else
+              @errors_armies << (army.name.to_s + " | " + army.errors.full_messages.join(", "))
+            end
+          end
+
+          if @errors_armies.length == 0
+            flash[:success] = t('messages.multiple.success', model: Army.model_name.human(:count => @updated_armies.length), succeed: ("<br>" + @updated_armies.join("<br>")).html_safe)
+            format.html { redirect_to armies_url }
+          else
+            flash[:danger] = t('messages.multiple.error', model: Army.model_name.human(:count => @errors_armies.length), failed: ("<br>" + @errors_armies.join("<br>") + "<br>").html_safe, succeed: ("<br>" + @updated_armies.join("<br>")).html_safe)
+            format.html { redirect_to armies_url }
+          end
+        end
+      else
+        format.js { render 'invalid_confirm' }
+      end
+    end
+  end
+
+  def destroy_multiple
+    @armies = Army.where(id: params[:army_ids])
+
+    respond_to do |format|
+      if params[:army][:confirm] == 'DELETE'
+        if @armies.each { |army| army.factions.clear } && @armies.destroy_all
+          format.html { redirect_to armies_url, success: 'Ejércitos eliminados correctamente.' }
+        else
+          format.html { redirect_to armies_url, danger: 'Ha ocurrido un error, por favor, intentalo de nuevo más tarde.' }
+        end
+      else
+        format.js { render 'invalid_confirm' }
+      end
+    end
+  end
+
+  def damage_multiple
+    armies = Army.where(id: params[:army_ids])
+    damage = params[:army][:damage].to_i * @army_scale # 1 dmg kills 1 scale of hp
+    times = params[:army][:times].to_i
+
+    if Rails.env.development? && times > 1
+      simulate_damage_distribution(armies, damage, times)
+    else
+      @damage_log = apply_damage(armies, damage)
+      army_ids = @damage_log.keys
+      @armies = Army.where(id: army_ids)
+      respond_to do | format |
+        format.js
+      end
+    end
+  end
+
+  def damage_multiple_update
+    army_params_by_id = params[:armies].index_by { |a| a[:id].to_i }
+    @armies = Army.includes(:units).where(id: army_params_by_id.keys)
+
+    @armies.each do |army|
+      unit_updates = army_params_by_id[army.id]["units"]
+
+      unit_updates.each do |unit_param|
+        unit = army.units.find { |u| u.id == unit_param["id"].to_i }
+        next unless unit
+
+        unit.count = unit_param["count"].to_i
+      end
+
+      army.save # triggers callbacks
+    end
+
+    respond_to do |format|
+      format.js { render 'update_multiple' }
+    end
+  end
+
+  def simulate_damage_distribution(armies, damage, times)
+    armies_data = armies.each_with_object({}) do |army, hash|
+      hash[army.id] = {
+        name: army.name,
+        units: army.units.each_with_object({}) do |unit, units_hash|
+          units_hash[unit.id] = {
+            unit_type: unit.unit_type,
+            hp: unit.hp,
+            count: unit.troops,
+            men: unit.men
+          }
+        end
+      }
+    end
+
+    File.open("logfile.txt", "a") do |file|
+      file.puts armies_data
+    end
+
+    times.times do
+      formatted_log = apply_damage(armies, damage)
+      File.open("logfile.txt", "a") do |file|
+        file.puts formatted_log.sort_by { |entry| entry[:unit_id] }
+      end
+    end
+  end
+
+  def apply_damage(armies, damage)
+    units = armies.flat_map(&:units).select { |u| u.hp > 0 }
+
+    # Track simulated HP per unit by ID
+    simulated_hp = units.index_with(&:hp).transform_keys(&:id)
+    unit_lookup = units.index_by(&:id)
+
+    remaining_damage = damage
+    damage_log = Hash.new { |h, k| h[k] = 0 }
+
+    while remaining_damage > 0 && simulated_hp.any?
+      eligible_units = simulated_hp.select do |unit_id, hp|
+        unit = unit_lookup[unit_id]
+        chunk = @options_armies.dig("units", unit.unit_type, "hp") || 1
+        unit && hp >= chunk && remaining_damage >= chunk
+      end
+
+      break if eligible_units.empty?
+
+      # Weight units by number of chunks they can absorb
+      weighted_units = {}
+      eligible_units.each do |unit_id, hp|
+        unit = unit_lookup[unit_id]
+        next unless unit
+
+        chunk = @options_armies.dig("units", unit.unit_type, "hp") || 1
+        next if chunk <= 0
+
+        weighted_units[unit_id] = hp / chunk
+      end
+
+      total_weight = weighted_units.values.sum
+      target = rand(total_weight)
+
+      selected_unit_id = nil
+      weighted_units.each do |unit_id, weight|
+        target -= weight
+        if target < 0
+          selected_unit_id = unit_id
+          break
+        end
+      end
+
+      next unless selected_unit_id
+
+      unit = unit_lookup[selected_unit_id]
+      chunk = @options_armies.dig("units", unit.unit_type, "hp") || 1
+
+      simulated_hp[selected_unit_id] -= chunk
+      remaining_damage -= chunk
+      damage_log[selected_unit_id] += chunk
+    end
+
+    # Format and sort result
+    formatted_log = damage_log.map do |unit_id, damage|
+      unit = unit_lookup[unit_id]
+      {
+        army_id: unit.army.id,
+        unit_id: unit.id,
+        unit_type: unit.unit_type,
+        damage: damage,
+        unit_losses: (damage / unit.hp_per_unit),
+        unit_survivors: (unit.count - (damage / unit.hp_per_unit))
+      }
+    end
+
+    grouped_log = formatted_log.group_by { |entry| entry[:army_id] }
+                               .transform_values { |entries| entries.map { |e| e.except(:army_id) } }
+                               .sort.to_h
+    return grouped_log
+  end
+
+  def get_armies
+    origin = URI(request.referer).path.split('/')[1]
+
+    @active_factions = JSON.parse(params[:active_factions])
+    @active_visibility = JSON.parse(params[:active_visibility])
+
+    @armies_all = Army.where(visible: true)
+
+    master = Faction.find_by(name: 'master')
+
+    if @active_factions.count == 1
+      @faction = Faction.find_by(id: @active_factions)
+    end
+
+    if @active_factions.include?(master.id.to_s)
+      @armies = Army.all.where(visible: @active_visibility)
+    else
+      @armies = Army.joins(:factions).where(visible: @active_visibility).where(factions: { id: @active_factions })
+    end
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def export
+  end
+
+  def import
+    if request.get?
+      render :import
+    elsif request.post?
+      respond_to do |format|
+        format.html
+      end
+    end
+  end
+
+  def get_discourse_armies
+  end
+
+  def post_discourse_armies
+  end
+
+private
+  def set_options
+    @options_armies = get_options(@tool)
+    if @options_armies.blank?
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
+    else
+      set_options_armies
+    end
+  end
+
+  def set_army
+    @army = Army.find(params[:id])
+  end
+
+  def set_factions
+    @factions = Faction.where.not(name: ['admin','player']).where(active: true).order(:id)
+  end
+
+  def set_filters
+    @filter = [ t('activerecord.attributes.army.selected'), t('activerecord.attributes.army.name'), t('activerecord.attributes.army.status'), t('activerecord.attributes.army.traits'), t('activerecord.attributes.army.position'), t('activerecord.attributes.army.group') ]
+    if @current_user&.is_master?
+        @filter << t('activerecord.attributes.army.visible')
+    end
+  end
+
+  def army_params
+    params.require(:army).permit(
+      :name, :status, :position, :group, :location_id, :family_id, :confirm,
+      :visible, :notes, :board, :xp, :army_type, faction_ids: [], tags: [],
+      units_attributes: [:id, :unit_type, :count, :modifier, :_destroy]
+    ).tap do |whitelisted|
+      whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
+      whitelisted[:board] = nil if whitelisted.key?(:board) && whitelisted[:board].blank?
+    end
+  end
+
+  def check_owner
+    armies_to_include = @army.present? ? [@army] : []
+
+    if params[:army_ids].present?
+      armies_to_include += Army.where(id: params[:army_ids]).order(:name)
+    end
+
+    ownership = armies_to_include.all? do |army|
+      army.factions.include?(@current_user.faction)
+    end
+
+    if !@current_user&.is_master? && !ownership
+      respond_to do |format|
+        format.html { redirect_to armies_url, danger: t('messages.permissions', model: Army.model_name.human(:count => 1).downcase) }
+        format.js do
+          flash[:danger] = t('messages.permissions', model: Army.model_name.human(:count => 1).downcase)
+          render js: "window.location='/armies'"
+        end
+      end
+    end
+  end
+
+  # Use a separate method to handle the `inline` parameter for logic purposes
+  def inline_param
+    params.dig(:army, :inline) == "true"
+  end
+end

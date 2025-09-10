@@ -47,6 +47,15 @@ es:
           one: Mostrando <b>%{count}</b> %{entry_name}
           other: Mostrando <b>un total de %{count}</b> %{entry_name}
           zero: No se han encontrado %{entry_name}
+    validate:
+      validate: "Escribe 'VALIDATE' para confirmar los cambios."
+      delete: "Escribe 'DELETE' para confirmar los cambios."
+      damage: "Escribe 'DAMAGE' para aplicar el daño."
+      clear: "Escribe 'CLEAR' para borrar la posición"
+    select:
+      no_type: 'Sin tipo'
+      no_tags: 'Sin rasgos'
+      no_faction: 'Sin facción'
     action:
       view: 'Ver %{thing}'
       edit: 'Editar %{thing}'
@@ -65,8 +74,9 @@ es:
       delete: 'Borrar %{model}'
       add: 'Añadir %{model}'
       remove: 'Quitar %{model}'
-      damage_multiple: 'Dañar %{model}'
-      damage_multiple_update: 'Aplicar daño a %{model}'
+      merge: 'Unir %{model}'
+      damage_multiple: 'Aplicar daño a %{model}'
+      create_multiple: 'Crear %{model}'
       update_multiple: 'Guardar %{model}'
       delete_multiple: 'Borrar %{model}'
       import: 'Importar'
@@ -114,24 +124,36 @@ es:
       army:
         name: "Nombre"
         status: "Estado"
-        position: "Posición"
-        group: "Grupo"
-        family_id: "Señor"
-        location_id: "Región"
+        xp: "Experiencia"
+        morale: "Moral"
         tags: "Rasgos"
-        visible: "Visible"
+        position: "Posición"
         notes: "Notas"
-        factions: "Facciones"
-        hp: "Salud"
-        board: "Embarcar"
-        army_type: "Tipo"
-        selected: "Seleccionado"
-        traits: "Rasgos"
+        visible: "Visible"
+        families: "Familias"
         damage: "Daño"
+        strength: "Fuerza"
+        strength_indirect: "Fuerza indirecta"
+        hp: "Puntos de vida"
+        men: "Hombres"
+        group: "Grupo"
       unit:
-        unit: "Unidad"
-        count: "número"
-        modifier: "mod."
+        name: "Nombre"
+        description: "Descripción"
+        unit_type: "Tipo"
+        count: "Tropas"
+        count_start: "Inicial"
+        count_death: "Bajas"
+        strength: "Fuerza"
+        strength_indirect: "Fuerza indirecta"
+        hp: "Puntos de vida"
+        factions: "Facciones"
+        location_id: "Lugar"
+        family_id: "Familia"
+        visible: "Visible"
+        tags: "Rasgos"
+        men: "Hombres"
+        damage: "Daño"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"
@@ -263,8 +285,14 @@ es:
               blank: 'El número de unidades debe existir'
             unit_type:
               blank: 'Sólo puede elegirse un tipo de unidad de la lista'
-            modifier:
-              blank: 'El modificador debe existir'
+            strength_mod:
+              blank: 'El modificador de fuerza debe existir'
+            strength_indirect_mod:
+              blank: 'El modificador de fuerza indirecta debe existir'
+            hp_mod:
+              blank: 'El modificador de puntos de vida debe existir'
+            name:
+              taken_in_faction: "Ya existe una unidad con ese nombre en la facción %{faction}"
         army:
           attributes:
             board:
@@ -276,6 +304,8 @@ es:
               inclusion: 'Sólo pueden elegirse rasgos de la lista'
             group:
               inclusion: 'Sólo pueden elegirse grupos de la lista'
+            units:
+              must_include_one: 'No puede quitarse la última unidad de un ejército.'
           clock:
             size:
               inclusion: 'Sólo pueden elegirse tamaños de la lista'
@@ -326,6 +356,16 @@ es:
     index:
       calculate: 'Calcular'
       add_step: 'Añadir etapa'
+  armies:
+    form_damage_multiple:
+      damage: "Calcular daño"
+    form_apply_damage_multiple:
+      damage: "Aplicar daño"
+  units:
+    form_damage_multiple:
+      damage: "Calcular daño"
+    form_apply_damage_multiple:
+      damage: "Aplicar daño"
   search:
     title: 'Resultados para'
     submit: 'Buscar ...'
@@ -412,10 +452,11 @@ es:
       error: >
         Se ha encontrado un error. %{model} fallidos:
         %{failed}
-        %{model} exitosos:
+        Los siguientes %{model} han sido exitosos:
         %{succeed}
+      delete: "%{model} eliminados con éxito"
       nothing: 'Nada que actualizar.'
-      validation: 'La palabra de validación es incorrecta'
+    validation: 'La palabra de validación es incorrecta'
     click_to_create: 'Haz click para crear «{tag}»'
   views:
     # kaminari

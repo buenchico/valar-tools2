@@ -1,8 +1,9 @@
-const checkbox_status = $('#id_<%= @army.id %>').is(":checked");
+const checkbox_status = $('#id_army_<%= @army.id %>').is(":checked");
 
 $('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
+$('#army_<%= @army.id %>').attr('class', '<%= @army.status %>')
 
-$('#army_<%= @army.id %>').addClass("table-highlight <%= @army.status %>", callback )
+$('#army_<%= @army.id %>').addClass("table-highlight", callback )
 
 function callback() {
   setTimeout(function() {
@@ -10,25 +11,31 @@ function callback() {
   }, 500 );
 }
 
-if (<%= @inline %> == true) {
-  $('#toast-title').html('<%= @toast %>');
-  var toast = new bootstrap.Toast($('#liveToast'))
-  toast.show();
-} else {
-  $("#flash").html('<%= j render partial: "layouts/alert" %>');
-}
+<% @new_unit_ids&.each do |unit_id| %>
+  $('#unit_' + <%= unit_id %>).remove();
+<% end %>
 
-$("#id_<%= @army.id %>").prop("checked", checkbox_status);
+<% @removed_unit_ids&.each do |unit_id| %>
+  <% unit = Unit.find_by(id: unit_id) %>
+  $('#unit_list').find('tbody').append('<tr id="unit_<%= unit.id.to_s %>"></tr>');
+  $('#unit_<%= unit.id %>').html('<%= j render "units/row", unit: unit  %>');
 
-$('.selectpicker').selectpicker();
+  $('#unit_<%= unit.id %>').addClass("table-highlight");
+  setTimeout(function() {
+    $('#unit_<%= unit.id %>').removeClass("table-highlight");
+  }, 500);
+<% end %>
 
-$("table").trigger("updateAll");
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
 
-$.fn.recalculateStats();
-$.fn.checkboxSelectable();
-$.fn.checkbox_listeners();
-$.fn.mass_edit_buttons();
-$.fn.inline_listeners();
-initPopovers();
+$("#id_army_<%= @army.id %>").prop("checked", checkbox_status);
 
 $(".modal").modal('hide');
+
+initPopovers();
+$('.selectpicker').selectpicker();
+$.fn.table_sorter();
+$.fn.checkbox_listeners();
+$.fn.inline_listeners();
+$.fn.mass_edit_buttons('units');
+$.fn.mass_edit_buttons('armies');

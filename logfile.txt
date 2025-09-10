@@ -1,4 +1,114 @@
-{91 => {name: "1 de Invernalia", units: {1 => {unit_type: "infantry", hp: 30000, count: 30000, men: 30000}, 2 => {unit_type: "artillery", hp: 40000, count: 1000, men: 8000}, 3 => {unit_type: "mech", hp: 100, count: 1, men: 1}, 4 => {unit_type: "tank", hp: 2250, count: 45, men: 360}}}}
-{unit_id: 1, unit_type: "infantry", damage: 1930}
-{unit_id: 2, unit_type: "artillery", damage: 2920}
-{unit_id: 4, unit_type: "tank", damage: 150}
+{
+  "unit_data": {
+    "1": {
+      "unit_type": "infantry",
+      "hp": 48025,
+      "count": 48025,
+      "men": 48025,
+      "army_id": 2,
+      "unit_id": 1
+    },
+    "4": {
+      "unit_type": "tank",
+      "hp": 24300,
+      "count": 486,
+      "men": 3888,
+      "army_id": 2,
+      "unit_id": 4
+    },
+    "3": {
+      "unit_type": "fighter",
+      "hp": 7680,
+      "count": 192,
+      "men": 1536,
+      "army_id": 3,
+      "unit_id": 3
+    },
+    "2": {
+      "unit_type": "infantry",
+      "hp": 47995,
+      "count": 47995,
+      "men": 47995,
+      "army_id": 2,
+      "unit_id": 2
+    },
+    "total": {
+      "damage": 15000,
+      "attempts": 2
+    }
+  },
+  "attempt_logs": [
+    {
+      "army_id": 2,
+      "unit_id": 2,
+      "unit_type": "infantry",
+      "damage": 5414.0,
+      "unit_losses": 5414.0,
+      "unit_survivors": 42581.0,
+      "attempt": 0
+    },
+    {
+      "army_id": 2,
+      "unit_id": 1,
+      "unit_type": "infantry",
+      "damage": 5536.0,
+      "unit_losses": 5536.0,
+      "unit_survivors": 42489.0,
+      "attempt": 0
+    },
+    {
+      "army_id": 2,
+      "unit_id": 4,
+      "unit_type": "tank",
+      "damage": 3050.0,
+      "unit_losses": 61.0,
+      "unit_survivors": 425.0,
+      "attempt": 0
+    },
+    {
+      "army_id": 3,
+      "unit_id": 3,
+      "unit_type": "fighter",
+      "damage": 1000.0,
+      "unit_losses": 25.0,
+      "unit_survivors": 167.0,
+      "attempt": 0
+    },
+    {
+      "army_id": 2,
+      "unit_id": 2,
+      "unit_type": "infantry",
+      "damage": 5642.0,
+      "unit_losses": 5642.0,
+      "unit_survivors": 42353.0,
+      "attempt": 1
+    },
+    {
+      "army_id": 2,
+      "unit_id": 1,
+      "unit_type": "infantry",
+      "damage": 5538.0,
+      "unit_losses": 5538.0,
+      "unit_survivors": 42487.0,
+      "attempt": 1
+    },
+    {
+      "army_id": 2,
+      "unit_id": 4,
+      "unit_type": "tank",
+      "damage": 3100.0,
+      "unit_losses": 62.0,
+      "unit_survivors": 424.0,
+      "attempt": 1
+    },
+    {
+      "army_id": 3,
+      "unit_id": 3,
+      "unit_type": "fighter",
+      "damage": 720.0,
+      "unit_losses": 18.0,
+      "unit_survivors": 174.0,
+      "attempt": 1
+    }
+  ]
+}

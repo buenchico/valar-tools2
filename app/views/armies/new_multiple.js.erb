@@ -1,0 +1,17 @@
+$(".modal").modal('hide');
+$('#content').html("<%= j render 'form_create_multiple', units: @units, action: 'create' %>");
+$('#armyModal').modal('show');
+
+$('#add-unit-row').on('click', function() {
+  <% rendered_row = fields_for "units[]", Unit.new do |unit_form| %>
+    <%= render partial: 'unit_fields', locals: { form: unit_form } %>
+  <% end %>
+
+  const newRow = `<%= j(rendered_row) %>`;
+  $('tbody.multiple-units-tbody').append(newRow);
+  $('tbody.multiple-units-tbody .selectpicker').selectpicker('refresh');
+});
+
+$('#armyModal').on('click', '.remove_unit', function() {
+  $(this).closest('tr').remove();
+});

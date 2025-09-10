@@ -1,89 +1,5 @@
 $(document).on('turbolinks:load', function () {
-  if ($(".armies").length !== 0 ) {
-    $.fn.copyArmies = function(){
-      let message = "";
-      let str = 0;
-      let men = 0;
-
-      //Loop through all checked CheckBoxes in GridView.
-      $(".checkbox_selectable:visible:checked").each(function () {
-          let row = $(this).closest("tr");
-          if (row.hasClass("tablesorter-headerRow") == false) {
-            message += "> * " + row.find('.army-data .visible').text().replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
-            message += "\n";
-            str += parseFloat(row.find('.army_strength').text())
-            men += parseInt(row.find('.army_men').text())
-          }
-      });
-
-      message += "Total: 🎖️: " + str + " 🪖: " + men
-
-      navigator.clipboard.writeText(message)
-    }
-
-    // Recalculate stats
-    $.fn.recalculateStats = function(){
-      var menArmies = 0
-      var strArmies = 0
-      $('tr:visible').each(function(){
-        men = parseInt($(this).find('.army_men').text());
-        if (isNaN(men)) {
-            men = 0;
-        }
-        menArmies += men;
-        str = parseFloat($(this).find('.army_strength').text());
-        if (isNaN(str)) {
-            str = 0;
-        }
-        strArmies += str
-      });
-      $("#visible_strength").html(strArmies.toFixed(2));
-      $("#visible_men").html(menArmies);
-    }
-
-    // Filters
-    $.fn.armyFilters = function(){
-        var value = $("#filtertext").val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        var column = $("#filterselect").children("option:selected").val();
-        $(".army_list").filterTable(value, column);
-        var countArmies = $('.checkbox_selectable:visible').length;
-        $("#count-visible").html(countArmies);
-    }
-
-    // Trigger filters
-    $("#filterselect").on("change", function() {
-        $.fn.armyFilters() // Why I need to remove the semicolons!!!!!
-        $.fn.recalculateStats()
-    });
-    $("#filtertext").on("keyup", function() {
-        $.fn.armyFilters()
-        $.fn.recalculateStats()
-    });
-
-    // Add hidden checkboxes for mass edit options
-    $.fn.checkboxSelectable = function(){
-      $('.checkbox_selectable').change(function() {
-        var form = $('#edit_multiple');
-        var armyId = $(this).val();
-
-        var hiddenInput = $('#army_ids_field');
-        var selectedIds = hiddenInput.val().split(',').filter(Boolean); // Splits by comma and removes empty values
-
-        if ($(this).is(':checked')) {
-          // Add armyId if it's checked and not already in the list
-          if (!selectedIds.includes(armyId)) {
-            selectedIds.push(armyId);
-          }
-        } else {
-          // Remove armyId if it's unchecked
-          selectedIds = selectedIds.filter(id => id !== armyId);
-        }
-
-        // Update the hidden input field with the new list of ids, joined by commas
-        hiddenInput.val(selectedIds.join(','));
-      });
-    }
-
+  if ($(".armies").length !== 0) {
     // Trigger armies load for master
     $('.armies-load').click(function() {
       $('#spinner-main').removeClass('d-none');
@@ -122,14 +38,43 @@ $(document).on('turbolinks:load', function () {
       form.submit();
     });
 
-    // Copy action event Trigger
-    $(".mass-copy").click(function () {
-      $.fn.copyArmies();
-    });
+    $.fn.copyArmies = function() {
+      $('.mass-copy').click(function() {
+        const button = $(this); // capture reference
+        var checkboxGroup = button.data("checkbox");
+        let message = "";
+        let str = 0;
+        let men = 0;
+        let ind = 0;
+        let hp = 0;
 
-    // Trigger functions on load
-    $.fn.recalculateStats();
-    $.fn.checkboxSelectable();
+        // Loop through all checked CheckBoxes in GridView.
+      $(`.checkbox_selectable:visible:checked[data-checkbox='${checkboxGroup}']`).each(function () {
+            let row = $(this).closest("tr");
+            if (row.hasClass("tablesorter-headerRow") == false) {
+              message += "> * " + row.find('.' + checkboxGroup + '_copy').text().replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
+              message += "\n";
+              str += parseFloat(row.find('.' + checkboxGroup + '_strength').text())
+              men += parseInt(row.find('.' + checkboxGroup + '_men').text())
+              ind += parseFloat(row.find('.' + checkboxGroup + '_strength_indirect').text())
+              hp += parseInt(row.find('.' + checkboxGroup + '_hp').text())
+            }
+        });
 
+        message += "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men
+
+        navigator.clipboard.writeText(message)
+
+        button.addClass('bg-success-subtle text-dark');
+        button.find('.bi-check').removeClass('d-none');
+        setTimeout(function() {
+          button.removeClass('bg-success-subtle text-dark');
+          button.find('.bi-check').addClass('d-none');
+        }, 500);
+      });
+    }
+
+    $.fn.copyArmies();
+    $.fn.inline_listeners();
   }
 });

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_01_135206) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -26,31 +26,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_135206) do
   end
 
   create_table "armies", force: :cascade do |t|
-    t.string "name"
-    t.string "status"
-    t.string "group"
+    t.string "name", null: false
     t.string "position"
     t.text "notes"
-    t.boolean "visible"
-    t.text "tags", default: [], array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "location_id"
-    t.bigint "family_id"
-    t.string "board"
-    t.text "logs", default: [], array: true
-    t.string "army_type"
+    t.string "status"
+    t.string "group"
     t.integer "xp", default: 100
     t.integer "morale", default: 100
-    t.index ["family_id"], name: "index_valar_armies_on_family_id"
-    t.index ["location_id"], name: "index_valar_armies_on_location_id"
-  end
-
-  create_table "armies_factions", force: :cascade do |t|
-    t.bigint "army_id"
-    t.bigint "faction_id"
+    t.boolean "visible", default: true
+    t.text "tags", default: [], array: true
+    t.text "logs", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "armies_factions", id: false, force: :cascade do |t|
+    t.bigint "army_id", null: false
+    t.bigint "faction_id", null: false
+    t.index ["army_id", "faction_id"], name: "index_valar_armies_factions_on_army_id_and_faction_id", unique: true
     t.index ["army_id"], name: "index_valar_armies_factions_on_army_id"
     t.index ["faction_id"], name: "index_valar_armies_factions_on_faction_id"
   end
@@ -117,6 +110,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_135206) do
     t.datetime "updated_at", null: false
     t.index ["faction_id"], name: "index_valar_factions_games_on_faction_id"
     t.index ["game_id"], name: "index_valar_factions_games_on_game_id"
+  end
+
+  create_table "factions_units", id: false, force: :cascade do |t|
+    t.bigint "unit_id", null: false
+    t.bigint "faction_id", null: false
+    t.index ["faction_id"], name: "index_valar_factions_units_on_faction_id"
+    t.index ["unit_id", "faction_id"], name: "index_valar_factions_units_on_unit_id_and_faction_id", unique: true
+    t.index ["unit_id"], name: "index_valar_factions_units_on_unit_id"
   end
 
   create_table "families", force: :cascade do |t|
@@ -219,14 +220,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_135206) do
   end
 
   create_table "units", force: :cascade do |t|
-    t.bigint "army_id", null: false
+    t.string "name", null: false
     t.string "unit_type"
-    t.integer "troops_start"
-    t.integer "count"
-    t.integer "modifier", default: 100
+    t.integer "count", default: 1
+    t.integer "count_start"
+    t.integer "count_death"
+    t.integer "strength_mod", default: 100
+    t.integer "strength_indirect_mod", default: 100
+    t.integer "hp_mod", default: 100
+    t.boolean "visible", default: true
+    t.text "tags", default: [], array: true
+    t.text "logs", default: [], array: true
+    t.bigint "army_id"
+    t.bigint "family_id"
+    t.bigint "location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["army_id"], name: "index_valar_units_on_army_id"
+    t.index ["family_id"], name: "index_valar_units_on_family_id"
+    t.index ["location_id"], name: "index_valar_units_on_location_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -246,9 +258,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_135206) do
   add_foreign_key "battles", "users"
   add_foreign_key "factions_games", "factions"
   add_foreign_key "factions_games", "games"
+  add_foreign_key "factions_units", "factions"
+  add_foreign_key "factions_units", "units"
   add_foreign_key "families", "families", column: "lord_id"
   add_foreign_key "games_recipes", "games"
   add_foreign_key "games_recipes", "recipes"
   add_foreign_key "locations", "locations", column: "region_id"
   add_foreign_key "units", "armies"
+  add_foreign_key "units", "families"
+  add_foreign_key "units", "locations"
 end

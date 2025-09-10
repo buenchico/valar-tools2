@@ -1,0 +1,34 @@
+const checkbox_status = $('#id_<%= @army.id %>').is(":checked");
+
+$('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
+
+$('#army_<%= @army.id %>').addClass("table-highlight <%= @army.status %>", callback )
+
+function callback() {
+  setTimeout(function() {
+    $('#army_<%= @army.id %>').removeClass( "table-highlight" );
+  }, 500 );
+}
+
+if (<%= @inline %> == true) {
+  $('#toast-title').html('<%= @toast %>');
+  var toast = new bootstrap.Toast($('#liveToast'))
+  toast.show();
+} else {
+  $("#flash").html('<%= j render partial: "layouts/alert" %>');
+}
+
+$("#id_<%= @army.id %>").prop("checked", checkbox_status);
+
+$('.selectpicker').selectpicker();
+
+$("table").trigger("updateAll");
+
+$.fn.recalculateStats();
+$.fn.checkboxSelectable();
+$.fn.checkbox_listeners();
+$.fn.mass_edit_buttons();
+$.fn.inline_listeners();
+initPopovers();
+
+$(".modal").modal('hide');

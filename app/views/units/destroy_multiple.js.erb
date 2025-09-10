@@ -1,0 +1,15 @@
+<% @destroyed&.each do |unit| %>
+  $('#unit_<%= unit.id %>').remove();
+<% end %>
+
+$("html, body").animate({ scrollTop: 0 }, "slow");
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+$(".modal").modal('hide');
+
+initPopovers();
+$.fn.table_sorter();
+$.fn.checkbox_listeners();
+$.fn.inline_listeners();
+$.fn.mass_edit_buttons('units');
+$.fn.mass_edit_buttons('armies');

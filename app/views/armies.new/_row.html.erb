@@ -1,0 +1,82 @@
+<td>
+  <%= check_box_tag "army_ids[]", army.id, false, id: 'id_' + army.id.to_s,class: "checkbox_selectable option-input" %>
+  <span class="army-data d-none">
+    <%= render 'army_one_line', army: army %>
+  </span>
+</td>
+
+<td>
+  <i class="bi bi-<%= @army_types[army.army_type]["icon"] %>"></i>
+</td>
+
+<td>
+  <%= render 'army_strength', army: army, terrain: nil %>
+  <span class="army_men d-none"><%= army.men %></span>
+</td>
+
+<td>
+  <%= army.name %>
+</td>
+
+<td>
+  <%= @army_status[army.status]["name"] %>
+</td>
+
+<td>
+  <%= render 'army_traits', army: army %>
+</td>
+
+<td>
+  <span class="d-none"><%= army.position %></span>
+  <%= form_with model: army, local: false do |form| %>
+    <%= form.hidden_field :inline, value: true %>
+    <%= form.text_field :position, class: 'inline-edit-input form-control', "data-initialvalue": army.position %>
+  <% end %>
+</td>
+
+<td>
+  <%= form_with model: army, class: 'inline-edit-select', local: false do |form| %>
+    <%= form.hidden_field :inline, value: true %>
+    <%= form.select :group,
+      options_for_select(
+        ARMY_GROUPS.map { | key, value |
+          [
+            key,
+            { "data-content": "<span class='badge rounded-pill pill-tags pill-#{key} filter-value'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe
+          }
+          ]
+        },
+        selected: army.group
+      ),
+      { include_blank: true },
+      class: 'selectpicker flex-fill dropdown-toggle-custom',
+      title: 'Sin agrupar',
+      data: { style: 'btn-success', width: '130px', dropupAuto: false }
+    %>
+  <% end %>
+</td>
+
+<% if @current_user&.is_master? %>
+  <td class="text-center">
+    <% if army.visible == true %>
+      <%= army.factions.pluck(:long_name).join(", ") %>
+    <% else %>
+      <i class="bi bi-x-lg text-danger"></i>
+    <% end %>
+  </td>
+<% end %>
+
+<td>
+  <%= link_to '', edit_army_path(army), remote: true, class: 'bi bi-pencil-square text-white' %>
+</td>
+<td>
+  <%= link_to '', edit_notes_army_path(army), remote: true, class: army.notes.blank? ? 'bi bi-sticky text-light' : 'bi bi-sticky-fill text-warning' %>
+</td>
+
+<td>
+  <% if @current_user&.is_master? %>
+    <%= link_to army_path(army), method: :delete, data: { confirm: "Estás seguro de eliminar el ejército #{army.name}?" }, remote: true do %>
+      <i class="bi bi-trash text-white"></i>
+    <% end %>
+  <% end %>
+</td>

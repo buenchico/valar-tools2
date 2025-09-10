@@ -16,14 +16,6 @@ module ArmiesHelper
   end
 
   def total_army_units_by_type(armies)
-    armies
-      .flat_map(&:units)
-      .group_by(&:unit_type)
-      .transform_values do |units|
-        {
-          count: units.sum(&:count),
-          strength: units.sum(&:strength)
-        }
-      end
+    Array(armies).flat_map(&:units).group_by(&:unit_type).transform_values { |units| units.sum(&:count) }
   end
 end

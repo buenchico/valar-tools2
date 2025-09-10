@@ -1,0 +1,29 @@
+<%= army.name %>
+
+<% general = @options_armies.fetch("general", {}) %>
+<% if percent_to_trait(army.xp) != 0 %>
+  <% xp_data = general.fetch("xp", {}) %>
+  <%= xp_data.fetch('name', 'xp').titleize %>
+  <%= number_to_modifier(percent_to_trait(army.xp)) %>
+<% end %>
+<% if percent_to_trait(army.morale) != 0 %>
+  <% morale_data = general.fetch("morale", {}) %>
+  <%= morale_data.fetch('name', 'morale').titleize %>
+  <%= number_to_modifier(percent_to_trait(army.morale)) %>
+<% end %>
+
+<% army.composition.each do | key, unit | %>
+  <%= number_to_compact(unit[:count].to_i) %>
+  <%= unit[:title] %>
+<% end %>
+
+<% army.unit_tags.each do |tag, count| %>
+  <% tag_options = @unit_tags.fetch(tag, {}) %>
+  <%= tag_options.fetch('name', tag).titleize %>
+  <%= (count != 1) ? "(#{count})" : "" %>
+<% end %>
+
+<% army.tags.each do |tag| %>
+  <% tag_options = @army_tags.fetch(tag, {}) %>
+  <%= tag_options.fetch('name', tag).titleize %>
+<% end %>

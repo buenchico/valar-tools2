@@ -1,3 +1,9 @@
-$(".modal").modal('hide');
-$('#content').html("<%= j render 'form_apply_damage' %>");
-$('#armyModal').modal('show');
+$("#armyModal").html('<%= j render "form_apply_damage_multiple", armies: @armies, units: @units %>')
+
+initPopovers();
+$('.selectpicker').selectpicker();
+$.fn.table_sorter();
+$.fn.checkbox_listeners();
+$.fn.inline_listeners();
+$.fn.mass_edit_buttons('units');
+$.fn.mass_edit_buttons('armies');

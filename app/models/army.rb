@@ -2,27 +2,26 @@ class Army < ApplicationRecord
   include PgSearch::Model
   multisearchable against: [:name, :group, :position, :notes, :search]
 
-  has_and_belongs_to_many :factions
-  belongs_to :family, class_name: 'Family', foreign_key: 'family_id', optional: true
-  belongs_to :location, class_name: 'Location', foreign_key: 'location_id', optional: true
+  has_many :units, dependent: :nullify
+  accepts_nested_attributes_for :units, allow_destroy: true
 
-  has_many :units, dependent: :destroy
-  accepts_nested_attributes_for :units, reject_if: :all_blank, allow_destroy: true
-
-  before_validation :set_options
-
-  validates :name, presence: true
-  validates_uniqueness_of :name
-  validate :army_type_must_be_valid
-
-  attr_accessor :faction_ids_was
   attr_accessor :unit_ids_was
 
-  after_find :cache_attributes
+  validate :must_have_at_least_one_unit
+  validates :name, presence: true, uniqueness: true
+  validates :xp, numericality: { greater_than_or_equal_to: 50 }
+  validates :morale, numericality: { greater_than_or_equal_to: 0 }
+  validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
+
+  after_find :cache_units
+
+  before_validation :ensure_minimum_xp
+  before_validation :ensure_minimum_morale
+
   before_save :log_changes
 
-  def title
-    self.name
+  def search
+   nil
   end
 
   def strength
@@ -34,7 +33,27 @@ class Army < ApplicationRecord
 
     units = self.units.sum(&:strength)
 
-    mult = (self.xp / 100) * (self.morale / 100).to_i
+    mult = ((self.xp.to_f / 100.0) * (self.morale.to_f / 100.0)).round(2)
+
+    tags = 0
+
+    total = units * mult
+
+    str = { "total": total.round(2), "subtotal": units.round(2), "mult": mult, "tags": tags }
+
+    return str
+  end
+
+  def strength_indirect
+    self.strength_calc[:total]
+  end
+
+  def strength_indirect_calc
+    set_options if @options_armies.nil?
+
+    units = self.units.sum(&:strength_indirect)
+
+    mult = (self.xp.to_f / 100.0) * (self.morale.to_f / 100.0).round(2)
 
     tags = 0
 
@@ -61,67 +80,111 @@ class Army < ApplicationRecord
     units.sum(&:hp_start).to_i
   end
 
-  def search
-    self.family&.name
+  def families
+    self.units.includes(:family).map(&:family).compact.uniq.sort_by(&:title)
+  end
+
+  def locations
+    self.units.includes(:location).map(&:location).compact.uniq.sort_by(&:name)
+  end
+
+  def factions
+    self.units.includes(:factions).flat_map(&:factions).uniq.sort_by(&:name)
+  end
+
+  def composition
+    self.units
+      .group_by(&:unit_type)
+      .sort_by { |unit_type, _| unit_type }
+      .to_h
+      .transform_values do |units|
+        {
+          count: units.sum(&:count),
+          icon: units.first.icon,
+          colour: units.first.colour,
+          title: units.first.title
+        }
+      end
+  end
+
+  def unit_tags
+    units.flat_map(&:tags).compact.sort.tally
+  end
+
+  def army_type
+    units&.first&.army_type
+  end
+
+  def icon
+    units&.first&.army_icon
+  end
+
+  def colour
+    units&.first&.colour
+  end
+
+private
+  def set_options
+    active_game = Game.find_by(active: true)
+    @options_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
+
+    @units = @options_armies["units"]
+    @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
+    @status = @options_armies["status"]
+    @army_scale = @options_armies["general"]["scale"]
+  end
+
+  def must_have_at_least_one_unit
+    if units.empty? || units.all?(&:marked_for_destruction?)
+      errors.add(:units, I18n.t('activerecord.errors.models.army.attributes.units.must_include_one'))
+    end
+  end
+
+  def ensure_minimum_xp
+    self.xp = 50 if xp.present? && xp < 50
+  end
+
+  def ensure_minimum_morale
+    self.morale = 0 if morale.present? && morale < 0
+  end
+
+  def cache_units
+    self.unit_ids_was = self.unit_ids.dup
   end
 
   def log_changes
+    excluded_keys = ["updated_at", "created_at", "logs"]
+    association_fields = { }
+
+    message = []
+
     current_user = Thread.current[:current_user] || User.find_by(player: "valar")
 
     if self.changes.keys != ['logs'] # Check if the only changes are not of the logs
-      if new_record?
-        changes = ["Army has been created"]
+      changes.each do |attr, (old, new)|
+        next if excluded_keys.include?(attr)
 
-        excluded = %w[family_id logs]
-        changes.concat(self.attributes.except(*excluded)
-                         .select { |_, value| value.present? }
-                         .map { |attr, value| "#{attr} is #{value.inspect}" })
-        if self.family_id.present?
-          changes << "family is #{Family.find(self.family_id)&.title}"
-        end
-
-        if self.faction_ids.present?
-          changes << "factions is #{Faction.where(id: faction_ids).pluck(:name, :id).map { |name, id | "#{name} (#{id})" }.to_s }"
-        end
-
-        if unit_ids.present?
-          self.units.each do | unit |
-            changes << "Unit added : #{unit.count} #{unit.name}"
-          end
-        end
-      else
-        excluded = %w[logs]
-        changes = self.changes.except(*excluded).map do |field, values|
-          if field == "family_id"
-            "#{field} changed from #{values[0].blank? ? "nil" : Family.find(values[0])&.title} to #{values[1].blank? ? "nil" : Family.find(values[1])&.title}"
-          else
-            "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
-          end
-        end
-
-        if self.faction_ids_was != self.faction_ids
-          changes << ("Factions changed from: " + Faction.where(id: self.faction_ids_was).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s + " to: " + Faction.where(id: self.faction_ids).pluck(:name, :id).map { |name, id| "#{name} (#{id})" }.to_s)
+        if association_fields.key?(attr)
+          model = association_fields[attr]
+          old_names = model.find_by(id: old)&.name || "None"
+          new_names = model.find_by(id: new)&.name || "None"
+          message << "Army ##{id || "None"} - #{attr.gsub('_id', '')} changed from '#{old_name}' to '#{new_name}'"
+        else
+          message << "Army ##{id || "None"} - #{attr || "None"} changed from #{old || "None"} to #{new || "None"}"
         end
       end
 
-      units.each do |unit|
-        if unit.new_record?
-          changes << "Unit created : #{unit.unit_type}, count: #{unit.count}"
-        elsif unit.marked_for_destruction?
-          changes << "Unit (##{unit.id}) destroyed : #{unit.unit_type}, count: #{unit.count}"
-        elsif unit.changed?
-          unit_changes = unit.changes.map do |field, values|
-            "#{field} changed from #{values[0].blank? ? "nil" : values[0]} to #{values[1].blank? ? "nil" : values[1]}"
-          end
-          changes << "Unit (##{unit.id}) : #{unit.unit_type} #{unit_changes.join(", ")}"
-        end
+      if self.unit_ids_was&.sort != unit_ids&.sort
+        old_names = Unit.where(id: self.unit_ids_was&.sort).pluck(:name, :id).join(", ")
+        new_names = Unit.where(id: unit_ids).pluck(:name).join(", ")
+        message << "Army ##{id} - units changed from '#{old_names}' to '#{new_names}'"
       end
 
       change_log = {
         timestamp: Time.now,
         user_id: current_user.id, # Set the current user appropriately
         username: current_user.player,
-        changes: changes
+        changes: message
       }
 
       # Initialize self.logs as an empty array if it's nil
@@ -130,26 +193,5 @@ class Army < ApplicationRecord
       # Append the change log to the "logs" array
       self.logs << change_log.to_json
     end
-  end
-
-  def set_options
-    active_game = Game.find_by(active: true)
-    @options_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
-
-    @units = @options_armies["units"]
-    @status = @options_armies["status"]
-    @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
-  end
-
-  def army_type_must_be_valid
-    valid_types = @army_types&.keys&.map(&:to_s) || []
-    unless valid_types.include?(army_type)
-      errors.add(:army_type, "is not a valid type. Must be one of: #{valid_types.join(', ')}")
-    end
-  end
-
-  def cache_attributes
-    self.faction_ids_was = self.faction_ids.dup
-    self.unit_ids_was = self.unit_ids.dup
   end
 end

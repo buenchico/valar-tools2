@@ -1,0 +1,9 @@
+$("html, body").animate({ scrollTop: 0 }, "slow");
+
+$('#army_<%= @army.id %>').remove();
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+
+$.fn.recalculateStats();
+
+$(".modal").modal('hide');

@@ -1,32 +1,70 @@
-<div class="table-responsive">
-  <table id="army_list" class="table table-dark table-striped table-borderless table-hover table-sm sortable army_list">
-    <caption>Lista de ejércitos</caption>
-    <thead>
-      <tr id="table_title">
-        <th data-sorter="false" data-filter="checkbox" scope="col" style="width: 30px">
-          <input type="checkbox" class="checkbox_select_all option-input" /><span class="d-none"><%= t('activerecord.attributes.army.selected') %></span>
-        </th>
-        <th scope="col" data-sorter="false"</th>
-        <th scope="col" style="width: 78px"><i class="bi bi-award"></i></th>
-        <th scope="col"><%= t('activerecord.attributes.army.name') %></th>
-        <th scope="col"><%= t('activerecord.attributes.army.status') %></th>
-        <th scope="col"><%= t('activerecord.attributes.army.traits') %></th>
-        <th scope="col" style="width: 100px"><%= t('activerecord.attributes.army.position') %></th>
-        <th scope="col"><%= t('activerecord.attributes.army.group') %></th>
-        <% if @current_user&.is_master? %>
-          <th scope="col"><%= t('activerecord.attributes.family.visible') %></th>
+<div class="row my-3">
+  <div class="col">
+    <%= form_tag(edit_multiple_armies_path, method: :get, id: 'edit_multiple_units', remote: true) do %>
+      <%= hidden_field_tag 'army_ids', '', id: 'armies_ids_field' %>
+      <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button mass-copy", disabled: true, data: {checkbox: "armies" }) do %>
+        <i class="bi bi-clipboard"></i> <%= t('helpers.action.copy') %> <i class="bi bi-check d-none"></i>
+      <% end %>
+      <% if @current_user&.is_master? %>
+        <%= button_tag(type: 'submit', class: "btn btn-success btn-sm mass_edit_button", disabled: true, value: "merge_armies", data: {checkbox: "armies" }) do %>
+          <i class="bi bi-exclude"></i> <%= t('helpers.submit.merge', model: Army.model_name.human.pluralize) %>
         <% end %>
-        <th scope="col" colspan="3" data-sorter="false"></th>
+      <% end %>
+      <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "edit", data: {checkbox: "armies" }) do %>
+        <i class="bi bi-pencil-square"></i> <%= t('helpers.action.mass_edit') %>
+      <% end %>
+      <% if @current_user&.is_master? %>
+        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "delete", data: {checkbox: "armies" }) do %>
+          <i class="bi bi-trash"></i> <%= t('helpers.action.mass_delete') %>
+        <% end %>
+        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "damage", data: {checkbox: "armies" }) do %>
+          <i class="bi bi-damage-kinetic"></i> <%= t('helpers.action.damage') %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<div class="table-responsive text-light">
+  <table id="army_list" class="table table-dark table-striped table-borderless table-hover table-sm sortable">
+    <caption class="text-light">Lista de ejércitos</caption>
+    <thead>
+      <tr>
+        <th data-sorter="false" data-filter="checkbox" scope="col" style="width: 30px">
+          <input type="checkbox" class="checkbox_select_all option-input" data-checkbox="armies" /><span class="d-none"></span>
+        </th>
+        <th scope="col" style="width: 78px">
+          <i class="bi bi-award"></i>
+        </th>
+        <th scope="col">
+          <%= t('activerecord.attributes.army.name') %>
+        </th>
+        <th scope="col">
+          <%= t('activerecord.attributes.army.status') %>
+        </th>
+        <th scope="col">
+          <%= t('activerecord.attributes.army.description') %>
+        </th>
+        <th scope="col">
+          <%= t('activerecord.attributes.army.position') %>
+        </th>
+        <th scope="col">
+          <%= t('activerecord.attributes.army.group') %>
+        </th>
+        <% if @current_user&.is_master? %>
+          <th scope="col" class="text-center"><%= t('activerecord.attributes.family.visible') %></th>
+          <th scope="col" colspan="<%= @current_user.is_master? ? 4 : 2 %>" data-sorter="false"></th>
+        <% end %>
       </tr>
     </thead>
     <tbody id="table_body">
       <div class="d-flex justify-content-center">
-        <div id="spinner-main" class="spinner-border fs-1 d-none" role="status">
+        <div id="spinner-units" class="spinner-border fs-1 d-none" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
       <% @armies&.each do |army| %>
-        <%= render 'row_container', army: army %>
+        <%= render 'armies/row_container', army: army %>
       <% end %>
     </tbody>
   </table>

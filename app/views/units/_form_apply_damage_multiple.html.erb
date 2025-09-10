@@ -1,0 +1,36 @@
+
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title w-100" id="Title"><%= t('helpers.action.damage') %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_for :unit, url: apply_damage_multiple_units_path, remote: true, method: :put do | form | %>
+          <div class="alert alert-warning">
+            <div>Las siguientes unidades recibirán daño</div>
+            <ul>
+              <% @damage_log.each do |key, value| %>
+              <%= hidden_field_tag "unit_ids[]", value[:unit_id] %>
+              <%= hidden_field_tag "units[][id]", value[:unit_id] %>
+              <%= hidden_field_tag "units[][count]", value[:unit_survivors].to_i %>
+
+                <li>
+                  <%= render 'units/one_line', unit: units.find_by(id: value[:unit_id]) %>
+                   —
+                  <span class="small"><%= value[:unit_losses].to_i %> <%= t('activerecord.attributes.unit.count_death').pluralize.downcase %></span>
+                  <span class="small"><%= value[:damage].to_i %> <%= t('activerecord.attributes.unit.damage').downcase %></span>
+                </li>
+              <% end %>
+            <ul>
+          </div>
+          <div class="input-group mt-3">
+            <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.damage') %>
+          </div>
+          <div class="input-group mt-3">
+            <%= form.submit t('.damage', model: t('activerecord.models.unit', count: 2)), class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>

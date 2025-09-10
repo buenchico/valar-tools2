@@ -1,0 +1,123 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title id="Title"><%= t('helpers.action.mass_edit') %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <%= form_for :army, url: update_multiple_armies_path, remote: true, method: :put do | form | %>
+            <div class="alert alert-warning">
+              <div>Los siguientes ejércitos serán actualizados:</div>
+              <ul>
+                <% armies.each do | army | %>
+                  <%= hidden_field_tag "army_ids[]", army.id %>
+                  <li>
+                    <%= render 'armies/one_line', army: army %>
+                  </li>
+                <% end %>
+              </ul>
+              <hr class="border border-secondary opacity-75 border-2">
+              <div>Las siguientes unidades serán afectadas:</div>
+              <ul>
+                <% units.each do | unit | %>
+                  <%= hidden_field_tag "unit_ids[]", unit.id %>
+                  <li>
+                    <%= render 'units/one_line', unit: unit %>
+                  </li>
+                <% end %>
+              <ul>
+            </div>
+            <% if @current_user.is_master? %>
+              <div class="input-group mt-3">
+                <%= form.label :status, t('activerecord.attributes.army.status'), class: 'input-group-text' %>
+                <%= form.select :status, ([""] + @army_status.map { |k,v| [v["name"], k]}), {}, class: 'form-select' %>
+              </div>
+              <div class="input-group mt-3">
+                <%= form.label :xp, t('activerecord.attributes.army.xp'),class: 'input-group-text' %>
+                <%= form.number_field :xp_sum, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.sum'), min: -200, max: 200 %>
+                <%= form.number_field :xp_change, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.change'), min: 0, max: 200 %>
+              </div>
+              <div class="input-group mt-3">
+                <%= form.label :morale, t('activerecord.attributes.army.morale'),class: 'input-group-text' %>
+                <%= form.number_field :morale_sum, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.sum'), min: -200, max: 200 %>
+                <%= form.number_field :morale_change, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.change'), min: 0, max: 200 %>
+              </div>
+              <div class="input-group mt-3">
+                <%= form.label :tags, t('activerecord.attributes.army.tags'), class: 'input-group-text' %>
+                <%= form.select :tags_add,
+                  options_for_select(
+                    @army_tags.map { | tag |
+                      [
+                        tag[0],
+                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                      }
+                      ]
+                    }
+                  ),
+                  { include_blank: false },
+                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  title: t('helpers.placeholder.add'),
+                  multiple: true,
+                  data: { }
+                %>
+                <%= form.select :tags_remove,
+                  options_for_select(
+                    @army_tags.map { | tag |
+                      [
+                        tag[0],
+                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                      }
+                      ]
+                    }
+                  ),
+                  { include_blank: false },
+                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  title: t('helpers.placeholder.remove'),
+                  multiple: true,
+                  data: { }
+                %>
+              </div>
+            <% end %>
+
+            <div class="input-group mt-3">
+              <%= form.label :position, t('activerecord.attributes.army.position'), class: 'input-group-text' %>
+              <%= form.text_field :position, class: "form-control", "data-bs-toggle": "tooltip", "data-bs-placement": "top", "data-bs-html": "true", title: t('helpers.validate.clear').html_safe %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :group, t('activerecord.attributes.army.group'), class: 'input-group-text' %>
+              <%= form.select :group,
+                options_for_select(
+                  ARMY_GROUPS.map { | key, value |
+                    [
+                      key,
+                      { "data-content": "<span class='badge rounded-pill pill-tags pill-#{key}'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe
+                    }
+                    ]
+                  }.unshift([{"data-content": "<span class='badge rounded-pill pill-tags bg-secondary'><span class='pill-tags-text'>Quitar grupos</span>"},"CLEAR"]),
+                  selected: nil
+                ),
+                { include_blank: true },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                data: { noneSelectedText: ' '}
+              %>
+            </div>
+            <% if @current_user.is_master? %>
+              <div class="input-group mt-3">
+                <%= form.label :visible, t('activerecord.attributes.army.visible'), class: 'input-group-text' %>
+                <%= form.select :visible, [[""],["Invisible", "CLEAR"],["Visible", true]], {}, class: 'form-select' %>
+              </div>
+            <% end %>
+            <div class="input-group mt-3">
+              <%= form.text_field :confirm, class: "form-control", placeholder: t('helpers.validate.validate') %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.submit t('helpers.submit.update_multiple', model: t('activerecord.models.army', count: 2)), class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

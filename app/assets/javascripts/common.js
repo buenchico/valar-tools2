@@ -98,6 +98,31 @@ $(document).on('shown.bs.modal', function (event) {
   initPopovers();
 });
 
+// Selectpicker to act on "none" option
+let suppressSelectChange = false;
+
+$(document).on('changed.bs.select', 'select.selectpicker', function (e, clickedIndex, isSelected, previousValue) {
+  if (suppressSelectChange) return;
+
+  const $select = $(this);
+  const clickedOption = $select.find('option').eq(clickedIndex);
+  const clickedValue = clickedOption.val();
+  const selected = $select.val() || [];
+
+  suppressSelectChange = true;
+
+  if (clickedValue === 'CLEAR' && isSelected) {
+    // If CLEAR was selected, deselect all others
+    $select.selectpicker('val', ['CLEAR']);
+  } else if (selected.includes('CLEAR')) {
+    // If CLEAR is already selected and user selects something else, remove CLEAR
+    const newSelection = selected.filter(v => v !== 'CLEAR');
+    $select.selectpicker('val', newSelection);
+  }
+
+  suppressSelectChange = false;
+});
+
 // Initializing selectpicker
 $(document).on('turbolinks:load', function() {
   $('.selectpicker').selectpicker();
@@ -113,22 +138,23 @@ $(document).on('cocoon:after-insert', function(e, insertedItem, originalEvent) {
   $('.selectpicker').selectpicker();
 });
 
-// Table sorting by column
-$(document).on('turbolinks:load', function() {
-  $(function() {
-    $("table.sortable").tablesorter({
-      headerTemplate : '{icon}{content}',
-      cssIconNone: 'bi bi-sort-caret sorter-icon',
-      cssIconAsc:  'bi bi-sort-caret-up sorter-icon',
-      cssIconDesc: 'bi bi-sort-caret-down sorter-icon',
-      imgAttr: 'title', // image attribute used by "image" parser
+// Activating custom sorting in tables
+$.fn.table_sorter =  function() {
+  $("table.sortable").tablesorter({
+    headerTemplate : '{icon}{content}',
+    cssIconNone: 'bi bi-sort-caret sorter-icon',
+    cssIconAsc:  'bi bi-sort-caret-up sorter-icon',
+    cssIconDesc: 'bi bi-sort-caret-down sorter-icon',
+    imgAttr: 'title', // image attribute used by "image" parser
 
-      textExtraction: function(node) {
-          // Replace en dash with hyphen
-          return $(node).text().replace(/–/g, '-');
-      }
-    });
+    textExtraction: function(node) {
+        // Replace en dash with hyphen
+        return $(node).text().replace(/–/g, '-');
+    }
   });
+}
+$(document).on('turbolinks:load', function() {
+  $.fn.table_sorter();
 });
 
 $.tablesorter.addParser({
@@ -181,48 +207,69 @@ $.fn.inline_listeners = function() {
   });
 }
 
-$(document).on('turbolinks:load', function() {
-  $.fn.inline_listeners();
-});
+// Custom checkbox listeners
 
 $.fn.checkbox_listeners = function() {
   $('.checkbox_selectable').change(function() {
-    if ($(".checkbox_selectable:visible:checked").length == $(".checkbox_selectable:visible").length ) {
-      $(".checkbox_select_all").prop('checked', true);
+
+    var checkboxGroup = $(this).data("checkbox");
+
+    var selectAll = $(`.checkbox_select_all[data-checkbox='${checkboxGroup}']`)
+    var selectItems = $(`.checkbox_selectable:visible[data-checkbox='${checkboxGroup}']`)
+
+    if (selectItems.filter(':checked').length == selectItems.length ) {
+      selectAll.prop("checked", true);
     } else {
-      $(".checkbox_select_all").prop('checked', false);
+      selectAll.prop("checked", false);
     }
-    $.fn.mass_edit_buttons();
+    $.fn.mass_edit_buttons(checkboxGroup);
+    $.fn.checkboxFieldUpdate(checkboxGroup);
   });
 
   $(".checkbox_select_all").click(function () {
-    $(".checkbox_selectable:visible").prop('checked', $(this).prop('checked'));
-    $(".checkbox_selectable:visible").trigger('change'); // Trigger the change event on individual checkboxes
+    var checkboxGroup = $(this).data("checkbox");
+
+    var selectItems = $(`.checkbox_selectable:visible[data-checkbox='${checkboxGroup}']`)
+
+    selectItems.prop('checked', $(this).prop('checked'));
+    selectItems.trigger('change'); // Trigger the change event on individual checkboxes
   });
 }
 
-$.fn.mass_edit_buttons = function() {
-  var countCheckedCheckboxes = $('.checkbox_selectable').filter(':checked').length;
+$.fn.mass_edit_buttons = function(checkboxGroup) {
+  var countCheckedCheckboxes = $(`.checkbox_selectable[data-checkbox='${checkboxGroup}']`).filter(':checked').length;
+  var massEditButtons = $(`.mass_edit_button[data-checkbox='${checkboxGroup}']`)
+
   if (countCheckedCheckboxes == 0 ) {
-    $(".mass_edit_button").prop("disabled", true);
+    massEditButtons.prop("disabled", true);
   }
   if (countCheckedCheckboxes != 0) {
-    $(".mass_edit_button").prop("disabled", false);
+    massEditButtons.prop("disabled", false);
   }
+}
+
+$.fn.checkboxFieldUpdate = function (checkboxGroup) {
+  var hiddenInput = $('#' + checkboxGroup + '_ids_field');
+
+  var selectedIds = $(`.checkbox_selectable:visible:checked[data-checkbox='${checkboxGroup}']`)
+                        .map(function () {
+                          return $(this).val();
+                        })
+                        .get();
+
+  // Update the hidden input field with the new list of ids, joined by commas
+  hiddenInput.val(selectedIds.join(','));
 }
 
 // Select all checkboxes
 $(document).on('turbolinks:load', function() {
   $.fn.checkbox_listeners();
-  $.fn.mass_edit_buttons();
 });
 
 // Select all checkboxes to work in modals
 $(document).on('shown.bs.modal', function (event) {
   $.fn.checkbox_listeners();
-  $.fn.mass_edit_buttons();
 });
-
 
 // Change collpase icon
 function changeCollapseIcon(event) {

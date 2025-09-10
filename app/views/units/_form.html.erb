@@ -1,0 +1,161 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title w-100" id="Title"><%= unit&.name %></h5>
+        <% if unit.id %>
+          <div class="w-100">
+            <%= link_to '', send("unit_path", unit.id), remote: true, class: 'btn-Close bi bi-eye-fill text-white float-end' %>
+          </div>
+        <% end %>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with model: unit, local: false do |form| %>
+          <div class="alert alert-warning">
+            <div>
+              <strong><%= render 'units/one_line', unit: unit %></strong>
+            </div>
+            <div>
+              <%= render 'units/stats', unit: unit %>
+            </div>
+          </div>
+          <% if @current_user.is_master? %>
+            <div class="input-group mb-3">
+              <%= form.label :name, class: 'input-group-text' %>
+              <%= form.text_field :name, class: 'form-control' %>
+            </div>
+
+            <div class="input-group mb-3">
+              <%= form.label :unit_type, class: 'input-group-text' %>
+              <%= form.select :unit_type,
+                options_for_select(
+                  @unit_types.map { | key, value |
+                    [
+                      key,
+                      {
+                        "data-content": "<span class='badge rounded-pill pill-tags bg-#{@army_types.fetch(value["type"], {}).fetch("colour", "brass")}'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe                      }
+                    ]
+                  },
+                  form.object.unit_type
+                ),
+                { },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select',
+                title: t('helpers.select.no_type'),
+                data: { },
+                disabled: form.object.persisted? ? true : false
+              %>
+            </div>
+
+            <% if @unit_tags.present? %>
+              <div class="input-group mb-3">
+                <%= form.label :tags, class: 'input-group-text' %>
+                <%= form.select :tags,
+                  options_for_select(
+                    @unit_tags.map { | tag |
+                      [
+                        tag[0],
+                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                      }
+                      ]
+                    },
+                    selected: unit.tags
+                  ),
+                  { include_blank: false },
+                  class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  title: t('helpers.select.no_tags'),
+                  multiple: true,
+                  data: { }
+                %>
+              </div>
+            <% end %>
+
+            <div class="input-group mb-3">
+              <%= form.label :count, class: 'input-group-text' %>
+              <%= form.number_field :count, class: 'form-control text-end', step: 1, min: 0 %>
+
+              <%= form.label :count_start, class: 'input-group-text' %>
+              <%= form.number_field :count_start, class: 'form-control text-end', disabled: true %>
+
+              <%= form.label :count_death, class: 'input-group-text' %>
+              <%= form.number_field :count_death, class: 'form-control text-end', disabled: true %>
+            </div>
+
+            <div class="input-group mb-3">
+              <%= form.label :strength, class: 'input-group-text' %>
+              <%= form.number_field :strength_mod, class: 'form-control text-end', step: 10, min: 50, max: 200 %>
+              <div class="input-group-append">
+                <span class="input-group-text bg-white text-dark">%</span>
+              </div>
+
+              <%= form.label :strength_indirect, class: 'input-group-text' %>
+              <%= form.number_field :strength_indirect_mod, class: 'form-control text-end', step: 10, min: 50, max: 200 %>
+              <div class="input-group-append">
+                <span class="input-group-text bg-white text-dark">%</span>
+              </div>
+
+              <%= form.label :hp, class: 'input-group-text' %>
+              <%= form.number_field :hp_mod, class: 'form-control text-end', step: 1, min: 1 %>
+              <div class="input-group-append">
+                <span class="input-group-text bg-white text-dark">%</span>
+              </div>
+            </div>
+
+            <div class="input-group mb-3">
+              <%= form.label :factions, class: 'input-group-text' %>
+              <%= form.select :faction_ids,
+                options_for_select(
+                  @factions.pluck(:long_name, :id).map { |name, id|
+                    [
+                      id,
+                      { "data-content": name
+                    }
+                    ]
+                  },
+                  selected: unit.factions.pluck(:id)
+                ),
+                { include_blank: false },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                title: t('helpers.select.no_faction'),
+                multiple: true,
+                data: { }
+              %>
+            </div>
+
+            <div class="input-group mb-3">
+              <%= form.label :location_id, class: 'input-group-text' %>
+              <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
+            </div>
+
+            <div class="input-group mb-3">
+              <%= form.label :family_id, class: 'input-group-text' %>
+              <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+            </div>
+
+          <% end %>
+
+          <div class="input-group mb-3">
+            <%= form.label :visible, class: 'input-group-text' %>
+            <div class="form-check form-switch switch-group fs-2">
+              <%= form.check_box :visible, class: 'form-check-input switch-group h-100' %>
+            </div>
+          </div>
+
+          <div class="input-group mb-3">
+            <%= form.submit nil, class: 'btn btn-primary' %>
+          </div>
+
+        <% end %>
+      </div>
+      <% if @current_user.is_master? && unit.logs&.present? %>
+        <div class="modal-footer">
+          <% unit.logs.reverse.each do |log| %>
+            <div class="container w-100">
+              <%= render 'layouts/logs', log: log %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>      
+    </div>
+  </div>
+</div>

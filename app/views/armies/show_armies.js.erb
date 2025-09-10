@@ -1,0 +1,13 @@
+$('#army_table').html("<%= j render 'armies/armies_table', armies: @armies %>")
+$('#unit_table').html("<%= j render 'units/units_table', units: @units %>")
+
+$('.selectpicker').selectpicker();
+
+$(".spinner-border").addClass("d-none");
+
+initPopovers();
+$('.selectpicker').selectpicker();
+$.fn.table_sorter();
+$.fn.checkbox_listeners();
+$.fn.inline_listeners();
+$.fn.copyArmies();

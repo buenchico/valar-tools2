@@ -1,0 +1,33 @@
+<div class="table-responsive">
+  <table id="army_list" class="table table-dark table-striped table-borderless table-hover table-sm sortable army_list">
+    <caption>Lista de ejércitos</caption>
+    <thead>
+      <tr id="table_title">
+        <th data-sorter="false" data-filter="checkbox" scope="col" style="width: 30px">
+          <input type="checkbox" class="checkbox_select_all option-input" /><span class="d-none"><%= t('activerecord.attributes.army.selected') %></span>
+        </th>
+        <th scope="col" data-sorter="false"</th>
+        <th scope="col" style="width: 78px"><i class="bi bi-award"></i></th>
+        <th scope="col"><%= t('activerecord.attributes.army.name') %></th>
+        <th scope="col"><%= t('activerecord.attributes.army.status') %></th>
+        <th scope="col"><%= t('activerecord.attributes.army.traits') %></th>
+        <th scope="col" style="width: 100px"><%= t('activerecord.attributes.army.position') %></th>
+        <th scope="col"><%= t('activerecord.attributes.army.group') %></th>
+        <% if @current_user&.is_master? %>
+          <th scope="col"><%= t('activerecord.attributes.family.visible') %></th>
+        <% end %>
+        <th scope="col" colspan="3" data-sorter="false"></th>
+      </tr>
+    </thead>
+    <tbody id="table_body">
+      <div class="d-flex justify-content-center">
+        <div id="spinner-main" class="spinner-border fs-1 d-none" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <% @armies&.each do |army| %>
+        <%= render 'row_container', army: army %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

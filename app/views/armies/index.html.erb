@@ -7,19 +7,7 @@
 </div>
 
 <% if @current_user&.is_master? %>
-  <div class="col">
-    <%= link_to new_army_path(selector: (@army_types.length == 1 ? false : true)), class: "btn btn-primary", remote: true do %>
-      <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
-    <% end %>
-  </div>
-<% end %>
-
-<div class="row my-3" id="army_stats">
-  <%= render 'stats', faction: @faction %>
-</div>
-
-<% if @current_user&.is_master? %>
-  <%= form_with url: get_armies_path, id: 'get-armies', method: :get, local: false do |form| %>
+  <%= form_with url: show_armies_path, id: 'get-armies', method: :get, local: false do |form| %>
     <ul class="nav nav-pills mb-3">
       <li class="me-1">Facciones:</li>
       <% @factions.each do |faction| %>
@@ -38,35 +26,16 @@
   <% end %>
 <% end %>
 
-<div class="row my-3">
-  <div class="col">
-    <%= form_tag(edit_multiple_armies_path, method: :get, id: 'edit_multiple', remote: true) do %>
-      <%= hidden_field_tag 'army_ids', '', id: 'army_ids_field' %>
-      <%= button_tag(type: 'submit', class: "btn btn-primary btn-sm mass_edit_button", disabled: true, value: "stats") do %>
-        <i class="bi bi-clipboard"></i> <%= t('helpers.action.copy') %>
-      <% end %>
-      <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "update") do %>
-        <i class="bi bi-pencil-square"></i> <%= t('helpers.action.mass_edit') %>
-      <% end %>
-      <% if @current_user&.is_master? %>
-        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "destroy") do %>
-          <i class="bi bi-trash"></i> <%= t('helpers.action.mass_delete') %>
-        <% end %>
-        <%= button_tag(type: 'submit', class: "btn btn-danger btn-sm mass_edit_button", disabled: true, value: "damage") do %>
-          <i class="bi bi-damage-kinetic"></i> <%= t('helpers.action.damage') %>
-        <% end %>
-      <% end %>
-    <% end %>
-  </div>
-
-  <div class="col">
-    <div class="d-flex align-items-center">
-      <%= select_tag "filter", options_for_select(@filter, t('activerecord.attributes.army.name')), id: "filterselect", class: "form-select form-select-sm me-2" %>
-      <input id="filtertext" class="form-control form-control-sm" type="text" placeholder="Filtrar...">
-    </div>
+<div class="d-flex justify-content-center">
+  <div id="spinner-main" class="spinner-border fs-1 d-none" role="status">
+    <span class="visually-hidden">Loading...</span>
   </div>
 </div>
 
 <div id="army_table">
-  <%= render 'armies_table' %>
+  <%= render 'armies/armies_table' %>
+</div>
+
+<div id="unit_table">
+  <%= render 'units/units_table' %>
 </div>

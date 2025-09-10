@@ -1,0 +1,138 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title w-100" id="Title"><%= t('helpers.submit.create', model: Army.model_name.human) %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <% if @army_type.length > 1 %>
+            <div class="container-fluid">
+              <div class="alert alert-danger">
+                <div>Por favor, escoge solo unidades del mismo tipo.</div>
+                <div>Tipos presentes: <%= @army_type %>
+              </div>
+            </div>
+          <% else %>
+            <%= form_with model: @army, id: "army_form", local: false do | form | %>
+            <div class="alert alert-warning">
+              <div>Las siguientes unidades serán añadidas a un ejército</div>
+              <ul>
+                <% units.each do | unit | %>
+                  <%= hidden_field_tag "unit_ids[]", unit.id %>
+                  <li>
+                    <%= render 'units/one_line', unit: unit %>
+                  </li>
+                <% end %>
+              <ul>
+            </div>
+            <div class="input-group mt-3">
+              <%= label_tag :army_id, t('activerecord.models.army.one'), class: 'input-group-text' %>
+              <%= select_tag :army_id,
+                options_for_select(
+                  [["Nuevo ejército", nil, { "data-content": "Nuevo ejército" }]] +
+                  @armies.map do |army|
+                    factions = army.factions.map(&:name).join(", ") # assuming army.factions returns an array of Faction objects
+                    [
+                      army.name,
+                      army.id,
+                      {
+                        "data-content": "<span id='army_data_#{army.id}'
+                          data-name='#{army.name}'
+                          data-xp='#{army.xp}'
+                          data-morale='#{army.morale}'
+                          data-tags='#{army.tags}'
+                          data-position='#{army.position}'
+                          data-status='#{army.status}'
+                          data-notes='#{army.notes}'>
+                          #{army.name} #{army.factions.nil? ? '' : '(' + army&.factions&.pluck(:long_name)&.join(", ") + ')'}
+                        </span>".html_safe
+                      }
+                    ]
+                  end,
+                  selected: nil
+                ),
+                id: "army_select",
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                multiple: false,
+                data: { "live-search": "true" }
+              %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :name, class: 'input-group-text' %>
+              <%= form.text_field :name, class: "form-control" %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :status, class: 'input-group-text' %>
+              <%= form.select :status, @army_status.map { |k,v| [v["name"], k]}, {}, class: 'form-select' %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :xp, class: 'input-group-text' %>
+              <%= form.number_field :xp, class: 'form-control text-end', step: 10, min: 0 %>
+
+              <%= form.label :morale, class: 'input-group-text' %>
+              <%= form.number_field :morale, class: 'form-control text-end', step: 10, min: 0 %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :tags, class: 'input-group-text' %>
+              <%= form.select :tags,
+                options_for_select(
+                  @army_tags.map { | tag |
+                    [
+                      tag[0],
+                      { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                    }
+                    ]
+                  },
+                  selected: nil
+                ),
+                { include_blank: false },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                title: 'Sin rasgos',
+                multiple: true,
+                data: { }
+              %>
+            </div>
+            <div class="input-group mt-3">
+              <%= form.label :position, class: 'input-group-text' %>
+              <%= form.text_field :position, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path} %>
+            </div>
+
+            <div class="input-group mt-3">
+              <%= form.label :group, class: 'input-group-text' %>
+              <%= form.select :group,
+                options_for_select(
+                  ARMY_GROUPS.map { | key, value |
+                    [
+                      key,
+                      { "data-content": "<span class='badge rounded-pill pill-tags pill-#{key}'><i class='bi bi-#{value[:icon]}'></i> <span class='pill-tags-text'>#{value[:name]}</span></span>".html_safe
+                    }
+                    ]
+                  },
+                  selected: nil
+                ),
+                { include_blank: true },
+                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                data: { noneselectedtext: 'Sin agrupar'}
+              %>
+            </div>
+
+            <div class="input-group mt-3">
+              <%= form.label :notes, class: 'input-group-text' %>
+              <%= form.text_area :notes, class: 'form-control' %>
+            </div>
+            <div class="input-group ms-1 mt-3">
+              <%= text_field_tag :confirm, nil, class: "form-control", placeholder: t('helpers.validate.validate') %>
+            </div>
+            <div class="input-group mt-3">
+              <%= hidden_field_tag "source", controller_name %>
+              <%= form.submit t('helpers.submit.update', model: Army.model_name.human), class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

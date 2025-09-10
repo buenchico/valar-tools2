@@ -1,0 +1,18 @@
+<div class="ms-3">
+   <i class="bi bi-award"></i> <%= t('activerecord.attributes.unit.strength') %>: <%= unit.strength %>
+</div>
+<div class="ms-3">
+  <i class="bi bi-crosshair"></i> <%= t('activerecord.attributes.unit.strength_indirect') %>: <%= unit.strength_indirect %>
+</div>
+<div class="ms-3">
+  <i class="bi bi-heart-fill"></i> <%= t('activerecord.attributes.unit.hp') %>: <%= number_with_delimiter(unit.hp, delimiter: ' ', separator: ',') %>
+</div>
+<div class="ms-3">
+  <i class="bi bi-person-standing"></i> <%= t('activerecord.attributes.unit.men') %>: <%= number_with_delimiter(unit.men, delimiter: ' ', separator: ',') %>
+  <% if unit.location.present? %>
+     — <span class="small">Provenientes de <strong><%= unit.location.name_es %></strong></span>
+  <% end %>
+  <% if unit.family.present? %>
+     — <span class="small">Al servicio de <strong><%= unit.family.title %></strong></span>
+  <% end %>
+</div>

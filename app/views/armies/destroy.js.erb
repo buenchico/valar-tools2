@@ -3,7 +3,12 @@ $("html, body").animate({ scrollTop: 0 }, "slow");
 $('#army_<%= @army.id %>').remove();
 
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
-
-$.fn.recalculateStats();
-
 $(".modal").modal('hide');
+
+initPopovers();
+$('.selectpicker').selectpicker();
+$.fn.table_sorter();
+$.fn.checkbox_listeners();
+$.fn.inline_listeners();
+$.fn.mass_edit_buttons('units');
+$.fn.mass_edit_buttons('armies');

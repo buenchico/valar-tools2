@@ -12,6 +12,34 @@
       </div>
       <div class="modal-body">
         <%= form_with model: army, local: false do |form| %>
+          <div class="alert alert-warning">
+            <div>
+              <strong><%= render 'armies/one_line', army: army %></strong>
+            </div>
+            <div>
+              <%= render 'armies/stats', army: army %>
+            </div>
+            <hr class="border border-secondary opacity-75 border-2">
+            <div id="units" class="ms-3">
+              <%= hidden_field_tag "army[unit_ids][]", nil %>
+              <% army.units.each do |unit| %>
+                <div id="unit_fields_<%= unit.id %>">
+                  <%= render 'units/one_line', unit: unit %>
+                  <%= hidden_field_tag "army[unit_ids][]", unit.id %>
+                  <div class="float-end">
+                    <i id='remove_<%= unit.id %>' class='bi bi-x-circle-fill ms-1 pt-1 text-danger remove_unit'></i>
+                    <i class='bi bi-damage-kinetic ms-1 pt-1 text-warning damage_unit'></i>
+                    <div class="position-absolute bg-light text-dark border p-3 shadow damage_box d-none" style="top: -50px; right: -15px; z-index: 1050;">
+                      <%= number_field_tag "damage", nil, id: "damage_#{unit.id}", class: "damage_field", placeholder: t("activerecord.attributes.army.damage") %>
+                      <%= hidden_field_tag "hp", unit.hp_per_unit, id: "damage_#{unit.id}", class: "hp_per_unit" %>
+                      <i class='bi bi-damage-kinetic ms-1 pt-1 text-success damage_apply'></i>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+
+            </div>
+          </div>
           <% if @current_user.is_master? %>
             <div class="input-group mb-3">
               <%= form.label :name, class: 'input-group-text' %>
@@ -22,21 +50,12 @@
               <%= form.label :status, class: 'input-group-text' %>
               <%= form.select :status, @army_status.map { |k,v| [v["name"], k]}, {}, class: 'form-select' %>
             </div>
-
             <div class="input-group mb-3">
-              <%= form.label :xp, ('<i class="bi bi-' + @army_xp["icon"] + '"></i>&nbsp;').html_safe + @army_xp["name"].capitalize + " *(" + @army_xp["str"].to_s + ")", class: 'input-group-text' %>
-              <%= form.number_field :xp, class: 'form-control text-end', step: 10, min: 10, max: 300 %>
+              <%= form.label :xp, class: 'input-group-text' %>
+              <%= form.number_field :xp, class: 'form-control text-end', step: 10, min: 0 %>
 
-              <div class="input-group-append me-2">
-                <span class="input-group-text bg-white text-dark">%</span>
-              </div>
-
-              <%= form.label :morale, ('<i class="bi bi-' + @army_morale["icon"] + '"></i>&nbsp;').html_safe + @army_morale["name"].capitalize + " *(" + @army_morale["str"].to_s + ")", class: 'input-group-text' %>
-              <%= form.number_field :morale, class: 'form-control text-end', step: 10, min: 10, max: 300 %>
-
-              <div class="input-group-append">
-                <span class="input-group-text bg-white text-dark">%</span>
-              </div>
+              <%= form.label :morale, class: 'input-group-text' %>
+              <%= form.number_field :morale, class: 'form-control text-end', step: 10, min: 0 %>
             </div>
 
             <% if @army_tags.present? %>
@@ -55,7 +74,7 @@
                   ),
                   { include_blank: false },
                   class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                  title: 'Sin rasgos',
+                  title: t('helpers.select.no_tags'),
                   multiple: true,
                   data: { }
                 %>
@@ -65,7 +84,7 @@
 
           <div class="input-group mb-3">
             <%= form.label :position, class: 'input-group-text' %>
-            <%= form.text_field :position, class: 'form-control' %>
+            <%= form.text_field :position, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path} %>
           </div>
 
           <div class="input-group mb-3">
@@ -88,13 +107,8 @@
           </div>
 
           <div class="input-group mb-3">
-            <%= form.label :location_id, class: 'input-group-text' %>
-            <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
-          </div>
-
-          <div class="input-group mb-3">
-            <%= form.label :family_id, class: 'input-group-text' %>
-            <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+            <%= form.label :notes, class: 'input-group-text' %>
+            <%= form.text_area :notes, class: 'form-control' %>
           </div>
 
           <div class="input-group mb-3">
@@ -105,71 +119,20 @@
           </div>
 
           <div class="input-group mb-3">
-            <%= form.label :notes, class: 'input-group-text' %>
-            <%= form.text_area :notes, class: 'form-control' %>
+            <%= hidden_field_tag "source", "army_form" %>
+            <%= form.submit nil, class: 'btn btn-primary' %>
           </div>
-
-          <div class="input-group mb-3">
-            <%= form.label :factions, class: 'input-group-text' %>
-            <%= form.select :faction_ids,
-              options_for_select(
-                @factions.pluck(:long_name, :id).map { |name, id|
-                  [
-                    id,
-                    { "data-content": name
-                  }
-                  ]
-                },
-                selected: army.factions.pluck(:id)
-              ),
-              { include_blank: false },
-              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-              title: 'Sin facción',
-              multiple: true,
-              data: { }
-            %>
-          </div>
-
-          <div id="units">
-            <%= form.fields_for :units do |unit_form| %>
-              <%= render 'unit_fields', f: unit_form %>
-            <% end %>
-          </div>
-
-          <div class="ps-3 mb-3">
-            <%= link_to_add_association(
-              "<i class='bi bi-plus-circle'></i> #{t('helpers.submit.add', model: t("activerecord.models.unit", count: 1))}".html_safe,
-              form,
-              :units,
-              class: 'btn btn-sm btn-success',
-              data: {
-                association_insertion_method: 'append',
-                association_insertion_node: '#units'
-              }
-            ) %>
-          </div>
-
-          <%= form.hidden_field :army_type, class: 'form-control' %>
-          <%= form.submit nil, class: 'btn btn-primary' %>
-
-          <% if army.logs&.empty? == false %>
-            <div class="input-group mt-3">
-              <%= form.label :changelog, class: 'input-group-text w-100' %>
-              <% army.logs.reverse.each do | log | %>
-                <% log = JSON.parse(log) %>
-                <div class="ms-3 mt-1 w-100 fw-bolder">
-                  <%= DateTime.parse(log["timestamp"]).strftime("%d/%m/%Y @ %H:%M") + ", by " + log["username"] %>
-                  <% log["changes"]&.each do |change| %>
-                    <div class="ms-3 mt-1 w-100 fw-lighter">
-                      <%= change %>
-                    </div>
-                  <% end %>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
         <% end %>
       </div>
+      <% if @current_user.is_master? && army.logs&.present? %>
+        <div class="modal-footer">
+          <% army.logs.reverse.each do |log| %>
+            <div class="container w-100">
+              <%= render 'layouts/logs', log: log %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

@@ -1,0 +1,22 @@
+$('#army_list').find('tbody').append('<tr id="army_<%= @army.id.to_s %>"></tr>');
+$('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
+
+$('.army_<%= @army.id %>').addClass( "table-highlight", callback )
+
+function callback() {
+  setTimeout(function() {
+    $('.army_<%= @army.id %>').removeClass( "table-highlight" );
+  }, 500 );
+}
+
+$("#flash").html('<%= j render partial: "layouts/alert" %>');
+
+$('.selectpicker').selectpicker();
+$.fn.recalculateStats();
+$.fn.checkboxSelectable();
+$.fn.checkbox_listeners();
+$.fn.mass_edit_buttons();
+$.fn.inline_listeners();
+initPopovers();
+
+$(".modal").modal('hide');

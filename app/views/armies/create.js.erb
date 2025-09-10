@@ -1,22 +1,30 @@
-$('#army_list').find('tbody').append('<tr id="army_<%= @army.id.to_s %>"></tr>');
+$('#army_list').find('tbody').append('<tr id="army_<%= @army.id.to_s %>" class="<%= @army.status %>"></tr>');
 $('#army_<%= @army.id %>').html('<%= j render "row", army: @army  %>');
 
-$('.army_<%= @army.id %>').addClass( "table-highlight", callback )
+$('#army_<%= @army.id %>').addClass("table-highlight", callback )
 
 function callback() {
   setTimeout(function() {
-    $('.army_<%= @army.id %>').removeClass( "table-highlight" );
+    $('#army_<%= @army.id %>').removeClass( "table-highlight" );
   }, 500 );
 }
 
+<% @unit_ids&.each do |unit_id| %>
+  $('#unit_' + <%= unit_id %>).remove();
+<% end %>
+
+<% @old_army_ids&.each do |army_id| %>
+  $('#army_' + <%= army_id %>).remove();
+<% end %>
+
 $("#flash").html('<%= j render partial: "layouts/alert" %>');
 
-$('.selectpicker').selectpicker();
-$.fn.recalculateStats();
-$.fn.checkboxSelectable();
-$.fn.checkbox_listeners();
-$.fn.mass_edit_buttons();
-$.fn.inline_listeners();
-initPopovers();
-
 $(".modal").modal('hide');
+
+initPopovers();
+$('.selectpicker').selectpicker();
+$.fn.table_sorter();
+$.fn.checkbox_listeners();
+$.fn.inline_listeners();
+$.fn.mass_edit_buttons('units');
+$.fn.mass_edit_buttons('armies');

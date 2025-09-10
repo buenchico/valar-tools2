@@ -1,5 +1,5 @@
 <% if @current_user&.is_master? %>
-  <td><%= check_box_tag "family_ids[]", family.id, @selected_families.include?(family.id.to_s), id: 'id_' + family.id.to_s,class: "checkbox_selectable option-input checkbox_cookie" %></td>
+  <td><%= check_box_tag "family_ids[]", family.id, @selected_families.include?(family.id.to_s), id: 'id_' + family.id.to_s,class: "checkbox_selectable option-input checkbox_cookie", data: { checkbox: families } %></td>
 <% end %>
 <td><%= link_to truncate(family.title, length: 20, omission: '...'), family_path(family), remote: true, class: 'link-unstyled' %></td>
 <% if @options_families["subtools"]["tags"] %>

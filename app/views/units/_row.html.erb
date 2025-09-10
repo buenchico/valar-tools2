@@ -1,0 +1,65 @@
+<td>
+  <%= check_box_tag "unit_ids[]", unit.id, false, id: 'id_unit_' + unit.id.to_s, class: "checkbox_selectable option-input", data: {checkbox: "units" } %>
+  <span id="unit_copy_<%= unit.id.to_s %>" class="d-none units_copy">
+    <%= render 'units/plain_text', unit: unit %>
+  </span>
+  <span class="units_men d-none">
+    <%= unit.men %>
+  </span>
+  <span class="units_strength d-none">
+    <%= unit.strength %>
+  </span>
+  <span class="units_strength_indirect d-none">
+    <%= unit.strength_indirect %>
+  </span>
+  <span class="units_hp d-none">
+    <%= unit.hp %>
+  </span>
+</td>
+
+<td>
+  <%= render 'units/strength', unit: unit %>
+</td>
+
+<td>
+  <span class="d-none"><%= unit.name %></span>
+  <%= form_with model: unit, local: false, html: { class: "d-inline-flex align-items-center gap-2" } do |form| %>
+    <i class="bi bi-<%= unit.army_icon %> text-<%= unit.colour %>"></i>
+    <%= hidden_field_tag :inline, value: true %>
+    <%= form.text_field :name, class: 'inline-edit-input input-sm form-control', style: 'height: 1.75rem', "data-initialvalue": unit.name %>
+  <% end %>
+</td>
+
+<td>
+  <%= render 'units/traits', unit: unit %>
+</td>
+
+<td>
+  <%= unit.location&.name %>
+</td>
+
+<td>
+  <%= unit.family&.title %>
+</td>
+
+<% if @current_user&.is_master? %>
+  <td class="text-center">
+    <% if unit.visible == true %>
+      <%= unit.factions.pluck(:long_name).join(", ") %>
+    <% else %>
+      <i class="bi bi-x-lg text-danger"></i>
+    <% end %>
+  </td>
+
+  <td>
+    <%= link_to '', edit_unit_path(unit), remote: true, class: 'bi bi-pencil-square text-white' %>
+  </td>
+
+  <td>
+    <%= link_to '', delete_unit_path(unit), remote: true, class: 'bi bi-trash text-white' %>
+  </td>
+<% end %>
+
+<td>
+  <%= link_to '', unit_path(unit), remote: true, class: 'bi bi-eye-fill text-white' %>
+</td>

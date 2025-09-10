@@ -1,0 +1,41 @@
+<div class="modal fade" id="armyModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title w-100" id="Title"><%= t('helpers.action.damage') %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_for :unit, url: damage_multiple_units_path, remote: true, method: :put do | form | %>
+          <div class="alert alert-warning">
+            <div>Las siguientes unidades recibirán daño</div>
+            <ul>
+              <% units.each do | unit | %>
+                <%= hidden_field_tag "unit_ids[]", unit.id %>
+                <li>
+                  <%= render 'units/one_line', unit: unit %>
+                </li>
+              <% end %>
+            <ul>
+          </div>
+          <div class="input-group mt-3">
+            <%= form.label :damage, t("activerecord.attributes.army.damage"), class: 'input-group-text' %>
+            <%= form.number_field :damage, class: "form-control", value: 0, step: 1, min: 1 %>
+            <div class="bg-danger-subtle text-danger-emphasis p-2">
+              1 punto de daño = <%= @army_scale %> hp
+            </div>
+          </div>
+          <% if Rails.env.development? %>
+            <div class="input-group mt-3">
+              <%= form.label :times, class: 'input-group-text' %>
+              <%= form.number_field :times, class: "form-control", value: 1, step: 1, min: 1, max: 10000 %>
+            </div>
+          <% end %>
+          <div class="input-group mt-3">
+            <%= form.submit t('.damage', model: t('activerecord.models.unit', count: 2)), class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

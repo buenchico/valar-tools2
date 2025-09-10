@@ -1,0 +1,44 @@
+<% general = @options_armies.fetch("general", {}) %>
+<% if percent_to_trait(army.xp) != 0 %>
+  <% xp_data = general.fetch("xp", {}) %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-byzantium %>">
+    <i class="bi bi-<%= xp_data.fetch('icon', '') %>"></i>
+    <%= xp_data.fetch('name', 'xp') %>
+    <%= number_to_modifier(percent_to_trait(army.xp)) %>
+  </span>
+<% end %>
+<% if percent_to_trait(army.morale) != 0 %>
+  <% morale_data = general.fetch("morale", {}) %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-secondary %>">
+    <i class="bi bi-<%= morale_data.fetch('icon', '') %>"></i>
+
+    <%= morale_data.fetch('name', 'morale') %>
+    <%= number_to_modifier(percent_to_trait(army.morale)) %>
+  </span>
+<% end %>
+
+<% army.composition.each do | key, unit | %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= unit[:colour] %>">
+    <i class="bi bi-<%= unit[:icon] %>"></i>
+
+    <%= number_to_compact(unit[:count].to_i) %>
+    <%= unit[:title] %>
+  </span>
+<% end %>
+
+<% army.unit_tags.each do |tag, count| %>
+  <% tag_options = @unit_tags.fetch(tag, {}) %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= tag_options.fetch('colour', 'success') %>">
+    <i class="bi bi-<%= tag_options.fetch('icon', '') %>"></i>
+    <%= tag_options.fetch('name', tag) %>
+    <%= (count != 1) ? "(#{count})" : "" %>
+  </span>
+<% end %>
+
+<% army.tags.each do |tag| %>
+  <% tag_options = @army_tags.fetch(tag, {}) %>
+  <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= tag_options.fetch('colour', 'success') %>">
+    <i class="bi bi-<%= tag_options.fetch('icon', '') %>"></i>
+    <%= tag_options.fetch('name', tag) %>
+  </span>
+<% end %>

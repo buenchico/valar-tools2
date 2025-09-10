@@ -1,0 +1,41 @@
+<div class="input-group mb-1 ps-3 nested-fields">
+  <%= f.label :unit, class: 'input-group-text' %>
+
+  <%= f.select :unit_type,
+    options_for_select(
+      @unit_types.select { |_, v| v["type"] == @army.army_type }.map { | key, value |
+        [
+          key,
+          {
+            "data-content": "<span class='badge rounded-pill pill-tags bg-#{@army_types.fetch(value["type"], {}).fetch("colour", "brass")}'><i class='bi bi-#{value["icon"]}'></i> <span class='pill-tags-text'>#{value["name"]}</span></span>".html_safe
+          }
+        ]
+      },
+      f.object.unit_type
+    ),
+    { },
+    class: 'selectpicker flex-fill dropdown-toggle dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select',
+    title: 'Sin tipo',
+    data: { },
+    disabled: f.object.persisted? ? true : false
+  %>
+
+  <%= f.number_field :count, class: 'form-control unit_count', step: 1, min: 0, max: f.object.count, placeholder: t('activerecord.attributes.unit.count'), readonly: f.object.persisted? ? true : false %>
+  <div class="col-md-1 col-sm-2">
+    <%= f.number_field :modifier, class: 'form-control text-end', step: 1, min: -50, max: 200, placeholder: t('activerecord.attributes.unit.modifier') %>
+  </div>
+  <div class="input-group-append">
+    <span class="input-group-text bg-white text-dark">%</span>
+  </div>
+
+  <% unless f.object.persisted? %>
+    <%= link_to_remove_association("<i class='bi bi-x-circle-fill'></i>".html_safe, f, class: 'text-danger ms-1 pt-1') %>
+  <% else %>
+    <i class='bi bi-damage-kinetic ms-1 pt-1 text-warning damage_unit'></i>
+    <div class="position-absolute bg-light text-dark border p-3 shadow damage_box d-none" style="top: -50px; right: -15px; z-index: 1050;">
+      <%= number_field_tag "damage", nil, id: "damage_#{f.object.id || SecureRandom.hex(4)}", class: "damage_field", placeholder: t("activerecord.attributes.army.damage") %>
+      <%= hidden_field_tag "hp", f.object.hp_per_unit, id: "damage_#{f.object.id || SecureRandom.hex(4)}", class: "hp_per_unit" %>
+      <i class='bi bi-damage-kinetic ms-1 pt-1 text-success damage_apply'></i>
+    </div>
+  <% end %>
+</div>
