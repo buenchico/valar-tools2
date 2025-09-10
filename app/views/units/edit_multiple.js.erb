@@ -26,8 +26,8 @@ $('#content').html("<%= j render partial: @template, locals: { units: @units } %
     } else {
       $('#army_form').attr('method', 'patch');
       $('#army_name').prop('disabled', true);
-      $('#army_xp').prop('readonly', true);
-      $('#army_morale').prop('readonly', true);
+      $('#army_xp').prop('readonly', false);
+      $('#army_morale').prop('readonly', false);
       $('#army_tags').prop('disabled', true);
       $('#army_status').prop('disabled', true);
     }
