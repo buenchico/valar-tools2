@@ -53,6 +53,14 @@ class Unit < ApplicationRecord
     return (self.count_start.to_i * unit_men).to_i
   end
 
+  def men_death
+    set_options if @options_armies.nil?
+
+    unit_men = @units.fetch(self.unit_type, {}).fetch("men", 0)
+
+    return (self.count_death.to_i * unit_men).to_i
+  end
+
   def hp
     (self.count.to_i * self.hp_per_unit).to_i
   end

@@ -183,6 +183,7 @@ class ArmiesController < ApplicationController
   end
 
   def destroy
+    @units = @army.units
     respond_to do |format|
       if params[:confirm].nil? || params[:confirm] == 'DELETE'
         if @army.destroy
