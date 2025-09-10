@@ -17,9 +17,10 @@
   <%= unit[:title] %>
 <% end %>
 
-<% army.unit_tags.each do |tag| %>
+<% army.unit_tags.each do |tag, count| %>
   <% tag_options = @unit_tags.fetch(tag, {}) %>
   <%= tag_options.fetch('name', tag).titleize %>
+  <%= (count != 1) ? "(#{count})" : "" %>
 <% end %>
 
 <% army.tags.each do |tag| %>

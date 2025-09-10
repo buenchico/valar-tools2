@@ -25,7 +25,7 @@
         <i class='bi bi-heart-fill'></i> <%= t('activerecord.attributes.unit.hp')  %>
       </div>
       <div class='text-end col-4'>
-        <%= army.hp %>
+        <%= number_to_compact(army.hp) %>
       </div>
     </div>
     <div class='row'>
@@ -33,7 +33,7 @@
         <i class='bi bi-person-standing'></i> <%= t('activerecord.attributes.unit.men')  %>
       </div>
       <div class='text-end col-4'>
-        <%= army.men %>
+        <%= number_to_compact(army.men) %>
       </div>
     </div>
   "

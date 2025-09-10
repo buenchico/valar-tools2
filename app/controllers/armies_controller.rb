@@ -306,7 +306,7 @@ class ArmiesController < ApplicationController
         timestamp: Time.now,
         user_id: @current_user.id, # Set the current user appropriately
         username: @current_user.player,
-        changes: "Army created from merging armies: #{params["army_ids"].join(", ")}"
+        changes: ["Army created from merging armies: #{params["army_ids"].join(", ")}"]
       }
     ]
 

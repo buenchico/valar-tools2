@@ -71,7 +71,23 @@ class Unit < ApplicationRecord
 
   def title
     set_options if @options_armies.nil?
-    return (@units.fetch(self.unit_type, {}).fetch("name", "")).pluralize_all_words(self.count)
+    title = (@units.fetch(self.unit_type, {}).fetch("name", "")).pluralize_all_words(self.count)
+    message = []
+    if strength_mod != 100
+      message << "🎖" + (strength_mod/100.0).round(1).to_s
+    end
+    if strength_indirect_mod != 100
+      message << "𖦏" + (strength_indirect_mod/100.0).round(1).to_s
+    end
+    if hp_mod != 100
+      message << "❤︎" + (hp_mod/100.0).round(1).to_s
+    end
+
+    if message.present?
+      title += " (" + message.join(", ") + ")"
+    end
+
+    return title
   end
 
 

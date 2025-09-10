@@ -108,7 +108,7 @@ class Army < ApplicationRecord
   end
 
   def unit_tags
-    units.flat_map(&:tags).compact.uniq
+    units.flat_map(&:tags).compact.sort.tally
   end
 
   def army_type
