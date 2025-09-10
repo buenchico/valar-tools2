@@ -12,7 +12,7 @@
   <%= number_to_modifier(percent_to_trait(army.morale)) %>
 <% end %>
 
-<% army.composition.each do | key, unit | %>
+<% total_army_units_by_unit_type(army.units).each do | key, unit | %>
   <%= number_to_compact(unit[:count].to_i) %>
   <%= unit[:title] %>
 <% end %>

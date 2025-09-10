@@ -97,22 +97,6 @@ class Army < ApplicationRecord
     self.units.includes(:factions).flat_map(&:factions).uniq.sort_by(&:name)
   end
 
-  def composition
-    self.units
-      .group_by(&:unit_type)
-      .sort_by { |unit_type, _| unit_type }
-      .to_h
-      .transform_values do |units|
-        {
-          count: units.sum(&:count),
-          count_death: units.sum(&:count_death),
-          icon: units.first.icon,
-          colour: units.first.colour,
-          title: units.first.simple_title
-        }
-      end
-  end
-
   def unit_tags
     units.flat_map(&:tags).compact.sort.tally
   end

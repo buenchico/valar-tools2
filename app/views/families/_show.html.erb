@@ -97,7 +97,7 @@
           <% if @options_families["subtools"]["armies"] %>
             <% if @family.units.present? %>
               <div class="h4">Tropas</div>
-                <% @family.composition.each do |key, values| %>
+                <% total_army_units_by_unit_type(@family.units).each do |key, values| %>
                   <div class="ms-3">
                     <%= values[:title].titleize %>: <%= number_with_delimiter(values[:count], delimiter: ' ', separator: ',') %> — <i class="bi bi-skull-solid"></i><%= number_with_delimiter(values[:count_death], delimiter: ' ', separator: ',') %>
                   </div>

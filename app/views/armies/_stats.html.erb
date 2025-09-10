@@ -19,7 +19,7 @@
 </div>
 <% if army.men_death %>
   <%= t('activerecord.attributes.unit.count_death') %>
-  <% army.composition.each do |key, values| %>
+  <% total_army_units_by_unit_type(army.units).each do |key, values| %>
     <% if values[:count_death] > 0 %>
       <div class="ms-3">
         <i class="bi bi-skull-solid"></i> <%= values[:title].titleize %>: <%= number_with_delimiter(values[:count_death], delimiter: ' ', separator: ',') %>

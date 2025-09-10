@@ -8,6 +8,8 @@ class Unit < ApplicationRecord
 
   validates :unit_type, presence: true
   validates :count, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :count_death, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :count_start, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :strength_mod, presence: true, numericality: {  greater_than_or_equal_to: 50, less_than_or_equal_to: 200 }
   validates :strength_indirect_mod, presence: true, numericality: {  greater_than_or_equal_to: 50, less_than_or_equal_to: 200 }
   validates :hp_mod, presence: true, numericality: {  greater_than_or_equal_to: 50, less_than_or_equal_to: 200 }
@@ -157,6 +159,7 @@ private
 
   def set_count_start
     self.count_start = self.count
+    self.count_death = 0
   end
 
   def generate_random_name
