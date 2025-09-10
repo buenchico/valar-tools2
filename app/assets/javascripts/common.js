@@ -141,6 +141,7 @@ $(document).on('cocoon:after-insert', function(e, insertedItem, originalEvent) {
 // Activating custom sorting in tables
 $.fn.table_sorter =  function() {
   $("table.sortable").tablesorter({
+    widgets: ['staticRow'],
     headerTemplate : '{icon}{content}',
     cssIconNone: 'bi bi-sort-caret sorter-icon',
     cssIconAsc:  'bi bi-sort-caret-up sorter-icon',

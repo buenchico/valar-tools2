@@ -1,0 +1,54 @@
+<% provide(:title, @tool.title) %>
+<% provide(:icon, @tool.icon_url) %>
+
+<div class="tool-title">
+  <i class="white <%= yield(:icon) %>"></i>
+  <%= yield(:title) %>
+</div>
+
+<div class="table-responsive text-light">
+  <table id="army_list" class="table table-dark table-striped table-borderless table-hover table-sm sortable">
+    <caption class="text-light">Estadísticas de ejércitos</caption>
+    <thead>
+      <tr>
+        <th scope="col">
+          Facción
+        </th>
+        <% @unit_types.each do |key, value| %>
+          <th scope="col" colspan=2 class="border-end">
+            <%= value["name"].titleize %>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="static no-wrap-column">
+        <td>
+          Todas
+        </td>
+        <% @unit_types.each do |key, value| %>
+          <td>
+            <%= number_to_compact(total_army_units_by_unit_type(@units).fetch(key, {}).fetch(:count, 0)) %>
+          </td>
+          <td class="border-end">
+            <i class="bi bi-skull-solid"></i><%= number_to_compact(total_army_units_by_unit_type(@units).fetch(key, {}).fetch(:count_death, 0)) %>
+          </td>
+        <% end %>
+      </tr>
+      <% @factions.each do |faction| %>
+        <tr class="no-wrap-column">
+          <td>
+            <%= faction.long_name %>
+          </td>
+          <% @unit_types.each do |key, value| %>
+            <td>
+              <%= number_to_compact(total_army_units_by_unit_type(faction.units).fetch(key, {}).fetch(:count, 0)) %>
+            </td>
+            <td class="border-end">
+              <i class="bi bi-skull-solid"></i><%= number_to_compact(total_army_units_by_unit_type(faction.units).fetch(key, {}).fetch(:count_death, 0)) %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
