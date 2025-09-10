@@ -17,3 +17,13 @@
      — <span class="small">Al servicio de <strong><%= army.families.map { |f| f.title }.join(", ") %></strong></span>
   <% end %>
 </div>
+<% if army.men_death %>
+  <%= t('activerecord.attributes.unit.count_death') %>
+  <% army.composition.each do |key, values| %>
+    <% if values[:count_death] > 0 %>
+      <div class="ms-3">
+        <i class="bi bi-skull-solid"></i> <%= values[:title].titleize %>: <%= number_with_delimiter(values[:count_death], delimiter: ' ', separator: ',') %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

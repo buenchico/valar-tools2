@@ -18,6 +18,7 @@ class Army < ApplicationRecord
   before_validation :ensure_minimum_xp
   before_validation :ensure_minimum_morale
 
+  before_save :annihilate
   before_save :log_changes
 
   def search
@@ -72,6 +73,10 @@ class Army < ApplicationRecord
     units.sum(&:men_start).to_i
   end
 
+  def men_death
+    units.sum(&:men_death).to_i
+  end
+
   def hp
     units.sum(&:hp).to_i
   end
@@ -100,9 +105,10 @@ class Army < ApplicationRecord
       .transform_values do |units|
         {
           count: units.sum(&:count),
+          count_death: units.sum(&:count_death),
           icon: units.first.icon,
           colour: units.first.colour,
-          title: units.first.title
+          title: units.first.simple_title
         }
       end
   end
@@ -150,6 +156,14 @@ private
 
   def cache_units
     self.unit_ids_was = self.unit_ids.dup
+  end
+
+  def annihilate
+    if self.status == "inactive"
+      self.units.each do |unit|
+        unit.update(count: 0)
+      end
+    end
   end
 
   def log_changes

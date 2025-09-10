@@ -7,10 +7,10 @@ class Unit < ApplicationRecord
   attr_accessor :faction_ids_was
 
   validates :unit_type, presence: true
-  validates :count, presence: true
-  validates :strength_mod, presence: true
-  validates :strength_indirect_mod, presence: true
-  validates :hp_mod, presence: true
+  validates :count, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :strength_mod, presence: true, numericality: {  greater_than_or_equal_to: 50, less_than_or_equal_to: 200 }
+  validates :strength_indirect_mod, presence: true, numericality: {  greater_than_or_equal_to: 50, less_than_or_equal_to: 200 }
+  validates :hp_mod, presence: true, numericality: {  greater_than_or_equal_to: 50, less_than_or_equal_to: 200 }
   validate :unique_name_within_faction
 
   before_create :set_count_start
@@ -77,9 +77,14 @@ class Unit < ApplicationRecord
     return (unit_hp * self.hp_mod * 0.01).round(2)
   end
 
+  def simple_title
+    set_options if @options_armies.nil?
+    return (@units.fetch(self.unit_type, {}).fetch("name", "")).pluralize_all_words(self.count)
+  end
+
   def title
     set_options if @options_armies.nil?
-    title = (@units.fetch(self.unit_type, {}).fetch("name", "")).pluralize_all_words(self.count)
+    title = self.simple_title
     message = []
     if strength_mod != 100
       message << "🎖" + (strength_mod/100.0).round(1).to_s
