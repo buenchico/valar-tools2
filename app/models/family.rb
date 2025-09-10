@@ -8,7 +8,7 @@ class Family < ApplicationRecord
   has_many :clocks, dependent: :nullify
   belongs_to :lord, class_name: 'Family', foreign_key: 'lord_id', optional: true
   has_many :vassals, class_name: 'Family', foreign_key: 'lord_id'
-  has_many :armies, foreign_key: 'family_id'
+  has_many :units, foreign_key: 'family_id'
 
   validates :name, presence: true
 
@@ -29,12 +29,16 @@ class Family < ApplicationRecord
   def set_army_options
   end
 
-  def hp
-    (self.armies&.sum(&:hp) / 5000).to_i || 0
+  def men
+    self.units&.sum(&:men) || 0
   end
 
-  def hp_start
-    (self.armies&.sum(&:hp_start) / 5000).to_i || 0
+  def men_start
+    self.units&.sum(&:men_start) || 0
+  end
+
+  def men_death
+    self.units&.sum(&:men_death) || 0
   end
 
 private

@@ -17,7 +17,7 @@
   </span>
 <% end %>
 
-<% army.composition.each do | key, unit | %>
+<% total_army_units_by_unit_type(army.units).each do | key, unit | %>
   <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= unit[:colour] %>">
     <i class="bi bi-<%= unit[:icon] %>"></i>
 

@@ -23,9 +23,9 @@ class ArmiesRefactor < ActiveRecord::Migration[8.0]
     create_table :units do |t|
       t.string :name, null: false
       t.string :unit_type
-      t.integer :count, default: 1
-      t.integer :count_start
-      t.integer :count_death
+      t.integer :count, default: 0
+      t.integer :count_start, default: 0
+      t.integer :count_death, default: 0
       t.integer :strength_mod, default: 100
       t.integer :strength_indirect_mod, default: 100
       t.integer :hp_mod, default: 100

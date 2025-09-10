@@ -222,9 +222,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
   create_table "units", force: :cascade do |t|
     t.string "name", null: false
     t.string "unit_type"
-    t.integer "count", default: 1
-    t.integer "count_start"
-    t.integer "count_death"
+    t.integer "count", default: 0
+    t.integer "count_start", default: 0
+    t.integer "count_death", default: 0
     t.integer "strength_mod", default: 100
     t.integer "strength_indirect_mod", default: 100
     t.integer "hp_mod", default: 100

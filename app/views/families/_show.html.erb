@@ -95,46 +95,26 @@
             <% end %>
           <% end %>
           <% if @options_families["subtools"]["armies"] %>
-            <% if @family.armies.present? %>
-            <div class="h4">Ejércitos</div>
-            <% unit_summary = @family.armies.each_with_object(Hash.new { |h, k| h[k] = Hash.new { |i, j| i[j] = Hash.new(0) } }) do |army, acc| %>
-              <% army.units.each do |unit| %>
-                <% acc[unit.unit_type][army.status]["troops"] += unit.troops.to_i %>
-                <% acc[unit.unit_type]["all"]["troops_start"] += unit.troops_start.to_i %>
-              <% end %>
-            <% end %>
-            <table class="table table-dark table-striped table-borderless table-hover table-sm">
-              <thead>
-                <tr id="table_title">
-                  <td></td>
-                  <td><%= @army_status["raised"]["name"] %></td>
-                  <td><%= @army_status["active"]["name"] %></td>
-                  <td><%= @army_status["inactive"]["name"] %></td>
-                </tr>
-              </thead>
-              <tbody>
-                <% unit_summary.each do | key, value | %>
-                  <tr>
-                    <td><%= @unit_types[key]["name"].capitalize %></td>
-                    <td><%= number_to_compact(value["raised"]["troops"]) %></td>
-                    <td><%= number_to_compact(value["active"]["troops"]) %></td>
-                    <td><%= number_to_compact(value["all"]["troops_start"]) %></td>
-                  </tr>
+            <% if @family.units.present? %>
+              <div class="h4">Tropas</div>
+                <% total_army_units_by_unit_type(@family.units).each do |key, values| %>
+                  <div class="ms-3">
+                    <%= values[:title].titleize %>: <%= number_with_delimiter(values[:count], delimiter: ' ', separator: ',') %> — <i class="bi bi-skull-solid"></i><%= number_with_delimiter(values[:count_death], delimiter: ' ', separator: ',') %>
+                  </div>
                 <% end %>
-              <tbody>
-            </table>
+              <div>
 
-            <div class="row ms-1 mt-1 h5">
-              Lista
-            </div>
-            <% @family.armies.order(:name).each do | army | %>
+              <div class="row ms-1 mt-1 h5">
+                Lista
+              </div>
+              <% @family.units.order(:name).each do | unit | %>
               <div class="row ms-1">
-                <div class="col <%= army.status %>">
-                  <%= render 'armies/army_one_line', army: army, link: true %>
+                <div class="col <%= unit.army&.status %>">
+                  <%= render 'units/one_line', unit: unit, link: true %>
                 </div>
               </div>
             <% end %>
-          <% end %>
+            <% end %>
           <% end %>
         <% end %>
       </div>

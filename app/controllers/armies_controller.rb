@@ -2,8 +2,8 @@ class ArmiesController < ApplicationController
   before_action :set_tool
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show, :delete, :show]
   before_action :set_options
-  before_action :set_factions, only: [:index, :new, :edit, :edit_multiple]
-  before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete, :damage_multiple, :damage_multiple_apply, :merge_multiple]
+  before_action :set_factions, only: [:index, :stats, :new, :edit, :edit_multiple]
+  before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete, :damage_multiple, :damage_multiple_apply, :merge_multiple, :stats]
   before_action :check_owner_inclusive, only: [:show]
 
   def index
@@ -24,6 +24,11 @@ class ArmiesController < ApplicationController
       @armies = armies.sort_by(&:army_type)
       @units = units.where(army: nil).sort_by(&:army_type).sort_by(&:army_type)
     end
+  end
+
+  def stats
+    @armies = Army.all
+    @units = Unit.all
   end
 
   def show_armies
@@ -183,6 +188,7 @@ class ArmiesController < ApplicationController
   end
 
   def destroy
+    @units = @army.units
     respond_to do |format|
       if params[:confirm].nil? || params[:confirm] == 'DELETE'
         if @army.destroy

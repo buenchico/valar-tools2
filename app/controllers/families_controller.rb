@@ -1,4 +1,6 @@
 class FamiliesController < ApplicationController
+  include ArmiesHelper
+
   before_action :set_tool
   before_action :check_master, except: [:index, :show]
   before_action :set_family, only: [:edit, :update, :destroy, :show]
