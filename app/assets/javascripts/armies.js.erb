@@ -40,7 +40,8 @@ $(document).on('turbolinks:load', function () {
 
     $.fn.copyArmies = function() {
       $('.mass-copy').click(function() {
-        var checkboxGroup = $(this).data("checkbox");
+        const button = $(this); // capture reference
+        var checkboxGroup = button.data("checkbox");
         let message = "";
         let str = 0;
         let men = 0;
@@ -63,6 +64,13 @@ $(document).on('turbolinks:load', function () {
         message += "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men
 
         navigator.clipboard.writeText(message)
+
+        button.addClass('bg-success-subtle text-dark');
+        button.find('.bi-check').removeClass('d-none');
+        setTimeout(function() {
+          button.removeClass('bg-success-subtle text-dark');
+          button.find('.bi-check').addClass('d-none');
+        }, 500);
       });
     }
 

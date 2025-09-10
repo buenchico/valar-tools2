@@ -14,7 +14,7 @@
     <%= form_tag(edit_multiple_units_path, method: :get, id: 'edit_multiple_units', remote: true) do %>
       <%= hidden_field_tag 'unit_ids', '', id: 'units_ids_field' %>
       <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button mass-copy", disabled: true, data: {checkbox: "units" }) do %>
-        <i class="bi bi-clipboard"></i> <%= t('helpers.action.copy') %>
+        <i class="bi bi-clipboard"></i> <%= t('helpers.action.copy') %> <i class="bi bi-check d-none"></i>
       <% end %>
       <% if @current_user&.is_master? %>
         <%= button_tag(type: 'submit', class: "btn btn-success btn-sm mass_edit_button", disabled: true, value: "create_army", data: {checkbox: "units" }) do %>

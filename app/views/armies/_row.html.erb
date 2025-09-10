@@ -1,9 +1,5 @@
 <td>
   <%= check_box_tag "army_ids[]", army.id, false, id: 'id_army_' + army.id.to_s, class: "checkbox_selectable option-input", data: {checkbox: "armies" } %>
-</td>
-
-<td>
-  <span class="strength"><%= render 'armies/strength', army: army %></span>
   <span id="army_copy_<%= army.id.to_s %>" class="d-none armies_copy">
     <%= render 'armies/plain_text', army: army %>
   </span>
@@ -19,6 +15,10 @@
   <span class="armies_hp d-none">
     <%= army.hp %>
   </span>
+</td>
+
+<td>
+  <span class="strength"><%= render 'armies/strength', army: army %></span>
 </td>
 
 <td>

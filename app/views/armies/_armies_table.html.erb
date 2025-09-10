@@ -3,7 +3,7 @@
     <%= form_tag(edit_multiple_armies_path, method: :get, id: 'edit_multiple_units', remote: true) do %>
       <%= hidden_field_tag 'army_ids', '', id: 'armies_ids_field' %>
       <%= button_tag(type: 'button', class: "btn btn-primary btn-sm mass_edit_button mass-copy", disabled: true, data: {checkbox: "armies" }) do %>
-        <i class="bi bi-clipboard"></i> <%= t('helpers.action.copy') %>
+        <i class="bi bi-clipboard"></i> <%= t('helpers.action.copy') %> <i class="bi bi-check d-none"></i>
       <% end %>
       <%= button_tag(type: 'submit', class: "btn btn-warning btn-sm mass_edit_button", disabled: true, value: "edit", data: {checkbox: "armies" }) do %>
         <i class="bi bi-pencil-square"></i> <%= t('helpers.action.mass_edit') %>
