@@ -14,8 +14,8 @@
         <i class="bi <%= @options_missions['list']['icon'] %>" data-bs-toggle="tooltip" title="<%= @options_missions["list"]["name"] %>"></i>
       <% end %>
     <% end %>
-    <% if @options_missions["rules"].present? %>
-      <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-html="true" title="<%= Kramdown::Document.new(@options_missions["rules"] || '').to_html.html_safe %>"></i>
+    <% if @options_missions["traits"].present? %>
+      <%= render 'rules' %>
     <% end %>
     </div>
 </div>

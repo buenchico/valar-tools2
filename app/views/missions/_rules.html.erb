@@ -1,0 +1,13 @@
+<% rules_text = "" %>
+<% @options_missions["traits"].each do |key, value| %>
+<% rules_text += Kramdown::Document.new("**#{key.capitalize}**: #{value}\n{: .text-start}").to_html %>
+<% end %>
+
+<i class="bi bi-question-circle"
+  data-bs-toggle="tooltip"
+    data-bs-placement="left"
+      data-bs-html="true"
+        title='
+          <%= rules_text.html_safe %>
+          '>
+</i>
