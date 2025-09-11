@@ -89,14 +89,18 @@ class UnitsController < ApplicationController
         tags: unit_data[:tags].reject!(&:empty?)
       }
 
-      unit = Unit.new(unit_params)
+      times = unit_data[:times].to_i
 
-      unit.faction_ids = faction_ids if faction_ids.present?
+      times.times do |i|
+        unit = Unit.new(unit_params)
 
-      if unit.valid?
-        @created_units << unit
-      else
-        failed_units << { unit: unit, errors: unit.errors.full_messages }
+        unit.faction_ids = faction_ids if faction_ids.present?
+
+        if unit.valid?
+          @created_units << unit
+        else
+          failed_units << { unit: unit, errors: unit.errors.full_messages }
+        end
       end
     end
 

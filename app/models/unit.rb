@@ -171,10 +171,14 @@ private
     loop do
       candidate_name = "#{existing_count} #{base_name}"
 
-      # Check if any faction already has a unit with this name and type
-      conflict = self.factions.any? do |faction|
-        faction.units.where(unit_type: unit_type, name: candidate_name).exists?
-      end
+      conflict =
+        if factions.any?
+          factions.any? do |faction|
+            faction.units.where(unit_type: unit_type, name: candidate_name).exists?
+          end
+        else
+          Unit.where(unit_type: unit_type, name: candidate_name).exists?
+        end
 
       if conflict
         existing_count += 1

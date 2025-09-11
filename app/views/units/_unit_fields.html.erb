@@ -15,11 +15,12 @@
       class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select me-1',
       title: t('helpers.select.no_type'),
       data: { width: '150px'},
-      disabled: form.object.persisted? ? true : false
+      disabled: form.object.persisted? ? true : false,
+      required: true
     %>
   </td>
   <td>
-    <%= form.number_field :count, class: 'form-control text-end me-1', step: 1, min: 0, style: "width: 80px" %>
+    <%= form.number_field :count, class: 'form-control text-end me-1', step: 1, min: 0 %>
   </td>
 
   <% if @unit_tags.present? %>
@@ -39,17 +40,21 @@
         class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white me-1',
         title: t('helpers.select.no_tags'),
         multiple: true,
-        data: { width: '150px', style: 'overflow: visible' }
+        data: { style: 'overflow: visible' }
       %>
     </td>
   <% end %>
 
   <td>
-    <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select', style: 'width: 150px' %>
+    <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
   </td>
 
   <td>
-    <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select', style: 'width: 150px' %>
+    <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+  </td>
+
+  <td>
+    <%= form.number_field :times, name: "units[][times]", value: 1, class: 'form-control  text-end me-1', step: 1, min: 1 %>
   </td>
 
   <td>
