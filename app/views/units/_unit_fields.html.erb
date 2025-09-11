@@ -50,7 +50,7 @@
   </td>
 
   <td>
-    <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+    <%= form.select :family_id, [""] + @families.map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
   </td>
 
   <td>

@@ -131,7 +131,7 @@
 
             <div class="input-group mb-3">
               <%= form.label :family_id, class: 'input-group-text' %>
-              <%= form.select :family_id, [""] + Family.all.order(visible: :desc, game_id: :asc, name: :asc).map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+              <%= form.select :family_id, [""] + @families.map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
             </div>
 
           <% end %>
