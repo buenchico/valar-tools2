@@ -44,7 +44,7 @@ $(document).on('ready', function () {
 
 // Toggle visibility
 $(document).on('turbolinks:load', function() {
-  $('.toggle-visibility').on('click', function() {
+  $('.toggle-visibility-button').on('click', function() {
       $('.toggle-visibility').toggleClass('d-none');
   });
 });

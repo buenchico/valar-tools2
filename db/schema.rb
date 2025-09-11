@@ -204,6 +204,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
     t.jsonb "results", default: {"major" => [], "minor" => [], "improvement" => []}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "visible", default: true
   end
 
   create_table "tools", force: :cascade do |t|

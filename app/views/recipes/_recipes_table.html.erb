@@ -8,13 +8,14 @@
         <th scope="col"><%= t('activerecord.attributes.recipe.speed') %></th>
         <th scope="col"><%= t('activerecord.attributes.recipe.difficulty') %></th>
         <th scope="col" data-sorter="false"><%= t('activerecord.attributes.recipe.description') %></th>
+        <th scope="col" data-sorter="false"><%= t('activerecord.attributes.recipe.game_ids') %></th>
         <th scope="col" colspan="2" data-sorter="false"></th>
       </tr>
     </thead>
     <tbody>
       <% @sections.each do | section | %>
         <% @recipes.where(section: section).each do | recipe | %>
-          <tr id="recipe_row_<%= recipe.id.to_s %>" class="recipe_<%= recipe.id %>">
+          <tr id="recipe_row_<%= recipe.id.to_s %>" class="recipe_<%= recipe.id %> <%= recipe.active ? '': 'toggle-visibility inactive d-none' %>">
             <%= render 'row', recipe: recipe %>
           </tr>
         <% end %>

@@ -26,7 +26,12 @@ class Recipe < ApplicationRecord
     self.name
   end
 
-  def visible
-    true
+  def active
+    active_game = Game.find_by(active: true)
+    if self.visible == true && self.games&.include?(active_game)
+      true
+    else
+      false
+    end
   end
 end

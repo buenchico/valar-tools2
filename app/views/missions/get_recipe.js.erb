@@ -18,7 +18,7 @@ $('#desc').html("<%= j(Kramdown::Document.new(replace_traits(@recipe&.descriptio
   <% ["plus", "minus"].each do |direction| %>
     <% ["simple", "double"].each do |size| %>
       <% ["once", "multiple"].each do |style| %>
-        <% @recipe.factors["#{direction}_#{size}_#{style}"].each do |factor| %>
+        <% @recipe&.factors["#{direction}_#{size}_#{style}"]&.each do |factor| %>
 
           <% open = (size == "double" ? "<u>" : "") %>
           <% close = (size == "double" ? "</u>" : "") %>
@@ -51,17 +51,17 @@ $('#desc').html("<%= j(Kramdown::Document.new(replace_traits(@recipe&.descriptio
   <% end %>
 
   results = ""
-  <% @recipe.results["major"].each_with_index do |result, index| %>
+  <% @recipe.results["major"]&.each_with_index do |result, index| %>
     results = `<div id="major_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-danger created disabled">
       <span class='result-data'>🟰 <%= result %></span>
     </div>`
   <% end %>
-  <% @recipe.results["minor"].each_with_index do |result, index| %>
+  <% @recipe.results["minor"]&.each_with_index do |result, index| %>
     results += `<div id="minor_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-warning created disabled">
       <span class='result-data'>➖ <%= result %></span>
     </div>`
   <% end %>
-  <% @recipe.results["improvement"].each_with_index do |result, index| %>
+  <% @recipe.results["improvement"]&.each_with_index do |result, index| %>
     results += `<div id="improvement_<%= index %>" class="ms-1 mb-1 result btn btn-sm btn-outline-success created disabled">
       <span class='result-data'>➕ <%= result %></span>
     </div>`

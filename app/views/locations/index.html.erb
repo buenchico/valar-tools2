@@ -15,9 +15,11 @@
       <i class="bi bi-plus-circle"></i> Crear Nuevo Lugar
     <% end %>
 
-    <button id="toggle_visibility_visible" class="btn btn-warning btn-sm toggle-visibility"> <%= t('helpers.label.toggle_visibility_visible') %></button>
-    <button id="toggle_visibility_invisible" class="btn btn-warning btn-sm d-none toggle-visibility"><%= t('helpers.label.toggle_visibility_invisible') %></button>
-  <% end %>    
+    <div class="float-end">
+      <button id="toggle_visibility_visible" class="btn btn-warning btn-sm toggle-visibility-button"> <%= t('helpers.label.toggle_visibility_visible') %></button>
+      <button id="toggle_visibility_invisible" class="btn btn-warning btn-sm d-none toggle-visibility-button"><%= t('helpers.label.toggle_visibility_invisible') %></button>
+    </div>
+  <% end %>
 </div>
 
 <%= render "locations_table" %>

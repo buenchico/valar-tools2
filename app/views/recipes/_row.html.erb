@@ -13,6 +13,9 @@
 <td>
   <%= Kramdown::Document.new(replace_traits(truncate(recipe.description, length: 60, omission: '...')  || "")).to_html.html_safe %>
 </td>
+<td>
+  <%= recipe.games.pluck(:title).join(", ") %>
+</td>
 <td><%= link_to '', send("edit_recipe_path", recipe.id), remote: true, class: 'bi bi-pencil-square text-white' %></td>
 <td>
   <%= link_to send("recipe_path", recipe.id), method: :delete, data: { confirm: "Estás seguro de eliminar el objeto #{recipe.name}?" }, remote: true do %>

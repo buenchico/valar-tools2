@@ -7,11 +7,7 @@ class RecipesController < ApplicationController
   include RecipesHelper
 
   def index
-    if @current_user.is_admin?
-      @recipes = Recipe.all
-    else
-      @recipes = Recipe.joins(:games).where(games: { id: active_game.id })
-    end
+    @recipes = Recipe.all
     @view = (cookies[:recipe_view] || "cards")
     @not_view = (@view == "cards" ? "table" : "cards")
   end

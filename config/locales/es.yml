@@ -247,6 +247,7 @@ es:
         role: "Roleo"
         total: "Total"
         dice: "Tirada"
+        game_ids: "Partidas"
     models:
       game: 'Partida'
       tool: 'Herramienta'

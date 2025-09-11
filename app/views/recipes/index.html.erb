@@ -20,7 +20,11 @@
       <% end %>
     <% end %>
 
-    <%= button_tag t('helpers.label.toggle_display_' + @not_view), type: "button", class: "btn btn-primary float-end", id: "change_view", data: { view: @view, view_name: t('helpers.label.toggle_display_' + @view)} %>
+    <%= button_tag t('helpers.label.toggle_display_' + @not_view), type: "button", class: "btn btn-secondary", id: "change_view", data: { view: @view, view_name: t('helpers.label.toggle_display_' + @view)} %>
+    <div class="float-end">
+      <button id="toggle_visibility_visible" class="btn btn-warning btn-sm toggle-visibility-button"> <%= t('helpers.label.toggle_visibility_visible') %></button>
+      <button id="toggle_visibility_invisible" class="btn btn-warning btn-sm d-none toggle-visibility-button"><%= t('helpers.label.toggle_visibility_invisible') %></button>
+    </div>
   </div>
 </div>
 

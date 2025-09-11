@@ -1,5 +1,8 @@
 class AddRecipeGamesRelation < ActiveRecord::Migration[8.0]
   def change
+
+    add_column :recipes, :visible, :boolean, default: true
+  
     create_table :games_recipes, id: false do |t|
       t.references :game, null: false, foreign_key: true, index: true
       t.references :recipe, null: false, foreign_key: true, index: true
