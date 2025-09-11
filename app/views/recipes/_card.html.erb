@@ -24,27 +24,35 @@
       <% end %>
     </div>
     <div class="text-center"><%= recipe.section %>, <strong><%= @options_missions["speed"][recipe.speed]["name"].capitalize %> (<%= @options_missions["speed"][recipe.speed]["days"] %>), <%= @options_missions["difficulty"].find { |item| item["value"] == recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(recipe.difficulty)%>)</strong></div>
-    <hr class="border border-primary opacity-100 w-100">
-    <div><%= Kramdown::Document.new(replace_traits(recipe.description)  || "").to_html.html_safe %></div>
-    <hr class="border border-primary opacity-100 w-100">
-    <% factors = { "plus" => [], "minus" => [] } %>
-    <% recipe.factors.sort_by { |key, _| key }.reverse.to_h.each do |key, value| %>
-      <% current_prefix = key.split('_').first %>
 
-      <% value.each do |factor| %>
-        <% factors[current_prefix].push(factor_to_text(factor, key, "html")) if factors[current_prefix] %>
-      <% end %>
+    <% if recipe.description.present? %>
+      <hr class="border border-primary opacity-100 w-100">
+      <div><%= Kramdown::Document.new(replace_traits(recipe.description)  || "").to_html.html_safe %></div>
     <% end %>
 
-    <p><%= (factors["plus"].sort_by { |item| natural_sort_key(item) } + factors["minus"].sort_by { |item| natural_sort_key(item) }).join(", ").html_safe %></p>
+    <% if recipe.factors.present? %>
+      <hr class="border border-primary opacity-100 w-100">
+      <% factors = { "plus" => [], "minus" => [] } %>
+      <% recipe.factors.sort_by { |key, _| key }.reverse.to_h.each do |key, value| %>
+        <% current_prefix = key.split('_').first %>
 
-    <hr class="border border-primary opacity-100 w-100">
-    <div>
-      <% ["major", "minor", "improvement"].each do | result_type | %>
-        <% recipe.results.fetch(result_type, []).each do | result | %>
-          <div><%= result_to_text(result, result_type).html_safe %></div>
+        <% value.each do |factor| %>
+          <% factors[current_prefix].push(factor_to_text(factor, key, "html")) if factors[current_prefix] %>
         <% end %>
       <% end %>
-    </div>
+
+      <p><%= (factors["plus"].sort_by { |item| natural_sort_key(item) } + factors["minus"].sort_by { |item| natural_sort_key(item) }).join(", ").html_safe %></p>
+    <% end %>
+
+    <% if recipe.results.present? %>
+      <hr class="border border-primary opacity-100 w-100">
+      <div>
+        <% ["major", "minor", "improvement"].each do | result_type | %>
+          <% recipe.results.fetch(result_type, []).each do | result | %>
+            <div><%= result_to_text(result, result_type).html_safe %></div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 </div>
