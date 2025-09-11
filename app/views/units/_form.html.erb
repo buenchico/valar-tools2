@@ -12,14 +12,16 @@
       </div>
       <div class="modal-body">
         <%= form_with model: unit, local: false do |form| %>
-          <div class="alert alert-warning">
-            <div>
-              <strong><%= render 'units/one_line', unit: unit %></strong>
+          <% if unit.persisted? %>
+            <div class="alert alert-warning">
+              <div>
+                <strong><%= render 'units/one_line', unit: unit %></strong>
+              </div>
+              <div>
+                <%= render 'units/stats', unit: unit %>
+              </div>
             </div>
-            <div>
-              <%= render 'units/stats', unit: unit %>
-            </div>
-          </div>
+          <% end %>
           <% if @current_user.is_master? %>
             <div class="input-group mb-3">
               <%= form.label :name, class: 'input-group-text' %>
@@ -155,7 +157,7 @@
             </div>
           <% end %>
         </div>
-      <% end %>      
+      <% end %>
     </div>
   </div>
 </div>
