@@ -79,20 +79,6 @@ private
 
   def recipe_params
     # Permit the parameters and initialize with sanitized values
-    recipe_params = params.require(:recipe).permit(:name, :section, :description, :difficulty, :speed, game_ids: [], factors: {}, results: {}).tap do |whitelisted|
-      # Clean up empty elements in factors
-      whitelisted[:factors] = clean_empty_elements(whitelisted[:factors])
-      # Clean up empty elements in results
-      whitelisted[:results] = clean_empty_elements(whitelisted[:results])
-    end
-  end
-
-  # Method to clean up empty elements in a JSON hash
-  def clean_empty_elements(json)
-    return {} unless json.is_a?(Hash)
-
-    json.transform_values do |array|
-      Array(array).reject(&:blank?)
-    end
+    recipe_params = params.require(:recipe).permit(:name, :section, :description, :difficulty, :speed, :visible, game_ids: [], factors: {}, results: {})
   end
 end

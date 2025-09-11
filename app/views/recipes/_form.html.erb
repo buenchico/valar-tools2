@@ -40,23 +40,24 @@
               <% ["once", "multiple"].each do |style| %>
                 <div class="input-group mb-3">
                   <%= form.label t("activerecord.attributes.recipe.#{direction}") + " " + t("activerecord.attributes.recipe.#{size}") + " " + t("activerecord.attributes.recipe.#{style}"), class: 'input-group-text' %>
-                  <%= form.select "factors[" + direction + "_" + size + "_" + style + "]",
+                  <%= select_tag "recipe[factors][#{direction}_#{size}_#{style}][]",
                     options_for_select(
-                      recipe.factors.fetch(direction + "_" + size + "_" + style, []).sort.map { |factor|
+                      recipe.factors.fetch("#{direction}_#{size}_#{style}", []).sort.map { |factor|
                         [
                           factor,
-                          { "data-content": "<span class='badge pill pill-tags bg-" + (direction == "plus" ? "primary" : "danger") + "'><span class='pill-tags-text'>#{factor}</span></span>".html_safe }
+                          { "data-content": "<span class='badge pill pill-tags bg-#{direction == "plus" ? "primary" : "danger"}'><span class='pill-tags-text'>#{factor}</span></span>".html_safe }
                         ]
                       },
-                      recipe.factors.fetch(direction + "_" + size + "_" + style, [])
+                      recipe.factors.fetch("#{direction}_#{size}_#{style}", [])
                     ),
-                    { include_blank: false },
+                    multiple: true,
+                    include_blank: false,
                     class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
                     title: t('activerecord.attributes.recipe.no_factors'),
-                    multiple: true,
-                    data: { "arbitrary": "true",
-                            "none-results-text-arbitrary": t('messages.click_to_create').html_safe
-                          }
+                    data: {
+                      arbitrary: true,
+                      "none-results-text-arbitrary": t('messages.click_to_create').html_safe
+                    }
                   %>
                 </div>
               <% end %>
@@ -70,23 +71,24 @@
             <% color = ["danger","warning","success"] %>
             <div class="input-group mb-3">
               <%= form.label t("activerecord.attributes.recipe.results_#{result}"), class: 'input-group-text' %>
-              <%= form.select "results[" + result + "]",
+              <%= select_tag "recipe[results][#{result}][]",
                 options_for_select(
-                  recipe.results.fetch(result, []).map { |result|
+                  recipe.results.fetch(result, []).map { |value|
                     [
-                      result,
-                      { "data-content": "<span class='badge pill pill-tags bg-" + color[index] + "'><span class='pill-tags-text'>#{result}</span></span>".html_safe }
+                      value,
+                      { "data-content": "<span class='badge pill pill-tags bg-#{color[index]}'><span class='pill-tags-text'>#{value}</span></span>".html_safe }
                     ]
                   },
                   recipe.results.fetch(result, [])
                 ),
-                { include_blank: false },
+                multiple: true,
+                include_blank: false,
                 class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color text-dark bg-white',
                 title: t('activerecord.attributes.recipe.no_results'),
-                multiple: true,
-                data: { "arbitrary": "true",
-                        "none-results-text-arbitrary": t('messages.click_to_create').html_safe
-                      }
+                data: {
+                  arbitrary: true,
+                  "none-results-text-arbitrary": t('messages.click_to_create').html_safe
+                }
               %>
             </div>
           <% end %>
