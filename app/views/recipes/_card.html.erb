@@ -23,7 +23,7 @@
         </ul>
       <% end %>
     </div>
-    <div class="text-center"><%= recipe.section %>, <strong><%= @options_missions["speed"][recipe.speed]["name"].capitalize %> (<%= @options_missions["speed"][recipe.speed]["days"] %>), <%= @options_missions["difficulty"].find { |item| item["value"] == recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(recipe.difficulty)%>)</strong></div>
+    <div class="text-center"><%= recipe.section %>, <strong><%= @options_missions["speed"][recipe.speed]["name"].capitalize %><%= @options_missions["speed"][recipe.speed]["days"].nil? ? "" : " (#{@options_missions["speed"][recipe.speed]["days"]})" %>, <%= @options_missions["difficulty"].find { |item| item["value"] == recipe.difficulty }["name"].capitalize %> (<%= number_to_modifier(recipe.difficulty)%>)</strong></div>
 
     <% if recipe.description.present? %>
       <hr class="border border-primary opacity-100 w-100">
