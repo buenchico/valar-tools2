@@ -32,9 +32,41 @@
   </div>
 </div>
 
+<div id="army_controls" class="row">
+  <div class="col">
+  </div>
+  <div class="col">
+    <div class="d-flex align-items-center">
+      <%= select_tag "filter", options_for_select(@army_filters, t('activerecord.attributes.army.name')), class: "form-select form-select-sm me-2 filterSelect", data: {filter: "army"} %>
+      <input class="form-control form-control-sm filterText" type="text" placeholder="Filtrar..." data-filter="army">
+    </div>
+  </div>
+</div>
+
 <div id="army_table">
   <%= render 'armies/armies_table' %>
 </div>
+
+
+<div id="unit_controls" class="row">
+  <% if @current_user&.is_master? %>
+    <div class="col">
+      <%= link_to new_unit_path, class: "btn btn-primary", remote: true do %>
+        <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.unit', count: 1) ) %>
+      <% end %>
+      <%= link_to new_units_path, class: "btn btn-success", remote: true do %>
+        <i class="bi bi-clipboard2-plus-fill"></i> <%= t('helpers.submit.create', model: t('activerecord.models.unit', count: 2) ) %>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="col">
+    <div class="d-flex align-items-center">
+      <%= select_tag "filter", options_for_select(@unit_filters, t('activerecord.attributes.unit.name')), class: "form-select form-select-sm me-2 filterSelect", data: {filter: "unit"} %>
+      <input class="form-control form-control-sm filterText" type="text" placeholder="Filtrar..." data-filter="unit">
+    </div>
+  </div>
+</div>
+
 
 <div id="unit_table">
   <%= render 'units/units_table' %>

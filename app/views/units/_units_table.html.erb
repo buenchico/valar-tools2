@@ -1,14 +1,3 @@
-<% if @current_user&.is_master? %>
-  <div class="col">
-    <%= link_to new_unit_path, class: "btn btn-primary", remote: true do %>
-      <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.unit', count: 1) ) %>
-    <% end %>
-    <%= link_to new_units_path, class: "btn btn-success", remote: true do %>
-      <i class="bi bi-clipboard2-plus-fill"></i> <%= t('helpers.submit.create', model: t('activerecord.models.unit', count: 2) ) %>
-    <% end %>
-  </div>
-<% end %>
-
 <div class="row my-3">
   <div class="col">
     <%= form_tag(edit_multiple_units_path, method: :get, id: 'edit_multiple_units', remote: true) do %>
@@ -63,7 +52,7 @@
         <% end %>
       </tr>
     </thead>
-    <tbody id="table_body">
+    <tbody id="units_table_body">
       <div class="d-flex justify-content-center">
         <div id="spinner-units" class="spinner-border fs-1 d-none" role="status">
           <span class="visually-hidden">Loading...</span>

@@ -5,6 +5,7 @@ class ArmiesController < ApplicationController
   before_action :set_factions, only: [:index, :stats, :new, :edit, :edit_multiple]
   before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete, :damage_multiple, :damage_multiple_apply, :merge_multiple, :stats]
   before_action :check_owner_inclusive, only: [:show]
+  before_action :set_filters, only: [:index, :show_armies]
 
   def index
     @faction = Faction.find_by(id: params[:faction_id])
@@ -32,6 +33,7 @@ class ArmiesController < ApplicationController
   end
 
   def show_armies
+
     active_factions = JSON.parse(params[:active_factions])
     active_visibility = JSON.parse(params[:active_visibility])
 
@@ -404,6 +406,15 @@ private
           end
         end
       end
+    end
+  end
+
+  def set_filters
+    @army_filters = [ t('activerecord.attributes.army.selected'), t('activerecord.attributes.army.name'), t('activerecord.attributes.army.status'), t('activerecord.attributes.army.description'), t('activerecord.attributes.army.position'), t('activerecord.attributes.army.group') ]
+    @unit_filters = [ t('activerecord.attributes.unit.selected'), t('activerecord.attributes.unit.name'), t('activerecord.attributes.unit.description'), t('activerecord.attributes.unit.location_id'), t('activerecord.attributes.unit.family_id') ]
+    if @current_user&.is_master?
+        @army_filters << t('activerecord.attributes.army.visible')
+        @unit_filters << t('activerecord.attributes.unit.visible')
     end
   end
 

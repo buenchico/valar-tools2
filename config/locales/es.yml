@@ -137,6 +137,8 @@ es:
         hp: "Puntos de vida"
         men: "Hombres"
         group: "Grupo"
+        selected: "Seleccionados"
+        description: "Descripcción"
       unit:
         name: "Nombre"
         description: "Descripción"
@@ -155,6 +157,7 @@ es:
         men: "Hombres"
         damage: "Daño"
         times: "Repetir"
+        selected: "Seleccionados"        
       faction:
         name: "Nombre"
         long_name: "Nombre completo"

@@ -272,6 +272,25 @@ $(document).on('shown.bs.modal', function (event) {
   $.fn.checkbox_listeners();
 });
 
+// Filters
+$.fn.tableFilters = function(filterGroup){
+    var value = $(`.filterText[data-filter='${filterGroup}']`).val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    var column = $(`.filterSelect[data-filter='${filterGroup}']`).children("option:selected").val();
+    $("#" + filterGroup + "_list").filterTable(value, column);
+}
+
+$.fn.tableFiltersLoad =  function() {
+  // Trigger filters
+  $(".filterSelect").on("change", function() {
+      const filterGroup = $(this).data("filter");
+      $.fn.tableFilters(filterGroup); // Why I need to remove the semicolons!!!!!
+  });
+  $(".filterText").on("keyup", function() {
+      const filterGroup = $(this).data("filter");
+      $.fn.tableFilters(filterGroup); // Why I need to remove the semicolons!!!!!
+  });
+}
+
 // Change collpase icon
 function changeCollapseIcon(event) {
   var source = event.currentTarget.activeElement

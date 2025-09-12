@@ -1,22 +1,10 @@
 // Change from land to sea
 $(document).on('turbolinks:load', function () {
   if ($(".families").length !== 0 ) {
+    // Trigger table filterSelect
+    $.fn.tableFiltersLoad();
 
-    // Filters
-    $.fn.familyFilters = function(){
-        var value = $("#filtertext").val().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        var column = $("#filterselect").children("option:selected").val()
-        $("#family_list").filterTable(value, column);
-    }
-
-    // Trigger filters
-    $("#filterselect").on("change", function() {
-        $.fn.familyFilters() // Why I need to remove the semicolons!!!!!
-    });
-    $("#filtertext").on("keyup", function() {
-        $.fn.familyFilters()
-    });
-
+    // Selected cookis
     $('.checkbox_cookie').on('change', function () {
       var selectedFamilies = [];
       var checkboxes = $('.checkbox_cookie:checked');
