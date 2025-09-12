@@ -1,3 +1,7 @@
 <i class="bi bi-<%= army.icon %> text-<%= army.colour %>"></i>
-<%= army.name %>
+<% if defined?(link) && link.present? %>
+  <%= link_to(army.name, army_path(army.id), remote: true, class: 'text-reset') %>
+<% else %>
+  <%= army.name %>
+<% end %>
 <%= render 'armies/traits', army: army %>

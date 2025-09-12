@@ -24,9 +24,10 @@
               <%= hidden_field_tag "army[unit_ids][]", nil %>
               <% army.units.each do |unit| %>
                 <div id="unit_fields_<%= unit.id %>">
-                  <%= render 'units/one_line', unit: unit %>
+                  <%= render 'units/one_line', unit: unit, link: true %>
                   <%= hidden_field_tag "army[unit_ids][]", unit.id %>
                   <div class="float-end">
+                    <%= link_to '', edit_unit_path(unit), remote: true, class: 'bi bi-pencil-square text-warning' %>
                     <i id='remove_<%= unit.id %>' class='bi bi-x-circle-fill ms-1 pt-1 text-danger remove_unit'></i>
                     <i class='bi bi-damage-kinetic ms-1 pt-1 text-warning damage_unit'></i>
                     <div class="position-absolute bg-light text-dark border p-3 shadow damage_box d-none" style="top: -50px; right: -15px; z-index: 1050;">

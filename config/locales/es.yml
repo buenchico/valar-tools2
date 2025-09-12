@@ -154,6 +154,7 @@ es:
         tags: "Rasgos"
         men: "Hombres"
         damage: "Daño"
+        times: "Repetir"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"

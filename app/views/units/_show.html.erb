@@ -3,12 +3,20 @@
     <div class="modal-content bg-dark text-light">
       <div class="modal-header">
         <h5 class="modal-title w-100" id="Title"><%= unit&.name %></h5>
+        <% if unit.persisted? %>
+          <div class="me-3 w-100">
+            <%= link_to '', send("edit_unit_path", unit.id), remote: true, class: 'btn-Close bi bi-pencil-square text-white float-end' %>
+          </div>
+        <% end %>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="alert alert-warning">
           <div>
             <strong><%= render 'units/one_line', unit: unit %></strong>
+            <% if unit.army %>
+             — en <%= render 'armies/one_line', army: unit.army, link: true %>
+            <% end %>
           </div>
           <div>
             <%= render 'units/stats', unit: unit %>
