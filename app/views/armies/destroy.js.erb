@@ -2,6 +2,8 @@ $("html, body").animate({ scrollTop: 0 }, "slow");
 
 $('#army_<%= @army.id %>').remove();
 
+console.log("<%= @units.size %>")
+
 <% @units&.each do |unit| %>
   $('#unit_list').find('tbody').append('<tr id="unit_<%= unit.id.to_s %>"></tr>');
   $('#unit_<%= unit.id %>').html('<%= j render "units/row", unit: unit  %>');

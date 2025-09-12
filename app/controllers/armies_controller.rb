@@ -188,7 +188,6 @@ class ArmiesController < ApplicationController
   end
 
   def destroy
-    @units = @army.units
     respond_to do |format|
       if params[:confirm].nil? || params[:confirm] == 'DELETE'
         if @army.destroy
@@ -412,7 +411,7 @@ private
     params.require(:army).permit(
       :name, :status, :position, :group,
       :visible, :notes, :xp, :morale, tags: [], unit_ids: [],
-      units_attributes: [:id, :_destroy]
+      units_attributes: [:id, :count]
     ).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
     end
