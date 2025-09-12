@@ -3,18 +3,23 @@
   <span id="army_copy_<%= army.id.to_s %>" class="d-none armies_copy">
     <%= render 'armies/plain_text', army: army %>
   </span>
-  <span class="armies_men d-none">
-    <%= army.men %>
-  </span>
-  <span class="armies_strength d-none">
-    <%= army.strength %>
-  </span>
-  <span class="armies_strength_indirect d-none">
-    <%= army.strength_indirect %>
-  </span>
-  <span class="armies_hp d-none">
-    <%= army.hp %>
-  </span>
+  <% total_army_units_by_unit_type(army.units).each do |type, unit| %>
+    <span class="unit_count <%= type %> d-none">
+      <%= unit[:count] %>
+    </span>
+    <span class="unit_men <%= type %> d-none">
+      <%= unit[:men] %>
+    </span>
+    <span class="unit_strength <%= type %> d-none">
+      <%= unit[:strength] %>
+    </span>
+    <span class="unit_strength_indirect <%= type %> d-none">
+      <%= unit[:strength_indirect] %>
+    </span>
+    <span class="unit_hp <%= type %> d-none">
+      <%= unit[:hp] %>
+    </span>
+  <% end %>
 </td>
 
 <td>

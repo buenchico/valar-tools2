@@ -9,6 +9,10 @@ class ArmiesController < ApplicationController
 
   def index
     @faction = Faction.find_by(id: params[:faction_id])
+    @total_men = Unit.all.sum(&:men)
+    @total_dead = Unit.all.sum(&:men_death)
+    @percent_dead = ((@total_dead / @options_armies["general"]["population"].to_f) * 100).round(2)
+    @total_strength = (Army.all.sum(&:strength) + Unit.all.sum(&:strength))
 
     if @current_user&.is_master?
       if @faction
@@ -33,7 +37,6 @@ class ArmiesController < ApplicationController
   end
 
   def show_armies
-
     active_factions = JSON.parse(params[:active_factions])
     active_visibility = JSON.parse(params[:active_visibility])
 
@@ -354,8 +357,9 @@ private
 
   def get_armies(factions, visibility)
     master = Faction.find_by(name: 'master')
+
     if factions.count == 1
-      faction = Faction.find_by(id: factions)
+      @faction = Faction.find_by(id: factions)
     end
 
     if factions.include?(master.id.to_s)

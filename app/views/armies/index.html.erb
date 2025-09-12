@@ -6,6 +6,12 @@
   <%= yield(:title) %>
 </div>
 
+<div class="card bg-secondary text-light mb-3">
+  <div class="card-body">
+    <%= render 'faction_stats', faction: @faction %>
+  </div>
+</div>
+
 <% if @current_user&.is_master? %>
   <%= form_with url: show_armies_path, id: 'get-armies', method: :get, local: false do |form| %>
     <ul class="nav nav-pills mb-3">
@@ -34,6 +40,7 @@
 
 <div id="army_controls" class="row">
   <div class="col">
+
   </div>
   <div class="col">
     <div class="d-flex align-items-center">
@@ -46,7 +53,6 @@
 <div id="army_table">
   <%= render 'armies/armies_table' %>
 </div>
-
 
 <div id="unit_controls" class="row">
   <% if @current_user&.is_master? %>

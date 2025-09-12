@@ -3,6 +3,24 @@ $(document).on('turbolinks:load', function () {
     // Trigger table filterSelect
     $.fn.tableFiltersLoad();
 
+    // Recalculate stats
+    $.fn.recalculateStats = function(){
+      $('tr:visible').each(function(){
+        men = parseInt($(this).find('.army_men').text());
+        if (isNaN(men)) {
+            men = 0;
+        }
+        menArmies += men;
+        str = parseFloat($(this).find('.army_strength').text());
+        if (isNaN(str)) {
+            str = 0;
+        }
+        strArmies += str
+      });
+      $("#visible_strength").html(strArmies.toFixed(2));
+      $("#visible_men").html(menArmies);
+    }
+
     // Trigger armies load for master
     $('.armies-load').click(function() {
       $('#spinner-main').removeClass('d-none');

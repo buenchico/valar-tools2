@@ -157,7 +157,7 @@ es:
         men: "Hombres"
         damage: "Daño"
         times: "Repetir"
-        selected: "Seleccionados"        
+        selected: "Seleccionadas"        
       faction:
         name: "Nombre"
         long_name: "Nombre completo"
