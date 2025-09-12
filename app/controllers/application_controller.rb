@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
     @regions = Location.where(location_type: "region").where(game_id: active_game.id).order('name_es')
   end
 
-  def set_families_list
+  def set_families
     if @current_user&.is_admin?
       @families = Family.all.order(:name)
     elsif @current_user&.is_master?

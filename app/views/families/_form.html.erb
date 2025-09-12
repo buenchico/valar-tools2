@@ -76,7 +76,7 @@
           </div>
           <div class="input-group mb-3">
             <%= form.label :faction_id, class: 'input-group-text' %>
-            <%= form.select :faction_id, [""] + Faction.all.order(active: :desc, long_name: :asc).map { |x| [x.long_name, x.id] }, {}, class: 'form-select' %>
+            <%= form.select :faction_id, [""] + @factions.map { |x| [x.long_name, x.id] }, {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :game_id, class: 'input-group-text' %>

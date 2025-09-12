@@ -33,7 +33,7 @@
     </thead>
     <tbody>
       <% @families.each do | family | %>
-        <tr id="family_<%= family.id.to_s %>" class="<%= family.visible ? nil : 'toggle-visibility d-none'%>">
+        <tr id="family_<%= family.id.to_s %>" class="<%= (family.visible && family.game == active_game) ? nil : 'inactive toggle-visibility d-none'%>">
           <%= render 'row', family: family %>
         </tr>
       <% end %>

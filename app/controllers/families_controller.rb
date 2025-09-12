@@ -4,7 +4,8 @@ class FamiliesController < ApplicationController
   before_action :set_tool
   before_action :check_master, except: [:index, :show]
   before_action :set_family, only: [:edit, :update, :destroy, :show]
-  before_action :set_families_list, only: [:index]
+  before_action :set_families, only: [:index, :edit, :new]
+  before_action :set_factions, only: [:edit, :new]
   before_action :set_options, only: [:index, :new, :edit, :update, :new, :show, :create, :export]
   before_action :set_filters, only: [:index, :show]
   before_action :set_selected_families, onlly: [:index, :update]
@@ -21,7 +22,7 @@ class FamiliesController < ApplicationController
     respond_to do | format |
       format.js
       format.html do
-        set_families_list
+        set_families
       end
     end
   end
