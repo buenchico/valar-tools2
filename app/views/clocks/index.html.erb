@@ -15,7 +15,7 @@
         <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
       <% end %>
       <%= form_tag(edit_multiple_clocks_path, method: :get, id: 'edit_multiple', class: 'mt-2', remote: true) do %>
-        <%= button_tag(type: 'submit', class: "btn btn-danger mass_edit_button", disabled: true, value: "destroy") do %>
+        <%= button_tag(type: 'submit', class: "btn btn-danger mass_edit_button", disabled: true, value: "destroy", data: {checkbox: "clocks" }) do %>
           <i class="bi bi-trash"></i> Borrar en masa
         <% end %>
       <% end %>
