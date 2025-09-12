@@ -55,16 +55,17 @@
 </div>
 
 <div id="unit_controls" class="row">
-  <% if @current_user&.is_master? %>
-    <div class="col">
+  <div class="col">
+    <% if @current_user&.is_master? %>
       <%= link_to new_unit_path, class: "btn btn-primary", remote: true do %>
         <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.unit', count: 1) ) %>
       <% end %>
       <%= link_to new_units_path, class: "btn btn-success", remote: true do %>
         <i class="bi bi-clipboard2-plus-fill"></i> <%= t('helpers.submit.create', model: t('activerecord.models.unit', count: 2) ) %>
       <% end %>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
+  
   <div class="col">
     <div class="d-flex align-items-center">
       <%= select_tag "filter", options_for_select(@unit_filters, t('activerecord.attributes.unit.name')), class: "form-select form-select-sm me-2 filterSelect", data: {filter: "unit"} %>

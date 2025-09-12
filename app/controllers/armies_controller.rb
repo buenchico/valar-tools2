@@ -29,6 +29,8 @@ class ArmiesController < ApplicationController
       @armies = armies.sort_by(&:army_type)
       @units = units.where(army: nil).sort_by(&:army_type).sort_by(&:army_type)
     end
+
+    @units_all = (Unit.where(army: @armies) + @units)
   end
 
   def stats

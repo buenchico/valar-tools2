@@ -3,23 +3,61 @@ $(document).on('turbolinks:load', function () {
     // Trigger table filterSelect
     $.fn.tableFiltersLoad();
 
-    // Recalculate stats
-    $.fn.recalculateStats = function(){
-      $('tr:visible').each(function(){
-        men = parseInt($(this).find('.army_men').text());
-        if (isNaN(men)) {
-            men = 0;
-        }
-        menArmies += men;
-        str = parseFloat($(this).find('.army_strength').text());
-        if (isNaN(str)) {
-            str = 0;
-        }
-        strArmies += str
+    $.fn.recalculateStats = function() {
+      let totalMen = 0;
+      let totalStr = 0;
+      const groupedTotals = {};
+
+      $('.unit_count').each(function () {
+        const $row = $(this).closest('tr');
+        if (!$row.is(':visible')) return;
+
+        const classes = $(this).attr('class')?.split(/\s+/) || [];
+        const typeClass = classes.find(c => c !== 'unit_count' && c !== 'd-none');
+        if (!typeClass) return;
+
+        const value = parseFloat($(this).text()) || 0;
+        groupedTotals[typeClass] = (groupedTotals[typeClass] || 0) + value;
       });
-      $("#visible_strength").html(strArmies.toFixed(2));
-      $("#visible_men").html(menArmies);
-    }
+
+      $('.units_visible').addClass('d-none');
+
+      Object.entries(groupedTotals).forEach(([key, value]) => {
+        const cell = $('#' + key + '_visible');
+        cell.html(value.toLocaleString('fr-FR'));
+        cell.parent().removeClass('d-none');
+      });
+
+      $('.unit_men').each(function () {
+        const $row = $(this).closest('tr');
+        if (!$row.is(':visible')) return;
+
+        const value = parseInt($(this).text()) || 0;
+        totalMen += value;
+      });
+      $('#men_visible').html(totalMen.toLocaleString('fr-FR'));
+
+      $('.unit_strength').each(function () {
+        const $row = $(this).closest('tr');
+        if (!$row.is(':visible')) return;
+
+        const value = parseFloat($(this).text()) || 0;
+        totalStr += value;
+      });
+      $('#strength_visible').html(totalStr.toLocaleString('fr-FR'));
+    };
+
+    // recalculate stats on filter
+    $(".filterSelect").on("change", function() {
+        const filterGroup = $(this).data("filter");
+        $.fn.recalculateStats();
+    });
+    $(".filterText").on("keyup", function() {
+        const filterGroup = $(this).data("filter");
+        $.fn.recalculateStats();
+    });
+
+    $.fn.recalculateStats();
 
     // Trigger armies load for master
     $('.armies-load').click(function() {
