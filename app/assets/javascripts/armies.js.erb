@@ -106,6 +106,7 @@ $(document).on('turbolinks:load', function () {
         let men = 0;
         let ind = 0;
         let hp = 0;
+        let selected = 0;
 
         // Loop through all checked CheckBoxes in GridView.
       $(`.checkbox_selectable:visible:checked[data-checkbox='${checkboxGroup}']`).each(function () {
@@ -117,10 +118,11 @@ $(document).on('turbolinks:load', function () {
               men += parseInt(row.find('.' + checkboxGroup + '_men').text())
               ind += parseFloat(row.find('.' + checkboxGroup + '_strength_indirect').text())
               hp += parseInt(row.find('.' + checkboxGroup + '_hp').text())
+              selected += 1;
             }
         });
 
-        message += "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men
+        message += "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men + " #: " + selected
 
         navigator.clipboard.writeText(message)
 
