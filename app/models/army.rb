@@ -26,43 +26,31 @@ class Army < ApplicationRecord
   end
 
   def strength
-    self.strength_calc[:total]
-  end
-
-  def strength_calc
     set_options if @options_armies.nil?
 
     units = self.units.sum(&:strength)
 
-    mult = ((self.xp.to_f / 100.0) * (self.morale.to_f / 100.0)).round(2)
+    multiplier = ((self.xp.to_f / 100.0) * (self.morale.to_f / 100.0)).round(2)
 
-    tags = 0
+    self.tags.each do |tag|
+      multiplier = (@army_tags.fetch(tag, {}).fetch("str", 1) * multiplier)
+    end
 
-    total = units * mult
-
-    str = { "total": total.round(2), "subtotal": units.round(2), "mult": mult, "tags": tags }
-
-    return str
+    (units * multiplier)
   end
 
   def strength_indirect
-    self.strength_calc[:total]
-  end
-
-  def strength_indirect_calc
     set_options if @options_armies.nil?
 
     units = self.units.sum(&:strength_indirect)
 
-    mult = (self.xp.to_f / 100.0) * (self.morale.to_f / 100.0).round(2)
+    multiplier = ((self.xp.to_f / 100.0) * (self.morale.to_f / 100.0)).round(2)
 
-    tags = 0
+    self.tags.each do |tag|
+      multiplier = (@army_tags.fetch(tag, {}).fetch("str_indirect", 1) * multiplier)
+    end
 
-    total = units * mult
-
-    str = { "total": total.round(2), "subtotal": units.round(2), "mult": mult, "tags": tags }
-
-    return str
+    (units * multiplier)
   end
 
   def men
@@ -78,7 +66,7 @@ class Army < ApplicationRecord
   end
 
   def hp
-    units.sum(&:hp).to_i
+    units.sum(&:hp).to_i    
   end
 
   def hp_start
@@ -119,6 +107,7 @@ private
     @options_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
 
     @units = @options_armies["units"]
+    @army_tags = @options_armies.fetch("army_tags", {})
     @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @status = @options_armies["status"]
     @army_scale = @options_armies["general"]["scale"]

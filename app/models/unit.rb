@@ -164,7 +164,6 @@ private
 
     @units = @options_armies["units"]
     @unit_tags = @options_armies.fetch("unit_tags", {})
-    @army_tags = @options_armies.fetch("army_tags", {})
     @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @status = @options_armies["status"]
     @army_scale = @options_armies["general"]["scale"]
