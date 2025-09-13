@@ -27,16 +27,24 @@ class Unit < ApplicationRecord
   def strength
     set_options if @options_armies.nil?
     unit_strength = @units.fetch(self.unit_type, {}).fetch("str", 0)
+    multiplier = 1
+    self.tags.each do |tag|
+      multiplier = (@unit_tags.fetch(tag, {}).fetch("str", 1) * multiplier)
+    end
 
-    return ((self.count.to_i * unit_strength.to_i * (self.strength_mod.to_f / 100)) / @army_scale).round(2)
+    return ((multiplier * self.count.to_i * unit_strength.to_i * (self.strength_mod.to_f / 100)) / @army_scale).round(2)
   end
 
   def strength_indirect
     set_options if @options_armies.nil?
     unit_data = @units[self.unit_type] || {}
     unit_strength = unit_data["str_indirect"] || unit_data["str"] || 0
+    multiplier = 1
+    self.tags.each do |tag|
+      multiplier = (@unit_tags.fetch(tag, {}).fetch("str_indirect", 1) * multiplier)
+    end
 
-    return ((self.count.to_i * unit_strength.to_i * (self.strength_indirect_mod.to_f / 100)) / @army_scale).round(2)
+    return ((multiplier * self.count.to_i * unit_strength.to_i * (self.strength_indirect_mod.to_f / 100)) / @army_scale).round(2)
   end
 
   def men
@@ -76,7 +84,25 @@ class Unit < ApplicationRecord
 
     unit_hp = @units.fetch(self.unit_type, {}).fetch("hp", 0)
 
-    return (unit_hp * self.hp_mod * 0.01).round(2)
+    multiplier = 1
+    self.tags.each do |tag|
+      multiplier = (@unit_tags.fetch(tag, {}).fetch("hp", 1) * multiplier)
+    end
+
+    return (multiplier * unit_hp * self.hp_mod * 0.01).round(2)
+  end
+
+  def speed
+    set_options if @options_armies.nil?
+
+    speed = @units.fetch(self.unit_type, {}).fetch("speed", "standard")
+    self.tags.each do |tag|
+      if (@unit_tags.fetch(tag, {}).fetch("speed", nil))
+        speed = (@unit_tags.fetch(tag, {}).fetch("speed", nil))
+      end
+    end
+
+    return speed
   end
 
   def simple_title
@@ -137,6 +163,8 @@ private
     @options_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
 
     @units = @options_armies["units"]
+    @unit_tags = @options_armies.fetch("unit_tags", {})
+    @army_tags = @options_armies.fetch("army_tags", {})
     @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @status = @options_armies["status"]
     @army_scale = @options_armies["general"]["scale"]
