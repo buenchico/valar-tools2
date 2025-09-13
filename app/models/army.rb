@@ -66,11 +66,27 @@ class Army < ApplicationRecord
   end
 
   def hp
-    units.sum(&:hp).to_i    
+    units.sum(&:hp).to_i
   end
 
   def hp_start
     units.sum(&:hp_start).to_i
+  end
+
+  def speed
+    set_options if @options_armies.nil?
+
+    unit_speeds = self.units.map(&:speed).uniq
+
+    army_speed = ""
+
+    @speeds.sort_by { |item| item["mod"] }.each do |speed|
+      if unit_speeds.include?(speed["name"])
+        army_speed = speed
+      end
+    end
+
+    return army_speed["name"]
   end
 
   def families
@@ -105,6 +121,7 @@ private
   def set_options
     active_game = Game.find_by(active: true)
     @options_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
+    @speeds = Tool.find_by(name: "travel").game_tools.find_by(game_id: active_game&.id)&.options.fetch("speed", [])
 
     @units = @options_armies["units"]
     @army_tags = @options_armies.fetch("army_tags", {})
