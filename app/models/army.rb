@@ -74,19 +74,16 @@ class Army < ApplicationRecord
   end
 
   def speed
+    self.units.map(&:speed).max
+  end
+
+  def speed_name
     set_options if @options_armies.nil?
 
-    unit_speeds = self.units.map(&:speed).uniq
+    value = self.speed
 
-    army_speed = ""
-
-    @speeds.sort_by { |item| item["mod"] }.each do |speed|
-      if unit_speeds.include?(speed["name"])
-        army_speed = speed
-      end
-    end
-
-    return army_speed["name"]
+    @speeds.select { |item| item["mod"] <= value }
+      .max_by { |item| item["mod"] }["name"]
   end
 
   def families

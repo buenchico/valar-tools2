@@ -4,16 +4,19 @@
     <%= render 'armies/plain_text', army: army %>
   </span>
   <span class="armies_strength d-none">
-    <%= army.strength %>
+    <%= army.strength.round(2) %>
   </span>
   <span class="armies_strength_indirect d-none">
-    <%= army.strength_indirect %>
+    <%= army.strength_indirect.round(2) %>
   </span>
   <span class="armies_hp d-none">
     <%= army.hp %>
   </span>
   <span class="armies_men d-none">
     <%= army.men %>
+  </span>
+  <span class="armies_speed d-none" data-speed="<%= army.speed %>">
+    <%= army.speed_name %>
   </span>
   <% total_army_units_by_unit_type(army.units).each do |type, unit| %>
     <span class="unit_count <%= type %> d-none">

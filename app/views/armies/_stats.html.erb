@@ -1,15 +1,17 @@
-
 <div class="ms-3">
-   <i class="bi bi-award"></i> <%= t('activerecord.attributes.unit.strength') %>: <%= army.strength %>
+   <i class="bi bi-award"></i> <%= t('activerecord.attributes.army.strength') %>: <%= army.strength %>
 </div>
 <div class="ms-3">
-  <i class="bi bi-crosshair"></i> <%= t('activerecord.attributes.unit.strength_indirect') %>: <%= army.strength_indirect %>
+  <i class="bi bi-crosshair"></i> <%= t('activerecord.attributes.army.strength_indirect') %>: <%= army.strength_indirect %>
 </div>
 <div class="ms-3">
-  <i class="bi bi-heart-fill"></i> <%= t('activerecord.attributes.unit.hp') %>: <%= number_with_delimiter(army.hp, delimiter: ' ', separator: ',') %>
+  <i class="bi bi-heart-fill"></i> <%= t('activerecord.attributes.army.hp') %>: <%= number_with_delimiter(army.hp, delimiter: ' ', separator: ',') %>
 </div>
 <div class="ms-3">
-  <i class="bi bi-person-standing"></i> <%= t('activerecord.attributes.unit.men') %>: <%= number_with_delimiter(army.men, delimiter: ' ', separator: ',') %>
+   <i class="bi bi-person-walking"></i> <%= t('activerecord.attributes.army.speed') %>: <%= army.speed_name %>
+</div>
+<div class="ms-3">
+  <i class="bi bi-person-standing"></i> <%= t('activerecord.attributes.army.men') %>: <%= number_with_delimiter(army.men, delimiter: ' ', separator: ',') %>
   <% if army.locations.present? %>
      — <span class="small">Provenientes de <strong><%= army.locations.map { |l| l.name }.join(", ") %></strong></span>
   <% end %>
@@ -17,7 +19,7 @@
      — <span class="small">Al servicio de <strong><%= army.families.map { |f| f.title }.join(", ") %></strong></span>
   <% end %>
 </div>
-<% if army.men_death %>
+<% if army.men_death > 0 %>
   <%= t('activerecord.attributes.unit.count_death') %>
   <% total_army_units_by_unit_type(army.units).each do |key, values| %>
     <% if values[:count_death] > 0 %>

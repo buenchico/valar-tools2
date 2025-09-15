@@ -95,7 +95,7 @@ class Unit < ApplicationRecord
   def speed
     set_options if @options_armies.nil?
 
-    speed = @units.fetch(self.unit_type, {}).fetch("speed", "standard")
+    speed = @units.fetch(self.unit_type, {}).fetch("speed", 1)
     self.tags.each do |tag|
       if (@unit_tags.fetch(tag, {}).fetch("speed", nil))
         speed = (@unit_tags.fetch(tag, {}).fetch("speed", nil))
@@ -103,6 +103,15 @@ class Unit < ApplicationRecord
     end
 
     return speed
+  end
+
+  def speed_name
+    set_options if @options_armies.nil?
+
+    value = self.speed
+
+    @speeds.select { |item| item["mod"] <= value }
+      .max_by { |item| item["mod"] }["name"]
   end
 
   def simple_title
@@ -161,6 +170,7 @@ private
   def set_options
     active_game = Game.find_by(active: true)
     @options_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
+    @speeds = Tool.find_by(name: "travel").game_tools.find_by(game_id: active_game&.id)&.options.fetch("speed", [])
 
     @units = @options_armies["units"]
     @unit_tags = @options_armies.fetch("unit_tags", {})

@@ -107,6 +107,8 @@ $(document).on('turbolinks:load', function () {
         let ind = 0;
         let hp = 0;
         let selected = 0;
+        let speed = 0;
+        let speed_text = ""
 
         // Loop through all checked CheckBoxes in GridView.
       $(`.checkbox_selectable:visible:checked[data-checkbox='${checkboxGroup}']`).each(function () {
@@ -118,11 +120,16 @@ $(document).on('turbolinks:load', function () {
               men += parseInt(row.find('.' + checkboxGroup + '_men').text())
               ind += parseFloat(row.find('.' + checkboxGroup + '_strength_indirect').text())
               hp += parseInt(row.find('.' + checkboxGroup + '_hp').text())
+              row_speed = parseFloat(row.find('.' + checkboxGroup + '_speed').data('speed'))
+              if (row_speed > speed) {
+                speed = row_speed
+                speed_text = row.find('.' + checkboxGroup + '_speed').text().trim();
+              }
               selected += 1;
             }
         });
 
-        message += "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men + " #: " + selected
+        message += "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men + " #: " + selected + " 🏃‍♂️‍: " + speed_text
 
         navigator.clipboard.writeText(message)
 

@@ -14,6 +14,7 @@ module ArmiesHelper
                  hp: sorted_units.sum { |u| u.hp.to_i },
                  icon: sorted_units.first.icon,
                  colour: sorted_units.first.colour,
+                 speed: sorted_units.map(&:speed).max,
                  title: sorted_units.first.simple_title
                }
              end

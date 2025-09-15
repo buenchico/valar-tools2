@@ -116,6 +116,7 @@ class ApplicationController < ActionController::Base
     # @men = @options_armies["men"]&.sort_by { |_, v| v["sort"] }.to_h
     # @hp = @options_armies["hp"]
     # @fleets = @options_armies["fleets"]
+    @army_speeds = Tool.find_by(name: "travel").game_tools.find_by(game_id: active_game&.id)&.options.fetch("speed", [])
     @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @army_status = @options_armies["status"]
     @army_tags = @options_armies["army_tags"]&.sort_by do |_, v|

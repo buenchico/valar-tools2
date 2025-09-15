@@ -8,6 +8,9 @@
   <i class="bi bi-heart-fill"></i> <%= t('activerecord.attributes.unit.hp') %>: <%= number_with_delimiter(unit.hp, delimiter: ' ', separator: ',') %>
 </div>
 <div class="ms-3">
+   <i class="bi bi-person-walking"></i> <%= t('activerecord.attributes.unit.speed') %>: <%= unit.speed_name %>
+</div>
+<div class="ms-3">
   <i class="bi bi-person-standing"></i> <%= t('activerecord.attributes.unit.men') %>: <%= number_with_delimiter(unit.men, delimiter: ' ', separator: ',') %>
   <% if unit.location.present? %>
      — <span class="small">Provenientes de <strong><%= unit.location.name_es %></strong></span>

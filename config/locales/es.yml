@@ -139,6 +139,7 @@ es:
         group: "Grupo"
         selected: "Seleccionados"
         description: "Descripcción"
+        speed: "Velocidad"
       unit:
         name: "Nombre"
         description: "Descripción"
@@ -157,7 +158,8 @@ es:
         men: "Hombres"
         damage: "Daño"
         times: "Repetir"
-        selected: "Seleccionadas"        
+        selected: "Seleccionadas"
+        speed: "Velocidad"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"
