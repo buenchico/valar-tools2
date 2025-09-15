@@ -8,8 +8,8 @@ $(document).on('turbolinks:load', function () {
 
     $('#size').on('change', function() {
       var size = $(this).val();
-      var mod = Math.floor((-1 + Math.sqrt(1 + 8 * size)) / 2);
-      $('#size_mod').html(mod);
+      var mod = ((-1 + Math.sqrt(1 + 8 * size)) / 2);
+      $('#size_mod').val(((mod * 33.3333) + 100).toFixed(0));
     });
 
     $(document).on("click", ".remstep", function() {

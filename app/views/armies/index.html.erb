@@ -12,6 +12,10 @@
   </div>
 </div>
 
+<div id="army_scale" class="d-none">
+  <%= @army_scale %>
+</div>
+
 <% if @current_user&.is_master? %>
   <%= form_with url: show_armies_path, id: 'get-armies', method: :get, local: false do |form| %>
     <ul class="nav nav-pills mb-3">
@@ -65,7 +69,7 @@
       <% end %>
     <% end %>
   </div>
-  
+
   <div class="col">
     <div class="d-flex align-items-center">
       <%= select_tag "filter", options_for_select(@unit_filters, t('activerecord.attributes.unit.name')), class: "form-select form-select-sm me-2 filterSelect", data: {filter: "unit"} %>

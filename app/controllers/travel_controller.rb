@@ -6,14 +6,15 @@ class TravelController < ApplicationController
   end
 
   def calculate
+
     @from = params[:from] != "" ? params[:from] : "Origen"
     @to = params[:to] != "" ? params[:to] : "Destino"
-    @size = params[:size].to_i
-    size_mod = army_size_mod(@size)
+    @size = params[:size].to_f
+    size_mod = params[:size_mod].to_f
 
     #get travel data
     base = @options_travel["base"] # hours per hexagon
-    size_time = 1 + (@options_travel["size"] * size_mod)
+    size_time = size_mod / 100.0
 
     steps = params[:step].nil? ? 0 : params[:step]
 
