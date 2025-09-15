@@ -5,8 +5,8 @@
   <i class="white <%= yield(:icon) %>"></i>
   <%= yield(:title) %>
 
-  <% if @options["rules_post"].present? %>
-    <%= link_to @options["rules_post"], class: 'float-end link-unstyled', target: '_blank', data: { bs_toggle: 'tooltip', bs_placement: 'left' }, title: t('helpers.action.goto', thing: t('helpers.label.rules_post').downcase).html_safe do %>
+  <% if @options_travel["rules_post"].present? %>
+    <%= link_to @options_travel["rules_post"], class: 'float-end link-unstyled', target: '_blank', data: { bs_toggle: 'tooltip', bs_placement: 'left' }, title: t('helpers.action.goto', thing: t('helpers.label.rules_post').downcase).html_safe do %>
       <i class="bi bi-question-circle float-end"></i>
     <% end %>
   <% end %>
@@ -60,7 +60,28 @@
         <div class="col-12 col-md-3 mb-3">
           <div class="input-group">
             <%= form.label :terrain, class: 'input-group-text' %>
-            <%= form.select :"step[0][terrain]", options_for_select(@terrain.map { |t| [t["name"], [t["name"], t["mod"]]] }), {}, class: 'form-select' %>
+            <%= form.select :"step[0][terrain]",
+              options_for_select(
+                @terrain.each_with_index.flat_map do |group, i|
+                  next [] if group.empty?
+
+                  options = group
+                    .sort_by { |_, attrs| attrs["mod"] } # Sort by mod ascending
+                    .map do |_, attrs|
+                      [
+                        attrs["name"],                          # Display text
+                        [attrs["name"], attrs["mod"]],          # Value
+                        attrs["desc"] ? { "data-subtext": attrs["desc"] } : {}
+                      ]
+                    end
+
+                  i.zero? ? options : [["", nil, { "data-divider": true }]] + options
+                end
+              ),
+              { showSubtext: true },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              data: { width: '25px' }
+            %>
           </div>
         </div>
         <div class="col-12 col-md-3 mb-3">
@@ -72,7 +93,28 @@
         <div class="col-11 col-md-3 mb-3">
           <div class="input-group">
             <%= form.label :obstacle, class: 'input-group-text' %>
-            <%= form.select :"step[0][obstacle]", options_for_select(@obstacles.map { |o| [o["name"],[o["desc"], o["hex"]]] }), {include_blank: true}, class: 'form-select' %>
+            <%= form.select :"step[0][obstacle]",
+              options_for_select(
+                @obstacles.each_with_index.flat_map do |group, i|
+                  next [] if group.empty?
+
+                  options = group
+                    .sort_by { |_, attrs| attrs["mod"] } # Sort by mod ascending
+                    .map do |_, attrs|
+                      [
+                        attrs["name"],                          # Display text
+                        [attrs["name"], attrs["mod"]]          # Value
+                      ]
+                    end
+
+                  i.zero? ? options : [["", nil, { "data-divider": true }]] + options
+                end,
+                nil
+              ),
+              { include_blank: true },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              data: { noneselectedtext: 'Sin agrupar', width: '25px' }
+            %>
           </div>
         </div>
       </div>

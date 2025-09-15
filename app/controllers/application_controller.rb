@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   helper_method :admin_tools
   helper_method :inactive_tools
 
+  helper_method :army_size_mod
+
   add_flash_types :error, :success, :info, :danger, :warning
 
   def set_current_user
@@ -56,6 +58,12 @@ class ApplicationController < ActionController::Base
         end
       end
     end
+  end
+
+  def army_size_mod(number)
+    @army_scale = 5000
+    number = (number / (@army_scale * 10))
+    ((-1 + Math.sqrt(1 + 8 * number)) / 2).floor
   end
 
   def set_tool
@@ -158,5 +166,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_options_map
+  end
+
+  def set_options_travel
+    @terrain = @options_travel["terrain"]
+    @speed = @options_travel["speed"]
+    @obstacles = @options_travel["obstacles"]
   end
 end

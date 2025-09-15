@@ -15,7 +15,31 @@ $(document).on('turbolinks:load', function () {
       <div class="col-12 col-md-3 mb-3">
         <div class="input-group">
           <%= label_tag :terrain, I18n.t('helpers.label.terrain'), class: 'input-group-text' %>
-          <%= select_tag "terrain", options_for_select(@terrain.map { |t| [t["name"], [t["name"], t["mod"]]] }), {class: 'form-select'} %>
+          <%= select_tag "terrain",
+            options_for_select(
+              @terrain.each_with_index.flat_map do |group, i|
+                next [] if group.empty?
+
+                options = group
+                  .sort_by { |_, attrs| attrs["mod"] }
+                  .map do |_, attrs|
+                    [
+                      attrs["name"],                          # Display text
+                      [attrs["name"], attrs["mod"]],          # Value
+                      attrs["desc"] ? { "data-subtext": attrs["desc"] } : {}
+                    ]
+                  end
+
+                i.zero? ? options : [["", nil, { "data-divider": true }]] + options
+              end
+            ),
+            {
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              data: {
+                width: '25px'
+              }
+            }
+          %>
         </div>
       </div>
     `
@@ -33,7 +57,34 @@ $(document).on('turbolinks:load', function () {
       <div class="col-11 col-md-3 mb-3">
         <div class="input-group">
           <%= label_tag :obstacle, I18n.t('helpers.label.obstacle'), class: 'input-group-text' %>
-          <%= select_tag "obstacle", options_for_select(@obstacles.map { |o| [o["name"],[o["desc"], o["hex"]]] }), {class: 'form-select', include_blank: true} %>
+          <%= select_tag "obstacle",
+            options_for_select(
+              @obstacles.each_with_index.flat_map do |group, i|
+                next [] if group.empty?
+
+                options = group
+                  .sort_by { |_, attrs| attrs["mod"] }
+                  .map do |_, attrs|
+                    [
+                      attrs["name"],                          # Display text
+                      [attrs["name"], attrs["mod"]]           # Value
+                    ]
+                  end
+
+                i.zero? ? options : [["", nil, { "data-divider": true }]] + options
+              end,
+              nil # selected value
+            ),
+            {
+              include_blank: true,
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+              data: {
+                noneselectedtext: 'Sin agrupar',
+                width: '25px',
+                showSubtext: true
+              }
+            }
+          %>
         </div>
       </div>
     `
@@ -64,5 +115,8 @@ $(document).on('turbolinks:load', function () {
                 .attr("id","step["+step_id+"][speed]")
     $('#obstacle').attr("name","step["+ step_id +"][obstacle]")
                    .attr("id","step["+step_id+"][obstacle]")
+
+    // Regenerate selectpickers
+    $('.selectpicker').selectpicker();
   });
 });

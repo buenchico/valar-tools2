@@ -6,16 +6,14 @@ class TravelController < ApplicationController
   end
 
   def calculate
-    #get data from the form
-
     @from = params[:from] != "" ? params[:from] : "Origen"
     @to = params[:to] != "" ? params[:to] : "Destino"
     @size = params[:size].to_i
     size_mod = army_size_mod(@size)
 
     #get travel data
-    base = @options["base"] # hours per hexagon
-    size_time = 1 + (@options["size"] * size_mod)
+    base = @options_travel["base"] # hours per hexagon
+    size_time = 1 + (@options_travel["size"] * size_mod)
 
     steps = params[:step].nil? ? 0 : params[:step]
 
@@ -57,14 +55,11 @@ class TravelController < ApplicationController
 
 private
   def set_options
-    @options = @tool.game_tools.find_by(game_id: active_game.id).options
-    @terrain = @options["terrain"]
-    @speed = @options["speed"]
-    @obstacles = @options["obstacles"]
-    @size_formula = @options["size_formula"]
-
-    if @options.nil?
-      redirect_to settings_url, warning: 'Prepara una partida antes de usar la calculadora de rutas'
+    @options_travel = get_options(@tool)
+    if @options_travel.blank?
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
+    else
+      set_options_travel
     end
   end
 
