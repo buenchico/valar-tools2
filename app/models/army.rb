@@ -25,6 +25,12 @@ class Army < ApplicationRecord
    nil
   end
 
+  def size
+    set_options if @options_armies.nil?
+
+    (self.men / (@army_scale * 10))
+  end
+
   def strength
     set_options if @options_armies.nil?
 

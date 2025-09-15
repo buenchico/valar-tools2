@@ -24,6 +24,12 @@ class Unit < ApplicationRecord
 
   before_save :log_changes
 
+  def size
+    set_options if @options_armies.nil?
+
+    (self.men / (@army_scale * 10))
+  end
+
   def strength
     set_options if @options_armies.nil?
     unit_strength = @units.fetch(self.unit_type, {}).fetch("str", 0)

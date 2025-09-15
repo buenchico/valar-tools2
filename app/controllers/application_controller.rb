@@ -62,7 +62,11 @@ class ApplicationController < ActionController::Base
 
   def army_size_mod(number)
     @army_scale = 5000
-    number = (number / (@army_scale * 10))
+    if number >= (@army_scale * 10)
+      number = (number / (@army_scale * 10))
+    else
+      number = 0
+    end
     ((-1 + Math.sqrt(1 + 8 * number)) / 2).floor
   end
 

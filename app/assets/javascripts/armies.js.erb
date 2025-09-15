@@ -106,7 +106,7 @@ $(document).on('turbolinks:load', function () {
         let men = 0;
         let ind = 0;
         let hp = 0;
-        let selected = 0;
+        let size = 0;
         let speed = 0;
         let speed_text = ""
 
@@ -125,11 +125,11 @@ $(document).on('turbolinks:load', function () {
                 speed = row_speed
                 speed_text = row.find('.' + checkboxGroup + '_speed').text().trim();
               }
-              selected += 1;
+              size += parseInt(row.find('.' + checkboxGroup + '_size').text())
             }
         });
 
-        message += "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men + " #: " + selected + " 🏃‍♂️‍: " + speed_text
+        message += "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men + " #: " + size + " 🏃‍♂️‍: " + speed_text
 
         navigator.clipboard.writeText(message)
 
