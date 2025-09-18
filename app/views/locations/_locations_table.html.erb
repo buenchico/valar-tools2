@@ -21,7 +21,7 @@
     </thead>
     <tbody>
       <% @locations.each do | location | %>
-        <tr id="location_<%= location.id.to_s %>" class="<%= location.visible ? nil : 'toggle-visibility inactive d-none'%>">
+        <tr id="location_<%= location.id.to_s %>" class="<%= (location.visible && location.game == active_game) ? nil : 'toggle-visibility inactive d-none'%>">
           <%= render 'row', location: location %>
         </tr>
       <% end %>
