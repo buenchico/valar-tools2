@@ -126,9 +126,9 @@ private
 
   def set_factions_list
     if @current_user&.is_master?
-      @factions = Faction.all.order(active: :desc, name: :asc)
+      @factions = Faction.all.order(active: :desc, long_name: :asc)
     else
-      @factions = Faction.where(active: true).where.not(name: ["admin", "player"]).order(:name)
+      @factions = Faction.where(active: true).where.not(name: ["admin", "player"]).order(long_name: :asc)
     end
   end
 
