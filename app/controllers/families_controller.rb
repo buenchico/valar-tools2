@@ -106,7 +106,7 @@ class FamiliesController < ApplicationController
             @options_families["loyalties"].each_with_index do | value, index |
               data_row << family["loyalty_#{index + 1}"]
             end
-            data_row += [family&.game&.id, family&.game&.name, family.hp("raised"), family.hp("inactive"), family.hp_start(["conscript","garrison","retinue"]), family.locations.count, family.locations.map { |l| [l.name, l.location_type] }]
+            data_row += [family&.game&.id, family&.game&.name, family.men, family.men_start, family.men_death, family.locations.count, family.locations.map { |l| [l.name, l.location_type] }]
             csv << data_row
           end
         end
