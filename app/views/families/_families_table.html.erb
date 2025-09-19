@@ -2,6 +2,12 @@
   <table id="family_list" class="table table-dark table-striped table-borderless table-hover table-sm align-middle sortable">
     <caption><%= @tool.title %></caption>
     <thead>
+      <% if @current_user&.is_master? && @options_families["loyalties"].present? %>
+        <tr>
+          <th data-sorter="false" scope="col" colspan="<%= @options_families["subtools"]["tags"].present? ? "6" : "5" %>"></th>
+          <th data-sorter="false" scope="col" colspan="<%= @options_families["loyalties"].length %>" class="text-center" style="line-height: 0"><%= t('activerecord.attributes.family.loyalty') %></th>
+        </tr>
+      <% end %>
       <tr>
         <% if @current_user&.is_master? %>
           <th data-sorter="false" data-filter="checkbox" scope="col"><input type="checkbox" class="checkbox_select_all option-input" data-checkbox="families" /><span class="d-none"><%= t('activerecord.attributes.family.selected') %></span></th>
@@ -15,7 +21,7 @@
         <th scope="col" data-sorter="false"><%= t('activerecord.attributes.family.description') %></th>
         <% if @current_user&.is_master? %>
           <% @options_families["loyalties"].each do |value| %>
-            <th scope="col"><%= t('activerecord.attributes.family.loyalty') %> <%= value %></th>
+            <th scope="col" class="text-center"><%= truncate(value, length: 3, omission: '') %></th>
           <% end %>
           <% if @options_families["subtools"]["armies"] %>
             <th scope="col"><%= t('activerecord.models.army.other') %></th>
