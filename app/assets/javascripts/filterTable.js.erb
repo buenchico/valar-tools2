@@ -4,7 +4,20 @@
 	$.fn.filterTable = function(filter, columnname) {
 		var index = null;
 		var type = null;
-		this.find("thead > tr:first > th").each(function(i) {
+
+		var headers = this.find("thead > tr");
+		var headerRow;
+
+		if (headers.length > 1) {
+			headerRow = this.find('thead > tr[data-filter="header"] > th');
+		  if (headerRow.length === 0) {
+		    headerRow = this.find('thead > tr:last > th'); // fallback
+		  }
+		} else {
+			headerRow = this.find("thead > tr:first > th");
+		}
+
+		headerRow.each(function(i) {
 			if ($.trim($(this).text()) == columnname) {
 				index = i;
 				if ($(this).data('filter') == null) {

@@ -6,6 +6,9 @@
         <tr>
           <th data-sorter="false" scope="col" colspan="<%= @options_families["subtools"]["tags"].present? ? "6" : "5" %>"></th>
           <th data-sorter="false" scope="col" colspan="<%= @options_families["loyalties"].length %>" class="text-center" style="line-height: 0"><%= t('activerecord.attributes.family.loyalty') %></th>
+          <%= @options_families["subtools"]["armies"].present? ? '<th data-sorter="false" scope="col"></th>'.html_safe : nil %>
+          <%= @options_families["subtools"]["tiers"].present? ? '<th data-sorter="false" scope="col"></th>'.html_safe : nil %>
+          <th data-sorter="false" scope="col" colspan="<%= @current_user&.is_admin? ? "4" : "3" %>"></th>
         </tr>
       <% end %>
       <tr>
