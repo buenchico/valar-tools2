@@ -8,18 +8,23 @@
   <%= yield(:title) %>
 </div>
 
+<div class="row my-3">
+  <div class="col">
+    <% if @current_user&.is_master? %>
+      <%= link_to new_location_path, class: "btn btn-primary", remote: true do %>
+        <i class="bi bi-plus-circle"></i> <%= t('helpers.submit.create', model: t('activerecord.models.' + @tool.name.singularize, count: 1) ) %>
+      <% end %>
 
-<div class="col">
-  <% if @current_user&.is_master? %>
-    <%= link_to send('new_location_path'), class: "btn btn-primary", remote: true do %>
-      <i class="bi bi-plus-circle"></i> Crear Nuevo Lugar
+      <button id="toggle_visibility_visible" class="btn btn-warning btn-sm toggle-visibility toggle-visibility-button"> <%= t('helpers.label.toggle_visibility_visible') %></button>
+      <button id="toggle_visibility_invisible" class="btn btn-warning btn-sm d-none toggle-visibility toggle-visibility-button"><%= t('helpers.label.toggle_visibility_invisible') %></button>
     <% end %>
-
-    <div class="float-end">
-      <button id="toggle_visibility_visible" class="btn btn-warning btn-sm toggle-visibility-button"> <%= t('helpers.label.toggle_visibility_visible') %></button>
-      <button id="toggle_visibility_invisible" class="btn btn-warning btn-sm d-none toggle-visibility-button"><%= t('helpers.label.toggle_visibility_invisible') %></button>
+  </div>
+  <div class="col">
+    <div class="d-flex align-items-center justify-content-end">
+      <%= select_tag "filter", options_for_select(@filter, t('activerecord.attributes.location.name_es')), class: "form-select form-select-sm me-2 filterSelect", data: { filter: "location" } %>
+      <input class="form-control form-control-sm filterText" type="text" placeholder="Filtrar..." data-filter="location" >
     </div>
-  <% end %>
+  </div>
 </div>
 
 <%= render "locations_table" %>

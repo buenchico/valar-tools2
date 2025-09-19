@@ -5,6 +5,7 @@ class LocationsController < ApplicationController
   before_action :set_locations_list, only: [:index]
   before_action :set_regions, except: [:index]
   before_action :set_options
+  before_action :set_filters, only: [:index]
 
   def index
   end
@@ -93,6 +94,33 @@ private
   def location_params
     params.require(:location).permit(:name_en, :name_es, :description, :x, :y, :line, :polygon, :priority, :region_id, :location_type, :visible, :family_id, :game_id, tags: []).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
+    end
+  end
+
+  def set_filters
+    if @current_user&.is_master?
+      @filter = [
+        t('activerecord.attributes.location.name_es'),
+        t('activerecord.attributes.location.name_en'),
+        t('activerecord.attributes.location.description'),
+        t('activerecord.attributes.location.tags'),
+        t('activerecord.attributes.location.location_type'),
+        t('activerecord.attributes.location.region'),
+        t('activerecord.attributes.location.family_id'),
+        t('activerecord.attributes.location.visible'),
+        t('activerecord.attributes.location.game_id')
+      ]
+    else
+      @filter = [
+        t('activerecord.attributes.location.name_es'),
+        t('activerecord.attributes.location.name_en'),
+        t('activerecord.attributes.location.description'),
+        t('activerecord.attributes.location.tags'),
+        t('activerecord.attributes.location.location_type'),
+        t('activerecord.attributes.location.region'),
+        t('activerecord.attributes.location.family_id'),
+        t('activerecord.attributes.location.visible')
+      ]
     end
   end
 end

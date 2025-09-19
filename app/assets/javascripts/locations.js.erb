@@ -1,0 +1,8 @@
+// Change from land to sea
+$(document).on('turbolinks:load', function () {
+  if ($(".locations").length !== 0 ) {
+    // Trigger table filterSelect
+    $.fn.tableFiltersLoad();
+
+  }
+});

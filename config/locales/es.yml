@@ -209,6 +209,7 @@ es:
         family_id: "Señor"
         description: "Descripción"
         game_id:  "Partida"
+        region: "Region"
       battle:
         name: "Nombre"
         status: "Fase"
