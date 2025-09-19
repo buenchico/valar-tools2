@@ -1,4 +1,7 @@
 class Unit < ApplicationRecord
+  include PgSearch::Model
+  multisearchable against: [:name, :search]
+
   has_and_belongs_to_many :factions
   belongs_to :army, optional: true
   belongs_to :family, class_name: 'Family', foreign_key: 'family_id', optional: true
@@ -120,14 +123,18 @@ class Unit < ApplicationRecord
       .max_by { |item| item["mod"] }["name"]
   end
 
-  def simple_title
+  def simple_type_name
     set_options if @options_armies.nil?
     return (@units.fetch(self.unit_type, {}).fetch("name", "")).pluralize_all_words(self.count)
   end
 
   def title
+    self.name
+  end
+
+  def type_name
     set_options if @options_armies.nil?
-    title = self.simple_title
+    title = self.simple_type_name
     message = []
     if strength_mod != 100
       message << "🎖" + (strength_mod/100.0).round(1).to_s
@@ -145,7 +152,6 @@ class Unit < ApplicationRecord
 
     return title
   end
-
 
   def icon
     set_options if @options_armies.nil?
@@ -170,6 +176,10 @@ class Unit < ApplicationRecord
   def unit_name
     set_options if @options_armies.nil?
     return @army_types.fetch(self.army_type, {}).fetch("unit", "")
+  end
+
+  def search
+   self.family&.title
   end
 
 private

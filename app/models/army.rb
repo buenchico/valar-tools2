@@ -1,6 +1,6 @@
 class Army < ApplicationRecord
   include PgSearch::Model
-  multisearchable against: [:name, :group, :position, :notes, :search]
+  multisearchable against: [:name, :group, :position, :notes, :families, :locations]
 
   has_many :units, dependent: :nullify
   accepts_nested_attributes_for :units, allow_destroy: true
@@ -21,8 +21,8 @@ class Army < ApplicationRecord
   before_save :annihilate
   before_save :log_changes
 
-  def search
-   nil
+  def title
+    self.name
   end
 
   def size

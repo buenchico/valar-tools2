@@ -13,7 +13,6 @@
     <div class="border border-primary mb-3 ps-2 p-1 <%= item.visible ? '' : 'inactive' %>">
       <div class="d-flex align-items-center">
         <h4 class="me-3">
-          <%= puts item.class %>
           <%= link_to item.title, polymorphic_path(item), remote: true, class: "link-unstyled" %>
         </h4>
         <span class="badge rounded-pill pill-tags pill-tags-text bg-brass">

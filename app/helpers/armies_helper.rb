@@ -15,7 +15,7 @@ module ArmiesHelper
                  icon: sorted_units.first.icon,
                  colour: sorted_units.first.colour,
                  speed: sorted_units.map(&:speed).max,
-                 title: sorted_units.first.simple_title
+                 title: sorted_units.first.simple_type_name
                }
              end
          end
