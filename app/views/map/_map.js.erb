@@ -118,9 +118,10 @@ $(document).on('turbolinks:load', function () {
           <% @locations.where(location_type: type).order(priority: :desc).each do | location | %>
             var color = '<%= @location_types[type].fetch("color", "black") %>'
             var opacity = '<%= @location_types[type].fetch("opacity", 0.5) %>'
+            var dashArray = '<%= @location_types[type].fetch("dashArray", 0) %>'
 
             <% if location.render == 'polyline' %>
-              var polyline = L.polyline(<%= location.line %>, {color: color})
+              var polyline = L.polyline(<%= location.line %>, {color: color, dashArray: dashArray})
               polyline.bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                                       className: 'leaflet-popup'
                                     });
