@@ -64,7 +64,29 @@
 
           <div class="input-group mb-3">
             <%= form.label :location_type, class: 'input-group-text' %>
-            <%= form.select :location_type, @options_locations["types"].map { |key, value| [value["name"],key] }, {}, class: 'form-select' %>
+            <%= form.select :location_type,
+              options_for_select(
+                @options_locations["types"]
+                  .group_by { |_, v| v["subtype"] }
+                  .sort_by { |subtype, _| subtype }
+                  .each_with_index
+                  .flat_map do |(_, items), i|
+                    sorted_items = items.sort_by { |_, v| v["name"] }
+
+                    options = sorted_items.map do |key, value|
+                      [
+                        value["name"],                     # Display text
+                        key,                               # Value
+                        value["desc"] ? { "data-subtext": value["subtext"] } : {}
+                      ]
+                    end
+
+                    i.zero? ? options : [["", nil, { "data-divider": true }]] + options
+                  end
+              ),
+              { showSubtext: true },
+              class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white'
+            %>
           </div>
 
           <div class="input-group mb-3">
