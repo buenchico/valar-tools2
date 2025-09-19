@@ -36,10 +36,10 @@
       </span>
     <% end %>
   </div>
-  <% if family.armies.present? %>
+  <% if family.units.present? %>
     <div class="mb-1">
-      <%= t('activerecord.models.army', count: family.armies.length) %> (<%= family.armies.length %>):
-      <%= family.armies.map { |army| link_to(army.name, army_path(army), class: 'text-white', remote: true) }.join(", ").html_safe %>
+      <%= t('activerecord.models.unit', count: family.units.length) %> (<%= family.units.length %>):
+      <%= family.units.map { |unit| (render 'units/one_line', unit: unit, link: true) }.join(", ").html_safe %>
     </div>
   <% end %>
 <% end %>

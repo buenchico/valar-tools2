@@ -65,6 +65,12 @@ class SearchController < ApplicationController
         elsif @current_user && record.factions.include?(@current_user.faction) && record.visible
           true
         end
+      when 'Unit'
+        if @current_user&.is_master?
+          true
+        elsif @current_user && record.factions.include?(@current_user.faction) && record.visible
+          true
+        end
       else
         true
       end
