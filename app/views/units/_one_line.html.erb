@@ -4,6 +4,7 @@
 <% else %>
   <%= unit.name %>
 <% end %>
+<i class="bi bi-award"></i> <%= render 'units/strength', unit: unit %>
 <%= render 'units/traits', unit: unit %>
 <% if unit.factions.present? %>
   (<%= unit.factions.pluck(:long_name).join(", ") %>)
