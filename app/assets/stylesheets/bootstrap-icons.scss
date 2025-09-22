@@ -2160,3 +2160,4 @@ $bootstrap-icons-map: (
 @each $icon, $codepoint in $bootstrap-icons-map {
   .bi-#{$icon}::before { content: $codepoint; }
 }
+$bootstrap-icons-extra-list: ("air-force", "anchor", "army", "artillery", "bow-arrow", "bull-head", "carrier", "chess-bishop-fill", "chess-king-fill", "chess-knight-fill", "chess-pawn-fill", "chess-queen-fill", "chess-rook-fill", "clover-fill", "clover", "cruiser", "damage-kinetic", "destroyer", "dreadnought", "dwarf-miner", "dwarf-warrior", "galley", "kayak", "longship", "mech", "plane-bomber", "plane-propeller", "roman-helmet", "scythe", "shield-zulu", "skull-crossbones-solid", "skull-solid", "soldier", "sort-caret-down", "sort-caret-up", "sort-caret", "spears", "submarine", "swords-emblem", "swords", "tank-heavy", "tank", "transport", "zombie") !default;

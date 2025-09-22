@@ -1,12 +1,16 @@
 # config/initializers/bootstrap_icons.rb
-BOOTSTRAP_CUSTOM_ICON_LIST = begin
-  path = Rails.root.join("app/assets/stylesheets/bootstrap-icons.scss")
-  content = File.read(path)
+scss_path = Rails.root.join("app/assets/stylesheets/bootstrap-icons.scss")
 
-  # Extract icon names in order of appearance
-  all_icons = content.scan(/"([^"]+)"\s*:/).flatten
+variable_name = '$bootstrap-icons-extra-list'
 
-  # Get everything after "anchor", "anchor" is the first of custom icons
-  anchor_index = all_icons.index("anchor")
-  anchor_index ? all_icons[(anchor_index + 1)..-1] : []
+content = File.read(scss_path)
+
+# Match the SCSS variable list
+match = content.match(/#{Regexp.escape(variable_name)}:\s*\(([^)]+)\)/)
+if match
+  raw_list = match[1]
+  icons = raw_list.split(',').map { |s| s.strip.delete('"').delete("'") }
+  BOOTSTRAP_CUSTOM_ICON_LIST = icons
+else
+  BOOTSTRAP_CUSTOM_ICON_LIST = []
 end
