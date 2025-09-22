@@ -219,7 +219,7 @@ private
     return unless name.blank?
 
     existing_count = 1
-    base_name = "#{unit_name} de #{title.singularize}"
+    base_name = "#{unit_name} de #{type_name.singularize}"
 
     loop do
       candidate_name = "#{existing_count} #{base_name}"
