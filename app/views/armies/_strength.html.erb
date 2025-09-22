@@ -36,6 +36,14 @@
         <%= number_to_compact(army.men) %>
       </div>
     </div>
+    <div class='row'>
+      <div class='text-start col-8'>
+        <i class='bi bi-person-walking'></i> <%= t('activerecord.attributes.unit.speed') %>
+      </div>
+      <div class='text-end col-4'>
+        <%= army.speed_name %>
+      </div>
+    </div>
   "
 >
   <%= army.strength.round(2) %>
