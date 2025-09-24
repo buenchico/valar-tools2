@@ -108,6 +108,7 @@ $(document).on('turbolinks:load', function () {
         var <%= code %> = new L.layerGroup.collision({margin: <%= @options_map['margin'] || 0 %>});
 
         <% layer["types"].each do | type | %>
+
           // if there is a layer image
           <% if !layer["img"].nil? %>
             var imageOverlay = L.imageOverlay('<%= asset_path(layer["img"]) %>', [[0,0],imgSize], {opacity: 0.5})
@@ -167,6 +168,7 @@ $(document).on('turbolinks:load', function () {
 
             <% elsif (location.render == 'point' || location.render == 'multipoint') %>
               var icon = '<%= @location_types[type]["icon"].nil? ? "" : asset_path(@location_types[type]["icon"]) %>'
+              var fontSize = <%= @location_types[type].fetch("fontSize", 15) %>
 
               // render only name
               if (icon == "") {
@@ -174,38 +176,39 @@ $(document).on('turbolinks:load', function () {
                   L.marker(
                     [<%= location.y %>,<%= location.x %>],
                       { icon: L.divIcon({
-                        className: "regionLabel <%= @options_map['font'] %>",
-                        html: "<%= location.name %>",
-                        iconSize: [<%= location.name.length * 30 * 0.6 %>, 30],
-                        iconAnchor: [<%= location.name.length * 30 * 0.6 * 0.5 %>, 15]
+                        className: "textLabel text-center <%= @options_map['font'] %>",
+                        html: `<div style="font-size: ` + fontSize + `px;"><%= location.name %></div>`,
+                        iconSize: [<%= location.name.length %> * fontSize * 0.3, fontSize],
+                        iconAnchor: [<%= location.name.length %> * fontSize * 0.3 * 0.5, fontSize * 0.5]
                         })
                       })
                       .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %></p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
                           className: 'leaflet-popup'
                         })
                   );
+
               // render only icon
-            } else if (<%= layer["display"] == "icons" %>) {
-              <%= code %>.addLayer(
-                L.marker(
-                  [<%= location.y %>,<%= location.x %>],
-                    { icon: L.icon({
-                        iconUrl: icon,
-                        className: '',
-                        iconSize: [30, 30],
-                        })
-                    })
-                    .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %> (<%= @location_types[location.location_type]["name"] %>)</p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
-                        className: 'leaflet-popup'
+              } else if (<%= layer["display"] == "icons" %>) {
+                <%= code %>.addLayer(
+                  L.marker(
+                    [<%= location.y %>,<%= location.x %>],
+                      { icon: L.icon({
+                          iconUrl: icon,
+                          className: '',
+                          iconSize: [30, 30],
+                          })
                       })
-                );
+                      .bindPopup('<p class="text-white"><%= link_to location.name, map_path + "/" + location.id.to_s, class: "text-white", remote: true %><%= location.family&.name.nil? ? "" : " de los #{location.family&.name}" %> (<%= @location_types[location.location_type]["name"] %>)</p><p class="text-white"><%= truncate(location.description, length: 100, omission: '...') %></p>', {
+                          className: 'leaflet-popup'
+                        })
+                  );
               // render icons & name
               } else {
                 <%= code %>.addLayer(
                   L.marker(
                     [<%= location.y %>,<%= location.x %>],
                       { icon: L.divIcon({
-                        className: "locationLabel <%= @options_map['font'] %>",
+                        className: "textLabel <%= @options_map['font'] %>",
                         html: "<img src=" + icon + " height='30' width='30' /><%= location.name %>",
                         style: "background:red !important;",
                         iconSize: [<%= (location.name.length * 5) + 40 %>, 30],

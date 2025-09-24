@@ -56,7 +56,7 @@
     display: none;
     }
 
-.locationLabel {
+.textLabel {
   background-color: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
@@ -68,19 +68,16 @@
     1px 1px 0 #000;
 }
 
+.textLabel-very-big {
+  font-size: 300%;
+}
 
-.regionLabel {
-  font-size: 30px;
-  text-align: center;
-  background-color: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  color: white !important;
-  text-shadow:
-    -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-    1px 1px 0 #000;
+.textLabel-big {
+  font-size: 200%;
+}
+
+.textLabel-small {
+  font-size: 100%;
 }
 
 .leaflet-top {

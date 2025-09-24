@@ -40,4 +40,5 @@
 /config/master.key
 
 # Ignore krita files in images
-/app/assets/*.kra
+/app/assets/**/*.kra
+/app/assets/**/*.kra~
