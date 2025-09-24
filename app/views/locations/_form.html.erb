@@ -82,7 +82,8 @@
                     end
 
                     i.zero? ? options : [["", nil, { "data-divider": true }]] + options
-                  end
+                  end,
+                form.object.location_type
               ),
               { showSubtext: true },
               class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white'
