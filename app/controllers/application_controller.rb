@@ -75,7 +75,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_regions
-    @regions = Location.where(location_type: "region").where(game_id: active_game.id).order('name_es')
+    region_types = active_game.game_tools.find_by(tool_id: Tool.find_by(name: "locations").id).options.fetch("region_types", ["region"])
+    @regions = region_types.flat_map do |type|
+      Location.where(location_type: type, game_id: active_game.id)
+              .order(:name_es)
+            end
   end
 
   def set_families
