@@ -67,6 +67,29 @@ class LocationsController < ApplicationController
     render json: @locations_list.map(&:name_es).uniq
   end
 
+  def export
+    locations = Location.all
+    respond_to do |format|
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"families.csv\""
+        headers['Content-Type'] ||= 'text/csv'
+
+        header_row = ["id", "name_es", "name_en", "description", "location_type", "visible", "family_id", "region_id", "game_id"]
+
+        csv_data = CSV.generate(col_sep: ";", headers: true) do |csv|
+          csv << header_row # Adjust the attributes as needed
+
+          locations.each do |location|
+            data_row = [location.id, location.name_es, location.name_en, location.description, location.location_type, location.visible, location.family_id, location.region_id, location.game_id]
+            csv << data_row
+          end
+        end
+
+        render plain: csv_data
+      end
+    end
+  end
+
 private
   def set_location
     @location = Location.find(params[:id])

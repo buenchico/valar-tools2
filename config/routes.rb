@@ -67,6 +67,7 @@ Rails.application.routes.draw do
   put 'units/damage_multiple_apply', to: 'units#damage_multiple_apply', as: 'apply_damage_multiple_units'
   resources :units
 
+  get 'locations/export', to: 'locations#export', as: 'export_locations'
   resources :locations
   get '/lists/locations', to: 'locations#list', as: 'locations_list'
 
