@@ -49,6 +49,7 @@
   <%= form_with model: army, local: false, html: { class: "d-inline-flex align-items-center gap-2" } do |form| %>
     <%= hidden_field_tag :inline, value: true %>
     <%= form.text_field :position, class: 'inline-edit-input form-control', style: 'height: 2.4rem', "data-initialvalue": army.position %>
+    <span class="d-none"><%= army.position %></span>
   <% end %>
 </td>
 
@@ -73,6 +74,7 @@
       data: { style: 'btn-success' }
     %>
   <% end %>
+  <span class="d-none"><%= ARMY_GROUPS[army.group.to_sym]["name"] %></span>
 </td>
 
 <% if @current_user&.is_master? %>
