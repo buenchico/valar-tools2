@@ -6,13 +6,10 @@ class ArmiesController < ApplicationController
   before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete, :damage_multiple, :damage_multiple_apply, :merge_multiple, :stats]
   before_action :check_owner_inclusive, only: [:show]
   before_action :set_filters, only: [:index, :show_armies]
+  before_action :set_stats, only: [:index, :show_armies]
 
   def index
     @faction = Faction.find_by(id: params[:faction_id])
-    @total_men = Unit.all.sum(&:men)
-    @total_dead = Unit.all.sum(&:men_death)
-    @percent_dead = ((@total_dead / @options_armies["general"]["population"].to_f) * 100).round(2)
-    @total_strength = (Army.all.sum(&:strength) + Unit.all.sum(&:strength))
 
     if @current_user&.is_master?
       if @faction
@@ -44,6 +41,8 @@ class ArmiesController < ApplicationController
 
     @armies, units = get_armies(active_factions, active_visibility)
     @units = units.where(army: nil)
+
+    @units_all = Array(Unit.where(army: @armies)) + Array(@units)
   end
 
   def delete
@@ -422,6 +421,13 @@ private
         @army_filters << t('activerecord.attributes.army.visible')
         @unit_filters << t('activerecord.attributes.unit.visible')
     end
+  end
+
+  def set_stats
+    @total_men = Unit.all.sum(&:men)
+    @total_dead = Unit.all.sum(&:men_death)
+    @percent_dead = ((@total_dead / @options_armies["general"]["population"].to_f) * 100).round(2)
+    @total_strength = (Army.all.sum(&:strength) + Unit.all.sum(&:strength))
   end
 
   def army_params
