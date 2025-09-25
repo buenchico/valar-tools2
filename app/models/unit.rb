@@ -184,12 +184,21 @@ class Unit < ApplicationRecord
 
 private
   def set_options
-    active_game = Game.find_by(active: true)
-    @options_armies = Tool.find_by(name: "armies").game_tools.find_by(game_id: active_game&.id)&.options
-    @speeds = Tool.find_by(name: "travel").game_tools.find_by(game_id: active_game&.id)&.options.fetch("speed", [])
+    return if defined?(@options_armies) && @options_armies.present?
+
+    active_game_id = Game.find_by(active: true)&.id
+    return unless active_game_id
+
+    @options_armies ||= begin
+      tool = Tool.find_by(name: "armies")
+      tool_options = tool&.game_tools&.find_by(game_id: active_game_id)&.options
+      tool_options || {}
+    end
+
+    @speeds ||= Tool.find_by(name: "travel")&.game_tools&.find_by(game_id: active_game_id)&.options&.fetch("speed", [])
 
     @units = @options_armies["units"]
-    @unit_tags = @options_armies.fetch("unit_tags", {})
+    @army_tags = @options_armies.fetch("army_tags", {})
     @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @status = @options_armies["status"]
     @army_scale = @options_armies["general"]["scale"]
