@@ -198,7 +198,7 @@ private
     @speeds ||= Tool.find_by(name: "travel")&.game_tools&.find_by(game_id: active_game_id)&.options&.fetch("speed", [])
 
     @units = @options_armies["units"]
-    @army_tags = @options_armies.fetch("army_tags", {})
+    @unit_tags = @options_armies.fetch("unit_tags", {})
     @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @status = @options_armies["status"]
     @army_scale = @options_armies["general"]["scale"]
