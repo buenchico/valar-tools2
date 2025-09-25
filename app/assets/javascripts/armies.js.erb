@@ -37,7 +37,7 @@ $(document).on('turbolinks:load', function () {
       });
       $('#men_visible').html(totalMen.toLocaleString('fr-FR'));
 
-      $('.unit_strength').each(function () {
+      $('.unit_strength, .army_strength').each(function () {
         const $row = $(this).closest('tr');
         if (!$row.is(':visible')) return;
 
