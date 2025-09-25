@@ -26,8 +26,6 @@ class ArmiesController < ApplicationController
       @armies = armies.sort_by(&:army_type)
       @units = units.where(army: nil).sort_by(&:army_type).sort_by(&:army_type)
     end
-
-    @units_all = Array(Unit.where(army: @armies)) + Array(@units)
   end
 
   def stats
@@ -41,8 +39,6 @@ class ArmiesController < ApplicationController
 
     @armies, units = get_armies(active_factions, active_visibility)
     @units = units.where(army: nil)
-
-    @units_all = Array(Unit.where(army: @armies)) + Array(@units)
   end
 
   def delete
