@@ -1,6 +1,6 @@
 <p>Hay <strong><%= number_with_delimiter(@total_men, delimiter: ' ', separator: ',') %></strong> soldados en el mundo con una fuerza de <strong><%= number_with_delimiter(@total_strength.round(2), delimiter: ' ', separator: ',') %></strong>, <strong><%= number_with_delimiter(@total_dead, delimiter: ' ', separator: ',') %></strong> hombres han perecido en el conflicto, un <strong><%= @percent_dead %>%</strong> de la población.</p>
 <% if faction %>
-  <p class="card-text">Dispones de <%= number_with_delimiter(@armies.sum(&:men) + @units.sum(&:men), delimiter: ' ', separator: ',') %> hombres con una fuerza de <%= number_with_delimiter((@armies.sum(&:strength) + @units.sum(&:strength).round(2)), delimiter: ' ', separator: ',') %>.</p>
+  <p class="card-text">Dispones de <%= number_with_delimiter(@armies.sum(&:men) + @units.sum(&:men), delimiter: ' ', separator: ',') %> hombres con una fuerza de <%= number_with_delimiter((@armies.sum(&:strength) + @units.sum(&:strength)).round(2), delimiter: ' ', separator: ',') %>.</p>
   <table class="w-auto ms-3 mb-3">
     <% total_army_units_by_unit_type(Array(Unit.where(army: @armies)) + Array(@units)).each do |type, unit| %>
       <tr>
