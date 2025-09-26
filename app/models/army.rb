@@ -13,6 +13,7 @@ class Army < ApplicationRecord
   validates :morale, numericality: { greater_than_or_equal_to: 0 }
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
 
+  after_find :set_options
   after_find :cache_units
 
   before_validation :ensure_minimum_xp
@@ -26,14 +27,10 @@ class Army < ApplicationRecord
   end
 
   def size
-    set_options if @options_armies.nil?
-
     (self.men / (@army_scale * 10.0))
   end
 
   def strength
-    set_options if @options_armies.nil?
-
     units = self.units.sum(&:strength)
 
     multiplier = ((self.xp.to_f / 100.0) * (self.morale.to_f / 100.0)).round(2)
@@ -46,8 +43,6 @@ class Army < ApplicationRecord
   end
 
   def strength_indirect
-    set_options if @options_armies.nil?
-
     units = self.units.sum(&:strength_indirect)
 
     multiplier = ((self.xp.to_f / 100.0) * (self.morale.to_f / 100.0)).round(2)
@@ -84,8 +79,6 @@ class Army < ApplicationRecord
   end
 
   def speed_name
-    set_options if @options_armies.nil?
-
     value = self.speed
 
     @speeds.select { |item| item["mod"] <= value }
@@ -124,22 +117,28 @@ private
   def set_options
     return if defined?(@options_armies) && @options_armies.present?
 
-    active_game_id = Game.find_by(active: true)&.id
-    return unless active_game_id
-
-    @options_armies ||= begin
-      tool = Tool.find_by(name: "armies")
-      tool_options = tool&.game_tools&.find_by(game_id: active_game_id)&.options
-      tool_options || {}
-    end
-
-    @speeds ||= Tool.find_by(name: "travel")&.game_tools&.find_by(game_id: active_game_id)&.options&.fetch("speed", [])
+    @options_armies ||= self.class.cached_options_armies
+    @speeds ||= self.class.cached_speeds
 
     @units = @options_armies["units"]
-    @army_tags = @options_armies.fetch("army_tags", {})
+    @army_tags = @options_armies.fetch("unit_tags", {})
     @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @status = @options_armies["status"]
     @army_scale = @options_armies["general"]["scale"]
+  end
+
+  def self.cached_options_armies
+    Thread.current[:cached_options_armies] ||= begin
+      active_game_id = Game.find_by(active: true)&.id
+      Tool.find_by(name: "armies")&.game_tools&.find_by(game_id: active_game_id)&.options || {}
+    end
+  end
+
+  def self.cached_speeds
+    Thread.current[:cached_speeds] ||= begin
+      active_game_id = Game.find_by(active: true)&.id
+      Tool.find_by(name: "travel")&.game_tools&.find_by(game_id: active_game_id)&.options&.fetch("speed", [])
+    end
   end
 
   def must_have_at_least_one_unit
