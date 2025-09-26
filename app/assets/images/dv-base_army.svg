@@ -5,7 +5,7 @@
    y="0px"
    version="1.1"
    id="svg5"
-   sodipodi:docname="dv-city_small.svg"
+   sodipodi:docname="dv-base_army.svg"
    width="16"
    height="16"
    inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
@@ -36,9 +36,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="45.254834"
-     inkscape:cx="8.010194"
-     inkscape:cy="7.9991455"
+     inkscape:zoom="22.627417"
+     inkscape:cx="20.572388"
+     inkscape:cy="2.2539029"
      inkscape:window-width="1920"
      inkscape:window-height="1010"
      inkscape:window-x="2873"
@@ -75,26 +75,25 @@
      id="path4"
      style="stroke-width:0.242424" />
   <circle
-     style="fill:#800000;fill-opacity:1;stroke:none;stroke-width:1.38853;stroke-opacity:1"
+     style="fill:#df5600;fill-opacity:1;stroke:none;stroke-width:1.38853;stroke-opacity:1"
      id="path6"
      cx="8"
      cy="8"
      r="4.3359122" />
-  <path
-     sodipodi:type="star"
-     style="fill:#ffffff;stroke:#ffffff"
-     id="path5"
-     inkscape:flatsided="false"
-     sodipodi:sides="3"
-     sodipodi:cx="5.756743"
-     sodipodi:cy="6.0721807"
-     sodipodi:r1="5.543955"
-     sodipodi:r2="2.1050649"
-     sodipodi:arg1="-1.5707963"
-     sodipodi:arg2="-0.52359872"
-     inkscape:rounded="0"
-     inkscape:randomized="0"
-     d="M 5.7567431,0.5282259 7.5797827,5.0196484 10.557949,8.8441583 5.7567428,8.1772456 0.95553714,8.844158 3.9337034,5.0196482 Z"
-     inkscape:transform-center-y="-0.39726658"
-     transform="matrix(0.74642256,0,0,0.74642256,3.7030372,3.6739718)" />
+  <g
+     id="g2"
+     transform="matrix(0.01267931,0,0,0.01267931,4.5690663,4.7703872)">
+	<path
+   class="st0"
+   d="m 490.462,316.323 c -0.5,-0.5 -1.328,-1.203 -2.469,-2.141 4.297,-17.672 6.563,-36.141 6.563,-55.109 0,-128.75 -104.375,-233.141 -233.125,-233.141 -123.625,0 -224.797,96.266 -232.609,217.938 -0.141,1.969 -0.234,3.938 -0.297,5.891 -1.813,3.781 -3.672,7.719 -4.313,7.938 -28.875,10.594 -36.516,38.172 2.734,38.172 h 4.25 230.234 c 21.672,0 46.031,38.563 84.516,57.266 30.672,14.891 63.703,22.5 113.86,22.5 22.469,0 41.906,-2.047 51.109,-15.344 5,-7.236 -8.187,-31.705 -20.453,-43.97 z"
+   id="path1-8"
+   style="fill:#000000" />
+
+	<path
+   class="st0"
+   d="m 273.258,379.588 c -11.578,23.734 -28.938,53.704 -51.656,79.235 -6.016,6.766 -5.406,17.109 1.344,23.109 6.766,6 17.109,5.406 23.109,-1.359 25.984,-29.266 44.734,-62.156 57.203,-87.844 5.844,-12.063 10.266,-22.531 13.359,-30.313 -9.969,-6.578 -19.969,-14.25 -27.313,-20.172 -2.452,6.704 -7.78,20.423 -16.046,37.344 z"
+   id="path2-8"
+   style="fill:#000000" />
+
+</g>
 </svg>
