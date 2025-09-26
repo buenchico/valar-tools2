@@ -13,7 +13,7 @@ class Army < ApplicationRecord
   validates :morale, numericality: { greater_than_or_equal_to: 0 }
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
 
-  after_find :set_options
+  after_initialize :set_options
   after_find :cache_units
 
   before_validation :ensure_minimum_xp

@@ -21,7 +21,7 @@ class Unit < ApplicationRecord
   before_create :set_count_start
   after_create :generate_random_name
 
-  after_find :set_options
+  after_initialize :set_options
   after_find :cache_factions
 
   after_update :track_count_changes
