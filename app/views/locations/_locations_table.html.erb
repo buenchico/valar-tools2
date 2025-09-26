@@ -3,18 +3,18 @@
     <caption><%=  @tool.title %></caption>
     <thead>
       <tr>
-        <th scope="col">Nombre (ES)</th>
-        <th scope="col">Nombre (EN)</th>
-        <th scope="col">Descripcción</th>
-        <th scope="col">Etiquetas</th>
-        <th scope="col">Tipo</th>
-        <th scope="col">Región</th>
-        <th scope="col">Señor</th>
+        <th scope="col"><%= t('activerecord.attributes.location.name_es') %></th>
+        <th scope="col"><%= t('activerecord.attributes.location.name_en') %></th>
+        <th scope="col"><%= t('activerecord.attributes.location.description') %></th>
+        <th scope="col"><%= t('activerecord.attributes.location.tags') %></th>
+        <th scope="col"><%= t('activerecord.attributes.location.location_type') %></th>
+        <th scope="col"><%= t('activerecord.attributes.location.region') %></th>
+        <th scope="col"><%= t('activerecord.attributes.location.family_id') %></th>
         <% if @current_user&.is_master? %>
-          <th scope="col" class="text-center sorter-bootstrap-icons">Visible</th>
+          <th scope="col" class="text-center sorter-bootstrap-icons"><%= t('activerecord.attributes.location.visible') %></th>
         <% end %>
         <% if @current_user&.is_admin? %>
-          <th scope="col">Partida</th>
+          <th scope="col"><%= t('activerecord.attributes.location.game_id') %></th>
         <% end %>
         <th scope="col" colspan="2" data-sorter="false"></th>
       </tr>
