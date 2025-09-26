@@ -79,10 +79,10 @@ class SearchController < ApplicationController
 
 private
   def set_options
-    @options_armies = get_options(Tool&.find_by(name: "armies"))
-    if @options_armies.present?
-      set_options_armies
-    end
+    options = GameOptionsService.fetch
+    set_options_armies(options)
+    set_options_locations(options)
+
     @options_clocks = get_options(Tool&.find_by(name: "clocks"))
     if @options_clocks.present?
       set_options_clocks
@@ -90,10 +90,6 @@ private
     @options_families = get_options(Tool&.find_by(name: "families"))
     if @options_families.present?
       set_options_families
-    end
-    @options_locations = get_options(Tool&.find_by(name: "locations"))
-    if @options_locations.present?
-      set_options_locations
     end
     @options_missions = get_options(Tool&.find_by(name: "missions"))
     if @options_missions.present?
