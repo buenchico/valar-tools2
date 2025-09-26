@@ -126,12 +126,12 @@ private
   end
 
   def set_options
+    options = GameOptionsService.fetch
     @options_families = get_options(@tool)
     if @options_families.blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      @options_armies = get_options(Tool&.find_by(name: "armies"))
-      set_options_armies
+      set_options_armies(options)
       set_options_families
     end
   end
