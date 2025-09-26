@@ -12,13 +12,13 @@ class MapController < ApplicationController
 
 private
   def set_options
-    @options_map = get_options(@tool)
-    @options_locations = get_options(Tool.find_by(name: "locations"))
-    if @options_map.blank? || @options_locations.blank?
+    options = GameOptionsService.fetch
+
+    if options[:map].blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      set_options_map
-      set_options_locations
+      set_options_map(options)
+      set_options_locations(options)
     end
   end
 

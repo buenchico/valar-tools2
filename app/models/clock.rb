@@ -67,8 +67,8 @@ private
   end
 
   def set_options
-    active_game = Game.find_by(active: true)
-    options = Tool.find_by(name: "clocks").game_tools.find_by(game_id: active_game&.id)&.options
+    options = GameOptionsService.fetch
+    @options_clocks = options[:clocks]
     SIZES.replace(options["sizes"].map { |s| s["size"] })
   end
 

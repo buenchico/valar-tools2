@@ -65,15 +65,15 @@ private
     @recipe = Recipe.find(params[:id])
   end
 
+  # Getting missions options
   def set_options
-    # Getting missions options
     @games = Game.all
-    tool = Tool.find_by(name: "missions")
-    @options_missions = get_options(tool)
-    if @options_missions.blank?
-      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: tool.title)
+    options = GameOptionsService.fetch
+
+    if options[:missions].blank?
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      set_options_missions
+      set_options_missions(options)
     end
   end
 

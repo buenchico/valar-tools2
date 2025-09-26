@@ -82,18 +82,8 @@ private
     options = GameOptionsService.fetch
     set_options_armies(options)
     set_options_locations(options)
-
-    @options_clocks = get_options(Tool&.find_by(name: "clocks"))
-    if @options_clocks.present?
-      set_options_clocks
-    end
-    @options_families = get_options(Tool&.find_by(name: "families"))
-    if @options_families.present?
-      set_options_families
-    end
-    @options_missions = get_options(Tool&.find_by(name: "missions"))
-    if @options_missions.present?
-      set_options_missions
-    end
+    set_options_clocks(options)
+    set_options_families(options)
+    set_options_missions(options)
   end
 end

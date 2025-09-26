@@ -90,11 +90,12 @@ private
   end
 
   def set_options
-    @options_clocks = get_options(@tool)
-    if @options_clocks.blank?
+    options = GameOptionsService.fetch
+
+    if options[:clocks].blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      set_options_clocks
+      set_options_clocks(options)
     end
   end
 

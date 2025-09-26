@@ -13,13 +13,6 @@ class Recipe < ApplicationRecord
 
   SECTIONS = ["default"]
 
-  def set_options
-    active_game = Game.find_by(active: true)
-    @option_recipes = Tool.find_by(name: "missions").game_tools.find_by(game_id: active_game&.id)&.options
-
-    @sections = @option_recipes["sections"]
-  end
-
   validates :section, inclusion: { in: ->(recipe) { recipe.instance_variable_get(:@sections) || SECTIONS } }
 
   def title
@@ -33,5 +26,13 @@ class Recipe < ApplicationRecord
     else
       false
     end
+  end
+
+private
+  def set_options
+    options = GameOptionsService.fetch
+    @option_missions = options[:missions]
+
+    @sections = @option_missions["sections"]
   end
 end

@@ -164,13 +164,16 @@ class ApplicationController < ActionController::Base
             end
   end
 
-  def set_options_clocks
+  def set_options_clocks(options)
+    @options_clocks = options[:clocks]
     @sizes = @options_clocks["sizes"]
     @outcomes = @options_clocks["outcomes"]
     @styles = @options_clocks["styles"]
   end
 
-  def set_options_families
+  def set_options_families(options)
+    @options_families = options[:famiies]
+
     @options_families["subtools"] ||= {}
 
     @options_families["subtools"]["tags"] = true if @options_families["tags"].present?
@@ -179,14 +182,19 @@ class ApplicationController < ActionController::Base
     @options_families["subtools"]["armies"] = true if Tool.find_by(name: "armies").is_active?
   end
 
-  def set_options_missions
+  def set_options_missions(options)
+    @options_missions = options[:missions]
+
     @sections = @options_missions["sections"]
   end
 
-  def set_options_map
+  def set_options_map(options)
+    @options_map = options[:map]
   end
 
-  def set_options_travel
+  def set_options_travel(options)
+    @options_missions = options[:travel]
+
     @terrain = @options_travel["terrain"]
     @speed = @options_travel["speed"]
     @obstacles = @options_travel["obstacles"]
