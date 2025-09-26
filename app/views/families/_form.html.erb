@@ -65,7 +65,7 @@
           <% if @options_families["subtools"]["tiers"] %>
             <div class="input-group mb-3">
               <%= form.label :tier, class: 'input-group-text' %>
-              <%= form.select :tier, [""] + @options_families["tiers"], {}, class: 'form-select' %>
+              <%= form.text_field :tier, class: 'form-select' %>
             </div>
           <% end %>
           <div class="input-group mb-3">
