@@ -2,7 +2,9 @@ class Unit < ApplicationRecord
   include PgSearch::Model
   multisearchable against: [:name, :search]
 
-  has_and_belongs_to_many :factions
+  has_and_belongs_to_many :factions,
+        before_add: :track_faction_addition,
+        before_remove: :track_faction_removal
   belongs_to :army, optional: true
   belongs_to :family, class_name: 'Family', foreign_key: 'family_id', optional: true
   belongs_to :location, class_name: 'Location', foreign_key: 'location_id', optional: true
@@ -22,7 +24,6 @@ class Unit < ApplicationRecord
   after_create :generate_random_name
 
   after_initialize :set_options
-  after_find :cache_factions
 
   after_update :track_count_changes
 
@@ -162,30 +163,15 @@ class Unit < ApplicationRecord
 
 private
   def set_options
-    return if defined?(@options_armies) && @options_armies.present?
-
-    @options_armies ||= self.class.cached_options_armies
-    @speeds ||= self.class.cached_speeds
+    options = GameOptionsService.fetch
+    @options_armies = options[:armies]
+    @speeds = options[:travel]
 
     @units = @options_armies["units"]
     @unit_tags = @options_armies.fetch("unit_tags", {})
     @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @status = @options_armies["status"]
     @army_scale = @options_armies["general"]["scale"]
-  end
-
-  def self.cached_options_armies
-    Thread.current[:cached_options_armies] ||= begin
-      active_game_id = Game.find_by(active: true)&.id
-      Tool.find_by(name: "armies")&.game_tools&.find_by(game_id: active_game_id)&.options || {}
-    end
-  end
-
-  def self.cached_speeds
-    Thread.current[:cached_speeds] ||= begin
-      active_game_id = Game.find_by(active: true)&.id
-      Tool.find_by(name: "travel")&.game_tools&.find_by(game_id: active_game_id)&.options&.fetch("speed", [])
-    end
   end
 
   def track_count_changes
@@ -247,8 +233,12 @@ private
     end
   end
 
-  def cache_factions
-    self.faction_ids_was = self.faction_ids.dup
+  def track_faction_addition(faction)
+    @faction_ids_before ||= self.faction_ids.dup
+  end
+
+  def track_faction_removal(faction)
+    @faction_ids_before ||= self.faction_ids.dup
   end
 
   def log_changes
@@ -277,8 +267,8 @@ private
         end
       end
 
-      if self.faction_ids_was&.sort != faction_ids&.sort
-        old_names = Faction.where(id: self.faction_ids_was&.sort).pluck(:name).join(", ")
+      if @faction_ids_before&.sort != self.faction_ids&.sort
+        old_names = Faction.where(id: @faction_ids_before&.sort).pluck(:name).join(", ")
         new_names = Faction.where(id: faction_ids).pluck(:name).join(", ")
         message << "Unit ##{id} - factions changed from '#{old_names}' to '#{new_names}'"
       end

@@ -2,7 +2,9 @@ class Army < ApplicationRecord
   include PgSearch::Model
   multisearchable against: [:name, :group, :position, :notes, :families, :locations]
 
-  has_many :units, dependent: :nullify
+  has_many :units, dependent: :nullify,
+        before_add: :track_unit_addition,
+        before_remove: :track_unit_removal
   accepts_nested_attributes_for :units, allow_destroy: true
 
   attr_accessor :unit_ids_was
@@ -14,7 +16,6 @@ class Army < ApplicationRecord
   validates :group, inclusion: { in: [nil] + ARMY_GROUPS.keys.map { |k| k.to_s }  }, allow_blank: true
 
   after_initialize :set_options
-  after_find :cache_units
 
   before_validation :ensure_minimum_xp
   before_validation :ensure_minimum_morale
@@ -115,30 +116,15 @@ class Army < ApplicationRecord
 
 private
   def set_options
-    return if defined?(@options_armies) && @options_armies.present?
-
-    @options_armies ||= self.class.cached_options_armies
-    @speeds ||= self.class.cached_speeds
+    options = GameOptionsService.fetch
+    @options_armies = options[:armies]
+    @speeds = options[:travel]
 
     @units = @options_armies["units"]
-    @army_tags = @options_armies.fetch("unit_tags", {})
+    @army_tags = @options_armies.fetch("army_tags", {})
     @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
     @status = @options_armies["status"]
     @army_scale = @options_armies["general"]["scale"]
-  end
-
-  def self.cached_options_armies
-    Thread.current[:cached_options_armies] ||= begin
-      active_game_id = Game.find_by(active: true)&.id
-      Tool.find_by(name: "armies")&.game_tools&.find_by(game_id: active_game_id)&.options || {}
-    end
-  end
-
-  def self.cached_speeds
-    Thread.current[:cached_speeds] ||= begin
-      active_game_id = Game.find_by(active: true)&.id
-      Tool.find_by(name: "travel")&.game_tools&.find_by(game_id: active_game_id)&.options&.fetch("speed", [])
-    end
   end
 
   def must_have_at_least_one_unit
@@ -155,9 +141,14 @@ private
     self.morale = 0 if morale.present? && morale < 0
   end
 
-  def cache_units
-    self.unit_ids_was = self.unit_ids.dup
+  def track_unit_addition(unit)
+    @unit_ids_before ||= self.unit_ids.dup
   end
+
+  def track_unit_removal(unit)
+    @unit_ids_before ||= self.unit_ids.dup
+  end
+
 
   def annihilate
     if self.status == "inactive"
@@ -189,8 +180,8 @@ private
         end
       end
 
-      if self.unit_ids_was&.sort != unit_ids&.sort
-        old_names = Unit.where(id: self.unit_ids_was&.sort).pluck(:name, :id).join(", ")
+      if @unit_ids_before&.sort != unit_ids&.sort
+        old_names = Unit.where(id: @unit_ids_before&.sort).pluck(:name, :id).join(", ")
         new_names = Unit.where(id: unit_ids).pluck(:name).join(", ")
         message << "Army ##{id} - units changed from '#{old_names}' to '#{new_names}'"
       end

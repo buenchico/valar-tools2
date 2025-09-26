@@ -295,12 +295,12 @@ private
   end
 
   def set_options
-    tool = Tool.find_by(name: "armies")
-    @options_armies = get_options(tool)
-    if @options_armies.blank?
+    options = GameOptionsService.fetch
+
+    if options[:armies].blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      set_options_armies
+      set_options_armies(options)
     end
   end
 

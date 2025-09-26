@@ -15,7 +15,7 @@ class ArmiesController < ApplicationController
       if @faction
         armies, units = get_armies([@faction.id], ["true"])
         @armies = armies.sort_by(&:army_type)
-        @units = units.where(army: nil).sort_by(&:army_type).sort_by(&:army_type)
+        @units = units.includes(:factions).where(army: nil).sort_by(&:army_type).sort_by(&:army_type)
       else
         @armies = nil
         @units = nil
@@ -24,7 +24,7 @@ class ArmiesController < ApplicationController
       @faction = @current_user.faction
       armies, units = get_armies([@faction.id], ["true"])
       @armies = armies.sort_by(&:army_type)
-      @units = units.where(army: nil).sort_by(&:army_type).sort_by(&:army_type)
+      @units = units.includes(:factions).where(army: nil).sort_by(&:army_type).sort_by(&:army_type)
     end
   end
 
@@ -38,7 +38,7 @@ class ArmiesController < ApplicationController
     active_visibility = JSON.parse(params[:active_visibility])
 
     @armies, units = get_armies(active_factions, active_visibility)
-    @units = units.where(army: nil)
+    @units = units.includes(:factions).where(army: nil)
   end
 
   def delete
@@ -344,11 +344,12 @@ private
   end
 
   def set_options
-    @options_armies = get_options(@tool)
-    if @options_armies.blank?
+    options = GameOptionsService.fetch
+
+    if options[:armies].blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      set_options_armies
+      set_options_armies(options)
     end
   end
 

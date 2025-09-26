@@ -70,6 +70,14 @@ class ApplicationController < ActionController::Base
     ((-1 + Math.sqrt(1 + 8 * number)) / 2).floor
   end
 
+  def sorted_hash(hash, *keys)
+    return {} unless hash.is_a?(Hash)
+
+    hash.sort_by do |_, v|
+      keys.map { |k| v[k] || 99 }
+    end.to_h
+  end
+
   def set_tool
     @tool = Tool.find_by(name: controller_name)
   end
@@ -125,27 +133,21 @@ class ApplicationController < ActionController::Base
     tool.game_tools.find_by(game_id: active_game&.id)&.options
   end
 
-  def set_options_armies
-    # @attributes = @options_armies["attributes"]&.sort_by { |_, v| v["sort"] }.to_h
-    # @men = @options_armies["men"]&.sort_by { |_, v| v["sort"] }.to_h
-    # @hp = @options_armies["hp"]
-    # @fleets = @options_armies["fleets"]
-    @army_speeds = Tool.find_by(name: "travel").game_tools.find_by(game_id: active_game&.id)&.options.fetch("speed", [])
-    @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
-    @army_status = @options_armies["status"]
-    @army_tags = @options_armies["army_tags"]&.sort_by do |_, v|
-      [v["sort"] || 99, v["name"]]
-    end.to_h
-    @unit_types = @options_armies["units"]&.sort_by do |_, v|
-      [v["type"], v["sort"] || 99, v["name"]]
-    end.to_h
-    @unit_tags = @options_armies["unit_tags"]&.sort_by do |_, v|
-      [v["sort"] || 99, v["name"]]
-    end.to_h
+  def set_options_armies(options)
+    @options_armies = options[:armies]
+    @army_speeds = options[:travel] || []
 
-    @army_scale = @options_armies["general"]["scale"]
-    @army_xp = @options_armies["general"]["xp"]
-    @army_morale = @options_armies["general"]["morale"]
+    @army_types = sorted_hash(@options_armies["army_type"], "sort")
+    @army_status = @options_armies["status"]
+
+    @army_tags = sorted_hash(@options_armies["army_tags"], "sort", "name")
+    @unit_types = sorted_hash(@options_armies["units"], "type", "sort", "name")
+    @unit_tags = sorted_hash(@options_armies["unit_tags"], "sort", "name")
+
+    general = @options_armies["general"] || {}
+    @army_scale = general["scale"]
+    @army_xp = general["xp"]
+    @army_morale = general["morale"]
   end
 
   def set_options_clocks
