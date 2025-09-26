@@ -157,7 +157,7 @@ class ApplicationController < ActionController::Base
   def set_options_locations(options)
     @options_locations = options[:locations]
     @location_types = @options_locations["types"]
-    @population_types = @options_locations.fetch("population", {}).fetch("types_with_population", ["region"])
+    @population_types = @options_locations.fetch("population", {}).fetch("types_with_population", [])
     @regions = @options_locations.fetch("region_types", ["region"]).flat_map do |type|
       Location.where(location_type: type, game_id: active_game.id)
               .order(:name_es)
