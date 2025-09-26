@@ -21,7 +21,7 @@ class Unit < ApplicationRecord
   validate :unique_name_within_faction
 
   before_create :set_count_start
-  after_create :generate_random_name
+  before_validation :generate_random_name
 
   after_initialize :set_options
 
@@ -197,27 +197,25 @@ private
   def generate_random_name
     return unless name.blank?
 
-    existing_count = 1
     base_name = "#{unit_name} de #{type_name.singularize}"
 
+    existing_names =
+      if factions.any?
+        factions.flat_map do |faction|
+          faction.units.where(unit_type: unit_type).pluck(:name)
+        end.to_set
+      else
+        Unit.where(unit_type: unit_type).pluck(:name).to_set
+      end
+
+    existing_count = 1
     loop do
       candidate_name = "#{existing_count} #{base_name}"
-
-      conflict =
-        if factions.any?
-          factions.any? do |faction|
-            faction.units.where(unit_type: unit_type, name: candidate_name).exists?
-          end
-        else
-          Unit.where(unit_type: unit_type, name: candidate_name).exists?
-        end
-
-      if conflict
-        existing_count += 1
-      else
+      unless existing_names.include?(candidate_name)
         self.name = candidate_name
         break
       end
+      existing_count += 1
     end
 
     save(validate: false, touch: false)
