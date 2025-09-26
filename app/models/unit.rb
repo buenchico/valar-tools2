@@ -105,7 +105,7 @@ class Unit < ApplicationRecord
   def speed_name
     value = self.speed
 
-    @speeds.select { |item| item["mod"] <= value }
+    @army_speeds.select { |item| item["mod"] <= value }
       .max_by { |item| item["mod"] }["name"]
   end
 
@@ -165,7 +165,7 @@ private
   def set_options
     options = GameOptionsService.fetch
     @options_armies = options[:armies]
-    @speeds = options[:travel]
+    @army_speeds = options[:travel].fetch("speed", {})
 
     @units = @options_armies["units"]
     @unit_tags = @options_armies.fetch("unit_tags", {})

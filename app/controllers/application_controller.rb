@@ -82,14 +82,6 @@ class ApplicationController < ActionController::Base
     @tool = Tool.find_by(name: controller_name)
   end
 
-  def set_regions
-    region_types = active_game.game_tools.find_by(tool_id: Tool.find_by(name: "locations").id).options.fetch("region_types", ["region"])
-    @regions = region_types.flat_map do |type|
-      Location.where(location_type: type, game_id: active_game.id)
-              .order(:name_es)
-            end
-  end
-
   def set_families
     if @current_user&.is_master?
       @families = Family.where(game_id: active_game.id).order(:name)
@@ -135,7 +127,9 @@ class ApplicationController < ActionController::Base
 
   def set_options_armies(options)
     @options_armies = options[:armies]
-    @army_speeds = options[:travel] || []
+    @options_locations = options[:locations]
+
+    @army_speeds = options[:travel].fetch("speed", {})
 
     @army_types = sorted_hash(@options_armies["army_type"], "sort")
     @army_status = @options_armies["status"]
@@ -148,6 +142,26 @@ class ApplicationController < ActionController::Base
     @army_scale = general["scale"]
     @army_xp = general["xp"]
     @army_morale = general["morale"]
+
+    locations = Location.where(game_id: active_game.id)
+
+    @population_total = locations.sum { |loc| loc.population.to_i }
+    @population_start = locations.sum { |loc| loc.population_start.to_i }
+    @population_dead = (@population_start - @population_total)
+
+    @regions = @options_locations.fetch("region_types", ["region"]).flat_map do |type|
+      locations.where(location_type: type).order(:name_es)
+            end
+  end
+
+  def set_options_locations(options)
+    @options_locations = options[:locations]
+    @location_types = @options_locations["types"]
+    @population_types = @options_locations.fetch("population", {}).fetch("types_with_population", ["region"])
+    @regions = @options_locations.fetch("region_types", ["region"]).flat_map do |type|
+      Location.where(location_type: type, game_id: active_game.id)
+              .order(:name_es)
+            end
   end
 
   def set_options_clocks
@@ -163,10 +177,6 @@ class ApplicationController < ActionController::Base
     @options_families["subtools"]["loyalties"] = true if @options_families["loyalties"].present?
     @options_families["subtools"]["tiers"] = true if @options_families["tiers"].present?
     @options_families["subtools"]["armies"] = true if Tool.find_by(name: "armies").is_active?
-  end
-
-  def set_options_locations
-    @location_types = @options_locations["types"]
   end
 
   def set_options_missions

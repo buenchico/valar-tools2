@@ -11,6 +11,12 @@ class Location < ApplicationRecord
   validates :name_en, presence: true, if: -> { name_es.blank? }
   validates :name_es, presence: true, if: -> { name_en.blank? }
   validates :priority, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: -100, less_than_or_equal_to: 100 }
+  validate :population_only_for_types
+
+  before_validation :set_options
+  before_validation :clear_population_if_disallowed
+
+  after_initialize :set_options
 
   def name
     if self.name_es.nil?
@@ -90,5 +96,25 @@ class Location < ApplicationRecord
 
   scope :search_by_name, ->(query) do
     where("lower(name_en) LIKE :query OR lower(name_es) LIKE :query", query: "%#{query.downcase}%")
+  end
+
+private
+  def population_only_for_types
+    if !(@population_types.include?(location_type) && (population.present? || population_start.present?))
+      errors.add(:population, :only_in_selected_types, types: @population_types.join(", "))
+    end
+  end
+
+  def clear_population_if_disallowed
+    unless @population_types.include?(location_type)
+      self.population = nil
+      self.population_start = nil
+    end
+  end
+
+  def set_options
+    options = GameOptionsService.fetch
+    @options_locations = options[:locations]
+    @population_types = @options_locations.fetch("population", {}).fetch("types_with_population", ["region"])
   end
 end

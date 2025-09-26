@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_26_211047) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -189,6 +189,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_151200) do
     t.jsonb "line", default: []
     t.integer "priority", limit: 2, default: 0
     t.jsonb "polygon", default: []
+    t.integer "population_start"
+    t.integer "population"
     t.index ["family_id"], name: "index_valar_locations_on_family_id"
     t.index ["game_id"], name: "index_valar_locations_on_game_id"
     t.index ["region_id"], name: "index_valar_locations_on_region_id"

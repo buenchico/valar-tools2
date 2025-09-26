@@ -1,7 +1,6 @@
 class UnitsController < ApplicationController
   before_action :set_options
   before_action :set_factions, only: [:new, :edit, :new_multiple, :edit_multiple]
-  before_action :set_regions, only: [:new, :edit, :new_multiple]
   before_action :set_unit, only: [:edit, :update, :destroy, :delete, :show]
   before_action :check_master, only: [:new, :edit, :delete, :edit_multiple, :create, :destroy, :delete, :update_multiple, :destroy_multiple, :damage_multiple, :damage_multiple_apply]
   before_action :check_owner, only: [:edit, :edit_notes, :update]

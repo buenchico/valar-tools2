@@ -3,7 +3,6 @@ class LocationsController < ApplicationController
   before_action :check_master, except: [:show, :list]
   before_action :set_location, only: [:edit, :show, :update, :destroy]
   before_action :set_locations_list, only: [:index]
-  before_action :set_regions, except: [:index]
   before_action :set_options
   before_action :set_filters, only: [:index]
 
@@ -106,16 +105,17 @@ private
   end
 
   def set_options
-    @options_locations = get_options(@tool)
-    if @options_locations.blank?
+    options = GameOptionsService.fetch
+
+    if options[:armies].blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      set_options_locations
+      set_options_locations(options)
     end
   end
 
   def location_params
-    params.require(:location).permit(:name_en, :name_es, :description, :x, :y, :line, :polygon, :priority, :region_id, :location_type, :visible, :family_id, :game_id, tags: []).tap do |whitelisted|
+    params.require(:location).permit(:name_en, :name_es, :description, :x, :y, :line, :polygon, :priority, :region_id, :location_type, :visible, :family_id, :game_id, :population, :population_start, tags: []).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
     end
   end

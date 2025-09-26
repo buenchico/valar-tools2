@@ -210,6 +210,8 @@ es:
         description: "Descripción"
         game_id:  "Partida"
         region: "Región"
+        population: "Población"
+        population_start: "Población inicial"
       battle:
         name: "Nombre"
         status: "Fase"
@@ -326,6 +328,10 @@ es:
           attributes:
             options:
               options_cannot_be_changed_if_game_is_active: "No puedes cambiar las opciones de la partida %{game_name} mientres esté activa"
+        location:
+          attributes:
+            population:
+              only_in_selected_types: "Sólo los tipos escogidos pueden tener población, %{types}"
         family:
           attributes:
             name:

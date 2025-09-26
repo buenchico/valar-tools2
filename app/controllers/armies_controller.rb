@@ -422,8 +422,8 @@ private
 
   def set_stats
     @total_men = Unit.all.sum(&:men)
-    @total_dead = Unit.all.sum(&:men_death)
-    @percent_dead = ((@total_dead / @options_armies["general"]["population"].to_f) * 100).round(2)
+    @total_dead = (Unit.all.sum(&:men_death) + @population_dead)
+    @percent_dead = ((@total_dead / @population_start.to_f) * 100).round(2)
     @total_strength = (Army.all.sum(&:strength) + Unit.all.sum(&:strength))
   end
 

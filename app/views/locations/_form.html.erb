@@ -90,6 +90,12 @@
             %>
           </div>
 
+          <div class="input-group mb-3 <%= @population_types.include?(location.location_type) ? "" : "d-none" %>">
+            <%= form.label :population, class: 'input-group-text' %>
+            <%= form.number_field :population, class: 'form-control', placeholder: t('activerecord.attributes.location.population') %>
+            <%= form.number_field :population_start, class: 'form-control', placeholder: t('activerecord.attributes.location.population_start') %>
+          </div>
+
           <div class="input-group mb-3">
             <%= form.label :region_id, class: 'input-group-text' %>
             <%= form.select :region_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
