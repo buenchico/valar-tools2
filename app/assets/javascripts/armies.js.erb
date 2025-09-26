@@ -61,8 +61,6 @@ $(document).on('turbolinks:load', function () {
 
     // Trigger armies load for master
     $('.armies-load').click(function() {
-      $('#spinner-main').removeClass('d-none');
-
       if ($(this).hasClass('master')) {
         if ($(this).hasClass('active')) {
           $('.armies-tab').removeClass('active')

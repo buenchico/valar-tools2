@@ -74,7 +74,12 @@
           </div>
 
           <div class="input-group mt-3">
-            <%= form.submit t('helpers.submit.create_multiple', model: t('activerecord.models.unit', count: 2)), class: 'btn btn-success' %>
+            <%= form.submit t('helpers.submit.create_multiple', model: t('activerecord.models.unit', count: 2)), class: 'btn btn-success show-spinner' %>
+            <div class="d-flex justify-content-center">
+              <div class="spinner spinner-border fs-1 d-none" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
           </div>
         <% end %>
       </div>

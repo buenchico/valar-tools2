@@ -22,6 +22,18 @@ $(document).on('turbolinks:load', function() {
   });
 });
 
+$(document).on('ready', function() {
+  $('.show-spinner').on('click', function() {
+    $('.spinner').removeClass('d-none');
+  })
+});
+
+$(document).on('shown.bs.modal', function (event) {
+  $('.show-spinner').on('click', function() {
+    $('.spinner').removeClass('d-none');
+  })
+});
+
 // Form control clearable icon
 $(document).on('ready', function () {
     $(function() {

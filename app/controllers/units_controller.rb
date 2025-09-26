@@ -123,7 +123,7 @@ class UnitsController < ApplicationController
             @created_units.each(&:save!)
           end
 
-          flash[:success] = t('messages.multiple.success', model: Unit.model_name.human(:count => @created_units.count), succeed: ("<br>" + @created_units.pluck(:name).join("<br>")).html_safe)
+          flash[:success] = t('messages.multiple.success', model: Unit.model_name.human(:count => @created_units.count), succeed: @created_units.count)
           format.js
         end
       end
