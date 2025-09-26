@@ -28,7 +28,7 @@ class Army < ApplicationRecord
   def size
     set_options if @options_armies.nil?
 
-    (self.men / (@army_scale * 10))
+    (self.men / (@army_scale * 10.0))
   end
 
   def strength
