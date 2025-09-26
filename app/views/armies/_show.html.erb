@@ -18,6 +18,12 @@
           <div>
             <%= render 'armies/stats', army: army %>
           </div>
+          <% if army&.notes&.present? %>
+            <hr class="border border-secondary opacity-75 border-2">
+            <div class="ms-3">
+              <%= simple_format(army.notes) %>
+            </div>
+          <% end %>          
           <hr class="border border-secondary opacity-75 border-2">
           <div id="units" class="ms-3">
             <%= hidden_field_tag "army[unit_ids][]", nil %>
