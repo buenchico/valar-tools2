@@ -188,7 +188,7 @@ $(document).on('turbolinks:load', function () {
                   );
 
               // render only icon
-            } else if (<%= layer["display"] == "icons" || @location_types[type].fetch("display", nil) == "icons" %>)
+              } else if (<%= layer["display"] == "icons" || @location_types[type].fetch("display", nil) == "icons" %>) {
                 <%= code %>.addLayer(
                   L.marker(
                     [<%= location.y %>,<%= location.x %>],
