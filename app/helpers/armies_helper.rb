@@ -3,7 +3,6 @@ module ArmiesHelper
     units.group_by(&:unit_type)
          .transform_values do |grouped_units|
            grouped_units
-             .sort_by { |u| [u.army_type, u.unit_type] }
              .then do |sorted_units|
                {
                  count: sorted_units.sum { |u| u.count.to_i },
@@ -15,10 +14,12 @@ module ArmiesHelper
                  icon: sorted_units.first.icon,
                  colour: sorted_units.first.colour,
                  speed: sorted_units.map(&:speed).max,
-                 title: sorted_units.first.simple_type_name
+                 title: sorted_units.first.simple_type_name,
+                 army_type: sorted_units.first.army_type
                }
              end
          end
-         .sort.to_h  
+         .sort_by { |key, data| [data[:army_type], key] }.to_h
+         .to_h
   end
 end

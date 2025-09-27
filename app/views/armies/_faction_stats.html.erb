@@ -16,7 +16,7 @@
 <% end %>
 <p class="card-text">Hay <strong><span id="men_visible"></span></strong> hombres visibles con una fuerza de <strong><span id="strength_visible"></span></strong>.</p>
 <table class="w-auto ms-3">
-  <% @unit_types.sort.each do |type, unit| %>
+  <% @unit_types.each do |type, unit| %>
     <tr class="units_visible d-none">
       <td width="100px">
         <%= unit["name"].titleize %>:
