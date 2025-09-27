@@ -193,7 +193,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_options_travel(options)
-    @options_missions = options[:travel]
+    @options_travel = options[:travel]
 
     @terrain = @options_travel["terrain"]
     @speed = @options_travel["speed"]

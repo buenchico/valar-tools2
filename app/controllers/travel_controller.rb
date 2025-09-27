@@ -56,11 +56,12 @@ class TravelController < ApplicationController
 
 private
   def set_options
-    @options_travel = get_options(@tool)
-    if @options_travel.blank?
+    options = GameOptionsService.fetch
+
+    if options[:armies].blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
-      set_options_travel
+      set_options_travel(options)
     end
   end
 
