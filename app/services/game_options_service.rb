@@ -20,7 +20,7 @@ class GameOptionsService
       travel: travel_tool&.game_tools&.find_by(game_id: active_game_id)&.options || {},
       locations: locations_tool&.game_tools&.find_by(game_id: active_game_id)&.options || {},
       clocks: clocks_tool&.game_tools&.find_by(game_id: active_game_id)&.options || {},
-      fammilies: families_tool&.game_tools&.find_by(game_id: active_game_id)&.options || {},
+      families: families_tool&.game_tools&.find_by(game_id: active_game_id)&.options || {},
       missions: missions_tool&.game_tools&.find_by(game_id: active_game_id)&.options || {},
       map: map_tool&.game_tools&.find_by(game_id: active_game_id)&.options || {}
     }
