@@ -172,7 +172,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_options_families(options)
-    @options_families = options[:famiies]
+    @options_families = options[:families]
 
     @options_families["subtools"] ||= {}
 
