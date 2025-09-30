@@ -41,15 +41,13 @@ module RecipesHelper
   end
 
   def replace_traits(text)
+    result = text
     @options_missions["traits"].each do |trait, title|
-      # Escaping asterisks in the regex and interpolating the trait
-      text.gsub!(/\*\*(#{trait})\*\*/i) do |match|
-        # Capitalize only the first letter of the matched trait
+      result = result.gsub(/\*\*(#{trait})\*\*/i) do |match|
         capitalized = $1[0].upcase + $1[1..-1].downcase
-        # Replace with the <abbr> tag while preserving the asterisks
         "**<abbr title='#{title}'>#{capitalized}</abbr>**"
       end
     end
-    text.html_safe
+    result
   end
 end
