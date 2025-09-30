@@ -7,9 +7,7 @@ class GameTool < ApplicationRecord
 
 private
   def invalidate_game_options_cache
-    if tool.name.in?(["armies", "travel"])
-      GameOptionsService.clear!
-    end
+    GameOptionsService.clear!
   end
 
   def options_cannot_be_changed_if_game_is_active
