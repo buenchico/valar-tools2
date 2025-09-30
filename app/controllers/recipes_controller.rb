@@ -7,7 +7,13 @@ class RecipesController < ApplicationController
   include RecipesHelper
 
   def index
-    @recipes = Recipe.all
+    recipes = Recipe.all
+    section_order = @sections.each_with_index.to_h
+
+    @sorted_recipes = recipes.sort_by do |recipe|
+      section_order.fetch(recipe.section, section_order.size)
+    end
+
     @view = (cookies[:recipe_view] || "cards")
     @not_view = (@view == "cards" ? "table" : "cards")
   end

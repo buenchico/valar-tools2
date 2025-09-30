@@ -13,13 +13,11 @@
       </tr>
     </thead>
     <tbody>
-      <% @sections.each do | section | %>
-        <% @recipes.where(section: section).each do | recipe | %>
-          <tr id="recipe_row_<%= recipe.id.to_s %>" class="recipe_<%= recipe.id %> <%= recipe.active ? '': 'toggle-visibility inactive d-none' %>">
-            <%= render 'row', recipe: recipe %>
-          </tr>
-        <% end %>
+      <% @recipes.where(section: section).each do | recipe | %>
+        <tr id="recipe_row_<%= recipe.id.to_s %>" class="recipe_<%= recipe.id %> <%= recipe.active ? '': 'toggle-visibility inactive d-none' %>">
+          <%= render 'row', recipe: recipe %>
+        </tr>
       <% end %>
     </tbody>
-    </table>
-  </div>
+  </table>
+</div>
