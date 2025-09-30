@@ -1,5 +1,5 @@
 <div class="row gx-2 gy-3" id="recipe_board">
-  <% @sorted_recipes.where(section: section).each do | recipe | %>
+  <% @sorted_recipes.each do | recipe | %>
     <div id="recipe_card_<%= recipe.id.to_s %>" class="col-md-6 col-12 <%= recipe.active ? '': 'toggle-visibility inactive d-none' %>">
       <%= render 'card', recipe: recipe %>
     </div>
