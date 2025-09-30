@@ -13,7 +13,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @recipes.each do | recipe | %>
+      <% @sorted_recipes.each do | recipe | %>
         <tr id="recipe_row_<%= recipe.id.to_s %>" class="recipe_<%= recipe.id %> <%= recipe.active ? '': 'toggle-visibility inactive d-none' %>">
           <%= render 'row', recipe: recipe %>
         </tr>
