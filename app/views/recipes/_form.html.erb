@@ -22,7 +22,7 @@
           </div>
           <div class="input-group mb-3">
             <%= form.label :speed, class: 'input-group-text' %>
-            <%= form.select :speed, options_for_select(@options_missions["speed"].map { |value| [value["name"].capitalize, value["time"]] }, recipe.speed), {}, class: 'form-select' %>
+            <%= form.select :speed, options_for_select(@options_missions["speed"].map { |value| [value["name"].capitalize + (value["days"].present? ? " (" + value["days"].to_s + ")" : ""), value["time"]] }, recipe.speed), {}, class: 'form-select' %>
           </div>
           <div class="input-group mb-3">
             <%= form.label :difficulty, class: 'input-group-text' %>

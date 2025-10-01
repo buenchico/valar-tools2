@@ -31,8 +31,8 @@ class Recipe < ApplicationRecord
 private
   def set_options
     options = GameOptionsService.fetch
-    @option_missions = options[:missions]
+    @options_missions = options[:missions]
 
-    @sections = @option_missions["sections"]
+    @sections = @options_missions["sections"]
   end
 end
