@@ -7,7 +7,7 @@ class Recipe < ApplicationRecord
   validates :name, presence: true
   validates :section, presence: true
   validates :difficulty, inclusion: { in: -6..3 }
-  validates :speed, inclusion: { in: -1..4 }
+  validates :speed, inclusion: { in: -1..5 }
 
   has_and_belongs_to_many :games
 
