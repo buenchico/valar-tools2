@@ -69,7 +69,7 @@
           </p>
           <div class="collapse" id="collapseLocations">
             <% @locations.each do | location | %>
-              <p class="ms-2">— <%= link_to(location.name, location_path(location.id), remote: true, class: 'text-white') %></p>
+              <p class="ms-2">— <%= link_to(location.name, location_path(location.id), remote: true, class: 'text-white') %>, <%= @options_locations.dig("types", location.location_type, "name") || "Unknown" %></p>
             <% end %>
           </div>
         <% end %>
