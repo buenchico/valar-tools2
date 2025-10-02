@@ -39,7 +39,9 @@
         <% end %>
         <% if @options_factions&.dig("resources") && (@current_user.faction == faction || @current_user.is_master?) %>
           <% faction&.families&.includes(:locations)&.pluck(:location_type)&.compact&.sort&.tally.each do |resource, count| %>
-            <div>— <%= @options_locations.fetch(resource, {}).fetch("name", resource) %> (<%= count %>)</div>
+            <% if @options_factions&.fetch("resources", {}).fetch("location_types", []).include?(resource) %>
+              <div>— <%= @options_locations.fetch("types", {}).fetch(resource, {}).fetch("name", resource) %> (<%= count %>)</div>
+            <% end %>
           <% end %>
         <% end %>
       </div>
