@@ -37,7 +37,7 @@
             <%= text_field_tag :faction_reputation, number_to_modifier(calculate_mod(faction.reputation)), class: 'form-control', disabled: true %>
           </div>
         <% end %>
-        <% if @options_factions&.dig("resources") && (@current_user.faction == faction || @current_user.is_master?) %>
+        <% if @options_factions&.dig("resources") && (@current_user&.faction == faction || @current_user&.is_master?) %>
           <div class="mt-3">
             <% faction&.families&.includes(:locations)&.pluck(:location_type)&.compact&.sort&.tally.each do |resource, count| %>
               <% if @options_factions&.fetch("resources", {}).fetch("location_types", []).include?(resource) %>
