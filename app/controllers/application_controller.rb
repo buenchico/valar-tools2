@@ -188,6 +188,10 @@ class ApplicationController < ActionController::Base
     @sections = @options_missions["sections"]
   end
 
+  def set_options_factions(options)
+    @options_factions = options[:factions]
+  end
+
   def set_options_map(options)
     @options_map = options[:map]
   end

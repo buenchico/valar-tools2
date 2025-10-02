@@ -31,11 +31,16 @@
             <%= Kramdown::Document.new(faction.tokens || "").to_html.html_safe %>
           </div>
         <% end %>
-        <% if @options&.dig("reputation") %>
+        <% if @options_factions&.dig("reputation") %>
           <div class="input-group">
             <%= label_tag :reputation, 'Reputation', class: 'input-group-text' %>
             <%= text_field_tag :faction_reputation, number_to_modifier(calculate_mod(faction.reputation)), class: 'form-control', disabled: true %>
           </div>
+        <% end %>
+        <% if @options_factions&.dig("resources") && (@current_user.faction == faction || @current_user.is_master?) %>
+          <% faction&.families&.includes(:locations)&.pluck(:location_type)&.compact&.sort&.tally.each do |resource, count| %>
+            <div>— <%= @options_locations.fetch(resource, {}).fetch("name", resource) %> (<%= count %>)</div>
+          <% end %>
         <% end %>
       </div>
     </div>

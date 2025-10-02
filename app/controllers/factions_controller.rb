@@ -133,7 +133,14 @@ private
   end
 
   def set_options
-    @options = @tool.game_tools.find_by(game_id: active_game&.id)&.options
+    options = GameOptionsService.fetch
+
+    if options[:factions].blank?
+      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
+    else
+      set_options_factions(options)
+      set_options_locations(options)
+    end
   end
 
   def check_fleets_owner
