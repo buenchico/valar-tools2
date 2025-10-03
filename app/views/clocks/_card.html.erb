@@ -41,10 +41,10 @@
       </div>
     <% end %>
 
-    <div class="position-absolute top-0 mt-2 my-auto">
+    <div class="position-absolute top-0 ms-5 me-3 mt-2 my-auto">
       <%= link_to truncate(clock.name, length: 30, omission: '...'), clock_path(clock), remote: true, class: 'link-unstyled' %>
     </div>
-    <div class="front mt-3 <%= (clock.open && clock.style != 'memory') ? '' : 'd-none' %>">
+    <div class="front mt-4 h-100 <%= (clock.open && clock.style != 'memory') ? '' : 'd-none' %>">
       <div class="mt-3">
         <% if clock.style != 'memory' %>
           <%= image_tag(clock.style + "_" + clock.size.to_s + "-" + clock.status.to_s + ".svg", class: clock.style + "-svg w-100", id: "clock-svg_" + clock.id.to_s) %>
@@ -58,15 +58,15 @@
           <%= clock.right %>
         </div>
       <% end %>
-      <div class="text-center">
+      <div class="mb-2 position-absolute bottom-0 start-50 translate-middle-x">
         <%= clock.family.blank? ? '&nbsp;'.html_safe : link_to(clock.family.title, family_path(clock.family.id), remote: true, class: 'text-white') %>
       </div>
     </div>
     <div class="back h-75 <%= (clock.open && clock.style != 'memory') ? 'd-none' : '' %>">
-      <div class="text-center">
+      <div class="text-center mt-3">
         <span class="badge bg-primary"><%= @styles[clock.style]["name"] %></span>
       </div>
-      <div>
+      <div class="h-100 overflow-auto">
         <% if clock.description.blank? %>
           N/A
         <% else %>
