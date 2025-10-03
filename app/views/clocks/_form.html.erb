@@ -52,7 +52,7 @@
           </div>
           <div class="input-group mb-3">
             <%= form.label :family_id, class: 'input-group-text' %>
-            <%= form.select :family_id, [""] + @families.map { |x| [truncate(x.title, length: 20, omission: '...'), x.id] }, {}, class: 'form-select' %>
+            <%= form.select :family_id, [""] + @families.map { |x| [truncate(x.title, length: 40, omission: '...'), x.id] }, {}, class: 'form-select' %>
           </div>
 
           <%= form.submit nil, class: 'btn btn-primary' %>

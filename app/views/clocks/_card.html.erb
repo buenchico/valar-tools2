@@ -42,7 +42,7 @@
     <% end %>
 
     <div class="position-absolute top-0 mt-2 my-auto">
-      <%= link_to truncate(clock.name, length: 20, omission: '...'), clock_path(clock), remote: true, class: 'link-unstyled' %>
+      <%= link_to truncate(clock.name, length: 30, omission: '...'), clock_path(clock), remote: true, class: 'link-unstyled' %>
     </div>
     <div class="front mt-3 <%= (clock.open && clock.style != 'memory') ? '' : 'd-none' %>">
       <div class="mt-3">
