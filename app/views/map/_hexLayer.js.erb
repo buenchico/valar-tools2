@@ -14,8 +14,8 @@ function generateHexGrid(bounds, sideLength) {
   const horizontalSpacing = hexWidth * 0.75;
   const verticalSpacing = hexHeight;
 
-  const numRows = (bounds[1][0] / sideLength);
-  const numCols = (bounds[1][1] / sideLength);
+  const numRows = (bounds[1][0] / verticalSpacing);
+  const numCols = (bounds[1][1] / horizontalSpacing);
 
   let rowOffset = 0;
   let colOffset = 0;
@@ -59,6 +59,23 @@ function generateHexGrid(bounds, sideLength) {
   return hexagons;
 }
 
+function getZoomCompensatedStyle() {
+  const zoom = map.getZoom();
+
+  let weight
+
+  if (zoom >= 0) {
+    weight = Math.pow(2, zoom); // Normal growth
+  } else {
+    weight = (1 / (Math.abs(zoom))); // Slower decay
+  }
+
+  return {
+    color: 'rgba(0,0,0,0.3)',
+    weight: weight
+  };
+}
+
 const hexGrid = generateHexGrid(bounds, sideLength);
 
 const jsonHex = {
@@ -73,11 +90,18 @@ const jsonHex = {
   features: hexGrid
 };
 
-var layer_hex = new L.geoJson(jsonHex, {
+map.createPane('hexLayer');
+map.getPane('hexLayer').style.zIndex = 300;
+
+var hexLayer = new L.geoJson(jsonHex, {
+  pane: 'hexLayer',
   interactive: false,
-  style: {
-    color: 'rgba(0,0,0,0.3)',
-    weight: 1.0
-  }
+  renderer: L.canvas(),
+  style: getZoomCompensatedStyle
 });
-map.addLayer(layer_hex);
+
+map.addLayer(hexLayer);
+
+map.on('zoomend', function () {
+  hexLayer.setStyle(getZoomCompensatedStyle);
+});

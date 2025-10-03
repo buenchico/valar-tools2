@@ -86,26 +86,12 @@ $(document).on('turbolinks:load', function () {
 
       const sideLength = <%= (@options_map["scale"] || 1 ) %>;
 
-      var hexGrid = L.GridLayer.extend({
-          options: {
-            bounds: bounds,
-            tileSize: L.point(sideLength * 2 * 1.5, Math.sqrt(3) * sideLength * 2),
-            minZoom: zoom[0],
-            maxNativeZoom: 0, // Define the minimum native zoom level
-            minNativeZoom: 0
-          },
-          createTile: function (coords) {
-              var tile = document.createElement('img');
-              tile.src = "<%= asset_path('hex-tile.svg') %>";
-
-              return tile;
-          }
-      });
-
-      var hexLayer = new hexGrid().addTo(map);
+      <%= render partial: 'hexLayer', formats: [:js] %>
 
       <% @options_map["layers"].each do | code, layer | %>
-        var <%= code %> = new L.layerGroup.collision({margin: <%= @options_map['margin'] || 0 %>});
+        var <%= code %> = new L.layerGroup.collision({
+          margin: <%= @options_map['margin'] || 0 %>
+        });
 
         <% layer["types"].each do | type | %>
 
