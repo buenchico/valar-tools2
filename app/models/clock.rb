@@ -69,7 +69,7 @@ private
   def set_options
     options = GameOptionsService.fetch
     @options_clocks = options[:clocks]
-    SIZES.replace(options["sizes"].map { |s| s["size"] })
+    SIZES.replace(@options_clocks["sizes"].map { |s| s["size"] })
   end
 
   def validate_status_for_clock_style
