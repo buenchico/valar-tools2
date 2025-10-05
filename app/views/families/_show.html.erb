@@ -86,11 +86,11 @@
           </div>
         <% end %>
         <% if @current_user&.is_master? %>
-          <% if @options_families["subtools"]["loyalty"] %>
+          <% if @options_families["subtools"]["loyalties"] %>
             <div class="h4"><%= t('activerecord.attributes.family.loyalty') %></div>
             <% @options_families["loyalties"].each_with_index do |value, index| %>
               <div class="row ms-1">
-                <%= value %>: <%= number_to_modifier(family["loyalty_#{index + 1}"]) %>
+                <%= value.capitalize %>: <%= number_to_modifier(family["loyalty_#{index + 1}"]) %>
               </div>
             <% end %>
           <% end %>
