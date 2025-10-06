@@ -63,11 +63,11 @@ $(document).on('turbolinks:load', function () {
                 next [] if group.empty?
 
                 options = group
-                  .sort_by { |_, attrs| attrs["mod"] }
+                  .sort_by { |_, attrs| attrs["hex"] }
                   .map do |_, attrs|
                     [
                       attrs["name"],                          # Display text
-                      [attrs["name"], attrs["mod"]]           # Value
+                      [attrs["name"], attrs["hex"]]           # Value
                     ]
                   end
 

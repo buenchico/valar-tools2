@@ -100,11 +100,11 @@
                   next [] if group.empty?
 
                   options = group
-                    .sort_by { |_, attrs| attrs["mod"] } # Sort by mod ascending
+                    .sort_by { |_, attrs| attrs["hex"] } # Sort by mod ascending
                     .map do |_, attrs|
                       [
                         attrs["name"],                          # Display text
-                        [attrs["name"], attrs["mod"]]          # Value
+                        [attrs["name"], attrs["hex"]]          # Value
                       ]
                     end
 

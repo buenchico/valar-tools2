@@ -31,6 +31,10 @@ class TravelController < ApplicationController
 
         modifier = (terrain * speed)
 
+        puts params
+        puts step["obstacle"]
+        puts "/////"
+
         if step["obstacle"].blank?
           obstacle_name = ""
           obstacle = 0
