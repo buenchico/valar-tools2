@@ -192,7 +192,7 @@ class MissionsController < ApplicationController
       last_normal_post = normal_posts.last
 
       post = topic["post_stream"]["posts"][0]["cooked"]
-      match_data = post.match(/Objetivo<\/h2>(.*?)<h2>/m)
+      match_data = post.match(/<h[1-6][^>]*>.*?Objetivo.*?<\/h[1-6]>(.*?)<h[1-6][^>]*>/m)
       target = match_data ? match_data[1].strip : t('.no_target')
 
       category = (factions.find_by(category_id: topic["category_id"])&.long_name || t('activerecord.attributes.faction.no_category'))
