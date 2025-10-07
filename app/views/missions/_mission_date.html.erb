@@ -6,6 +6,8 @@
   <% else %>
     <h2 class="display-5 bg-warning m-0 text-dark"><%= t('missions.list.no_date') %></h2>
     <%= form_with url: set_mission_timer_path, local: false do |form| %>
+      <%= form.hidden_field :days, value: 0 %>
+      <%= button_tag number_to_modifier(0), class: 'btn btn-sm btn-primary p-1', name: 'days', value: 0 %>
       <% @speed.each do |speed| %>
         <%= form.hidden_field :days, value: speed %>
         <%= button_tag number_to_modifier(speed), class: 'btn btn-sm btn-primary p-1', name: 'days', value: speed %>

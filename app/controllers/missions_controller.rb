@@ -270,8 +270,14 @@ class MissionsController < ApplicationController
       target_date = target_date + 2
     end
 
+    if target_date == today
+      time = Time.current + 1.minute
+    else
+      time = target_date.to_time.change({ hour: 8, min: 30 })
+    end
+
     timer = {
-	     "time": target_date.to_time.change({ hour: 8, min: 30 }),
+       "time": time,
 	      "status_type": "bump"
       }
 
