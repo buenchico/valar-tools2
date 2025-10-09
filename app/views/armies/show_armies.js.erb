@@ -5,6 +5,7 @@ $('#unit_table').html("<%= j render 'units/units_table', units: @units %>")
 $('.selectpicker').selectpicker();
 
 $('.spinner').addClass('d-none');
+$('.armies-load').attr('disabled', false) 
 
 initPopovers();
 $('.selectpicker').selectpicker();

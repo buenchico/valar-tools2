@@ -91,6 +91,7 @@ $(document).on('turbolinks:load', function () {
       $('#active_visibility').val(JSON.stringify(visibility));
 
       // Submit the form
+      $('.armies-load').attr('disabled', true) 
       const form = $(this).closest('form');
       form.submit();
     });
