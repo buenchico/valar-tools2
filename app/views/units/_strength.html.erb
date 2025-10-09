@@ -36,14 +36,22 @@
         <%= number_to_compact(unit.men) %>
       </div>
     </div>
-      <div class='row'>
-        <div class='text-start col-7'>
-          <i class='bi bi-person-walking'></i> <%= t('activerecord.attributes.unit.speed') %>
-        </div>
-        <div class='text-end col-5'>
-          <%= unit.speed_name %>
-        </div>
+    <div class='row'>
+      <div class='text-start col-7'>
+        <i class='bi bi-person-walking'></i> <%= t('activerecord.attributes.unit.speed') %>
       </div>
+      <div class='text-end col-5'>
+        <%= unit.speed_name %>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='text-start col-7'>
+        <i class='bi bi-bounding-box'></i> <%= t('activerecord.attributes.unit.size') %>
+      </div>
+      <div class='text-end col-5'>
+        <%= unit.size %>
+      </div>
+    </div>
   "
 >
   <%= unit.strength %>

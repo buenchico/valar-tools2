@@ -140,6 +140,7 @@ es:
         selected: "Seleccionados"
         description: "Descripcción"
         speed: "Velocidad"
+        size: "Tamaño"
       unit:
         name: "Nombre"
         description: "Descripción"
@@ -160,6 +161,7 @@ es:
         times: "Repetir"
         selected: "Seleccionadas"
         speed: "Velocidad"
+        size: "Tamaño"
       faction:
         name: "Nombre"
         long_name: "Nombre completo"
