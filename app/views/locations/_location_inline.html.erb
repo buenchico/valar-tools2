@@ -12,5 +12,5 @@
 <% end %>
 
 <div class="mb-1">
-  <%= location.name %> es <%= I18n.t('articles.indefinite.' + word_gender(@location_types[location&.location_type]["name"].singularize), count: 1) %> <strong><%= @location_types[location&.location_type]["name"].downcase %></strong>.</p>
+  <%= location.name %> es <%= I18n.t('articles.indefinite.' + word_gender(@location_types.fetch(location.location_type, {}).fetch("name", location.location_type).singularize), count: 1) %> <strong><%= @location_types.fetch(location.location_type, {}).fetch("name", location.location_type).downcase %></strong>.
 </div>
