@@ -8,6 +8,18 @@
       <div class="modal-body">
         <%= form_for :army, url: apply_damage_multiple_armies_path, remote: true, method: :put do | form | %>
           <div class="alert alert-warning">
+            <div>Daño recibido</div>
+            <ul>
+              <% @damage_log_by_type.each do |key, value| %>
+                <li>
+                  <%= @unit_types.fetch(key, {}).fetch("name", key).capitalize %>
+                  —
+                  <span class="small"><%= value[:total_losses].to_i %> <%= t('activerecord.attributes.unit.count_death').pluralize.downcase %></span>
+                  <span class="small"><%= value[:total_damage].to_i %> <%= t('activerecord.attributes.unit.damage').downcase %></span>
+                </li>
+              <% end %>
+            </ul>
+            <hr class="border border-secondary opacity-75 border-2">
             <div>Las siguientes unidades recibirán daño</div>
             <ul>
               <% @damage_log_by_armies.each do |key, value| %>
@@ -16,20 +28,27 @@
                    —
                   <span class="small"><%= @totals_by_army[key][:total_losses].to_i %> <%= t('activerecord.attributes.unit.count_death').pluralize.downcase %></span>
                   <span class="small"><%= @totals_by_army[key][:total_damage].to_i %> <%= t('activerecord.attributes.unit.damage').downcase %></span>
-                  <ul>
-                    <% value.each do |unit| %>
-                      <%= hidden_field_tag "unit_ids[]", unit[:unit_id] %>
-                      <%= hidden_field_tag "units[][id]", unit[:unit_id] %>
-                      <%= hidden_field_tag "units[][count]", unit[:unit_survivors].to_i %>
+                  <p>
+                    <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseUnits_<%= key %>" role="button" aria-expanded="false" aria-controls="collapseUnits_<%= key %>">
+                      <i class="bi bi-plus-circle"></i> <strong><%= t('activerecord.models.unit', count: 2) %></strong>
+                    </a>
+                  </p>
+                  <div class="collapse" id="collapseUnits_<%= key %>">
+                    <ul>
+                      <% value.each do |unit| %>
+                        <%= hidden_field_tag "unit_ids[]", unit[:unit_id] %>
+                        <%= hidden_field_tag "units[][id]", unit[:unit_id] %>
+                        <%= hidden_field_tag "units[][count]", unit[:unit_survivors].to_i %>
 
-                      <li>
-                        <%= render 'units/one_line', unit: units.find_by(id: unit[:unit_id]) %>
-                         —
-                        <span class="small"><%= unit[:unit_losses].to_i %> <%= t('activerecord.attributes.unit.count_death').pluralize.downcase %></span>
-                        <span class="small"><%= unit[:damage].to_i %> <%= t('activerecord.attributes.unit.damage').downcase %></span>
-                      </li>
-                    <% end %>
-                  </ul>
+                        <li>
+                          <%= render 'units/one_line', unit: units.find_by(id: unit[:unit_id]) %>
+                           —
+                          <span class="small"><%= unit[:unit_losses].to_i %> <%= t('activerecord.attributes.unit.count_death').pluralize.downcase %></span>
+                          <span class="small"><%= unit[:damage].to_i %> <%= t('activerecord.attributes.unit.damage').downcase %></span>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </div>
                 </li>
               <% end %>
 

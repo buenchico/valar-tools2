@@ -246,6 +246,13 @@ class ArmiesController < ApplicationController
     times = params.dig(:army, :times).presence&.to_i || 1
 
     damage_log = DamageSimulator.simulate_damage(units: @units, damage: damage, times: times)
+    @damage_log_by_type = damage_log.values.group_by { |unit| unit[:unit_type] }.transform_values do |units|
+      {
+        total_damage: units.sum { |u| u[:damage] },
+        total_losses: units.sum { |u| u[:unit_losses] },
+        total_survivors: units.sum { |u| u[:unit_survivors] }
+      }
+    end
     @damage_log_by_armies = damage_log.values.group_by { |unit| unit[:army_id] }
     @totals_by_army = @damage_log_by_armies.transform_values do |units|
       {
@@ -284,7 +291,7 @@ class ArmiesController < ApplicationController
     respond_to do |format|
       if params[:army][:confirm] == 'DAMAGE'
         if @errors_units.length == 0
-          flash[:success] = t('messages.multiple.success', model: Army.model_name.human(:count => @updated_armies.length), succeed: ("<br>" + @updated_armies.pluck(:name).join("<br>")).html_safe)
+          flash[:success] = t('messages.multiple.success', model: Army.model_name.human(:count => @updated_armies.length), succeed: @updated_armies.length)
           format.js { render 'update_multiple'}
         else
           flash[:danger] = t('messages.multiple.error', model: Unit.model_name.human(:count => @errors_units.length), failed: ("<br>" + @errors_units.join("<br>") + "<br>").html_safe, succeed: ("<br>" + @updated_units.pluck(:name).join("<br>")).html_safe)
