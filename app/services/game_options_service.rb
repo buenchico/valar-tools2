@@ -7,6 +7,7 @@ class GameOptionsService
     active_game_id = Game.find_by(active: true)&.id
     return {} unless active_game_id
 
+    settings_tool = Tool.find_by(name: "settings")
     armies_tool = Tool.find_by(name: "armies")
     travel_tool = Tool.find_by(name: "travel")
     locations_tool = Tool.find_by(name: "locations")
@@ -17,6 +18,7 @@ class GameOptionsService
     factions_tool = Tool.find_by(name: "factions")
 
     {
+      settings: settings_tool&.game_tools&.find_by(game_id: active_game_id)&.options || {},
       armies: armies_tool&.game_tools&.find_by(game_id: active_game_id)&.options || {},
       travel: travel_tool&.game_tools&.find_by(game_id: active_game_id)&.options || {},
       locations: locations_tool&.game_tools&.find_by(game_id: active_game_id)&.options || {},

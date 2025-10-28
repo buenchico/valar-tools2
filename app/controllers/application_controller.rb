@@ -203,4 +203,9 @@ class ApplicationController < ActionController::Base
     @speed = @options_travel["speed"]
     @obstacles = @options_travel["obstacles"]
   end
+
+  def set_options_settings(options)
+    @options_settings = options[:settings]
+    @workdays = @options_settings["workdays"]
+  end
 end
