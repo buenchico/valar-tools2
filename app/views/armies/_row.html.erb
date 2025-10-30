@@ -74,7 +74,7 @@
       data: { style: 'btn-success' }
     %>
   <% end %>
-  <span class="d-none"><%= ARMY_GROUPS.fetch(army.group.to_sym, {}).fetch("name", "") %></span>
+  <span class="d-none"><%= ARMY_GROUPS.fetch(army.group&.to_sym, {})["name"] || "" %></span>
 </td>
 
 <% if @current_user&.is_master? %>
