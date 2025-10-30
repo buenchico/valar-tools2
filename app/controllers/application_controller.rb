@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :army_size_mod
 
+  helper_method :calculate_ellapsed_date
+
   add_flash_types :error, :success, :info, :danger, :warning
 
   def set_current_user
@@ -58,6 +60,22 @@ class ApplicationController < ActionController::Base
         end
       end
     end
+  end
+
+  def calculate_ellapsed_date(days)
+    date = Date.today
+
+    # Step 1: Advance to the next valid workday if today isn't one
+    date += 1 until @workdays.include?(date.strftime("%A"))
+
+    # Step 2: Count forward only on valid workdays
+    count = 0
+    while count < days
+      date += 1
+      count += 1 if @workdays.include?(date.strftime("%A"))
+    end
+
+    date
   end
 
   def army_size_mod(number)
@@ -206,6 +224,6 @@ class ApplicationController < ActionController::Base
 
   def set_options_settings(options)
     @options_settings = options[:settings]
-    @workdays = @options_settings["workdays"]
+    @workdays = @options_settings.fetch("workdays", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"])
   end
 end

@@ -8,7 +8,6 @@
       </button>
     </div>
     <div id="travel-text" class="card-text">
-
       <% count = [@size, 1].min %>
       <% @html = "<p>Un #{Army.model_name.human(:count => count).downcase}" %>
       <% @html += ((@size == 0) ? "" : " de tamaño #{@size}") %>
@@ -22,6 +21,8 @@
       <% end %>
 
       <%= @time.zero? ? "Por favor, rellena todos los datos necesarios." : @html.html_safe %>
+
+      <p>Se espera que lleguen el <strong><%= I18n.l(@target_date, format: :long_spanish, locale: :es) %><strong></p>
     </div>
     <div class="d-none">
       <p><%= @time %> horas</p>

@@ -98,7 +98,6 @@ class MissionsController < ApplicationController
       @options_missions["fortune"]["results"].sort.reverse.each do |range|
           if range[0].to_i <= total
             @result = range[1]
-            puts range[1]
             break
           end
       end

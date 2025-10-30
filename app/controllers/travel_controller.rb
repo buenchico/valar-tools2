@@ -33,7 +33,6 @@ class TravelController < ApplicationController
 
         puts params
         puts step["obstacle"]
-        puts "/////"
 
         if step["obstacle"].blank?
           obstacle_name = ""
@@ -47,13 +46,17 @@ class TravelController < ApplicationController
 
         time += step_time
         line = { hex: hex, step_time: step_time, terrain_name: terrain_name, speed_name: speed_name, obstacle_name: obstacle_name }
-        puts line
         @steps << line
       end
     end
 
-    @time = time
-    @travel_time = travel_time(time)
+    # To handle granularity correctly
+    phase_shift = 3
+    adjusted_time = [(time + phase_shift),0].max
+
+    @time = adjusted_time
+    @travel_time = travel_time(adjusted_time)
+    @target_date = calculate_ellapsed_date((adjusted_time / 24))
 
     respond_to :js
   end
@@ -66,6 +69,7 @@ private
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
       set_options_travel(options)
+      set_options_settings(options)
     end
   end
 
@@ -74,14 +78,12 @@ private
       scope: :'datetime.distance_in_words'
     }
 
-    phase_shift = 3
-    adjusted_time = [(time + phase_shift),0].max
+    adjusted_time = time
 
     half_days = adjusted_time / 12
 
-    weeks = half_days / ( 5 * 2 ) # Using 5 days weeks
-    days = ( half_days - ( weeks * 5 * 2 ) ) / 2
-    half =
+    weeks = half_days / ( @workdays.length * 2 ) # Using workdays days weeks
+    days = ( half_days - ( weeks * @workdays.length * 2 ) ) / 2
 
     I18n.with_options scope: options[:scope] do |locale|
       message = ""
