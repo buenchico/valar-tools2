@@ -1,6 +1,6 @@
 class MissionsController < ApplicationController
   before_action :set_tool
-  before_action :set_options, only: [:index, :calculate, :get_recipe, :list, :stats]
+  before_action :set_options, only: [:index, :calculate, :get_recipe, :list, :stats, :set_mission_timer]
   before_action :check_master, only: [:list]
 
   def index
@@ -131,7 +131,6 @@ class MissionsController < ApplicationController
   end
 
   def list
-
     open_tag = @options_missions["tags"]["open"]
     long_tag = @options_missions["tags"]["long"]
 
@@ -263,11 +262,7 @@ class MissionsController < ApplicationController
     days_to_add = params[:days].to_i
 
     today = Date.today
-    target_date = today + days_to_add
-
-    if target_date.saturday? || target_date.sunday?
-      target_date = target_date + 2
-    end
+    target_date = calculate_ellapsed_date(days_to_add)
 
     if target_date == today
       time = Time.current + 1.minute
@@ -298,6 +293,7 @@ private
     if options[:missions].blank?
       redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
     else
+      set_options_settings(options)
       set_options_missions(options)
     end
   end
