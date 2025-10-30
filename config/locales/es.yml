@@ -484,6 +484,6 @@ es:
       truncate: "&hellip;"
   date:
     formats:
-      long_spanish: "%A, %d de %B de %Y"
+      long_spanish: "%A, %-d de %B de %Y"
     day_names: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"]
     month_names: [~, "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
