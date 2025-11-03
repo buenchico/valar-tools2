@@ -242,7 +242,7 @@ class ArmiesController < ApplicationController
   def damage_multiple
     @units = Unit.where(id: params[:unit_ids])
     @armies = Army.where(id: params[:army_ids])
-    damage = params[:army][:damage].to_i * @army_scale # 1 dmg kills 1 scale of hp
+    damage = (params[:army][:damage].to_f * @army_scale).to_i # 1 dmg kills 1 scale of hp
     times = params.dig(:army, :times).presence&.to_i || 1
 
     damage_log = DamageSimulator.simulate_damage(units: @units, damage: damage, times: times)
