@@ -143,7 +143,8 @@ class ArmiesController < ApplicationController
             army_params[:sum].each do |key, value|
               if army.respond_to?(key)
                 old_value = army[key]
-                army.send("#{key}=", (old_value += value))
+                old_value = army[key]
+                army.send("#{key}=", (old_value += value.to_i))
               end
             end
 
