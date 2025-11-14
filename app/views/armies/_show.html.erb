@@ -23,15 +23,22 @@
             <div class="ms-3">
               <%= simple_format(army.notes) %>
             </div>
-          <% end %>          
+          <% end %>
           <hr class="border border-secondary opacity-75 border-2">
           <div id="units" class="ms-3">
-            <%= hidden_field_tag "army[unit_ids][]", nil %>
-            <% army.units.each do |unit| %>
-              <div id="unit_fields_<%= unit.id %>">
-                <%= render 'units/one_line', unit: unit, link: true %>
-              </div>
-            <% end %>
+            <div>
+              <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseUnits" role="button" aria-expanded="false" aria-controls="collapseUnits">
+                <i class="bi bi-plus-circle"></i> Unidades:
+              </a>
+            </div>
+            <div class="collapse" id="collapseUnits">
+              <%= hidden_field_tag "army[unit_ids][]", nil %>
+              <% army.units.each do |unit| %>
+                <div id="unit_fields_<%= unit.id %>">
+                  <%= render 'units/one_line', unit: unit, link: true %>
+                </div>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>

@@ -21,8 +21,14 @@
             </div>
             <hr class="border border-secondary opacity-75 border-2">
             <div id="units" class="ms-3">
-              <%= hidden_field_tag "army[unit_ids][]", nil %>
-              <% army.units.each do |unit| %>
+              <div>
+                <a class="link-unstyled" data-bs-toggle="collapse" href="#collapseUnits" role="button" aria-expanded="false" aria-controls="collapseUnits">
+                  <i class="bi bi-plus-circle"></i> Unidades:
+                </a>
+              </div>
+              <div class="collapse" id="collapseUnits">
+                <%= hidden_field_tag "army[unit_ids][]", nil %>
+                <% army.units.each do |unit| %>
                 <div id="unit_fields_<%= unit.id %>" class="unit_fields">
                   <%= render 'units/one_line', unit: unit, link: true %>
                   <%= hidden_field_tag "army[unit_ids][]", unit.id %>
@@ -44,7 +50,7 @@
                   </div>
                 </div>
               <% end %>
-
+              </div>
             </div>
           </div>
           <% if @current_user.is_master? %>
