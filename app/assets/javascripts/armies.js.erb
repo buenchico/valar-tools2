@@ -91,7 +91,7 @@ $(document).on('turbolinks:load', function () {
       $('#active_visibility').val(JSON.stringify(visibility));
 
       // Submit the form
-      $('.armies-load').attr('disabled', true) 
+      $('.armies-load').attr('disabled', true)
       const form = $(this).closest('form');
       form.submit();
     });
@@ -107,9 +107,11 @@ $(document).on('turbolinks:load', function () {
         let hp = 0;
         let speed = 0;
         let speed_text = ""
+        var totals = {}
 
         // Loop through all checked CheckBoxes in GridView.
-      $(`.checkbox_selectable:visible:checked[data-checkbox='${checkboxGroup}']`).each(function () {
+        $(`.checkbox_selectable:visible:checked[data-checkbox='${checkboxGroup}']`).each(function () {
+            // Create an object to hold totals by type
             let row = $(this).closest("tr");
             if (row.hasClass("tablesorter-headerRow") == false) {
               message += "> * " + row.find('.' + checkboxGroup + '_copy').text().replace(/(\r\n|\n|\r)/gm, " ").replace(/\s+/g, " ").trim();
@@ -123,6 +125,22 @@ $(document).on('turbolinks:load', function () {
                 speed = row_speed
                 speed_text = row.find('.' + checkboxGroup + '_speed').text().trim();
               }
+
+              // Iterate over each unit_count span
+              row.find(".unit_count").each(function() {
+                // Get the type from the second class (e.g. "artillery", "infantry", etc.)
+                var classes = $(this).attr("class").split(/\s+/);
+                var type = classes[1]; // assumes "unit_count" is always first
+
+                // Parse the number inside the span
+                var value = parseInt($(this).text(), 10);
+
+                // Add to the running total for this type
+                if (!totals[type]) {
+                  totals[type] = 0;
+                }
+                totals[type] += value;
+              });
             }
         });
 
@@ -130,7 +148,13 @@ $(document).on('turbolinks:load', function () {
 
         size = (men / chunks)
 
-        message += "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men + " 🏃‍♂️‍: " + speed_text + " #: " + size.toFixed(1)
+        message += "Composición: "
+
+        $.each(totals, function(type, value) {
+          message += type + ": " + value + ", ";
+        });
+
+        message += "\n" + "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men + " 🏃‍♂️‍: " + speed_text + " #: " + size.toFixed(1)
 
         navigator.clipboard.writeText(message)
 
