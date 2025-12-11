@@ -323,7 +323,7 @@ class ArmiesController < ApplicationController
         username: @current_user.player,
         changes: ["Army created from merging armies: #{params["army_ids"].join(", ")}"]
       }
-    ]
+    ].map(&:to_json)
 
     @army = Army.new(name: name, position: position, notes: notes, status: status, xp: xp, morale: morale, visible: visible, tags: tags, logs: logs)
     @army.units = units
