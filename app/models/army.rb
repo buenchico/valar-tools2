@@ -118,13 +118,13 @@ private
   def set_options
     options = GameOptionsService.fetch
     @options_armies = options[:armies]
-    @army_speeds = options[:travel].fetch("speed", {})
+    @army_speeds = options[:travel]&.fetch("speed", {})
 
-    @units = @options_armies["units"]
-    @army_tags = @options_armies.fetch("army_tags", {})
-    @army_types = @options_armies["army_type"]&.sort_by { |_, v| v["sort"] }.to_h
-    @status = @options_armies["status"]
-    @army_scale = @options_armies["general"]["scale"]
+    @units = @options_armies&.fetch("units", {})
+    @army_tags = @options_armies&.fetch("army_tags", {})
+    @army_types = @options_armies&.fetch("army_type", {})&.sort_by { |_, v| v["sort"] }.to_h
+    @status = @options_armies&.fetch("status", {})
+    @army_scale = @options_armies&.fetch("general", {})&.fetch("scale", 1)
   end
 
   def must_have_at_least_one_unit
