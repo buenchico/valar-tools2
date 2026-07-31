@@ -70,7 +70,7 @@ class LocationsController < ApplicationController
     locations = Location.all
     respond_to do |format|
       format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"families.csv\""
+        headers['Content-Disposition'] = "attachment; filename=\"locations.csv\""
         headers['Content-Type'] ||= 'text/csv'
 
         header_row = ["id", "name_es", "name_en", "description", "location_type", "visible", "family_id", "region_id", "game_id"]
