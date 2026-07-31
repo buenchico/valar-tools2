@@ -102,9 +102,9 @@ class ApplicationController < ActionController::Base
 
   def set_families
     if @current_user&.is_master?
-      @families = Family.where(game_id: active_game.id).order(:name)
+      @families = Family.where(game_id: active_game&.id).order(:name)
     else
-      @families = Family.where(visible: true).where(game_id: active_game.id).order(:name)
+      @families = Family.where(visible: true).where(game_id: active_game&.id).order(:name)
     end
   end
 
@@ -174,9 +174,9 @@ class ApplicationController < ActionController::Base
 
   def set_options_locations(options)
     @options_locations = options[:locations]
-    @location_types = @options_locations["types"]
-    @population_types = @options_locations.fetch("population", {}).fetch("types_with_population", [])
-    @regions = @options_locations.fetch("region_types", ["region"]).flat_map do |type|
+    @location_types = @options_locations&.fetch("types", {})
+    @population_types = @options_locations&.fetch("population", {})&.fetch("types_with_population", [])
+    @regions = @options_locations&.fetch("region_types", ["region"])&.flat_map do |type|
       Location.where(location_type: type, game_id: active_game.id)
               .order(:name_es)
             end

@@ -5,6 +5,7 @@ class User < ApplicationRecord
   validates_uniqueness_of :player
 
   before_create :generate_token
+  before_update :prevent_updates_to_system_user
 
   def generate_token
     begin
@@ -23,5 +24,12 @@ class User < ApplicationRecord
 
   def is_active?
     self.faction.name != 'player'
+  end
+
+  def prevent_updates_to_system_user
+    if name == "admin"
+      errors.add(:base, "Superuser cannot be modified")
+      throw(:abort)
+    end
   end
 end
