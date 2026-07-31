@@ -47,8 +47,8 @@ class GamesController < ApplicationController
 
   def setup
     @game = Game.find(params[:id])
-    @factions = Faction.all.order(:id)
-    @users = User.offset(1).all.order(:id)
+    @factions = Faction.where.not(id: Faction.order(:id).limit(1)).order(:name)
+    @users = User.where.not(id: User.order(:id).limit(1)).order(:player)
   end
 
   def setup_complete
@@ -71,7 +71,6 @@ class GamesController < ApplicationController
         @errors << faction.errors
       end
 
-      User.find(1).update(faction_id: 1)
       User.all.offset(1).update_all(faction_id: 3)
 
       users_array = params[:users] || []
@@ -111,7 +110,7 @@ class GamesController < ApplicationController
 
   def unset_active_game
     respond_to do |format|
-      if Game.update_all(active: false) && Tool.where.not(role: 'admin').update_all(active: false)
+      if Game.update_all(active: false) && Tool.where.not(role: 'admin').update_all(active: false) && User.update_all(faction_id: Faction.find_by!(name: "inactive").id)
         format.html { redirect_to settings_url, success: 'Partida terminada correctamente.' }
       else
         format.html { redirect_to settings_url, danger: @game.errors }

@@ -27,7 +27,7 @@ class User < ApplicationRecord
   end
 
   def prevent_updates_to_system_user
-    if name == "admin"
+    if player == "admin"
       errors.add(:base, "Superuser cannot be modified")
       throw(:abort)
     end

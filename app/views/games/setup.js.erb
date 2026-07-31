@@ -1,25 +1,24 @@
 $(".modal").modal('hide');
 $('#content').html("<%= j render 'setup', game: @game %>");
 $('#gameModal').modal('show');
+
 $('#step-users').click(function() {
+  const selectedFactionIds = $('.checkbox-faction:checked').map(function() {
+      return parseInt(this.value, 10);
+  }).get();
+
+  $('.select-factions').find('option').each(function() {
+    const optionValue = parseInt($(this).val(), 10);
+
+    if (!selectedFactionIds.includes(optionValue)) {
+      $(this).hide();
+    }
+  });
+
+  $('.select-factions').selectpicker('refresh');
   $("#users-tab").tab("show");
-
-  var uncheckedFactionIds = []; // Initialize an empty array to store checked faction_ids
-
-  // Loop through each checkbox with class 'checkbox_selectable' that is checked
-  $('input.checkbox_faction:not(:checked)').each(function() {
-    var factionId = $(this).val(); // Get the value (faction_id) of the checked checkbox
-    uncheckedFactionIds.push(factionId); // Add the faction_id to the array
-  });
-
-  $('.select-factions').each(function() {
-    var select = $(this);
-    uncheckedFactionIds.forEach(function(id) {
-      select.find('option[value="' + id + '"]').remove();
-    });
-  });
-
 });
+
 $('#step-tools').click(function() {
   $("#tools-tab").tab("show");
 });
