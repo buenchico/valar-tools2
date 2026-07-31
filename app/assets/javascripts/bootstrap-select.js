@@ -694,7 +694,8 @@
   elementTemplates.subtext.className = 'text-muted';
 
   elementTemplates.text = elementTemplates.span.cloneNode(false);
-  elementTemplates.text.className = 'text';
+
+  elementTemplates.text.className = 'text w-100'
 
   elementTemplates.checkMark = elementTemplates.span.cloneNode(false);
 
@@ -999,7 +1000,8 @@
     // Extended options
     ,
     arbitrary: false, // liveSearch: true is required to get search in the box
-    noneResultsTextArbitrary: 'Click to create «{tag}»'
+    noneResultsTextArbitrary: 'Click to create «{tag}»',
+    arbitraryPlaceholder: null
   };
 
   Selectpicker.prototype = {
@@ -2140,7 +2142,7 @@
 
       this.sizeInfo.selectWidth = this.$newElement[0].offsetWidth;
 
-      text.className = 'text';
+      text.className = 'text w-100'
       a.className = 'dropdown-item ' + (firstOption ? firstOption.className : '');
       newElement.className = this.$menu[0].parentNode.className + ' ' + classNames.SHOW;
       newElement.style.width = 0; // ensure button width doesn't affect natural width of menu when calculating
