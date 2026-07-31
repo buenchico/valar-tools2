@@ -47,23 +47,19 @@ class GamesController < ApplicationController
 
   def setup
     @game = Game.find(params[:id])
-    @factions = Faction.where.not(id: Faction.order(:id).limit(1)).order(:name)
-    @users = User.where.not(id: User.order(:id).limit(1)).order(:player)
+    @factions_special = Faction.where(name: ['master', 'player'])
+    @factions_game = @game.factions.where.not(name: ['admin', 'master', 'player']).order(:name)
+    @all_factions = @factions_special.to_a + @factions_game.to_a
+    @users = User.where.not(player: 'valar').order('LOWER(player)')
   end
 
   def setup_complete
     game = Game.find(params[:id])
 
-    Faction.update_all(active: false) # setting all factions as inactive
-
-    selected_faction_ids = params[:faction_ids].unshift("3", "2", "1") # Get selected faction IDs from form parameter
+    selected_faction_ids = params[:faction_ids] # Get selected faction IDs from form parameter
     selected_factions = Faction.where(id: selected_faction_ids) # Fetch Faction records for selected factions
 
     selected_factions.each do |faction|
-      # Check if the faction does not already have the game associated
-      unless faction.games.exists?(game.id)
-        faction.games << game # Add @game to each faction's games association
-      end
       faction.active = true
       faction.save
 
@@ -71,13 +67,13 @@ class GamesController < ApplicationController
         @errors << faction.errors
       end
 
-      User.all.offset(1).update_all(faction_id: 3)
+      users = params[:users] || {}
 
-      users_array = params[:users] || []
+      puts users
 
-      users_array.each do | user |
-        player = User.find(user["id"].to_i)
-        if !player.update(faction_id: user["faction"].to_i)
+      users.each do | user_id, value |
+        player = User.find(user_id.to_i)
+        if !player.update(faction_id: value["faction"].to_i)
           @errors << player.errors
         end
       end
@@ -110,8 +106,12 @@ class GamesController < ApplicationController
 
   def unset_active_game
     respond_to do |format|
-      if Game.update_all(active: false) && Tool.where.not(role: 'admin').update_all(active: false) && User.update_all(faction_id: Faction.find_by!(name: "inactive").id)
-        format.html { redirect_to settings_url, success: 'Partida terminada correctamente.' }
+      if  Game.update_all(active: false) &&
+          Tool.where.not(role: 'admin').where.not(name: ['factions', 'players']).update_all(active: false) &&
+          Faction.where.not(name: ['admin', 'master', 'player']).update_all(active: false) &&
+          User.where.not(player: 'valar').update_all(faction_id: Faction.find_by(name: 'player').id)
+
+            format.html { redirect_to settings_url, success: 'Partida terminada correctamente.' }
       else
         format.html { redirect_to settings_url, danger: @game.errors }
       end

@@ -22,9 +22,11 @@ $('#step-users').click(function() {
 $('#step-tools').click(function() {
   $("#tools-tab").tab("show");
 });
+
 $('#step-complete').click(function() {
   $("#complete-tab").tab("show");
 });
+
 $('input[type="checkbox"]').change(function() {
   var id = $(this).attr('id').split("-")[1]
   if ($(this).prop('checked')) {

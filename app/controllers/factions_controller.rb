@@ -136,7 +136,8 @@ private
     options = GameOptionsService.fetch
 
     if options[:factions].blank?
-      redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
+      # redirect_to settings_url, warning: t('activerecord.errors.messages.options_not_ready', tool_name: @tool.title)
+      # Allowing the use of factions tool without a game ready
     else
       set_options_factions(options)
       set_options_locations(options)
