@@ -5,10 +5,11 @@
   <%= unit.type_name %>
 </span>
 
-<% unit.tags.each do |tag| %>
+<% unit.tags.tally.each do |tag, count| %>
   <% tag_options = @unit_tags.fetch(tag, {}) %>
   <span class="badge rounded-pill pill-tags pill-tags-text bg-<%= tag_options.fetch('colour', 'success') %>">
     <i class="bi bi-<%= tag_options.fetch('icon', '') %>"></i>
     <%= tag_options.fetch('name', tag) %>
+    <%= (count != 1) ? "(#{count})" : "" %>
   </span>
 <% end %>

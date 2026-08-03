@@ -60,7 +60,7 @@
                   @unit_tags.map { | tag |
                     [
                       tag[0],
-                      { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1].fetch("colour", "success")}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                      { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]&.fetch("colour", "success")}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
                     }
                     ]
                   }
@@ -76,7 +76,7 @@
                   @unit_tags.map { | tag |
                     [
                       tag[0],
-                      { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                      { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]&.fetch("colour", "success")}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
                     }
                     ]
                   }

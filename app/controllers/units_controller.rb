@@ -86,7 +86,14 @@ class UnitsController < ApplicationController
         location_id: unit_data[:location_id],
         family_id: unit_data[:family_id],
         count: unit_data[:count],
-        tags: unit_data[:tags].reject!(&:empty?)
+        tags: if @options_armies&.dig("general", "expert_unit_tags")
+                unit_data[:tags].to_s
+                .split(",")
+                .map(&:strip)
+                .reject(&:blank?)
+              else
+                Array(unit_data[:tags]).reject(&:blank?)
+              end
       }
 
       times = unit_data[:times].to_i
@@ -339,7 +346,19 @@ private
     end
 
     params.require(:unit).permit(*permitted_keys).tap do |whitelisted|
-      whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
+      if @options_armies&.dig("general", "expert_unit_tags")
+        # text field submitted as a string
+        tags = params.dig(:unit, :tags)
+
+        whitelisted[:tags] = tags.to_s
+          .split(",")
+          .map(&:strip)
+          .reject(&:blank?)
+          .sort
+      elsif whitelisted[:tags]
+        # normal select submits an array
+        whitelisted[:tags].reject!(&:empty?)
+      end
     end
   end
 end

@@ -12,51 +12,55 @@
         form.object.unit_type
       ),
       { },
-      class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select me-1',
+      class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white units-select me-1 w-100',
       title: t('helpers.select.no_type'),
-      data: { width: '150px'},
+      data: { min_width: '150px'},
       disabled: form.object.persisted? ? true : false,
       required: true
     %>
   </td>
   <td>
-    <%= form.number_field :count, class: 'form-control text-end me-1', step: 1, min: 0 %>
+    <%= form.number_field :count, class: 'form-control text-end me-1  w-100', step: 1, min: 0 %>
   </td>
 
   <% if @unit_tags.present? %>
     <td>
-      <%= form.select :tags,
-        options_for_select(
-          @unit_tags.map { | tag |
-            [
-              tag[0],
-              { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1].fetch("colour", "success")}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
-            }
-            ]
-          },
-          selected: form.object.tags
-        ),
-        { include_blank: false },
-        class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white me-1',
-        title: t('helpers.select.no_tags'),
-        multiple: true,
-        data: { style: 'overflow: visible' }
-      %>
+      <% if @options_armies.dig("general", "expert_unit_tags") %>
+        <%= form.text_field :tags, value: '', class: "form-control" %>
+      <% else %>
+        <%= form.select :tags,
+          options_for_select(
+            @unit_tags.map { | tag |
+              [
+                tag[0],
+                { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1].fetch("colour", "success")}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+              }
+              ]
+            },
+            selected: form.object.tags
+          ),
+          { include_blank: false },
+          class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white me-1  w-100',
+          title: t('helpers.select.no_tags'),
+          multiple: true,
+          data: { style: 'overflow: visible' }
+        %>
+      <% end %>
     </td>
   <% end %>
 
   <% if @regions.present? %>
     <td>
-      <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
+      <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select w-100' %>
     </td>
   <% end %>
   <% if @families.present? %>
     <td>
-      <%= form.select :family_id, [""] + @families.map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+      <%= form.select :family_id, [""] + @families.map { |x| [x.title, x.id] }, {}, class: 'form-select w-100' %>
     </td>
   <% end %>
   <td>
-    <%= form.number_field :times, name: "units[][times]", value: 1, class: 'form-control  text-end me-1', step: 1, min: 1 %>
+    <%= form.number_field :times, name: "units[][times]", value: 1, class: 'form-control text-end me-1 w-100', step: 1, min: 1 %>
   </td>
 
   <td>
