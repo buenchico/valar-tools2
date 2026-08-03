@@ -63,17 +63,25 @@
               <%= form.label :name, class: 'input-group-text' %>
               <%= form.text_field :name, class: "form-control" %>
             </div>
-            <div class="input-group mt-3">
-              <%= form.label :status, class: 'input-group-text' %>
-              <%= form.select :status, @army_status.map { |k,v| [v["name"], k]}, {}, class: 'form-select' %>
-            </div>
-            <div class="input-group mt-3">
-              <%= form.label :xp, class: 'input-group-text' %>
-              <%= form.number_field :xp, class: 'form-control text-end', step: 10, min: 0 %>
+            <% if @options_armies&.dig("status").present? %>
+              <div class="input-group mt-3">
+                <%= form.label :status, class: 'input-group-text' %>
+                <%= form.select :status, @army_status.map { |k,v| [v["name"], k]}, {}, class: 'form-select' %>
+              </div>
+            <% end %>
+            <% if @options_armies&.dig("general", "xp").present? || @options_armies&.dig("general", "morale").present? %>
+              <div class="input-group mt-3">
+                <% if @options_armies&.dig("general", "xp").present? %>
+                  <%= form.label :xp, class: 'input-group-text' %>
+                  <%= form.number_field :xp, class: 'form-control text-end', step: 10, min: 0 %>
+                <% end %>
 
-              <%= form.label :morale, class: 'input-group-text' %>
-              <%= form.number_field :morale, class: 'form-control text-end', step: 10, min: 0 %>
-            </div>
+                <% if @options_armies&.dig("general", "morale").present? %>
+                  <%= form.label :morale, class: 'input-group-text' %>
+                  <%= form.number_field :morale, class: 'form-control text-end', step: 10, min: 0 %>
+                <% end %>
+              </div>
+            <% end %>
             <% if @options_armies&.dig("army_tags").present? %>
               <div class="input-group mt-3">
                 <%= form.label :tags, class: 'input-group-text' %>

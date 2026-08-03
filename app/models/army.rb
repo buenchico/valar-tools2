@@ -86,6 +86,16 @@ class Army < ApplicationRecord
       .max_by { |item| item["mod"] }["name"]
   end
 
+  def speed_name
+    return "Normal" if @army_speeds.blank?
+
+    speed_entry = @army_speeds
+      .select { |item| item["mod"] <= speed }
+      .max_by { |item| item["mod"] }
+
+    speed_entry ? speed_entry["name"] : "Normal"
+  end  
+
   def families
     self.units.includes(:family).map(&:family).compact.uniq.sort_by(&:title)
   end
