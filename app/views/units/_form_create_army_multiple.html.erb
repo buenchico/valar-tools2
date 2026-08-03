@@ -74,26 +74,28 @@
               <%= form.label :morale, class: 'input-group-text' %>
               <%= form.number_field :morale, class: 'form-control text-end', step: 10, min: 0 %>
             </div>
-            <div class="input-group mt-3">
-              <%= form.label :tags, class: 'input-group-text' %>
-              <%= form.select :tags,
-                options_for_select(
-                  @army_tags.map { | tag |
-                    [
-                      tag[0],
-                      { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
-                    }
-                    ]
-                  },
-                  selected: nil
-                ),
-                { include_blank: false },
-                class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                title: 'Sin rasgos',
-                multiple: true,
-                data: { }
-              %>
-            </div>
+            <% if @options_armies&.dig("army_tags").present? %>
+              <div class="input-group mt-3">
+                <%= form.label :tags, class: 'input-group-text' %>
+                <%= form.select :tags,
+                  options_for_select(
+                    @army_tags.map { | tag |
+                      [
+                        tag[0],
+                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1].fetch("colour", "success")}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                      }
+                      ]
+                    },
+                    selected: nil
+                  ),
+                  { include_blank: false },
+                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                  title: 'Sin rasgos',
+                  multiple: true,
+                  data: { }
+                %>
+              </div>
+            <% end %>
             <div class="input-group mt-3">
               <%= form.label :position, class: 'input-group-text' %>
               <%= form.text_field :position, class: 'form-control ui-autocomplete-input auto-source', data: {autocomplete_source: locations_list_path} %>

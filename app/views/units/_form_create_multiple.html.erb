@@ -43,12 +43,16 @@
                       <%= t('activerecord.attributes.unit.tags') %>
                     </td>
                   <% end %>
-                  <td>
-                    <%= t('activerecord.attributes.unit.location_id') %>
-                  </td>
-                  <td>
-                    <%= t('activerecord.attributes.unit.family_id') %>
-                  </td>
+                  <% if @regions.present? %>
+                    <td>
+                      <%= t('activerecord.attributes.unit.location_id') %>
+                    </td>
+                  <% end %>
+                  <% if @families.present? %>
+                    <td>
+                      <%= t('activerecord.attributes.unit.family_id') %>
+                    </td>
+                  <% end %>
                   <td>
                     <%= t('activerecord.attributes.unit.times') %>
                   </td>

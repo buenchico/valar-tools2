@@ -36,55 +36,63 @@
               </div>
             </div>
             <% if @current_user.is_master? %>
-              <div class="input-group mt-3">
-                <%= form.label :status, t('activerecord.attributes.army.status'), class: 'input-group-text' %>
-                <%= form.select :status, ([""] + @army_status.map { |k,v| [v["name"], k]}), {}, class: 'form-select' %>
-              </div>
-              <div class="input-group mt-3">
-                <%= form.label :xp, t('activerecord.attributes.army.xp'),class: 'input-group-text' %>
-                <%= form.number_field :xp_sum, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.sum'), min: -200, max: 200 %>
-                <%= form.number_field :xp_change, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.change'), min: 0, max: 200 %>
-              </div>
-              <div class="input-group mt-3">
-                <%= form.label :morale, t('activerecord.attributes.army.morale'),class: 'input-group-text' %>
-                <%= form.number_field :morale_sum, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.sum'), min: -200, max: 200 %>
-                <%= form.number_field :morale_change, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.change'), min: 0, max: 200 %>
-              </div>
-              <div class="input-group mt-3">
-                <%= form.label :tags, t('activerecord.attributes.army.tags'), class: 'input-group-text' %>
-                <%= form.select :tags_add,
-                  options_for_select(
-                    @army_tags.map { | tag |
-                      [
-                        tag[0],
-                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+              <% if @options_armies&.dig("status").present? %>
+                <div class="input-group mt-3">
+                  <%= form.label :status, t('activerecord.attributes.army.status'), class: 'input-group-text' %>
+                  <%= form.select :status, ([""] + @army_status.map { |k,v| [v["name"], k]}), {}, class: 'form-select' %>
+                </div>
+              <% end %>
+              <% if @options_armies&.dig("general", "xp").present? %>
+                <div class="input-group mt-3">
+                  <%= form.label :xp, t('activerecord.attributes.army.xp'),class: 'input-group-text' %>
+                  <%= form.number_field :xp_sum, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.sum'), min: -200, max: 200 %>
+                  <%= form.number_field :xp_change, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.change'), min: 0, max: 200 %>
+                </div>
+              <% end %>
+              <% if @options_armies&.dig("general", "morale").present? %>
+                <div class="input-group mt-3">
+                  <%= form.label :morale, t('activerecord.attributes.army.morale'),class: 'input-group-text' %>
+                  <%= form.number_field :morale_sum, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.sum'), min: -200, max: 200 %>
+                  <%= form.number_field :morale_change, class: 'form-control form-exclusive', step: 10, placeholder: t('helpers.placeholder.change'), min: 0, max: 200 %>
+                </div>
+              <% end %>
+              <% if @options_armies&.dig("army_tags").present? %>
+                <div class="input-group mt-3">
+                  <%= form.label :tags, t('activerecord.attributes.army.tags'), class: 'input-group-text' %>
+                  <%= form.select :tags_add,
+                    options_for_select(
+                      @army_tags.map { | tag |
+                        [
+                          tag[0],
+                          { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                        }
+                        ]
                       }
-                      ]
-                    }
-                  ),
-                  { include_blank: false },
-                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                  title: t('helpers.placeholder.add'),
-                  multiple: true,
-                  data: { }
-                %>
-                <%= form.select :tags_remove,
-                  options_for_select(
-                    @army_tags.map { | tag |
-                      [
-                        tag[0],
-                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                    ),
+                    { include_blank: false },
+                    class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                    title: t('helpers.placeholder.add'),
+                    multiple: true,
+                    data: { }
+                  %>
+                  <%= form.select :tags_remove,
+                    options_for_select(
+                      @army_tags.map { | tag |
+                        [
+                          tag[0],
+                          { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                        }
+                        ]
                       }
-                      ]
-                    }
-                  ),
-                  { include_blank: false },
-                  class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                  title: t('helpers.placeholder.remove'),
-                  multiple: true,
-                  data: { }
-                %>
-              </div>
+                    ),
+                    { include_blank: false },
+                    class: 'selectpicker flex-fill dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                    title: t('helpers.placeholder.remove'),
+                    multiple: true,
+                    data: { }
+                  %>
+                </div>
+              <% end %>
             <% end %>
 
             <div class="input-group mt-3">

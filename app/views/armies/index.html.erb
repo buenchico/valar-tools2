@@ -12,6 +12,10 @@
   </div>
 </div>
 
+<p>
+  <%= @options_armies&.fetch("army_tags", {}).present? %>
+</p>
+
 <div id="army_scale" class="d-none">
   <%= @army_scale %>
 </div>

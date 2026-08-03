@@ -37,9 +37,11 @@
   <%= army.name %>
 </td>
 
-<td>
-  <%= @army_status[army.status]["name"] %>
-</td>
+<% if @options_armies&.dig("status").present? %>
+  <td>
+    <%= @army_status[army.status]["name"] %>
+  </td>
+<% end %>
 
 <td>
   <%= render 'traits', army: army %>

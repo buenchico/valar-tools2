@@ -52,27 +52,29 @@
               %>
             </div>
 
-            <% if @unit_tags.present? %>
-              <div class="input-group mb-3">
-                <%= form.label :tags, class: 'input-group-text' %>
-                <%= form.select :tags,
-                  options_for_select(
-                    @unit_tags.map { | tag |
-                      [
-                        tag[0],
-                        { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1]["colour"]}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
-                      }
-                      ]
-                    },
-                    selected: unit.tags
-                  ),
-                  { include_blank: false },
-                  class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white',
-                  title: t('helpers.select.no_tags'),
-                  multiple: true,
-                  data: { }
-                %>
-              </div>
+            <% if @options_armies&.dig("unit_tags").present? %>
+              <% if @unit_tags.present? %>
+                <div class="input-group mb-3">
+                  <%= form.label :tags, class: 'input-group-text' %>
+                  <%= form.select :tags,
+                    options_for_select(
+                      @unit_tags.map { | tag |
+                        [
+                          tag[0],
+                          { "data-content": "<span class='badge rounded-pill pill-tags bg-#{tag[1].fetch("colour" , "success")}'><i class='bi bi-#{tag[1]["icon"]}'></i> <span class='pill-tags-text'>#{tag[1]["name"]}</span></span>".html_safe
+                        }
+                        ]
+                      },
+                      selected: unit.tags
+                    ),
+                    { include_blank: false },
+                    class: 'selectpicker flex-fill bootstrap-select-height dropdown-toggle-custom dropdown-toggle-text-color bg-white',
+                    title: t('helpers.select.no_tags'),
+                    multiple: true,
+                    data: { }
+                  %>
+                </div>
+              <% end %>
             <% end %>
 
             <div class="input-group mb-3">
@@ -127,15 +129,19 @@
               %>
             </div>
 
-            <div class="input-group mb-3">
-              <%= form.label :location_id, class: 'input-group-text' %>
-              <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
-            </div>
+            <% if @regions.present? %>
+              <div class="input-group mb-3">
+                <%= form.label :location_id, class: 'input-group-text' %>
+                <%= form.select :location_id, [""] + @regions.map { |x| [x.name, x.id] }, {}, class: 'form-select' %>
+              </div>
+            <% end %>
 
-            <div class="input-group mb-3">
-              <%= form.label :family_id, class: 'input-group-text' %>
-              <%= form.select :family_id, [""] + @families.map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
-            </div>
+            <% if @families.present? %>
+              <div class="input-group mb-3">
+                <%= form.label :family_id, class: 'input-group-text' %>
+                <%= form.select :family_id, [""] + @families.map { |x| [x.title, x.id] }, {}, class: 'form-select' %>
+              </div>
+            <% end %>
 
           <% end %>
 

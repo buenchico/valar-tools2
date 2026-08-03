@@ -40,9 +40,11 @@
         <th scope="col">
           <%= t('activerecord.attributes.army.name') %>
         </th>
-        <th scope="col">
-          <%= t('activerecord.attributes.army.status') %>
-        </th>
+        <% if @options_armies&.dig("status").present? %>
+          <th scope="col">
+            <%= t('activerecord.attributes.army.status') %>
+          </th>
+        <% end %>
         <th scope="col">
           <%= t('activerecord.attributes.army.description') %>
         </th>
