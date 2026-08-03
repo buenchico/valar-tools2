@@ -103,10 +103,13 @@ class Unit < ApplicationRecord
   end
 
   def speed_name
-    value = self.speed
+    return "Normal" if @army_speeds.blank?
 
-    @army_speeds.select { |item| item["mod"] <= value }
-      .max_by { |item| item["mod"] }["name"]
+    speed_entry = @army_speeds
+      .select { |item| item["mod"] <= speed }
+      .max_by { |item| item["mod"] }
+
+    speed_entry ? speed_entry["name"] : "Normal"
   end
 
   def simple_type_name
