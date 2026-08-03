@@ -3,7 +3,7 @@
     <div class="modal-content bg-dark text-light">
       <div class="modal-header">
         <h5 class="modal-title w-100" id="Title"><%= army&.name %></h5>
-        <% if army.persisted? %>
+        <% if army.persisted? && @current_user&.is_master? %>
           <div class="me-3 w-100">
             <%= link_to '', send("edit_army_path", army.id), remote: true, class: 'btn-Close bi bi-pencil-square text-white float-end' %>
           </div>
