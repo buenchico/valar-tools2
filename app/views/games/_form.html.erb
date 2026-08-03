@@ -1,5 +1,5 @@
 <div class="modal fade" id="gameModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content bg-dark text-light">
       <%= form_with model: game do |form| %>
         <div class="modal-header">
@@ -28,22 +28,27 @@
           </div>
 
           <%= form.fields_for :game_tools do |game_tool_form| %>
-            <div class="input-group mb-3">
+            <div class="input-group mb-1">
               <div class="input-group-text">
                 <%= game_tool_form.label nil, game_tool_form.object.tool.title %>
               </div>
               <div class="form-check form-switch switch-group fs-2">
                  <%= game_tool_form.check_box :active, class: 'form-check-input switch-group h-100', role: 'switch' %>
               </div>
-              <div class="input-group">
-                <%= game_tool_form.text_area :options,
-                      value: JSON.pretty_generate(game_tool_form.object.options),
-                      rows: game_tool_form.object.options.nil? ? 1 : 10,
-                      class: 'form-control float-end',
-                      "data-bs-toggle": "tooltip",
-                      "data-bs-html": "true",
-                      "title": ( game_tool_form.object.tool.options_info&.then { |info| Kramdown::Document.new(info).to_html } || '').html_safe
-                       %>
+            </div>
+            <div class="input-group mb-3">
+              <div class="row w-100">
+                <div class="col-6">
+                  <div class="input-group h-100">
+                    <%= game_tool_form.text_area :options,
+                          value: JSON.pretty_generate(game_tool_form.object.options),
+                          class: 'form-control h-100'
+                           %>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <%= (game_tool_form.object.tool.options_info&.then { |info| Kramdown::Document.new(info).to_html } || '').html_safe %>
+                </div>
               </div>
             </div>
           <% end %>
