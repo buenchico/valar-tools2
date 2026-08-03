@@ -1,58 +1,60 @@
-<span
-  class="army_strength_tooltip"
-  data-bs-toggle="tooltip"
-  data-bs-placement="top"
-  data-bs-html="true"
-  title="
-    <div class='row'>
-      <div class='text-start col-7'>
-        <i class='bi bi-award'></i> <%= t('activerecord.attributes.unit.strength')  %>
+<% unless @options_armies.dig("general", "hide_str") %>
+  <span
+    class="army_strength_tooltip"
+    data-bs-toggle="tooltip"
+    data-bs-placement="top"
+    data-bs-html="true"
+    title="
+      <div class='row'>
+        <div class='text-start col-7'>
+          <i class='bi bi-award'></i> <%= t('activerecord.attributes.unit.strength')  %>
+        </div>
+        <div class='text-end col-5'>
+          <%= army.strength.round(2) %>
+        </div>
       </div>
-      <div class='text-end col-5'>
-        <%= army.strength.round(2) %>
+      <div class='row'>
+        <div class='text-start col-7'>
+          <i class='bi bi-crosshair'></i> <%= t('activerecord.attributes.unit.strength_indirect')  %>
+        </div>
+        <div class='text-end col-5'>
+          <%= army.strength_indirect.round(2) %>
+        </div>
       </div>
-    </div>
-    <div class='row'>
-      <div class='text-start col-7'>
-        <i class='bi bi-crosshair'></i> <%= t('activerecord.attributes.unit.strength_indirect')  %>
+      <div class='row'>
+        <div class='text-start col-7'>
+          <i class='bi bi-heart-fill'></i> <%= t('activerecord.attributes.unit.hp')  %>
+        </div>
+        <div class='text-end col-5'>
+          <%= number_to_compact(army.hp) %>
+        </div>
       </div>
-      <div class='text-end col-5'>
-        <%= army.strength_indirect.round(2) %>
+      <div class='row'>
+        <div class='text-start col-7'>
+          <i class='bi bi-person-standing'></i> <%= t('activerecord.attributes.unit.men')  %>
+        </div>
+        <div class='text-end col-5'>
+          <%= number_to_compact(army.men) %>
+        </div>
       </div>
-    </div>
-    <div class='row'>
-      <div class='text-start col-7'>
-        <i class='bi bi-heart-fill'></i> <%= t('activerecord.attributes.unit.hp')  %>
+      <div class='row'>
+        <div class='text-start col-7'>
+          <i class='bi bi-person-walking'></i> <%= t('activerecord.attributes.unit.speed') %>
+        </div>
+        <div class='text-end col-5'>
+          <%= army.speed_name %>
+        </div>
       </div>
-      <div class='text-end col-5'>
-        <%= number_to_compact(army.hp) %>
+      <div class='row'>
+        <div class='text-start col-7'>
+          <i class='bi bi-bounding-box'></i> <%= t('activerecord.attributes.unit.size') %>
+        </div>
+        <div class='text-end col-5'>
+          <%= army.size %>
+        </div>
       </div>
-    </div>
-    <div class='row'>
-      <div class='text-start col-7'>
-        <i class='bi bi-person-standing'></i> <%= t('activerecord.attributes.unit.men')  %>
-      </div>
-      <div class='text-end col-5'>
-        <%= number_to_compact(army.men) %>
-      </div>
-    </div>
-    <div class='row'>
-      <div class='text-start col-7'>
-        <i class='bi bi-person-walking'></i> <%= t('activerecord.attributes.unit.speed') %>
-      </div>
-      <div class='text-end col-5'>
-        <%= army.speed_name %>
-      </div>
-    </div>
-    <div class='row'>
-      <div class='text-start col-7'>
-        <i class='bi bi-bounding-box'></i> <%= t('activerecord.attributes.unit.size') %>
-      </div>
-      <div class='text-end col-5'>
-        <%= army.size %>
-      </div>
-    </div>
-  "
->
-  <%= army.strength.round(2) %>
-</span>
+    "
+  >
+    <%= army.strength.round(2) %>
+  </span>
+<% end %>
