@@ -15,7 +15,7 @@ class ArmiesController < ApplicationController
       if @faction
         armies, units = get_armies([@faction.id], ["true"])
         @armies = armies.sort_by(&:army_type)
-        @units = units.includes(:factions).where(army: nil).sort_by(&:army_type).sort_by(&:army_type)
+        @units = units.includes(:factions).sort_by(&:army_type).sort_by(&:army_type)
       else
         @armies = nil
         @units = nil
@@ -24,7 +24,7 @@ class ArmiesController < ApplicationController
       @faction = @current_user.faction
       armies, units = get_armies([@faction.id], ["true"])
       @armies = armies.sort_by(&:army_type)
-      @units = units.includes(:factions).where(army: nil).sort_by(&:army_type).sort_by(&:army_type)
+      @units = units.includes(:factions).sort_by(&:army_type).sort_by(&:army_type)
     end
   end
 
@@ -38,7 +38,7 @@ class ArmiesController < ApplicationController
     active_visibility = JSON.parse(params[:active_visibility])
 
     @armies, units = get_armies(active_factions, active_visibility)
-    @units = units.includes(:factions).where(army: nil)
+    @units = units.includes(:factions)
   end
 
   def delete
@@ -378,6 +378,10 @@ private
         .where(factions: { id: factions })
         .distinct
       units = Unit.joins(:factions).where(visible: visibility).where(factions: { id: factions })
+    end
+
+    if !@options_armies&.dig("general", "show_all_units")
+      units = units.where(army: nil)
     end
 
     return [armies, units]
