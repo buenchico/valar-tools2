@@ -6,6 +6,8 @@
   <%= yield(:title) %>
 </div>
 
+<%= total_army_units_by_unit_type(Army.last.units) %>
+
 <div class="card bg-secondary text-light mb-3">
   <div id="faction_stats" class="card-body">
     <%= render 'faction_stats', faction: @faction %>

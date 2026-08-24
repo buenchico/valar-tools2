@@ -113,15 +113,29 @@ class Unit < ApplicationRecord
   end
 
   def simple_type_name
-    return (@units.fetch(self.unit_type, {}).fetch("name", "")).pluralize_all_words(self.count)
+    return (@units.fetch(self.unit_type, {}).fetch("name", ""))
+  end
+
+  def simple_type_name_plural
+    @units.fetch(unit_type, {}).fetch("name_plural", nil).presence ||
+      simple_type_name.pluralize
   end
 
   def title
     self.name
   end
 
+  def hide_name
+    return @units.fetch(self.unit_type, {}).fetch("hide_name", false)
+  end
+
   def type_name
-    title = self.simple_type_name
+    if self.count == 1
+      title = self.simple_type_name
+    else
+      title = self.simple_type_name_plural
+    end
+
     message = []
     if strength_mod != 100
       message << "🎖" + (strength_mod/100.0).round(1).to_s

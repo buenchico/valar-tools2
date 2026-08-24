@@ -13,8 +13,10 @@
 <% end %>
 
 <% total_army_units_by_unit_type(army.units).each do | key, unit | %>
-  <%= number_to_compact(unit[:count].to_i) %>
-  <%= unit[:title] %>
+  <% if unit[:hide_name] == false %>
+    <%= number_to_compact(unit[:count].to_i) %>
+    <%= unit[:title] %>
+  <% end %>
 <% end %>
 
 <% army.unit_tags.each do |tag, count| %>

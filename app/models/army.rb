@@ -94,7 +94,7 @@ class Army < ApplicationRecord
       .max_by { |item| item["mod"] }
 
     speed_entry ? speed_entry["name"] : "Normal"
-  end  
+  end
 
   def families
     self.units.includes(:family).map(&:family).compact.uniq.sort_by(&:title)
@@ -109,7 +109,16 @@ class Army < ApplicationRecord
   end
 
   def unit_tags
-    units.flat_map(&:tags).compact.sort.tally
+    units
+      .flat_map(&:tags)
+      .compact
+      .tally
+      .sort_by do |tag, _count|
+        sort = @unit_tags.fetch(tag, {}).fetch("sort", Float::INFINITY)
+
+        [sort, tag.downcase]
+      end
+      .to_h
   end
 
   def army_type
@@ -131,6 +140,7 @@ private
     @army_speeds = options[:travel]&.fetch("speed", {})
 
     @units = @options_armies&.fetch("units", {})
+    @unit_tags = @options_armies&.fetch("unit_tags", {})
     @army_tags = @options_armies&.fetch("army_tags", {})
     @army_types = @options_armies&.fetch("army_type", {})&.sort_by { |_, v| v["sort"] }.to_h
     @status = @options_armies&.fetch("status", {})
