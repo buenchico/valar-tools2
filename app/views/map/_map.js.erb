@@ -97,7 +97,7 @@ $(document).on('turbolinks:load', function () {
 
           // if there is a layer image
           <% if !layer["img"].nil? %>
-            var imageOverlay = L.imageOverlay('<%= asset_path(layer["img"]) %>', [[0,0],imgSize], {opacity: 0.5})
+            var imageOverlay = L.imageOverlay('<%= asset_path(layer["img"]) %>', [[0,0],imgSize], {opacity: <%= layer.fetch("opacity", 0.5) %>})
             imageOverlay.addTo(<%= code %>);
           <% end %>
 
