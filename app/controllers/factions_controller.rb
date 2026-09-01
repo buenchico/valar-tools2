@@ -63,7 +63,7 @@ class FactionsController < ApplicationController
           if @faction.save
             @count += 1
           else
-            @errors << group["name"]
+            @errors << "#{group['name']}: #{@faction.errors.full_messages.join(', ')}"
           end
         else
           @faction = @factions.find_by(discourse_id: group["id"])
@@ -77,7 +77,7 @@ class FactionsController < ApplicationController
           )
             @count += 1
           else
-            @errors << group["name"] + @faction.errors
+            @errors << "#{group['name']}: #{@faction.errors.full_messages.join(', ')}"
           end
         end
       end
