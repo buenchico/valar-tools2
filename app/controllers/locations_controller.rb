@@ -117,6 +117,15 @@ private
   def location_params
     params.require(:location).permit(:name_en, :name_es, :description, :x, :y, :line, :polygon, :priority, :region_id, :location_type, :visible, :family_id, :game_id, :population, :population_start, tags: []).tap do |whitelisted|
       whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
+      if @options_locations["tags"] != "false"
+        whitelisted[:tags].each do |tag|
+          if !@options_locations["tags"].include?(tag)
+            @options_locations["tags"] << tag
+          end
+          @options_locations["tags"] = @options_locations["tags"].sort
+          @tool.game_tools.find_by(game_id: active_game&.id).update(options: @options_locations)
+        end
+      end
     end
   end
 
