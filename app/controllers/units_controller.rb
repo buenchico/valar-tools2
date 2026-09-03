@@ -346,17 +346,13 @@ private
     end
 
     params.require(:unit).permit(*permitted_keys).tap do |whitelisted|
-      if @options_armies&.dig("general", "expert_unit_tags")
-        # text field submitted as a string
-        tags = params.dig(:unit, :tags)
-
-        whitelisted[:tags] = tags.to_s
+      if @options_armies&.dig("general", "expert_unit_tags") && params.dig(:unit).key?(:tags)
+        whitelisted[:tags] = params[:unit][:tags].to_s
           .split(",")
           .map(&:strip)
           .reject(&:blank?)
           .sort
       elsif whitelisted[:tags]
-        # normal select submits an array
         whitelisted[:tags].reject!(&:empty?)
       end
     end
