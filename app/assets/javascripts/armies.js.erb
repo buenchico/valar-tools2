@@ -148,14 +148,47 @@ $(document).on('turbolinks:load', function () {
 
         size = (men / chunks)
 
-        message += "Composición: "
+        let totalParts = [];
 
-        $.each(totals, function(type, value) {
-          message += type + ": " + value + ", ";
-        });
+        if (!isNaN(str)) {
+            totalParts.push(`🎖️: ${str.toFixed(2)}`);
+        }
 
-        message += "\n" + "Total: 🎖️: " + str.toFixed(2) + " 𖦏: " + ind.toFixed(2) + " ❤︎: " + hp + " 🪖: " + men + " 🏃‍♂️‍: " + speed_text + " #: " + size.toFixed(1)
+        if (!isNaN(ind)) {
+            totalParts.push(`𖦏: ${ind.toFixed(2)}`);
+        }
 
+        if (!isNaN(hp)) {
+            totalParts.push(`❤︎: ${hp}`);
+        }
+
+        if (!isNaN(men)) {
+            totalParts.push(`🪖: ${men}`);
+        }
+
+        if (speed_text && speed_text.trim() !== "") {
+            totalParts.push(`🏃‍♂️‍: ${speed_text}`);
+        }
+
+        if (!isNaN(size)) {
+            totalParts.push(`#: ${size.toFixed(1)}`);
+        }
+
+        if (Object.keys(totals).length > 0) {
+            message += "Composición: ";
+
+            $.each(totals, function(type, value) {
+                if (!isNaN(value)) {
+                    message += `${type}: ${value}, `;
+                }
+            });
+        }
+
+        // Only show Total if at least one valid value exists
+        if (totalParts.length > 0) {
+            message += "\nTotal: " + totalParts.join(" ");
+        }
+        
         navigator.clipboard.writeText(message)
 
         button.addClass('bg-success-subtle text-dark');
