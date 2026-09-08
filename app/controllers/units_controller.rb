@@ -3,7 +3,7 @@ class UnitsController < ApplicationController
   before_action :set_factions, only: [:new, :edit, :new_multiple, :edit_multiple]
   before_action :set_unit, only: [:edit, :edit_notes, :update, :destroy, :delete, :show]
   before_action :check_master, only: [:new, :edit, :delete, :edit_multiple, :create, :destroy, :delete, :update_multiple, :destroy_multiple, :damage_multiple, :damage_multiple_apply]
-  before_action :check_owner, only: [:edit, :edit_notes, :update]
+  before_action :check_owner, only: [:edit, :edit_notes, :update, :show]
   before_action :set_families, only: [:edit, :edit_multiple, :new, :new_multiple]
 
   def new
@@ -154,7 +154,7 @@ class UnitsController < ApplicationController
     unit_params[:remove][:tags] = params["unit"]["tags_remove"].reject(&:empty?)
     unit_params[:change][:visible] = params["unit"]["visible"] unless params["unit"]["visible"].empty?
 
-    if params["unit"]["faction_ids"] == ["CLEAR"]
+    if params["unit"]["faction_ids"].reject(&:blank?) == ["CLEAR"]
       unit_params[:change][:faction_ids] == []
     else
       unit_params[:change][:faction_ids] = params["unit"]["faction_ids"].reject(&:empty?)

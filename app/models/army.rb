@@ -133,6 +133,16 @@ class Army < ApplicationRecord
     units&.first&.colour
   end
 
+  def belongs_to_faction?(faction, type: :exclusive)
+    return false if faction.blank?
+
+    if type == :exclusive
+      units.all? { |unit| unit.factions.include?(faction) }
+    else
+      units.any? { |unit| unit.factions.include?(faction) }
+    end
+  end
+
 private
   def set_options
     options = GameOptionsService.fetch

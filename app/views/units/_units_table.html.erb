@@ -37,16 +37,16 @@
             <i class="bi bi-award"></i>
           </th>
         <% end %>
-        <th scope="col">
+        <th scope="col" class="text-nowrap">
           <%= t('activerecord.attributes.unit.name') %>
         </th>
-        <th scope="col">
+        <th scope="col" class="text-nowrap">
           <%= t('activerecord.attributes.unit.description') %>
         </th>
-        <th scope="col">
+        <th scope="col" class="text-nowrap">
           <%= t('activerecord.attributes.unit.location_id') %>
         </th>
-        <th scope="col">
+        <th scope="col" class="text-nowrap">
           <%= t('activerecord.attributes.unit.family_id') %>
         </th>
         <% if @current_user&.is_master? %>

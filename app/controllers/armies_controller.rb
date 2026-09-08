@@ -4,6 +4,7 @@ class ArmiesController < ApplicationController
   before_action :set_options
   before_action :set_factions, only: [:index, :stats, :new, :edit, :edit_multiple]
   before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete, :damage_multiple, :damage_multiple_apply, :merge_multiple, :stats]
+  before_action :check_owner_exclusive, only: [:edit_notes, :update]
   before_action :check_owner_inclusive, only: [:show]
   before_action :set_filters, only: [:index, :show_armies]
   before_action :set_stats, only: [:index, :show_armies]
@@ -388,36 +389,38 @@ private
   end
 
   def check_owner_exclusive
+    ### Ownership of ALL units
     check_owner("exclusive")
   end
 
   def check_owner_inclusive
+    ### Ownership of at least one unit
     check_owner("inclusive")
   end
 
   def check_owner(type)
-    armies_to_include = [@army] # Initialize with @army
+    return if @current_user&.is_master?
 
-    if params[:army_ids].present?
-      armies_to_include += Army.where(id: params[:army_ids]).order(:name)
-    end
+    armies_to_include = [@army]
+    armies_to_include += Army.where(id: params[:army_ids])
 
-    units = Unit.where(army_id: armies_to_include)
-
-    if !@current_user&.is_master?
+    pass =
       if type == "exclusive"
-        pass = units.all? { |unit| unit.factions.include?(@current_user.faction) }
+        armies_to_include.all? do |army|
+          army.belongs_to_faction?(@current_user.faction, type: :exclusive)
+        end
       else
-        pass = units.any? { |unit| unit.factions.include?(@current_user.faction) }
+        armies_to_include.any? do |army|
+          army.belongs_to_faction?(@current_user.faction, type: :inclusive)
+        end
       end
 
-      if pass == false
-        respond_to do |format|
-          format.html { redirect_to armies_url, danger: t('messages.permissions', model: Unit.model_name.human(:count => 1).downcase) }
-          format.js do
-            flash[:danger] = t('messages.permissions', model: Unit.model_name.human(:count => 1).downcase)
-            render js: "window.location='/armies'"
-          end
+    unless pass
+      respond_to do |format|
+        format.html { redirect_to armies_url, danger: t('messages.permissions', model: Unit.model_name.human(:count => 1).downcase) }
+        format.js do
+          flash[:danger] = t('messages.permissions', model: Unit.model_name.human(:count => 1).downcase)
+          render js: "window.location='/armies'"
         end
       end
     end

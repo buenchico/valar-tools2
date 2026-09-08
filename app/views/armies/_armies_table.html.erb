@@ -39,26 +39,26 @@
             <i class="bi bi-award"></i>
           </th>
         <% end %>
-        <th scope="col">
+        <th scope="col" class="text-nowrap">
           <%= t('activerecord.attributes.army.name') %>
         </th>
         <% if @options_armies&.dig("status").present? %>
-          <th scope="col">
+          <th scope="col" class="text-nowrap">
             <%= t('activerecord.attributes.army.status') %>
           </th>
         <% end %>
-        <th scope="col">
+        <th scope="col" class="text-nowrap">
           <%= t('activerecord.attributes.army.description') %>
         </th>
-        <th scope="col">
+        <th scope="col" class="text-nowrap">
           <%= t('activerecord.attributes.army.position') %>
         </th>
-        <th scope="col">
+        <th scope="col" class="text-nowrap">
           <%= t('activerecord.attributes.army.group') %>
         </th>
         <% if @current_user&.is_master? %>
-          <th scope="col" class="text-center"><%= t('activerecord.attributes.family.visible') %></th>
-          <th scope="col" colspan="<%= @current_user.is_master? ? 4 : 2 %>" data-sorter="false"></th>
+          <th scope="col" class="text-center text-nowrap"><%= t('activerecord.attributes.family.visible') %></th>
+          <th scope="col" class="text-nowrap" colspan="<%= @current_user.is_master? ? 4 : 2 %>" data-sorter="false"></th>
         <% end %>
       </tr>
     </thead>
