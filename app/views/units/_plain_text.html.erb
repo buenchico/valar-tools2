@@ -1,7 +1,7 @@
 <%= unit.name %>
 <%= number_to_compact(unit.count.to_i) %>
 <%= unit.type_name %>
-<% unit.tags.tally.each do |tag, count| %>
+<% unit.tags.weighted_tally.each do |tag, count| %>
   <% tag_options = @unit_tags.fetch(tag, {}) %>
   <%= tag_options.fetch('name', tag).titleize %>
   <%= (count != 1) ? "(#{count})" : "" %>

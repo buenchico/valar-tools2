@@ -112,11 +112,9 @@ class Army < ApplicationRecord
     units
       .flat_map(&:tags)
       .compact
-      .tally
-      .sort_by do |tag, _count|
-        sort = @unit_tags.fetch(tag, {}).fetch("sort", Float::INFINITY)
-
-        [sort, tag.downcase]
+      .weighted_tag_tally
+      .sort_by do |tag, _|
+        [@unit_tags.dig(tag, "sort") || Float::INFINITY, tag.downcase]
       end
       .to_h
   end

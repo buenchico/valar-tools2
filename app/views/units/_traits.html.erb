@@ -6,7 +6,7 @@
 </span>
 
 <% unit.tags
-      .tally
+      .weighted_tally
       .sort_by do |tag, _count|
         tag_options = @unit_tags.fetch(tag, {})
         [
