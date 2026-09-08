@@ -407,11 +407,11 @@ private
     pass =
       if type == "exclusive"
         armies_to_include.all? do |army|
-          army.belongs_to_faction?(@current_user.faction, type: :exclusive)
+          army.belongs_to_user?(@current_user, type: :exclusive)
         end
       else
         armies_to_include.any? do |army|
-          army.belongs_to_faction?(@current_user.faction, type: :inclusive)
+          army.belongs_to_user?(@current_user, type: :inclusive)
         end
       end
 

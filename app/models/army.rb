@@ -133,13 +133,14 @@ class Army < ApplicationRecord
     units&.first&.colour
   end
 
-  def belongs_to_faction?(faction, type: :exclusive)
-    return false if faction.blank?
+  def belongs_to_user?(user, type: :exclusive)
+    return false if user.blank?
+    return true if user.is_master?
 
     if type == :exclusive
-      units.all? { |unit| unit.factions.include?(faction) }
+      units.all? { |unit| unit.factions.include?(user.faction) }
     else
-      units.any? { |unit| unit.factions.include?(faction) }
+      units.any? { |unit| unit.factions.include?(user.faction) }
     end
   end
 

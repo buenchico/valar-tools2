@@ -37,7 +37,7 @@
 <% end %>
 
 <td class="text-nowrap">
-  <% if army.belongs_to_faction?(@current_user.faction, type: :exclusive) %>
+  <% if army.belongs_to_user?(@current_user, type: :exclusive) %>
     <span class="d-none"><%= army.name %></span>
     <%= form_with model: army, local: false, html: { class: "d-inline-flex align-items-center gap-2" } do |form| %>
       <i class="bi bi-<%= army.icon %> text-<%= army.colour %>"></i>
@@ -61,7 +61,7 @@
 </td>
 
 <td>
-  <% if army.belongs_to_faction?(@current_user.faction, type: :exclusive) %>
+  <% if army.belongs_to_user?(@current_user, type: :exclusive) %>
     <%= form_with model: army, local: false, html: { class: "d-inline-flex align-items-center gap-2" } do |form| %>
       <%= hidden_field_tag :inline, value: true %>
       <%= form.text_field :position, class: 'inline-edit-input form-control', style: 'height: 2.4rem', "data-initialvalue": army.position %>
@@ -73,7 +73,7 @@
 </td>
 
 <td>
-  <% if army.belongs_to_faction?(@current_user.faction, type: :exclusive) %>
+  <% if army.belongs_to_user?(@current_user, type: :exclusive) %>
     <%= form_with model: army, class: 'inline-edit-select', local: false do |form| %>
       <%= form.hidden_field :inline, value: true %>
       <%= form.select :group,
@@ -121,7 +121,7 @@
   <%= link_to '', army_path(army), remote: true, class: 'bi bi-eye-fill text-white' %>
 </td>
 <td>
-  <% if army.belongs_to_faction?(@current_user.faction, type: :exclusive) %>
+  <% if army.belongs_to_user?(@current_user, type: :exclusive) %>
     <%= link_to '', edit_notes_army_path(army), remote: true, class: army.notes.blank? ? 'bi bi-sticky text-white' : 'bi bi-sticky-fill text-warning' %>
   <% end %>
 </td>

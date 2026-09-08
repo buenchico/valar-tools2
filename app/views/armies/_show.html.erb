@@ -34,9 +34,11 @@
             <div class="collapse" id="collapseUnits">
               <%= hidden_field_tag "army[unit_ids][]", nil %>
               <% army.units.each do |unit| %>
-                <div id="unit_fields_<%= unit.id %>">
-                  <%= render 'units/one_line', unit: unit, link: true %>
-                </div>
+                <% if unit.factions.include?(@current_user.faction) %>
+                  <div id="unit_fields_<%= unit.id %>">
+                    <%= render 'units/one_line', unit: unit, link: true %>
+                  </div>
+                <% end %>
               <% end %>
             </div>
           </div>
