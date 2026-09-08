@@ -15,12 +15,20 @@
           <div>
             <strong><%= render 'units/one_line', unit: unit %></strong>
             <% if unit.army %>
-             — en <%= render 'armies/one_line', army: unit.army, link: true %>
+             — en <%= render 'armies/one_line', army: unit.army, link: true, long: false %>
             <% end %>
           </div>
-          <div>
-            <%= render 'units/stats', unit: unit %>
-          </div>
+          <% if !@options_armies.fetch("general", {}).fetch("hide_stats", false) %>
+            <div>
+              <%= render 'units/stats', unit: unit %>
+            </div>
+          <% end %>
+          <% if unit&.notes&.present? %>
+            <hr class="border border-secondary opacity-75 border-2">
+            <div class="ms-3">
+              <%= simple_format(unit.notes) %>
+            </div>
+          <% end %>
         </div>
       </div>
       <% if @current_user.is_master? && unit.logs&.present? %>

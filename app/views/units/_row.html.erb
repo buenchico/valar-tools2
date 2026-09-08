@@ -73,3 +73,7 @@
 <td>
   <%= link_to '', unit_path(unit), remote: true, class: 'bi bi-eye-fill text-white' %>
 </td>
+
+<td>
+  <%= link_to '', edit_notes_unit_path(unit), remote: true, class: unit.notes.blank? ? 'bi bi-sticky text-white' : 'bi bi-sticky-fill text-warning' %>
+</td>

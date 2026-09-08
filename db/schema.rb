@@ -10,10 +10,87 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_26_211047) do
+ActiveRecord::Schema[8.0].define(version: 2026_09_08_103013) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+
+  create_table "belts", force: :cascade do |t|
+    t.string "name"
+    t.string "title"
+    t.string "icon"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "downloads", force: :cascade do |t|
+    t.string "name"
+    t.string "version"
+    t.string "filename"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "fork_tasks", force: :cascade do |t|
+    t.string "name"
+    t.string "state"
+    t.string "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "forklift_id"
+    t.index ["forklift_id"], name: "index_fork_tasks_on_forklift_id"
+  end
+
+  create_table "forklifts", force: :cascade do |t|
+    t.date "date"
+    t.boolean "complete"
+    t.string "agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.string "title"
+    t.datetime "message_date"
+    t.string "style", default: "default"
+    t.text "content"
+    t.bigint "tool_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "show"
+    t.index ["tool_id"], name: "index_messages_on_tool_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "title"
+    t.string "to", null: false
+    t.string "period", null: false
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "last_run_time"
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "status_notes"
+    t.datetime "forced_run_time"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "number"
+    t.string "email"
+    t.string "customer"
+    t.string "products"
+    t.integer "total_exvat"
+    t.integer "total_vat"
+    t.string "address"
+    t.string "notes"
+    t.string "status", default: "in process"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "pg_search_documents", id: :serial, force: :cascade do |t|
     t.text "content"
@@ -23,6 +100,65 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_211047) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "code"
+    t.string "title"
+    t.string "barcode"
+    t.integer "vat"
+    t.float "price_cost"
+    t.float "price_web"
+    t.float "price_expo"
+    t.string "notes"
+    t.boolean "available"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "stock"
+    t.string "location"
+    t.string "overstock"
+    t.string "image_url"
+  end
+
+  create_table "reads", force: :cascade do |t|
+    t.string "reader_type"
+    t.bigint "reader_id"
+    t.string "document_type"
+    t.bigint "document_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["document_type", "document_id"], name: "index_reads_on_document"
+    t.index ["reader_type", "reader_id"], name: "index_reads_on_reader"
+  end
+
+  create_table "tools", force: :cascade do |t|
+    t.string "name"
+    t.string "title"
+    t.string "icon"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "belt_id", null: false
+    t.boolean "display", default: true
+    t.index ["belt_id"], name: "index_tools_on_belt_id"
+  end
+
+  create_table "tools_users", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "tool_id", null: false
+    t.index ["tool_id", "user_id"], name: "index_tools_users_on_tool_id_and_user_id"
+    t.index ["user_id", "tool_id"], name: "index_tools_users_on_user_id_and_tool_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "password_digest"
+    t.string "name"
+    t.string "role", default: "user"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "calendar_id"
+    t.string "email_password"
+    t.boolean "smtp_test", default: false
   end
 
   create_table "armies", force: :cascade do |t|
@@ -239,6 +375,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_211047) do
     t.bigint "location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "notes"
     t.index ["army_id"], name: "index_valar_units_on_army_id"
     t.index ["family_id"], name: "index_valar_units_on_family_id"
     t.index ["location_id"], name: "index_valar_units_on_location_id"
@@ -256,6 +393,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_211047) do
     t.index ["faction_id"], name: "index_valar_users_on_faction_id"
   end
 
+  add_foreign_key "messages", "tools"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "tools", "belts"
   add_foreign_key "armies_factions", "armies"
   add_foreign_key "armies_factions", "factions"
   add_foreign_key "battles", "users"

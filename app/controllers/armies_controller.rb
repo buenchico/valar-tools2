@@ -440,12 +440,20 @@ private
   end
 
   def army_params
-    params.require(:army).permit(
-      :name, :status, :position, :group,
-      :visible, :notes, :xp, :morale, tags: [], unit_ids: [],
-      units_attributes: [:id, :count]
-    ).tap do |whitelisted|
-      whitelisted[:tags].reject!(&:empty?) if whitelisted[:tags]
+    permitted_keys = if @current_user.is_master?
+      [
+        :name, :status, :position, :group,
+        :visible, :notes, :xp, :morale,
+        { tags: [], unit_ids: [], units_attributes: [:id, :count] }
+      ]
+    else
+      [
+        :name, :position, :group, :notes
+      ]
+    end
+
+    params.require(:army).permit(*permitted_keys).tap do |whitelisted|
+      whitelisted[:tags]&.reject!(&:empty?)
     end
   end
 end

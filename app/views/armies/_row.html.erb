@@ -37,8 +37,12 @@
 <% end %>
 
 <td>
-  <i class="bi bi-<%= army.icon %> text-<%= army.colour %>"></i>
-  <%= army.name %>
+  <span class="d-none"><%= army.name %></span>
+  <%= form_with model: army, local: false, html: { class: "d-inline-flex align-items-center gap-2" } do |form| %>
+    <i class="bi bi-<%= army.icon %> text-<%= army.colour %>"></i>
+    <%= hidden_field_tag :inline, value: true %>
+    <%= form.text_field :name, class: 'inline-edit-input input-sm form-control', style: 'height: 1.75rem', "data-initialvalue": army.name %>
+  <% end %>
 </td>
 
 <% if @options_armies&.dig("status").present? %>

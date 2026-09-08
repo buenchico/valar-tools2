@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   resources :armies
 
   get 'units/new_multiple', to: 'units#new_multiple', as: 'new_units'
+  get 'units/:id/edit_notes', to: 'units#edit_notes', as: 'edit_notes_unit'
   post 'units/create_multiple', to:'units#create_multiple', as: 'create_units'
   get 'units/:id/delete', to: 'units#delete', as: 'delete_unit'
   get 'units/edit_multiple', to: 'units#edit_multiple', as: 'edit_multiple_units'

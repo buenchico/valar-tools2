@@ -1,7 +1,7 @@
 class UnitsController < ApplicationController
   before_action :set_options
   before_action :set_factions, only: [:new, :edit, :new_multiple, :edit_multiple]
-  before_action :set_unit, only: [:edit, :update, :destroy, :delete, :show]
+  before_action :set_unit, only: [:edit, :edit_notes, :update, :destroy, :delete, :show]
   before_action :check_master, only: [:new, :edit, :delete, :edit_multiple, :create, :destroy, :delete, :update_multiple, :destroy_multiple, :damage_multiple, :damage_multiple_apply]
   before_action :check_owner, only: [:edit, :edit_notes, :update]
   before_action :set_families, only: [:edit, :edit_multiple, :new, :new_multiple]
@@ -15,6 +15,9 @@ class UnitsController < ApplicationController
   end
 
   def edit
+  end
+
+  def edit_notes
   end
 
   def edit_multiple
@@ -336,13 +339,13 @@ private
     permitted_keys = if @current_user.is_master?
       [
         :name, :location_id, :family_id,
-        :count, :count_start, :count_death,
+        :count, :notes, :count_start, :count_death,
         :strength_mod, :strength_indirect_mod, :hp_mod,
         :visible, :unit_type,
         { faction_ids: [], tags: [] }
       ]
     else
-      [:name, { tags: [] }]
+      [:name, :notes, { tags: [] }]
     end
 
     params.require(:unit).permit(*permitted_keys).tap do |whitelisted|
