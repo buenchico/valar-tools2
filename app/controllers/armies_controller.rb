@@ -24,7 +24,11 @@ class ArmiesController < ApplicationController
     else
       @faction = @current_user.faction
       armies, units = get_armies([@faction.id], ["true"])
-      @armies = armies.sort_by(&:army_type)
+      if @options_armies.fetch("general", {}).fetch("show_all_armies", false)
+        @armies = Army.all.where(visible: true)
+      else
+        @armies = armies.sort_by(&:army_type)
+      end
       @units = units.includes(:factions).sort_by(&:army_type).sort_by(&:army_type)
     end
   end

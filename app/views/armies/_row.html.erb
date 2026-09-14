@@ -118,7 +118,9 @@
   </td>
 <% end %>
 <td>
-  <%= link_to '', army_path(army), remote: true, class: 'bi bi-eye-fill text-white' %>
+  <% if army.belongs_to_user?(@current_user, type: :inclusive) %>
+    <%= link_to '', army_path(army), remote: true, class: 'bi bi-eye-fill text-white' %>
+  <% end %>
 </td>
 <td>
   <% if army.belongs_to_user?(@current_user, type: :exclusive) %>
