@@ -10,7 +10,7 @@ class TravelController < ApplicationController
     @from = params[:from] != "" ? params[:from] : "Origen"
     @to = params[:to] != "" ? params[:to] : "Destino"
     @size = params[:size].to_f
-    size_mod = params[:size_mod].to_f
+    size_mod = params[:size_mod].present? ? params[:size_mod].to_f : 1
 
     #get travel data
     base = @options_travel["base"] # hours per hexagon
