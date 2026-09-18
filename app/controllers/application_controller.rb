@@ -27,9 +27,9 @@ class ApplicationController < ActionController::Base
     # allows only logged in user
     if @current_user.nil?
       respond_to do |format|
-        format.html { redirect_to root_path, danger: 'No tienes permisos para acceder a esta herramienta' }
+        format.html { redirect_to root_path, danger: t('messages.permissions.player') }
         format.js do
-          flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
+          flash[:danger] = t('messages.permissions.player')
           render js: 'window.location.replace("/");'
         end
       end
@@ -40,9 +40,9 @@ class ApplicationController < ActionController::Base
     # allows only admin user
     if @current_user.nil? || !@current_user.is_admin?
       respond_to do |format|
-        format.html { redirect_to root_path, danger: 'No tienes permisos para acceder a esta herramienta' }
+        format.html { redirect_to root_path, danger: t('messages.permissions.master') }
         format.js do
-          flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
+          flash[:danger] = t('messages.permissions.master')
           render js: 'window.location.replace("/");'
         end
       end
@@ -53,9 +53,9 @@ class ApplicationController < ActionController::Base
     # allows only master user
     if @current_user.nil? || !@current_user.is_master?
       respond_to do |format|
-        format.html { redirect_to root_path, danger: 'No tienes permisos para acceder a esta herramienta' }
+        format.html { redirect_to root_path, danger: t('messages.permissions.admin') }
         format.js do
-          flash[:danger] = 'No tienes permisos para acceder a esta herramienta'
+          flash[:danger] = t('messages.permissions.admin')
           render js: 'window.location.replace("/");'
         end
       end

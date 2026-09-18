@@ -3,6 +3,7 @@ class ArmiesController < ApplicationController
   before_action :set_army, only: [:edit, :edit_notes, :update, :destroy, :show, :delete, :show]
   before_action :set_options
   before_action :set_factions, only: [:index, :stats, :new, :edit, :edit_multiple]
+  before_action :check_player, only: [:index]
   before_action :check_master, only: [:new, :edit, :delete, :create, :destroy, :delete, :damage_multiple, :damage_multiple_apply, :merge_multiple, :stats]
   before_action :check_owner_exclusive, only: [:edit_notes, :update]
   before_action :check_owner_inclusive, only: [:show]

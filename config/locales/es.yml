@@ -445,7 +445,10 @@ es:
     ciudad: feminine
     región: feminine
   messages:
-    permissions: "No tienes permisos para acceder a esta página"
+    permissions:
+      player: "No tienes permisos para acceder a esta herramienta."
+      master: "Necesitas ser máster para acceder a esta herramienta."
+      admin: "Necesitas ser admin para acceder a esta herramienta."
     success:
       create:
         one:  '%{thing} ha sido creado correctamente.'
