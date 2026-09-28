@@ -25,14 +25,14 @@
         <ul class="list-inline">
           <li class="list-inline-item">
             <%= t('.assigned_to') %>:
-            <span class="badge fs-6 bg-success"><%= mission[:assigned_to] %></span>
+            <span class="badge fs-6 bg-success user-select-all"><%= mission[:assigned_to] %></span>
           </li>
           <li class="list-inline-item">
             <%= t('missions.stats.faction') %>:
-            <span class="badge fs-6 bg-primary"><%= mission[:category] %></span>
+            <span class="badge fs-6 bg-primary user-select-all"><%= mission[:category] %></span>
           </li>
         </ul>
-        <div class="fw-light">
+        <div class="fw-light user-select-all">
           <%= mission[:target].html_safe %>
         </div>
         <% if mission[:message].present? %>
