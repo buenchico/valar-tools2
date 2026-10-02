@@ -27,8 +27,8 @@
           </div>
         <% end %>
         <p>
-          <% location.tags do | tag | %>
-            <span class="badge rounded-pill pill-tags pill-tags-text"><%= tag %></span>
+          <% location.tags.each do | tag | %>
+            <span class="badge rounded-pill pill-tags pill-tags-text bg-byzantium"><%= tag %></span>
           <% end %>
         </p>
         <p><strong>Región:</strong> <%= location.region&.name %></p>
