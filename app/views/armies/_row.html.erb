@@ -42,7 +42,7 @@
     <%= form_with model: army, local: false, html: { class: "d-inline-flex align-items-center gap-2" } do |form| %>
       <i class="bi bi-<%= army.icon %> text-<%= army.colour %>"></i>
       <%= hidden_field_tag :inline, value: true %>
-      <%= form.text_field :name, class: 'inline-edit-input input-sm form-control', style: 'height: 1.75rem', "data-initialvalue": army.name %>
+      <%= form.text_field :name, id: "army_name_#{army.id}", class: 'inline-edit-input input-sm form-control', style: 'height: 1.75rem', "data-initialvalue": army.name %>
     <% end %>
   <% else %>
     <i class="bi bi-<%= army.icon %> text-<%= army.colour %>"></i>
